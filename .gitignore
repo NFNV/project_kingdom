@@ -1,0 +1,9 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+
+# Tiny Swords is installed locally and must not be redistributed.
+/assets/tiny_swords/
+# Reference-based prototype character art stays local as well.
+/assets/local_characters/
+.DS_Store

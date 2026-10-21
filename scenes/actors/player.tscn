@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/actors/actor.tscn" id="1"]
+[ext_resource type="Script" path="res://scripts/actors/player_controller.gd" id="2"]
+
+[node name="Player" instance=ExtResource("1")]
+faction = 1
+player_controlled = true
+maximum_health = 8
+movement_speed = 255.0
+display_name = "Cat warrior"
+
+[node name="Controller" type="Node" parent="."]
+script = ExtResource("2")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, -120)
+position_smoothing_enabled = true
+position_smoothing_speed = 7.0
+limit_left = 0
+limit_top = 0
+limit_right = 2560
+limit_bottom = 1792
+limit_smoothed = true

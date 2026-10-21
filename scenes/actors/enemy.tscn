@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/actors/actor.tscn" id="1"]
+[ext_resource type="Script" path="res://scripts/actors/enemy_controller.gd" id="2"]
+
+[node name="Enemy" instance=ExtResource("1")]
+faction = 0
+hostile = true
+maximum_health = 3
+movement_speed = 132.0
+display_name = "Dog patrol"
+
+[node name="Controller" type="Node" parent="."]
+script = ExtResource("2")

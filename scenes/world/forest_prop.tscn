@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/forest_prop.gd" id="1"]
+
+[sub_resource type="CircleShape2D" id="Footprint"]
+radius = 22.0
+
+[node name="ForestProp" type="StaticBody2D"]
+collision_layer = 1
+collision_mask = 0
+script = ExtResource("1")
+
+[node name="Visual" type="AnimatedSprite2D" parent="."]
+
+[node name="Footprint" type="CollisionShape2D" parent="."]
+position = Vector2(0, -10)
+shape = SubResource("Footprint")
