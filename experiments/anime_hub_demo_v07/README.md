@@ -101,7 +101,22 @@ oven flames, rising tea steam, flour motes and swaying curtain edges. Its window
 follow the outdoor light while the room stays warmly lit. Foreground trees fade
 when they would cover the cat; interaction prompts track world positions through
 the camera. Most foliage, bridge rails and water in forest plates remain static.
-The cat still uses the starter two-pose walking loops; NPCs have standing views.
+The cat now has **eight facing directions**, each with **eight walk poses, eight
+separate run poses, and four idle/blink poses**. Its sword stays sheathed during
+peaceful exploration. Gait phase follows distance actually travelled, so collision
+or releasing movement stops the stepping. Direction hysteresis prevents tiny
+steering changes from repeatedly flipping the character.
+
+All five civilian types have eight idle poses and four occupational/greeting
+poses. The baker offers bread, Mallow adjusts her spectacles, Sage reads and turns
+a page, Moss inspects an apple, and Pip raises a letter. Their idle/gesture timing
+is staggered. Clover uses the baker's animation behind the counter. The three
+friendly wardens have eight walking poses and four idle poses in four directions,
+walk short routes with resting pauses, stop when approached, and face the cat.
+Their conversation prompts follow their current positions. Combat remains off.
+
+The new art remains a prototype: some silhouettes and changes between directions
+can still benefit from animation-artist cleanup.
 There is one enterable interior. Audio, combat, and disk saves are not included.
 
 New paintings were created with **built-in imagegen**. Source files and exact
@@ -113,14 +128,18 @@ This is prototype alignment, not a guarantee of identical painted detail.
 
 ## Verification
 
-[test_results.json](test_results.json) records 109 gameplay checks: movement,
+[test_results.json](test_results.json) records 164 gameplay checks: movement,
 physical collision, the delivery route, friendly-warden regressions, the longer
 clock, physically walking through every connection, all three resting places,
 walking over the bridge, returning home, persistent progress and pause/resume. New checks cover real camera following,
 scene-edge limits, world-to-screen prompts, water flow, physically entering and
 leaving the bakery, navigating to the counter, its collision and vendor depth,
 shop button purchases, insufficient funds, blocked world input and inventory
-persistence through repeated visits.
+persistence through repeated visits. Animation checks also exercise eight-way
+resources, all eight poses during real walking, the separate running state,
+brief blinks, turning deadband, no stepping against obstacles, actual patrol
+movement and collision clearance, moving conversation targets, greeting triggers,
+and freezing character/NPC animation on pause.
 
 [performance.json](performance.json) records native graphical measurements on the
 current machine with moving characters and camera, fountain effects, the bakery,
@@ -128,11 +147,12 @@ its merchant interface, the clock, forest effects, lighting
 crossfades and a maximized window. Warmup precedes each six-second sample; long
 frames are retained. Travel/loading fades are outside steady-state measurements.
 
-The native run on Apple M1 / Metal / Godot 4.7.2 measured **59.5–60.0 FPS**
-across seven samples. Worst steady-state frame was **33.91 ms**; one frame exceeded
-33.33 ms. The forest crossfade sample retained a brief focus loss (87% focused);
-all other samples were 100% focused. These short samples describe this demo on this machine, not larger maps
-or other hardware.
+The native run on Apple M1 / Metal / Godot 4.7.2 measured approximately **60 FPS**
+(59.9–60.1 over short samples) across all seven cases, including walking/running,
+patrolling wardens, animated residents, and the shop. Every sample was fully
+focused. One forest sample retained a **53.66 ms** long frame; all other cases
+had worst frames under 20 ms. These short samples describe this demo on this
+machine, not a guarantee of hitch-free playback or other hardware.
 
 ```sh
 Godot --headless --path . --fixed-fps 60 --script res://experiments/anime_hub_demo_v07/tools/test_hub.gd
@@ -150,4 +170,21 @@ Recreate the close-camera screenshots with:
 
 ```sh
 Godot --path . --script res://experiments/anime_hub_demo_v07/tools/capture_hub.gd
+```
+
+
+## Animation authoring and preview
+
+The final [motion assets and prompt index](assets/motion/README.md) include 268
+registered poses across 17 sheets. Generation used **built-in imagegen**. PNGs
+remain byte-identical to the selected outputs; native AtlasTexture regions and
+margins register heads and planted boot baselines on a shared canvas. Registration
+uses detected transparent gutters rather than assuming perfectly equal AI cells.
+The runtime reads only the final catalog and SpriteFrames resources.
+
+[Character motion preview](previews/character_motion.png) shows the directions and
+states rendered by Godot. To watch the animated gallery:
+
+```sh
+Godot --path . --script res://experiments/anime_hub_demo_v07/tools/preview_motion.gd
 ```

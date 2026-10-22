@@ -4,6 +4,7 @@ const ART := "res://experiments/anime_hub_assets_v06/"
 const ROOT := "res://experiments/anime_hub_demo_v07/"
 const Actor := preload("res://experiments/anime_hub_demo_v07/tools/actor.gd")
 const Map := preload("res://experiments/anime_hub_demo_v07/tools/woodland_map.gd")
+const Resident := preload("res://experiments/anime_hub_demo_v07/tools/resident_motion.gd")
 const Bakery := preload("res://experiments/anime_hub_demo_v07/tools/bakery_room.gd")
 const FountainFX := preload("res://experiments/anime_hub_demo_v07/tools/fountain_fx.gd")
 const Hud := preload("res://experiments/anime_hub_demo_v07/tools/hud.gd")
@@ -35,6 +36,7 @@ var catalog: Dictionary
 var world: Node2D
 var player: CharacterBody2D
 var dogs: Array = []
+var residents: Array[Node2D] = []
 var pieces: Array[CanvasItem] = []
 var occluders: Array[Sprite2D] = []
 var interactables: Dictionary = {}
@@ -146,6 +148,7 @@ func _load_zone(destination: String, entry: String) -> void:
 	pieces.clear()
 	occluders.clear()
 	dogs.clear()
+	residents.clear()
 	interactables.clear()
 	blockers.clear()
 	ripples = null
@@ -347,8 +350,21 @@ func _solid(polygon: PackedVector2Array, boundary := false) -> StaticBody2D:
 	return body
 
 
+func _animated_resident(id: String, asset: String, at: Vector2, height: float) -> Node2D:
+	var anchor := Resident.new()
+	anchor.hub = self
+	anchor.asset = asset
+	anchor.resident_id = id
+	anchor.height = height
+	anchor.position = at
+	world.add_child(anchor)
+	residents.append(anchor)
+	pieces.append(anchor.sprite)
+	return anchor
+
+
 func _resident(id: String, name_text: String, asset: String, at: Vector2, height := 108.0) -> void:
-	var anchor := _piece(asset,at,height)
+	var anchor := _animated_resident(id,asset,at,height)
 	var body := _solid(_ellipse(at+Vector2(0,-5),Vector2(21,13)))
 	interactables[id] = {"name":name_text,"at":at,"anchor":anchor,"body":body,"height":height}
 
@@ -379,6 +395,13 @@ func _build_plaza() -> void:
 	_solid(_ellipse(Vector2(1240,1007),Vector2(52,16)))
 	for item in [["warden","Bram · Warden",Vector2(1150,850)],["guard_west","Oak · Warden",Vector2(760,545)],["guard_east","Fern · Warden",Vector2(1300,910)]]:
 		var warden = _actor(false,item[2])
+		warden.resident_id = item[0]
+		warden.patrol_wait = 1.0+dogs.size()*1.7
+		warden.patrol = {
+			"warden":PackedVector2Array([Vector2(1150,850),Vector2(1040,925),Vector2(1160,955),Vector2(1210,860)]),
+			"guard_west":PackedVector2Array([Vector2(760,545),Vector2(870,545),Vector2(820,590)]),
+			"guard_east":PackedVector2Array([Vector2(1300,910),Vector2(1360,945),Vector2(1260,975)])
+		}[item[0]]
 		dogs.append(warden)
 		interactables[item[0]] = {"name":item[1],"at":warden.position,"anchor":warden,"height":108}
 	# Animated water highlights are drawn over the painted water, using native 2D.
@@ -414,7 +437,7 @@ func _build_bakery() -> void:
 	_furniture("bakery_oven",Bakery.iso(6.0,.9),205)
 	_solid(PackedVector2Array([Vector2(1264,454),Vector2(1361,512),Vector2(1454,478),Vector2(1367,418)]))
 	var vendor_at := Bakery.iso(4.3,1.55)
-	var vendor := _piece("cat_baker",vendor_at,118)
+	var vendor := _animated_resident("shop_vendor","cat_baker",vendor_at,118)
 	var body := _solid(_ellipse(vendor_at,Vector2(20,12)))
 	interactables["shop_vendor"] = {"name":"Clover · Bakery keeper","at":Bakery.iso(4.5,4.2),"anchor":vendor,"body":body,"height":118.0}
 	_furniture("bakery_counter",Bakery.iso(4.6,3.25),186)
@@ -429,10 +452,8 @@ func _build_bakery() -> void:
 
 func open_shop() -> void:
 	shopping = true
-	player.intent = Vector2.ZERO
-	player.velocity = Vector2.ZERO
-	player.route.clear()
-	player.sprite.play("idle_"+player.direction)
+	player.stop_motion()
+	interactables["shop_vendor"]["anchor"].greet()
 	dialogue_left = 0
 	talk_panel.hide()
 	prompt.hide()
@@ -529,6 +550,8 @@ func _physics_process(_delta: float) -> void:
 		if combat_active and id=="warden":
 			continue
 		var item: Dictionary = interactables[id]
+		if item.has("anchor") and item["anchor"] is CharacterBody2D:
+			item["at"] = item["anchor"].position
 		var candidate: float = Actor.ground_vector(item["at"]-player.position).length()
 		var quest_target: bool = zone=="town" and quest_stage<5 and id==QUEST_TARGETS[quest_stage]
 		if candidate<150 and (candidate<distance or quest_target):
@@ -552,6 +575,8 @@ func interact(id := "") -> void:
 		id = nearest
 	if id.is_empty():
 		return
+	if interactables[id].has("anchor") and interactables[id]["anchor"].has_method("greet"):
+		interactables[id]["anchor"].greet()
 	var lines := {
 		"baker":"The oven's warm and the square is waking up. Good to see you!",
 		"elder":"A quiet bench, a warm breeze. A fine place to spend the morning.",
@@ -708,7 +733,7 @@ func set_paused(value: bool) -> void:
 	pause_overlay.visible = value
 	for actor in [player]+dogs:
 		if is_instance_valid(actor):
-			actor.sprite.speed_scale = 0.0 if value else 1.0
+			actor.sprite.speed_scale = 0.0
 
 
 func _unhandled_input(event: InputEvent) -> void:

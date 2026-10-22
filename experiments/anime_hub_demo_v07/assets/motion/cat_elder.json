@@ -1,0 +1,9 @@
+{
+  "id": "cat_elder",
+  "kind": "resident",
+  "columns": 4,
+  "rows": 3,
+  "reference": "/Users/n/Documents/project-kingdom/experiments/anime_hub_assets_v06/characters/cat_elder.png",
+  "prompt": "Use case: stylized-concept. Production animation sprite sheet of the EXACT NPC in the attached reference image, matching its charming hand-painted anime art and complete character design. Grey tabby elder with round gold spectacles, lavender floral shawl, teal skirt, brown shoes, purse and cane. Gently breathe, blink, nod, then adjust her spectacles with one paw while the other keeps the cane planted. Return to the exact relaxed stance. EXACTLY FOUR columns by THREE rows, TWELVE distinct full-body poses. All face the same original three-quarter front-right view with elevated orthographic camera. First EIGHT frames (rows one and two): a subtle seamless idle loop, same anatomical scale and planted feet, gentle breathing and tail/ear follow-through, with a short blink in frames five/six. Last FOUR frames (row three): the described welcoming or occupational gesture, returning to the resting pose in the last cell. Keep face, outfit, props, relative size and body position identical. Genuine transparent background, equal cells and wide transparent gutters; a shared boot-contact baseline per row. Do not crop ears, tail or props. No text, grid, labels, ground, shadows, border, extra characters or props.",
+  "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-29661e0b-cd0c-497b-b408-0ed63ee4b2df.png"
+}

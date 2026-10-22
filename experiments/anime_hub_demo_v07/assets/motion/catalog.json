@@ -1,0 +1,84 @@
+{
+  "cat": {
+    "se": {
+      "height": 252.0,
+      "source": "cat_se.png"
+    },
+    "sw": {
+      "height": 256.5,
+      "source": "cat_sw.png"
+    },
+    "ne": {
+      "height": 270.5,
+      "source": "cat_ne.png"
+    },
+    "nw": {
+      "height": 248.0,
+      "source": "cat_nw.png"
+    },
+    "e": {
+      "height": 264.0,
+      "source": "cat_e.png"
+    },
+    "w": {
+      "height": 256.0,
+      "source": "cat_w.png"
+    },
+    "s": {
+      "height": 253.5,
+      "source": "cat_s.png"
+    },
+    "n": {
+      "height": 245.0,
+      "source": "cat_n.png"
+    }
+  },
+  "warden": {
+    "se": {
+      "height": 319.0,
+      "source": "warden_se.png"
+    },
+    "sw": {
+      "height": 304.5,
+      "source": "warden_sw.png"
+    },
+    "ne": {
+      "height": 300.0,
+      "source": "warden_ne.png"
+    },
+    "nw": {
+      "height": 301.5,
+      "source": "warden_nw.png"
+    }
+  },
+  "cat_baker": {
+    "se": {
+      "height": 357.0,
+      "source": "cat_baker.png"
+    }
+  },
+  "cat_elder": {
+    "se": {
+      "height": 377.0,
+      "source": "cat_elder.png"
+    }
+  },
+  "cat_bookseller": {
+    "se": {
+      "height": 363.5,
+      "source": "cat_bookseller.png"
+    }
+  },
+  "dog_grocer": {
+    "se": {
+      "height": 382.5,
+      "source": "dog_grocer.png"
+    }
+  },
+  "dog_courier": {
+    "se": {
+      "height": 353.5,
+      "source": "dog_courier.png"
+    }
+  }
+}

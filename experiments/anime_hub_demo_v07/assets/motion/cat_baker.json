@@ -1,0 +1,9 @@
+{
+  "id": "cat_baker",
+  "kind": "resident",
+  "columns": 4,
+  "rows": 3,
+  "reference": "/Users/n/Documents/project-kingdom/experiments/anime_hub_assets_v06/characters/cat_baker.png",
+  "prompt": "Use case: stylized-concept. Production animation sprite sheet of the EXACT NPC in the attached reference image, matching its charming hand-painted anime art and complete character design. Orange tabby baker in cream chef hat, white shirt and apron, brown trousers, red neckerchief, holding the same bread basket. Idle with gentle breathing, ear and tail movement, then blink, then briefly offer the basket forward and smile, finally relax. Keep both feet planted. EXACTLY FOUR columns by THREE rows, TWELVE distinct full-body poses. All face the same original three-quarter front-right view with elevated orthographic camera. First EIGHT frames (rows one and two): a subtle seamless idle loop, same anatomical scale and planted feet, gentle breathing and tail/ear follow-through, with a short blink in frames five/six. Last FOUR frames (row three): the described welcoming or occupational gesture, returning to the resting pose in the last cell. Keep face, outfit, props, relative size and body position identical. Genuine transparent background, equal cells and wide transparent gutters; a shared boot-contact baseline per row. Do not crop ears, tail or props. No text, grid, labels, ground, shadows, border, extra characters or props.",
+  "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-0043e992-502d-4a6c-8220-3f22cb09770c.png"
+}

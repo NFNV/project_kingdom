@@ -69,6 +69,89 @@ func _visit_landmark(id: String) -> void:
 	_check(game.discoveries.has(id),"Proximity interaction records "+id)
 
 
+
+func _check_motion() -> void:
+	var frames: SpriteFrames = game.player.sprite.sprite_frames
+	for direction in ["e","se","s","sw","w","nw","n","ne"]:
+		_check(frames.get_frame_count("walk_"+direction)==8 and frames.get_frame_count("run_"+direction)==8,"Eight drawn walk and run poses load for "+direction)
+		_check(frames.get_frame_count("idle_"+direction)==4,"A separate breathing/blinking idle loads for "+direction)
+		var walk_frame: AtlasTexture = frames.get_frame_texture("walk_"+direction,0)
+		var run_frame: AtlasTexture = frames.get_frame_texture("run_"+direction,0)
+		_check(walk_frame.region!=run_frame.region,"Running has separate artwork for "+direction)
+		_check(walk_frame.get_size()==Vector2(512,512),"Animation poses share a registered canvas for "+direction)
+	await _settle(Vector2(800,930))
+	Input.action_press("hub_right")
+	var poses: Dictionary = {}
+	for tick in 60:
+		await physics_frame
+		if game.player.sprite.state=="walk":
+			poses[game.player.sprite.frame] = true
+	_check(game.player.sprite.animation=="walk_e" and poses.size()==8,"Actual eastward walking displays all eight poses")
+	Input.action_release("hub_right")
+	await physics_frame
+	_check(game.player.sprite.state=="idle","Releasing movement changes to the matching idle")
+	await _settle(Vector2(800,930))
+	Input.action_press("hub_run")
+	Input.action_press("hub_right")
+	for tick in 20:
+		await physics_frame
+	_check(game.player.sprite.animation=="run_e","Shift switches actual movement to the drawn run sequence")
+	Input.action_release("hub_right")
+	Input.action_release("hub_run")
+	await physics_frame
+	var motion = game.player.sprite
+	motion.facing_direction = "e"
+	motion.idle_clock = 3.94
+	motion.tick(.03,0,Vector2.ZERO)
+	_check(motion.state=="idle" and motion.frame==2,"The short blink is part of idle, not a movement pose")
+	motion.facing_direction = "e"
+	_check(motion.direction_for(Vector2.from_angle(PI/8.0+.03))=="e","Facing deadband rejects tiny changes near a sector boundary")
+	_check(motion.direction_for(Vector2.DOWN)=="s" and motion.direction_for(Vector2.UP)=="n","Cardinal motion has true front and back views")
+	await _settle(Vector2(970,805))
+	Input.action_press("hub_up")
+	for tick in 100:
+		await physics_frame
+	var phase_before: float = motion.phase
+	for tick in 30:
+		await physics_frame
+	_check(motion.state=="idle" and is_equal_approx(motion.phase,phase_before),"Holding movement against the fountain cannot treadmill the walk cycle")
+	Input.action_release("hub_up")
+	await _settle(Vector2(430,950))
+	var before_patrol: Array[Vector2] = []
+	for dog in game.dogs:
+		before_patrol.append(dog.position)
+	for tick in 360:
+		await physics_frame
+	var moving_wardens := 0
+	for index in game.dogs.size():
+		var dog = game.dogs[index]
+		moving_wardens += int(dog.position.distance_to(before_patrol[index])>20)
+		_check(game.is_walkable(dog.position,12),"Warden patrol respects the painted ground footprint")
+		_check(game.interactables[dog.resident_id].at.distance_to(dog.position)<5,"Conversation target follows the moving warden")
+	_check(moving_wardens>=2,"Multiple friendly wardens physically stroll through the square")
+	var dog = game.dogs[0]
+	await _settle(dog.position+Vector2(60,35))
+	await physics_frame
+	var talking_at: Vector2 = dog.position
+	for tick in 30:
+		await physics_frame
+	_check(dog.position.distance_to(talking_at)<3,"Approaching a patrolling warden makes him stop for conversation")
+	_check(game.residents.size()==5,"Every town civilian uses the new animation controller")
+	for resident in game.residents:
+		_check(resident.sprite.sprite_frames.get_frame_count("idle_se")==8 and resident.sprite.sprite_frames.get_frame_count("gesture_se")==4,"Civilian has idle and occupational gesture sequences: "+resident.resident_id)
+	var baker = game.interactables.baker.anchor
+	var greetings_before: int = baker.sprite.gesture_count
+	game.interact("baker")
+	_check(baker.sprite.gesture_count>greetings_before,"Speaking to the baker triggers a welcoming gesture")
+	var idle_before: float = baker.sprite.idle_clock
+	var gait_before: float = motion.phase
+	game.set_paused(true)
+	for tick in 30:
+		await physics_frame
+	_check(is_equal_approx(baker.sprite.idle_clock,idle_before) and is_equal_approx(motion.phase,gait_before),"Pause freezes both civilian gestures and character gait")
+	game.set_paused(false)
+
+
 func _run() -> void:
 	game = load(ROOT+"demo.tscn").instantiate()
 	root.add_child(game)
@@ -239,6 +322,7 @@ func _run() -> void:
 	await _travel_route("bakery","bakery")
 	_check(game.coins==3 and game.inventory.honey==1,"Reentering the bakery cannot reset or duplicate purchased goods")
 	await _travel_route("town","town")
+	await _check_motion()
 	game.clock = 3.95
 	game.advance_time()
 	for tick in 30:
@@ -260,7 +344,7 @@ func _run() -> void:
 	for action in InputMap.get_actions():
 		if action.begins_with("hub_"):
 			Input.action_release(action)
-	var report := {"checks":checks,"passed":checks-failures.size(),"failures":failures,"scope":"Movement/collision, delivery quest, peaceful warden regression, twenty-minute clock, camera tracking/projection/limits, spilling fountain, furnished bakery entry/return, counter collision, vendor purchases and modal input, physical southeast exit, both forest areas, bridge, complete return journey and persistent progress."}
+	var report := {"checks":checks,"passed":checks-failures.size(),"failures":failures,"scope":"Eight-direction walk/run/idle, drawn civilian gestures, actual friendly patrols, conversation tracking, pause and blocked-motion animation regression. Movement/collision, delivery quest, peaceful warden regression, twenty-minute clock, camera tracking/projection/limits, spilling fountain, furnished bakery entry/return, counter collision, vendor purchases and modal input, physical southeast exit, both forest areas, bridge, complete return journey and persistent progress."}
 	FileAccess.open(ProjectSettings.globalize_path(ROOT+"test_results.json"),FileAccess.WRITE).store_string(JSON.stringify(report,"  ")+"\n")
 	print("Playable hub: ",checks-failures.size(),"/",checks," checks passed.")
 	quit(0 if failures.is_empty() else 1)

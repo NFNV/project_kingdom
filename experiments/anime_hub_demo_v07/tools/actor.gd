@@ -2,6 +2,7 @@ extends CharacterBody2D
 
 const ART := "res://experiments/anime_hub_assets_v06/"
 const GROUND_Y := 0.65
+const Motion := preload("res://experiments/anime_hub_demo_v07/tools/motion_sprite.gd")
 var hub: Node2D
 var controlled := false
 var enemy := false
@@ -22,6 +23,11 @@ var path_timer := 0.0
 var swing_hits: Array = []
 var direction := "se"
 var automated := false
+var resident_id := ""
+var patrol := PackedVector2Array()
+var patrol_index := 1
+var patrol_wait := 2.0
+var moved_distance := 0.0
 
 
 func _ready() -> void:
@@ -32,15 +38,9 @@ func _ready() -> void:
 	circle.radius = 15.0
 	shape.shape = circle
 	add_child(shape)
-	sprite = AnimatedSprite2D.new()
-	var id := "cat_adventurer" if controlled else "dog_warden"
-	sprite.sprite_frames = load(ART+"godot/"+id+"_frames.tres")
-	var frame = hub.catalog[id]["sheet"]["frame_canvas"]
-	sprite.centered = false
-	sprite.offset = Vector2(-float(frame[0])/2.0,-float(frame[1])+24.0)
-	sprite.scale = Vector2.ONE*108.0/(float(frame[1])-48.0)
+	sprite = Motion.new()
 	add_child(sprite)
-	sprite.play("idle_se")
+	sprite.configure("cat" if controlled else "warden",108.0,float(get_instance_id()%37)*.13)
 	physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_ON
 	queue_redraw()
 
@@ -50,7 +50,11 @@ static func ground_vector(vector: Vector2) -> Vector2:
 
 
 func _physics_process(delta: float) -> void:
-	if hub.paused or hub.shopping or hub.transitioning or not active:
+	if hub.paused or hub.transitioning or not active:
+		return
+	if hub.shopping:
+		velocity = Vector2.ZERO
+		sprite.tick(delta,0.0,facing)
 		return
 	grace = maxf(0,grace-delta)
 	cooldown = maxf(0,cooldown-delta)
@@ -74,8 +78,12 @@ func _physics_process(delta: float) -> void:
 		speed = 325.0
 	if swing>0 or windup>0:
 		speed *= 0.2
+	if not controlled and hub.peaceful_mode:
+		speed = 74.0
+	var before := position
 	velocity = Vector2(intent.x,intent.y*GROUND_Y)*speed+knockback
 	move_and_slide()
+	moved_distance = ground_vector(position-before).length()
 	if windup>0:
 		windup -= delta
 		if windup<=0:
@@ -84,7 +92,7 @@ func _physics_process(delta: float) -> void:
 		swing = maxf(0,swing-delta)
 		if swing<0.22:
 			resolve_hits()
-	_update_animation(intent.length()>0.05 and swing<=0 and windup<=0)
+	_update_animation(delta,moved_distance)
 	var tint: Color = hub.actor_tint
 	sprite.modulate = tint.lerp(Color(1.0,0.4,0.3),flash)
 	if grace>0 and controlled:
@@ -103,7 +111,7 @@ func follow_route() -> Vector2:
 func _enemy_intent(delta: float) -> Vector2:
 	if hub.peaceful_mode:
 		windup = 0
-		return Vector2.ZERO
+		return _friendly_intent(delta)
 	if not enemy or not hub.combat_active or not hub.player.active:
 		return Vector2.ZERO
 	var offset: Vector2 = hub.player.position-position
@@ -170,15 +178,37 @@ func receive_hit(from: Vector2) -> bool:
 	return true
 
 
-func _update_animation(walking: bool) -> void:
-	if facing.y>=0:
-		direction = "se" if facing.x>=0 else "sw"
-	else:
-		direction = "ne" if facing.x>=0 else "nw"
-	var animation := ("walk_" if walking else "idle_")+direction
-	if sprite.animation!=animation:
-		sprite.play(animation)
-	sprite.speed_scale = 1.35 if controlled and Input.is_action_pressed("hub_run") else 1.0
+func _friendly_intent(delta: float) -> Vector2:
+	if patrol.is_empty() or not is_instance_valid(hub.player):
+		return Vector2.ZERO
+	var offset: Vector2 = hub.player.position-position
+	if ground_vector(offset).length()<155:
+		facing = ground_vector(offset).normalized()
+		return Vector2.ZERO
+	patrol_wait = maxf(0,patrol_wait-delta)
+	if patrol_wait>0:
+		return Vector2.ZERO
+	if route.is_empty():
+		var goal := patrol[patrol_index]
+		if position.distance_to(goal)<18:
+			patrol_index = (patrol_index+1)%patrol.size()
+			patrol_wait = 2.5+patrol_index*.7
+			return Vector2.ZERO
+		route = hub.find_path(position,goal)
+	return follow_route()
+
+
+func _update_animation(delta: float, distance: float) -> void:
+	var running := controlled and Input.is_action_pressed("hub_run")
+	sprite.tick(delta,distance,facing,running)
+	direction = sprite.facing_direction
+
+
+func stop_motion() -> void:
+	intent = Vector2.ZERO
+	velocity = Vector2.ZERO
+	route.clear()
+	sprite.set_pose("idle",direction,0)
 
 
 func _draw() -> void:

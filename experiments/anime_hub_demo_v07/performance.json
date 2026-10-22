@@ -3,86 +3,86 @@
   "canvas": "1920x1080 fixed viewport; close actor-follow camera, animated fountain, authored bakery and forest plates",
   "engine": "4.7.2-stable (official)",
   "max_fps": 60,
-  "notes": "Graphical measurements after warmup; foreground focus is requested before each sample and actual focused fractions are recorded. Actual cat movement with a 1.7x following camera, peaceful wardens, flowing water and splashes, bakery steam/fire, vendor interface, animated wind/leaves/fireflies, clock and background crossfades. All long frames retained. Maximize still renders the same 1080p canvas. Scene loads occur during short travel fades and outside steady-state samples.",
+  "notes": "Graphical measurements after warmup; foreground focus is requested before each sample and actual focused fractions are recorded. Actual cat movement with a 1.7x following camera, animated civilians and friendly patrolling wardens, eight-direction drawn walk/run cycles, flowing water and splashes, bakery steam/fire, vendor interface, animated wind/leaves/fireflies, clock and background crossfades. All long frames retained. Maximize still renders the same 1080p canvas. Scene loads occur during short travel fades and outside steady-state samples.",
   "renderer": "forward_plus",
   "samples": [
     {
-      "case": "town_close_camera_and_fountain",
+      "case": "town_walk_run_patrols_and_fountain",
       "draw_calls": 274.0,
       "focused_fraction": 1.0,
-      "fps": 60.0,
+      "fps": 60.1,
       "frames_above_20_ms": 0,
       "frames_above_33_ms": 0,
-      "p95_ms": 17.07,
-      "p99_ms": 18.22,
+      "p95_ms": 16.82,
+      "p99_ms": 16.96,
       "render_size": "(1920.0, 1080.0)",
       "window_size": "(1280, 720)",
-      "worst_ms": 18.68
+      "worst_ms": 17.54
     },
     {
       "case": "furnished_bakery_follow_camera_and_fire",
       "draw_calls": 160.0,
       "focused_fraction": 1.0,
-      "fps": 59.9,
-      "frames_above_20_ms": 2,
+      "fps": 60.1,
+      "frames_above_20_ms": 0,
       "frames_above_33_ms": 0,
-      "p95_ms": 17.19,
-      "p99_ms": 17.95,
+      "p95_ms": 17.01,
+      "p99_ms": 17.21,
       "render_size": "(1920.0, 1080.0)",
       "window_size": "(1280, 720)",
-      "worst_ms": 22.9
+      "worst_ms": 17.32
     },
     {
       "case": "bakery_vendor_interface_and_animation",
       "draw_calls": 178.0,
       "focused_fraction": 1.0,
-      "fps": 59.5,
-      "frames_above_20_ms": 3,
+      "fps": 60.1,
+      "frames_above_20_ms": 0,
       "frames_above_33_ms": 0,
-      "p95_ms": 17.38,
-      "p99_ms": 17.81,
+      "p95_ms": 16.81,
+      "p99_ms": 17.09,
       "render_size": "(1920.0, 1080.0)",
       "window_size": "(1280, 720)",
-      "worst_ms": 33.27
+      "worst_ms": 17.44
     },
     {
       "case": "forest_trail_day_wind_and_clock",
       "draw_calls": 112.0,
       "focused_fraction": 1.0,
-      "fps": 60.0,
-      "frames_above_20_ms": 0,
-      "frames_above_33_ms": 0,
-      "p95_ms": 17.63,
-      "p99_ms": 18.14,
+      "fps": 59.9,
+      "frames_above_20_ms": 1,
+      "frames_above_33_ms": 1,
+      "p95_ms": 17.51,
+      "p99_ms": 17.81,
       "render_size": "(1920.0, 1080.0)",
       "window_size": "(1280, 720)",
-      "worst_ms": 18.34
+      "worst_ms": 53.66
     },
     {
       "case": "forest_trail_day_night_crossfade",
       "draw_calls": 129.0,
-      "focused_fraction": 0.87,
-      "fps": 59.7,
-      "frames_above_20_ms": 4,
-      "frames_above_33_ms": 1,
-      "p95_ms": 17.59,
-      "p99_ms": 27.21,
+      "focused_fraction": 1.0,
+      "fps": 60.0,
+      "frames_above_20_ms": 0,
+      "frames_above_33_ms": 0,
+      "p95_ms": 17.51,
+      "p99_ms": 17.83,
       "render_size": "(1920.0, 1080.0)",
       "window_size": "(1280, 720)",
-      "worst_ms": 33.91
+      "worst_ms": 18.23
     },
     {
       "case": "river_glade_twilight",
       "draw_calls": 108.0,
       "focused_fraction": 1.0,
       "fps": 60.0,
-      "frames_above_20_ms": 1,
+      "frames_above_20_ms": 0,
       "frames_above_33_ms": 0,
-      "p95_ms": 16.99,
-      "p99_ms": 17.33,
+      "p95_ms": 17.47,
+      "p99_ms": 17.63,
       "render_size": "(1920.0, 1080.0)",
       "window_size": "(1280, 720)",
-      "worst_ms": 22.91
+      "worst_ms": 17.92
     },
     {
       "case": "maximized_river_at_night",
@@ -91,11 +91,11 @@
       "fps": 60.0,
       "frames_above_20_ms": 0,
       "frames_above_33_ms": 0,
-      "p95_ms": 17.38,
-      "p99_ms": 17.89,
+      "p95_ms": 16.91,
+      "p99_ms": 17.0,
       "render_size": "(1920.0, 1080.0)",
       "window_size": "(2880, 1476)",
-      "worst_ms": 18.43
+      "worst_ms": 17.23
     }
   ]
 }

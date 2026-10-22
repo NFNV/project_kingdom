@@ -1,0 +1,10 @@
+{
+  "id": "warden_sw",
+  "kind": "warden",
+  "direction": "sw",
+  "columns": 4,
+  "rows": 3,
+  "reference": "/Users/n/Documents/project-kingdom/experiments/anime_hub_assets_v06/characters/dog_warden.png",
+  "prompt": "Use case: stylized-concept. Production animation sheet of the EXACT beagle dog warden in the reference: blue cap and coat with gold trim, cream trousers, brown boots, long floppy dark ears, blue shield with gold fleur-de-lis, low-held small sword. Preserve his identity, outfit, head/body proportions and painted anime style. Elevated orthographic 35-degree camera. All twelve full figures face ONE LOCKED direction: southwest: a three-quarter FRONT view facing diagonally toward the lower LEFT of the screen. Both eyes visible, nose points left. EXACTLY FOUR columns by THREE rows on genuine transparent background, evenly spaced complete figures with transparent gutters, consistent scale and boot-contact baseline. NO floor, shadows, grid lines, labels, text, cropped parts or overlap. First two rows are a true eight-frame relaxed WALK cycle in order: left contact, down, passing, up, right contact, down, passing, up. Legs alternate with clear bent-knee intermediate poses, opposite arm motion, ears and tail follow through. Third row four IDLE frames: relaxed, inhale, blink, exhale. Keep the shield and sword on the same anatomical arms throughout; do not change equipment. Every gait pose is distinct, but the body's design stays identical.",
+  "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-c31587c1-2b70-4ce1-b2f3-93aa5459be22.png"
+}

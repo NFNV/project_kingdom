@@ -10,7 +10,7 @@
     1070,
     300
   ],
-  "water_pixels_changed_over_2_levels": 900,
+  "water_pixels_changed_over_2_levels": 856,
   "water_pixels_compared": 30160,
   "visual_checks": [
     "Closer camera follows cat in every zone; painted edges remain covered",
@@ -20,5 +20,19 @@
     "Oven fire is anchored inside the dark firebox",
     "Shop text, prices, purchase buttons and close action fit the parchment frame",
     "Bakery windows darken at night while the interior stays warm"
-  ]
+  ],
+  "motion": {
+    "pose_count": 268,
+    "sheets": 17,
+    "player_directions": 8,
+    "walk_poses_per_direction": 8,
+    "run_poses_per_direction": 8,
+    "idle_poses_per_direction": 4,
+    "civilian_idle_poses": 8,
+    "civilian_gesture_poses": 4,
+    "native_preview": "previews/character_motion.png",
+    "all_final_sheets_visually_inspected": true,
+    "registration": "assets/motion/registration.json",
+    "limitations": "Prototype painted sheets retain some silhouette and direction-change variation; the preview is a native-rendered still, not a motion capture."
+  }
 }
