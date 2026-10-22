@@ -22,7 +22,15 @@ func _run() -> void:
 	game.player.automated = true
 	game.dialogue_left = 0
 	await create_timer(3.0).timeout
-	await _sample("town_day_with_celestial_clock",6.0)
+	await _sample("town_close_camera_and_fountain",6.0)
+	game._load_zone("bakery","town")
+	game.player.position = Vector2(982,590)
+	game.player.reset_physics_interpolation()
+	await create_timer(1.0).timeout
+	await _sample("furnished_bakery_follow_camera_and_fire",6.0)
+	game.interact("shop_vendor")
+	await _sample("bakery_vendor_interface_and_animation",6.0)
+	game.close_shop()
 	game._load_zone("trail","town")
 	game.player.position = game.Map.point(850,515)
 	game.player.reset_physics_interpolation()
@@ -42,7 +50,7 @@ func _run() -> void:
 	await create_timer(2.0).timeout
 	await _sample("maximized_river_at_night",6.0)
 	game.player.intent = Vector2.ZERO
-	var report := {"engine":Engine.get_version_info()["string"],"renderer":RenderingServer.get_current_rendering_method(),"adapter":RenderingServer.get_video_adapter_name(),"canvas":"1920x1080 fixed viewport; original forest day/night plates, native celestial clock", "max_fps":Engine.max_fps,"samples":results,"notes":"Focused graphical measurements after warmup. Actual cat movement, peaceful wardens, animated wind/leaves/fireflies, clock and background crossfades. All long frames retained. Maximize still renders the same 1080p canvas. Scene loads occur during short travel fades and outside steady-state samples."}
+	var report := {"engine":Engine.get_version_info()["string"],"renderer":RenderingServer.get_current_rendering_method(),"adapter":RenderingServer.get_video_adapter_name(),"canvas":"1920x1080 fixed viewport; close actor-follow camera, animated fountain, authored bakery and forest plates", "max_fps":Engine.max_fps,"samples":results,"notes":"Graphical measurements after warmup; foreground focus is requested before each sample and actual focused fractions are recorded. Actual cat movement with a 1.7x following camera, peaceful wardens, flowing water and splashes, bakery steam/fire, vendor interface, animated wind/leaves/fireflies, clock and background crossfades. All long frames retained. Maximize still renders the same 1080p canvas. Scene loads occur during short travel fades and outside steady-state samples."}
 	FileAccess.open(ProjectSettings.globalize_path(ROOT+"performance.json"),FileAccess.WRITE).store_string(JSON.stringify(report,"  ")+"\n")
 	quit()
 
@@ -56,7 +64,9 @@ func _sample(label: String, duration: float) -> void:
 	var focused := 0
 	while Time.get_ticks_usec()-start<duration*1000000:
 		var seconds := (Time.get_ticks_usec()-start)/1000000.0
-		var center := Vector2(970,900)
+		var center := Vector2(970,810)
+		if game.zone=="bakery":
+			center = Vector2(982,650)
 		if game.zone=="trail":
 			center = game.Map.point(850,515)
 		elif game.zone=="river":

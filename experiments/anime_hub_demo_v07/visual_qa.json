@@ -1,0 +1,24 @@
+{
+  "method": "Two native renderer captures 0.4 seconds apart, camera and clock fixed; numerical RGB comparison only.",
+  "canvas_dimensions": [
+    1920,
+    1080
+  ],
+  "water_region_xyxy": [
+    838,
+    170,
+    1070,
+    300
+  ],
+  "water_pixels_changed_over_2_levels": 900,
+  "water_pixels_compared": 30160,
+  "visual_checks": [
+    "Closer camera follows cat in every zone; painted edges remain covered",
+    "Falling streams register to the original fountain lips and basin",
+    "Blue awning doorway has a connected walkable approach and entry prompt",
+    "Clover is a separate sprite visibly behind the sales counter",
+    "Oven fire is anchored inside the dark firebox",
+    "Shop text, prices, purchase buttons and close action fit the parchment frame",
+    "Bakery windows darken at night while the interior stays warm"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "tool": "built-in image_gen.imagegen",
+  "reference": "experiments/anime_hub_assets_v06/backgrounds/plaza_noon.png",
+  "assets": [
+    {
+      "id": "bakery_counter",
+      "transparent": true,
+      "prompt": "Use case: stylized-concept. Asset type: a reusable transparent cutout for an actual 2D isometric storybook anime RPG bakery interior. Match the attached town's warm hand-painted gouache/watercolor anime art, cream plaster, teal accents, pale honey oak and brass. Elevated orthographic isometric camera about 35 degrees downward; crisp readable silhouette, meticulous material texture, never pixel art. Draw a complete isolated object with genuine transparent background and ample clear padding on all sides. No ground plane, room, backdrop, drop shadow, characters, text, watermark or border. Neutral soft warm indoor illumination, no large glows outside the object. A beautiful long freestanding honey-oak bakery sales counter, with a dark polished wood top, cream carved front panels, a small brass wheat emblem centered on its front, a glass pastry display holding neat little croissants and buns on the left end, a brass countertop till and ceramic bread plate at the right end. The main long front edge runs diagonally from upper-left to lower-right in the image (screen slope about +0.5); the short end recedes toward the upper-right. Show the whole front, right end, top and base. Counter only, with no staff. Its back is open so a separate vendor sprite can stand behind it.",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-ba43e374-3636-4f57-88aa-80ccd77541e4.png"
+    },
+    {
+      "id": "bakery_shelf",
+      "transparent": true,
+      "prompt": "Use case: stylized-concept. Asset type: a reusable transparent cutout for an actual 2D isometric storybook anime RPG bakery interior. Match the attached town's warm hand-painted gouache/watercolor anime art, cream plaster, teal accents, pale honey oak and brass. Elevated orthographic isometric camera about 35 degrees downward; crisp readable silhouette, meticulous material texture, never pixel art. Draw a complete isolated object with genuine transparent background and ample clear padding on all sides. No ground plane, room, backdrop, drop shadow, characters, text, watermark or border. Neutral soft warm indoor illumination, no large glows outside the object. A tall, beautiful freestanding vintage bakery bread cabinet in honey oak: three shelves of baguettes, round loaves, flour jars and ceramic tea tins, bottom cupboards, a small bunch of dried wheat tied to the side, muted teal fabric trim. Its broad front face extends diagonally from upper-right toward lower-left (screen slope about -0.5), suitable against the left rear wall of an isometric cutaway room. Show its depth and complete base and decorative cornice. Cabinet only.",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-534d7c09-40e3-406e-9618-86f6a9e6228a.png"
+    },
+    {
+      "id": "bakery_oven",
+      "transparent": true,
+      "prompt": "Use case: stylized-concept. Asset type: a reusable transparent cutout for an actual 2D isometric storybook anime RPG bakery interior. Match the attached town's warm hand-painted gouache/watercolor anime art, cream plaster, teal accents, pale honey oak and brass. Elevated orthographic isometric camera about 35 degrees downward; crisp readable silhouette, meticulous material texture, never pixel art. Draw a complete isolated object with genuine transparent background and ample clear padding on all sides. No ground plane, room, backdrop, drop shadow, characters, text, watermark or border. Neutral soft warm indoor illumination, no large glows outside the object. A charming complete cream-brick bakery oven with a rounded arched dark firebox opening facing front-left, a dark cast-iron rim, short cream-brick chimney, dark stone hearth, a copper kettle and a wooden bread peel resting against its side. A few stacked oak logs are visible inside the dark firebox, WITHOUT painted flames or glow: animated fire will be added in the game. Show complete body and base. Compact vintage appliance, not medieval.",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-5fec114a-4c00-4eed-8bb4-307b580b19b8.png"
+    },
+    {
+      "id": "bakery_table",
+      "transparent": true,
+      "prompt": "Use case: stylized-concept. Asset type: a reusable transparent cutout for an actual 2D isometric storybook anime RPG bakery interior. Match the attached town's warm hand-painted gouache/watercolor anime art, cream plaster, teal accents, pale honey oak and brass. Elevated orthographic isometric camera about 35 degrees downward; crisp readable silhouette, meticulous material texture, never pixel art. Draw a complete isolated object with genuine transparent background and ample clear padding on all sides. No ground plane, room, backdrop, drop shadow, characters, text, watermark or border. Neutral soft warm indoor illumination, no large glows outside the object. A small round honey-oak cafe table with two matching bentwood chairs, an ivory lace-edged cloth, a delicate little teal teapot and two cups, a white ceramic vase with three daisies. All pieces form one complete isolated furniture cluster with chair legs visible, suitable for an isometric bakery seating corner. No people.",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-d5e0b93f-092e-4abe-b71b-64af16ffae38.png"
+    },
+    {
+      "id": "oak_floor",
+      "transparent": false,
+      "prompt": "Use case: stylized-concept. Asset type: seamless square top-down wood-floor material texture for an isometric anime game. Warm pale honey-oak floorboards, gently worn satin finish, thin dark seams between broad parallel horizontal boards, restrained hand-painted wood grain, subtle alternating warm tones. Charming painted watercolor-gouache game background quality matching the attached town reference. Completely flat orthographic overhead view with uniform neutral lighting: absolutely no perspective, objects, shadows, room edges, border, text or vignette. Tile seamlessly across every edge. Square texture.",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-0d1ae76a-123c-4261-8177-a581f4c6307d.png"
+    }
+  ],
+  "counter_cleanup": {
+    "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-2f4ef555-f6d7-4b79-af53-847b56d0e390.png",
+    "prompt": "Use case: precise-edit. Keep this exact bakery counter, its painted style, proportions, colors, pastries, glass, cash register, bread basket and perspective unchanged. Remove ALL the diffuse brown glow and green shadow outside its physical silhouette. Every pixel outside the physical object must be fully transparent, with only fine antialiasing along the actual edge. No drop shadow, haze, backdrop, light spill, ground plane or painted ambient occlusion beyond the object. A clean production cutout on genuine transparency. Preserve the whole object and all its details."
+  }
+}

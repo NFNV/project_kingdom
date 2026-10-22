@@ -1,0 +1,86 @@
+{
+  "bakery_counter": {
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "sha256": "62073dc2823f5f4914b598a3a0098b8469fb8bfe14606b7ab3d6e68932860b14",
+    "alpha_bounds": [
+      30,
+      37,
+      1512,
+      1019
+    ],
+    "byte_identical_to_generated_source": true,
+    "transparent_pixel_fraction": 0.5105,
+    "alpha_extrema": [
+      0,
+      254
+    ]
+  },
+  "bakery_shelf": {
+    "dimensions": [
+      1347,
+      1167
+    ],
+    "sha256": "22e020a20e9d1fe76f6c21b421936d58ae7d44bd85acdd4c9f7162e57ec0302d",
+    "alpha_bounds": [
+      224,
+      25,
+      1201,
+      1159
+    ],
+    "byte_identical_to_generated_source": true,
+    "transparent_pixel_fraction": 0.4686,
+    "alpha_extrema": [
+      0,
+      255
+    ]
+  },
+  "bakery_oven": {
+    "dimensions": [
+      1312,
+      1199
+    ],
+    "sha256": "bac7bbfef7ab7a3f623361acd5fdab71989d6c902233e405b3822d9e885fcac1",
+    "alpha_bounds": [
+      103,
+      8,
+      1229,
+      1189
+    ],
+    "byte_identical_to_generated_source": true,
+    "transparent_pixel_fraction": 0.4921,
+    "alpha_extrema": [
+      0,
+      255
+    ]
+  },
+  "bakery_table": {
+    "dimensions": [
+      1402,
+      1122
+    ],
+    "sha256": "fdfb293a7104663aba612f82d8a5be82f13a0768744d8c1f1491486f0288bd14",
+    "alpha_bounds": [
+      76,
+      103,
+      1348,
+      1053
+    ],
+    "byte_identical_to_generated_source": true,
+    "transparent_pixel_fraction": 0.6205,
+    "alpha_extrema": [
+      0,
+      255
+    ]
+  },
+  "oak_floor": {
+    "dimensions": [
+      1254,
+      1254
+    ],
+    "sha256": "0e7a1e4999c0398b20646e4c895675e65a02c1a963df88420f53c545762afc21",
+    "byte_identical_to_generated_source": true
+  }
+}

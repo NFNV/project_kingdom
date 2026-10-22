@@ -4,12 +4,14 @@ const ART := "res://experiments/anime_hub_assets_v06/"
 const ROOT := "res://experiments/anime_hub_demo_v07/"
 const Actor := preload("res://experiments/anime_hub_demo_v07/tools/actor.gd")
 const Map := preload("res://experiments/anime_hub_demo_v07/tools/woodland_map.gd")
+const Bakery := preload("res://experiments/anime_hub_demo_v07/tools/bakery_room.gd")
+const FountainFX := preload("res://experiments/anime_hub_demo_v07/tools/fountain_fx.gd")
 const Hud := preload("res://experiments/anime_hub_demo_v07/tools/hud.gd")
 const CYCLE_SECONDS := 1200.0
 const SIZE := Vector2i(1920,1080)
 const TIMES := ["Dawn","Noon","Dusk","Night"]
 const TINTS := [Color(1.0,0.88,0.80),Color.WHITE,Color(0.86,0.70,0.67),Color(0.43,0.52,0.74)]
-var FLOOR := PackedVector2Array([Vector2(760,465),Vector2(1150,460),Vector2(1315,570),Vector2(1590,735),Vector2(1360,835),Vector2(1460,990),Vector2(1270,1060),Vector2(410,1060),Vector2(500,925),Vector2(370,770),Vector2(430,685),Vector2(650,580)])
+var FLOOR := PackedVector2Array([Vector2(760,465),Vector2(1150,460),Vector2(1315,570),Vector2(1590,735),Vector2(1360,835),Vector2(1460,990),Vector2(1270,1060),Vector2(410,1060),Vector2(500,925),Vector2(370,770),Vector2(350,720),Vector2(290,695),Vector2(245,635),Vector2(245,555),Vector2(330,550),Vector2(380,610),Vector2(465,630),Vector2(650,580)])
 var town_floor := FLOOR.duplicate()
 const OBJECTIVES := [
 	"Visit Pippa at the blue bakery cart.",
@@ -34,6 +36,7 @@ var world: Node2D
 var player: CharacterBody2D
 var dogs: Array = []
 var pieces: Array[CanvasItem] = []
+var occluders: Array[Sprite2D] = []
 var interactables: Dictionary = {}
 var blockers: Array[PackedVector2Array] = []
 var navigation := AStarGrid2D.new()
@@ -65,6 +68,16 @@ var hud_timer := 0.0
 var spawn := Vector2(840,905)
 var ripples: Node2D
 var victory_count := 0
+var camera: Camera2D
+var bakery_room: Node2D
+var shopping := false
+var coins := 12
+var inventory: Dictionary = {"bread":0,"tea":0,"honey":0}
+const GOODS := [
+	{"id":"bread","name":"Warm sourdough","description":"A crisp crust, a soft heart.","price":2},
+	{"id":"tea","name":"Meadow tea","description":"Chamomile and a little lavender.","price":3},
+	{"id":"honey","name":"Valley honey","description":"Wildflowers from Mosswood.","price":4}
+]
 
 
 func _ready() -> void:
@@ -85,10 +98,17 @@ func _ready() -> void:
 	_update_hud()
 	if DisplayServer.get_name()!="headless":
 		DisplayServer.window_move_to_foreground()
-	_say("Welcome to Garden Square", "WASD to walk, Shift to run. The wardens are friendly. Visit Pippa, or take the southeast gate into Mosswood.")
+	_say("Welcome to Garden Square", "WASD to walk, Shift to run. Enter the blue-awning bakery on the left with E, or take the southeast gate into Mosswood. The wardens are friendly.")
 	if "--night" in OS.get_cmdline_user_args():
 		clock = 3.0
-	if "--trail" in OS.get_cmdline_user_args():
+	if "--bakery" in OS.get_cmdline_user_args():
+		_load_zone("bakery","town")
+	elif "--fountain" in OS.get_cmdline_user_args():
+		player.position = Vector2(970,810)
+		player.reset_physics_interpolation()
+		camera.reset_smoothing()
+		camera.force_update_scroll()
+	elif "--trail" in OS.get_cmdline_user_args():
 		_load_zone("trail","town")
 	elif "--river" in OS.get_cmdline_user_args():
 		_load_zone("river","trail")
@@ -118,14 +138,19 @@ func _load_zone(destination: String, entry: String) -> void:
 	if is_instance_valid(zone_root):
 		remove_child(zone_root)
 		zone_root.queue_free()
+	shopping = false
+	if is_instance_valid(ui):
+		ui.merchant.hide()
 	zone = destination
 	backgrounds.clear()
 	pieces.clear()
+	occluders.clear()
 	dogs.clear()
 	interactables.clear()
 	blockers.clear()
 	ripples = null
 	trail_effects = null
+	bakery_room = null
 	nearest = ""
 	near_exit = ""
 	zone_root = Node2D.new()
@@ -135,6 +160,8 @@ func _load_zone(destination: String, entry: String) -> void:
 		FLOOR = town_floor.duplicate()
 		for time in TIMES:
 			files.append(ART+"backgrounds/plaza_"+time.to_lower()+".png")
+	elif zone=="bakery":
+		FLOOR = Bakery.floor_polygon()
 	else:
 		FLOOR = Map.floor_for(zone)
 		var id := "mosswood" if zone=="trail" else "riverbend"
@@ -152,6 +179,8 @@ func _load_zone(destination: String, entry: String) -> void:
 	zone_root.add_child(world)
 	if zone=="town":
 		_build_plaza()
+	elif zone=="bakery":
+		_build_bakery()
 	else:
 		_build_forest()
 	exits = Map.exits_for(zone)
@@ -165,9 +194,25 @@ func _load_zone(destination: String, entry: String) -> void:
 	player.velocity = Vector2.ZERO
 	player.route.clear()
 	player.reset_physics_interpolation()
+	if not is_instance_valid(camera):
+		camera = Camera2D.new()
+		camera.name = "FollowCamera"
+		camera.zoom = Vector2(1.7,1.7)
+		camera.position = Vector2(0,-55)
+		camera.position_smoothing_enabled = false
+		camera.process_callback = Camera2D.CAMERA2D_PROCESS_PHYSICS
+		camera.limit_left = 0
+		camera.limit_top = 0
+		camera.limit_right = SIZE.x
+		camera.limit_bottom = SIZE.y
+		player.add_child(camera)
+	camera.make_current()
+	camera.reset_physics_interpolation()
+	camera.reset_smoothing()
+	camera.force_update_scroll()
 	travel_cooldown = 1.2
 	var markings := Node2D.new()
-	markings.z_index = 1
+	markings.z_index = -1
 	zone_root.add_child(markings)
 	markings.draw.connect(_draw_exit_marks.bind(markings))
 	markings.queue_redraw()
@@ -210,8 +255,9 @@ func _draw_exit_marks(node: Node2D) -> void:
 		sign.border_color = Color("c4ab72")
 		sign.set_border_width_all(1)
 		sign.set_corner_radius_all(5)
-		node.draw_style_box(sign,Rect2(at+Vector2(-82,-57),Vector2(164,29)))
-		node.draw_string(ThemeDB.fallback_font,at+Vector2(-76,-36),"Mosswood" if zone=="town" else ("Garden Square" if id=="town" else ("Riverbend" if id=="river" else "Mosswood")),HORIZONTAL_ALIGNMENT_CENTER,152,16,Color("fff1cb"))
+		var label_y := -150.0 if id=="bakery" else -57.0
+		node.draw_style_box(sign,Rect2(at+Vector2(-82,label_y),Vector2(164,29)))
+		node.draw_string(ThemeDB.fallback_font,at+Vector2(-76,label_y+21),exits[id].get("sign","Mosswood" if zone=="town" else ("Garden Square" if id=="town" else ("Riverbend" if id=="river" else "Mosswood"))),HORIZONTAL_ALIGNMENT_CENTER,152,16,Color("fff1cb"))
 
 
 func _draw_forest_air() -> void:
@@ -231,7 +277,7 @@ func _draw_forest_air() -> void:
 
 
 func request_travel(exit_id: String) -> void:
-	if paused or transitioning or not exits.has(exit_id):
+	if paused or shopping or transitioning or not exits.has(exit_id):
 		return
 	transitioning = true
 	var target: Dictionary = exits[exit_id]
@@ -264,6 +310,7 @@ func _piece(id: String, at: Vector2, height: float) -> Node2D:
 	anchor.add_child(sprite)
 	pieces.append(sprite)
 	if id.ends_with("tree"):
+		occluders.append(sprite)
 		sprite.material = load(ART+"godot/"+("elm_wind.tres" if id=="elm_tree" else "willow_wind.tres"))
 	return anchor
 
@@ -335,10 +382,81 @@ func _build_plaza() -> void:
 		dogs.append(warden)
 		interactables[item[0]] = {"name":item[1],"at":warden.position,"anchor":warden,"height":108}
 	# Animated water highlights are drawn over the painted water, using native 2D.
-	ripples = Node2D.new()
+	ripples = FountainFX.new()
+	ripples.hub = self
 	ripples.position = Vector2(970,700)
 	world.add_child(ripples)
-	ripples.draw.connect(_draw_water)
+
+
+func _furniture(id: String, at: Vector2, height: float) -> Node2D:
+	var anchor := Node2D.new()
+	anchor.name = id
+	anchor.position = at
+	world.add_child(anchor)
+	var sprite := Sprite2D.new()
+	sprite.texture = load(ROOT+"assets/bakery/"+id+".tres")
+	sprite.centered = false
+	sprite.offset = Vector2(-sprite.texture.get_width()/2.0,-sprite.texture.get_height())
+	sprite.scale = Vector2.ONE*height/sprite.texture.get_height()
+	anchor.add_child(sprite)
+	pieces.append(sprite)
+	return anchor
+
+
+func _build_bakery() -> void:
+	bakery_room = Bakery.new()
+	bakery_room.hub = self
+	bakery_room.z_index = -10
+	zone_root.add_child(bakery_room)
+	_solid(FLOOR,true)
+	_furniture("bakery_shelf",Bakery.iso(.9,2.2),230)
+	_solid(_ellipse(Bakery.iso(.9,2.2)+Vector2(0,-15),Vector2(88,31)))
+	_furniture("bakery_oven",Bakery.iso(6.0,.9),205)
+	_solid(PackedVector2Array([Vector2(1264,454),Vector2(1361,512),Vector2(1454,478),Vector2(1367,418)]))
+	var vendor_at := Bakery.iso(4.3,1.55)
+	var vendor := _piece("cat_baker",vendor_at,118)
+	var body := _solid(_ellipse(vendor_at,Vector2(20,12)))
+	interactables["shop_vendor"] = {"name":"Clover · Bakery keeper","at":Bakery.iso(4.5,4.2),"anchor":vendor,"body":body,"height":118.0}
+	_furniture("bakery_counter",Bakery.iso(4.6,3.25),186)
+	_solid(PackedVector2Array([Vector2(939,464),Vector2(1155,551),Vector2(1204,504),Vector2(992,414)]))
+	_furniture("bakery_table",Bakery.iso(2.5,5.8),150)
+	_solid(_ellipse(Bakery.iso(2.5,5.8)+Vector2(0,-12),Vector2(94,37)))
+	trail_effects = Node2D.new()
+	trail_effects.z_index = 2
+	zone_root.add_child(trail_effects)
+	trail_effects.draw.connect(bakery_room.draw_air.bind(trail_effects))
+
+
+func open_shop() -> void:
+	shopping = true
+	player.intent = Vector2.ZERO
+	player.velocity = Vector2.ZERO
+	player.route.clear()
+	player.sprite.play("idle_"+player.direction)
+	dialogue_left = 0
+	talk_panel.hide()
+	prompt.hide()
+	ui.merchant.show()
+	ui.refresh_shop("Welcome in! Everything was baked this morning.")
+
+
+func close_shop() -> void:
+	shopping = false
+	ui.merchant.hide()
+
+
+func buy(index: int) -> bool:
+	if not shopping or zone!="bakery" or index<0 or index>=GOODS.size():
+		return false
+	var product: Dictionary = GOODS[index]
+	if coins<int(product["price"]):
+		ui.refresh_shop("A little short of coins for that one. Try something smaller.")
+		return false
+	coins -= int(product["price"])
+	inventory[product["id"]] += 1
+	ui.refresh_shop("%s tucked into your satchel. Thank you!" % product["name"])
+	_update_hud()
+	return true
 
 
 func is_walkable(point: Vector2, padding := 20.0) -> bool:
@@ -394,7 +512,7 @@ func clear_line(from: Vector2, to: Vector2, exclude: Array[RID] = []) -> bool:
 
 
 func _physics_process(_delta: float) -> void:
-	if paused or transitioning or not is_instance_valid(player):
+	if paused or shopping or transitioning or not is_instance_valid(player):
 		return
 	near_exit = ""
 	if travel_cooldown<=0:
@@ -442,6 +560,10 @@ func interact(id := "") -> void:
 		"bookseller":"This town was built around its spring. Some say the water remembers every wish.",
 		"postbox":"A sturdy red postbox. Today's collection hasn't gone yet."
 	}
+	if zone=="bakery":
+		if id=="shop_vendor":
+			open_shop()
+		return
 	if zone!="town":
 		var landmark: Dictionary = interactables[id]
 		discoveries[id] = true
@@ -519,24 +641,25 @@ func _update_lighting() -> void:
 			backgrounds[i].visible = i==base or (i==next and weight>0)
 			backgrounds[i].modulate.a = weight if i==next else 1.0
 			backgrounds[i].z_index = -9 if i==next else -10
+	elif zone=="bakery":
+		actor_tint = Color("fff1db").lerp(Color("c7b99e"),clampf(1.0-actor_tint.g,0,1)*.6)
+		if is_instance_valid(bakery_room):
+			bakery_room.queue_redraw()
 	else:
 		var night_weights := [0.16,0.0,0.24,1.0]
 		backgrounds[0].modulate = Color.WHITE.lerp(actor_tint,0.20)
 		backgrounds[1].modulate.a = lerpf(night_weights[base],night_weights[next],weight)
 	for piece in pieces:
 		piece.modulate = actor_tint
+	for foliage in occluders:
+		if is_instance_valid(player) and player.position.y<foliage.get_parent().position.y:
+			var local_point := foliage.to_local(player.global_position-Vector2(0,60))
+			if foliage.get_rect().has_point(local_point):
+				foliage.modulate.a = .34
 	if is_instance_valid(ripples):
 		ripples.modulate.a = clampf(actor_tint.g,0.4,1.0)
 	if is_instance_valid(ui):
 		ui.clock_dial.set_phase(clock)
-
-
-func _draw_water() -> void:
-	for i in 3:
-		var progress := fposmod(elapsed*0.25+i/3.0,1.0)
-		ripples.draw_set_transform(Vector2(0,-60),0,Vector2(1,0.28))
-		ripples.draw_arc(Vector2.ZERO,25+progress*70,0.1,2.9,42,Color(0.8,0.97,1,(1-progress)*0.26),1.5,true)
-	ripples.draw_set_transform(Vector2.ZERO)
 
 
 func _build_ui() -> void:
@@ -567,15 +690,17 @@ func _update_hud() -> void:
 
 
 func _update_prompt() -> void:
-	prompt.visible = not nearest.is_empty() and not combat_active
+	prompt.visible = (not nearest.is_empty() or not near_exit.is_empty()) and not combat_active and not shopping and not transitioning
 	if prompt.visible:
 		var offset_y := -165.0 if dialogue_left>0 else 25.0
-		prompt.position = (player.global_position+Vector2(-140,offset_y)).clamp(Vector2(15,170),Vector2(1620,940))
-		prompt_text.text = "E   "+interactables[nearest]["name"]
+		prompt.position = (get_canvas_transform()*player.global_position+Vector2(-140,offset_y)).clamp(Vector2(15,170),Vector2(1620,940))
+		prompt_text.text = "E   "+("Enter bakery" if near_exit=="bakery" else ("Go to "+exits[near_exit].get("sign","the next path") if near_exit!="" else interactables[nearest]["name"]))
 	quest_marker.visible = zone=="town" and quest_stage<5 and not transitioning
 	if quest_marker.visible:
 		var target: Dictionary = interactables[QUEST_TARGETS[quest_stage]]
-		quest_marker.position = target["at"]+Vector2(-14,-target["height"]-38+sin(elapsed*2.3)*5)
+		var point: Vector2 = get_canvas_transform()*(target["at"]+Vector2(0,-target["height"]-24))
+		quest_marker.position = point+Vector2(-14,-18+sin(elapsed*2.3)*5)
+		quest_marker.visible = Rect2(20,190,1880,760).has_point(point)
 
 
 func set_paused(value: bool) -> void:
@@ -588,6 +713,15 @@ func set_paused(value: bool) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.echo:
+		return
+	if shopping:
+		if event.is_action_pressed("hub_pause") or event.is_action_pressed("hub_interact"):
+			close_shop()
+		elif event is InputEventKey and event.pressed:
+			var index: int = event.physical_keycode-KEY_1
+			if index>=0 and index<GOODS.size():
+				buy(index)
+		get_viewport().set_input_as_handled()
 		return
 	if event.is_action_pressed("hub_pause"):
 		set_paused(not paused)

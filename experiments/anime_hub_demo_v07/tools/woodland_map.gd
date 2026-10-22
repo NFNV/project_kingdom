@@ -1,6 +1,6 @@
 extends RefCounted
 
-const NAMES := {"town":"Garden Square","trail":"Mosswood Trail","river":"Riverbend Glade"}
+const NAMES := {"town":"Garden Square","trail":"Mosswood Trail","river":"Riverbend Glade","bakery":"The Bluebird Bakery"}
 const SOURCE_SIZE := Vector2(1672,941)
 
 
@@ -24,17 +24,23 @@ static func floor_for(zone: String) -> PackedVector2Array:
 
 static func exits_for(zone: String) -> Dictionary:
 	if zone=="town":
-		return {"southeast":{"at":Vector2(1380,966),"to":"trail","entry":"town","label":"Southeast gate  →  Mosswood Trail"}}
+		return {"bakery":{"at":Vector2(320,580),"to":"bakery","entry":"town","sign":"Bluebird Bakery","label":"Blue awning  →  Enter bakery"},"southeast":{"at":Vector2(1380,966),"to":"trail","entry":"town","sign":"Mosswood","label":"Southeast gate  →  Mosswood Trail"}}
+	if zone=="bakery":
+		return {"town":{"at":Vector2(960,817),"to":"town","entry":"bakery","sign":"Garden Square","label":"Front door  →  Garden Square"}}
 	if zone=="trail":
 		return {
-			"town":{"at":point(150,461),"to":"town","entry":"forest","label":"West path  →  Garden Square"},
-			"river":{"at":point(1530,872),"to":"river","entry":"trail","label":"Southeast trail  →  Riverbend Glade"}
+			"town":{"at":point(150,461),"to":"town","entry":"forest","sign":"Garden Square","label":"West path  →  Garden Square"},
+			"river":{"at":point(1530,872),"to":"river","entry":"trail","sign":"Riverbend","label":"Southeast trail  →  Riverbend Glade"}
 		}
-	return {"trail":{"at":point(145,552),"to":"trail","entry":"river","label":"West path  →  Mosswood Trail"}}
+	return {"trail":{"at":point(145,552),"to":"trail","entry":"river","sign":"Mosswood","label":"West path  →  Mosswood Trail"}}
 
 
 static func arrival(zone: String, entry: String) -> Vector2:
+	if zone=="bakery":
+		return Vector2(960,745)
 	if zone=="town":
+		if entry=="bakery":
+			return Vector2(390,695)
 		return Vector2(1290,936) if entry=="forest" else Vector2(840,905)
 	if zone=="trail":
 		return point(1430,811) if entry=="river" else point(270,469)

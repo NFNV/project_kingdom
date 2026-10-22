@@ -1,6 +1,6 @@
 {
-  "checks": 72,
+  "checks": 109,
   "failures": [],
-  "passed": 72,
-  "scope": "Movement/collision, delivery quest, peaceful warden regression, twenty-minute clock, physical southeast exit, both forest areas, bridge, complete return journey and persistent progress."
+  "passed": 109,
+  "scope": "Movement/collision, delivery quest, peaceful warden regression, twenty-minute clock, camera tracking/projection/limits, spilling fountain, furnished bakery entry/return, counter collision, vendor purchases and modal input, physical southeast exit, both forest areas, bridge, complete return journey and persistent progress."
 }

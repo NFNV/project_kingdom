@@ -177,6 +177,68 @@ func _run() -> void:
 	_check(game.quest_stage==5 and game.discoveries.size()==3,"Returning home preserves town and forest progress")
 	_check(absf(game.clock-1.4)<.001,"The shared clock is not reset by any zone transition")
 	_check(game.player.get_parent()==game.world,"The same playable cat transfers into the current ground-sorted scene")
+	# Close camera follows the same actor across the new room and every return trip.
+	_check(game.camera.get_parent()==game.player and is_equal_approx(game.camera.zoom.x,1.7),"Close camera is attached to the cat at 1.7x zoom")
+	await _settle(Vector2(960,630))
+	game.camera.force_update_scroll()
+	var screen_before: Vector2 = game.get_canvas_transform()*game.player.position
+	var camera_before: Vector2 = game.camera.get_screen_center_position()
+	var end_camera := await _walk(Vector2(960,630),["hub_right"],20)
+	game.camera.force_update_scroll()
+	_check(game.camera.get_screen_center_position().x>camera_before.x+40,"Camera tracks real character movement")
+	_check(absf((game.get_canvas_transform()*end_camera).x-screen_before.x)<3,"Following keeps the cat at a fixed horizontal screen position")
+	var view_origin: Vector2 = game.get_canvas_transform().affine_inverse()*Vector2.ZERO
+	var view_end: Vector2 = game.get_canvas_transform().affine_inverse()*Vector2(1920,1080)
+	_check(view_origin.x>=-.1 and view_origin.y>=-.1 and view_end.x<=1920.1 and view_end.y<=1080.1,"Camera frustum stays inside painted scene bounds")
+	await _settle(Vector2(485,755))
+	game.camera.force_update_scroll()
+	game._update_prompt()
+	_check(game.prompt.visible and game.prompt.position.distance_to((game.get_canvas_transform()*game.player.position+Vector2(-140,-165 if game.dialogue_left>0 else 25)).clamp(Vector2(15,170),Vector2(1620,940)))<2,"NPC prompt projects world position through the moving camera")
+	_check(is_instance_valid(game.ripples) and game.ripples.streams.size()==4,"Fountain has four registered animated spilling streams")
+	var curve_before: Vector2 = game.ripples.curve(game.ripples.streams[0],.2)
+	var curve_after: Vector2 = game.ripples.curve(game.ripples.streams[0],.7)
+	_check(curve_after.y>curve_before.y+90,"Fountain streaks travel down the fountain into the basin")
+	await _travel_route("bakery","bakery")
+	_check(game.backgrounds.is_empty() and is_instance_valid(game.bakery_room),"Bakery uses an authored walkable room rather than a painted background")
+	_check(game.interactables.has("shop_vendor"),"Bakery has its own vendor NPC")
+	_check(game.camera.get_parent()==game.player,"The follow camera survives entering the house")
+	game.player.route = game.find_path(game.player.position,game.interactables.shop_vendor.at)
+	for tick in 500:
+		await physics_frame
+		if game.nearest=="shop_vendor":
+			break
+	_check(game.nearest=="shop_vendor","Cat physically reaches the customer side of the counter")
+	_check(not game.is_walkable(Vector2(1080,490),0),"Sales counter has a solid collision footprint")
+	_check(game.interactables.shop_vendor.anchor.position.y<game.world.get_node("bakery_counter").position.y,"Vendor is depth sorted behind the sales counter")
+	game.interact()
+	_check(game.shopping and game.ui.merchant.visible,"E opens the vendor's usable shop")
+	var before_shop: Vector2 = game.player.position
+	var click := InputEventMouseButton.new()
+	click.button_index = MOUSE_BUTTON_RIGHT
+	click.pressed = true
+	game._unhandled_input(click)
+	_check(game.player.route.is_empty(),"Shop input cannot click through to world navigation")
+	Input.action_press("hub_right")
+	for tick in 20:
+		await physics_frame
+	Input.action_release("hub_right")
+	_check(game.player.position.is_equal_approx(before_shop),"Shopping prevents movement and accidental door travel")
+	game.ui.shop_buttons[0].pressed.emit()
+	_check(game.coins==10 and game.inventory.bread==1,"Buying a loaf charges two coins and puts bread in the satchel")
+	_check(game.buy(1) and game.coins==7 and game.inventory.tea==1,"Tea has its own price and inventory entry")
+	_check(game.buy(2) and game.coins==3 and game.inventory.honey==1,"Honey has its own price and inventory entry")
+	_check(not game.buy(2) and game.coins==3 and game.inventory.honey==1,"Unaffordable purchases cannot create items or negative money")
+	var escape := InputEventKey.new()
+	escape.physical_keycode = KEY_ESCAPE
+	escape.pressed = true
+	game._unhandled_input(escape)
+	_check(not game.shopping and not game.paused and not game.ui.merchant.visible,"Escape closes shopping without also pausing the game")
+	_check(not game.buy(0),"Purchasing outside a vendor conversation is rejected")
+	await _travel_route("town","town")
+	_check(game.quest_stage==5 and game.discoveries.size()==3 and game.coins==3 and game.inventory.bread==1,"Leaving the house preserves errands, forest memories, money and purchases")
+	await _travel_route("bakery","bakery")
+	_check(game.coins==3 and game.inventory.honey==1,"Reentering the bakery cannot reset or duplicate purchased goods")
+	await _travel_route("town","town")
 	game.clock = 3.95
 	game.advance_time()
 	for tick in 30:
@@ -184,11 +246,13 @@ func _run() -> void:
 	_check(game.clock<0.1 and game.clock_target<0,"Night transitions into dawn without an out-of-range texture")
 	var before_clock: float = game.clock
 	var before_position: Vector2 = game.player.position
+	var before_water: float = game.elapsed
 	game.set_paused(true)
 	Input.action_press("hub_right")
 	for tick in 30:
 		await physics_frame
 	Input.action_release("hub_right")
+	_check(is_equal_approx(game.elapsed,before_water),"Pause freezes the fountain, steam and oven animation clock")
 	_check(game.player.position.is_equal_approx(before_position),"Pause stops character simulation")
 	_check(is_equal_approx(game.clock,before_clock),"Pause freezes the day/night clock")
 	game.set_paused(false)
@@ -196,7 +260,7 @@ func _run() -> void:
 	for action in InputMap.get_actions():
 		if action.begins_with("hub_"):
 			Input.action_release(action)
-	var report := {"checks":checks,"passed":checks-failures.size(),"failures":failures,"scope":"Movement/collision, delivery quest, peaceful warden regression, twenty-minute clock, physical southeast exit, both forest areas, bridge, complete return journey and persistent progress."}
+	var report := {"checks":checks,"passed":checks-failures.size(),"failures":failures,"scope":"Movement/collision, delivery quest, peaceful warden regression, twenty-minute clock, camera tracking/projection/limits, spilling fountain, furnished bakery entry/return, counter collision, vendor purchases and modal input, physical southeast exit, both forest areas, bridge, complete return journey and persistent progress."}
 	FileAccess.open(ProjectSettings.globalize_path(ROOT+"test_results.json"),FileAccess.WRITE).store_string(JSON.stringify(report,"  ")+"\n")
 	print("Playable hub: ",checks-failures.size(),"/",checks," checks passed.")
 	quit(0 if failures.is_empty() else 1)

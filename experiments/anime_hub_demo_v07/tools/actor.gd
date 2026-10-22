@@ -50,7 +50,7 @@ static func ground_vector(vector: Vector2) -> Vector2:
 
 
 func _physics_process(delta: float) -> void:
-	if hub.paused or hub.transitioning or not active:
+	if hub.paused or hub.shopping or hub.transitioning or not active:
 		return
 	grace = maxf(0,grace-delta)
 	cooldown = maxf(0,cooldown-delta)
