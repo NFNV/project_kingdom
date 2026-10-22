@@ -1,0 +1,224 @@
+{
+  "checks": [
+    {
+      "check": "all 13 requested asset types are delivered",
+      "passed": true
+    },
+    {
+      "check": "house source hash matches selected generated PNG",
+      "passed": true
+    },
+    {
+      "check": "house texture and native scene exist",
+      "passed": true
+    },
+    {
+      "check": "house has actual alpha transparency",
+      "passed": true
+    },
+    {
+      "check": "community_shop source hash matches selected generated PNG",
+      "passed": true
+    },
+    {
+      "check": "community_shop texture and native scene exist",
+      "passed": true
+    },
+    {
+      "check": "community_shop has actual alpha transparency",
+      "passed": true
+    },
+    {
+      "check": "tree source hash matches selected generated PNG",
+      "passed": true
+    },
+    {
+      "check": "tree texture and native scene exist",
+      "passed": true
+    },
+    {
+      "check": "tree has actual alpha transparency",
+      "passed": true
+    },
+    {
+      "check": "resident source hash matches selected generated PNG",
+      "passed": true
+    },
+    {
+      "check": "resident texture and native scene exist",
+      "passed": true
+    },
+    {
+      "check": "resident has actual alpha transparency",
+      "passed": true
+    },
+    {
+      "check": "old_car source hash matches selected generated PNG",
+      "passed": true
+    },
+    {
+      "check": "old_car texture and native scene exist",
+      "passed": true
+    },
+    {
+      "check": "old_car has actual alpha transparency",
+      "passed": true
+    },
+    {
+      "check": "bench source hash matches selected generated PNG",
+      "passed": true
+    },
+    {
+      "check": "bench texture and native scene exist",
+      "passed": true
+    },
+    {
+      "check": "bench has actual alpha transparency",
+      "passed": true
+    },
+    {
+      "check": "notice_board source hash matches selected generated PNG",
+      "passed": true
+    },
+    {
+      "check": "notice_board texture and native scene exist",
+      "passed": true
+    },
+    {
+      "check": "notice_board has actual alpha transparency",
+      "passed": true
+    },
+    {
+      "check": "street_lamp source hash matches selected generated PNG",
+      "passed": true
+    },
+    {
+      "check": "street_lamp texture and native scene exist",
+      "passed": true
+    },
+    {
+      "check": "street_lamp has actual alpha transparency",
+      "passed": true
+    },
+    {
+      "check": "fence source hash matches selected generated PNG",
+      "passed": true
+    },
+    {
+      "check": "fence texture and native scene exist",
+      "passed": true
+    },
+    {
+      "check": "fence has actual alpha transparency",
+      "passed": true
+    },
+    {
+      "check": "planter source hash matches selected generated PNG",
+      "passed": true
+    },
+    {
+      "check": "planter texture and native scene exist",
+      "passed": true
+    },
+    {
+      "check": "planter has actual alpha transparency",
+      "passed": true
+    },
+    {
+      "check": "grass_tile source hash matches selected generated PNG",
+      "passed": true
+    },
+    {
+      "check": "grass_tile texture and native scene exist",
+      "passed": true
+    },
+    {
+      "check": "pavement_tile source hash matches selected generated PNG",
+      "passed": true
+    },
+    {
+      "check": "pavement_tile texture and native scene exist",
+      "passed": true
+    },
+    {
+      "check": "road_tile source hash matches selected generated PNG",
+      "passed": true
+    },
+    {
+      "check": "road_tile texture and native scene exist",
+      "passed": true
+    },
+    {
+      "check": "town_corner_native.png has correct output dimensions",
+      "passed": true
+    },
+    {
+      "check": "town_corner_native.png contains rendered image content",
+      "passed": true
+    },
+    {
+      "check": "town_corner.png has correct output dimensions",
+      "passed": true
+    },
+    {
+      "check": "town_corner.png contains rendered image content",
+      "passed": true
+    },
+    {
+      "check": "contact_sheet.png has correct output dimensions",
+      "passed": true
+    },
+    {
+      "check": "contact_sheet.png contains rendered image content",
+      "passed": true
+    },
+    {
+      "check": "all existing tracked project files are unchanged",
+      "passed": true
+    }
+  ],
+  "passed": 44,
+  "total": 44,
+  "renderer": "Godot 4.7.2 / Forward+ / Metal / Apple M1",
+  "ground_edge_diagnostics": {
+    "grass_tile": {
+      "mean_edge_rgb_difference_0_to_255": 7.719,
+      "maximum_edge_difference": 48.667,
+      "exact_edge_matching_verified": false,
+      "source_region": [
+        450,
+        450,
+        256,
+        256
+      ]
+    },
+    "pavement_tile": {
+      "mean_edge_rgb_difference_0_to_255": 7.75,
+      "maximum_edge_difference": 41.667,
+      "exact_edge_matching_verified": false,
+      "source_region": [
+        0,
+        0,
+        1254,
+        1254
+      ]
+    },
+    "road_tile": {
+      "mean_edge_rgb_difference_0_to_255": 4.328,
+      "maximum_edge_difference": 17.667,
+      "exact_edge_matching_verified": false,
+      "source_region": [
+        0,
+        0,
+        1254,
+        1254
+      ]
+    }
+  },
+  "scope": "Static art assembly, resource import, source integrity, and layout inspection; no gameplay testing or large-world performance claims.",
+  "native_scene_validation": {
+    "loaded_scene_count": 13,
+    "completed": true,
+    "method": "Godot PackedScene load/instantiate and native graphical render of contact sheet and sample"
+  }
+}

@@ -1,0 +1,20 @@
+[
+  {
+    "file": "assets/blue_slate.png",
+    "sha256": "57c504cf0e1c34d67a93133d71d16b5667c811b62dac37efee7d816ef4039c16"
+  },
+  {
+    "file": "assets/characters/cat_warrior.png",
+    "sha256": "446e986b8d94dcf85a11432f50c4c8e0bb83898cb2dd3e3b3fa33bcf877c3467",
+    "source": "assets/local_characters/cat_warrior.png"
+  },
+  {
+    "file": "assets/characters/dog_warrior.png",
+    "sha256": "c2505b946f20740a3cc2ddbd920fdcacf6b9d39d55b083187e99814ddf2fe645",
+    "source": "assets/local_characters/dog_warrior.png"
+  },
+  {
+    "file": "assets/warm_plaster.png",
+    "sha256": "8301c50f6cbd0fdd6fd42f3a51c60ce7bf6dd9216ac83fcb4e41a06ebeb1eaf2"
+  }
+]

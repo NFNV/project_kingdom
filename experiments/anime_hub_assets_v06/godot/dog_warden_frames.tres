@@ -1,0 +1,112 @@
+[gd_resource type="SpriteFrames" load_steps=14 format=3]
+
+[ext_resource type="Texture2D" path="res://experiments/anime_hub_assets_v06/characters/dog_warden.png" id="1"]
+
+[sub_resource type="AtlasTexture" id="F0"]
+
+atlas = ExtResource("1")
+
+region = Rect2(85, 33, 250, 287)
+
+margin = Rect2(51.00, 32, 96, 56)
+
+[sub_resource type="AtlasTexture" id="F1"]
+
+atlas = ExtResource("1")
+
+region = Rect2(439, 31, 250, 290)
+
+margin = Rect2(35.00, 29, 96, 53)
+
+[sub_resource type="AtlasTexture" id="F2"]
+
+atlas = ExtResource("1")
+
+region = Rect2(841, 32, 250, 288)
+
+margin = Rect2(72.00, 31, 96, 55)
+
+[sub_resource type="AtlasTexture" id="F3"]
+
+atlas = ExtResource("1")
+
+region = Rect2(1202, 32, 268, 288)
+
+margin = Rect2(43.00, 31, 78, 55)
+
+[sub_resource type="AtlasTexture" id="F4"]
+
+atlas = ExtResource("1")
+
+region = Rect2(71, 358, 266, 284)
+
+margin = Rect2(41.00, 35, 80, 59)
+
+[sub_resource type="AtlasTexture" id="F5"]
+
+atlas = ExtResource("1")
+
+region = Rect2(443, 356, 280, 286)
+
+margin = Rect2(40.00, 33, 66, 57)
+
+[sub_resource type="AtlasTexture" id="F6"]
+
+atlas = ExtResource("1")
+
+region = Rect2(834, 363, 265, 283)
+
+margin = Rect2(50.00, 36, 81, 60)
+
+[sub_resource type="AtlasTexture" id="F7"]
+
+atlas = ExtResource("1")
+
+region = Rect2(1211, 364, 252, 280)
+
+margin = Rect2(48.00, 39, 94, 63)
+
+[sub_resource type="AtlasTexture" id="F8"]
+
+atlas = ExtResource("1")
+
+region = Rect2(74, 680, 267, 293)
+
+margin = Rect2(36.00, 26, 79, 50)
+
+[sub_resource type="AtlasTexture" id="F9"]
+
+atlas = ExtResource("1")
+
+region = Rect2(440, 681, 283, 289)
+
+margin = Rect2(39.00, 30, 63, 54)
+
+[sub_resource type="AtlasTexture" id="F10"]
+
+atlas = ExtResource("1")
+
+region = Rect2(832, 681, 264, 294)
+
+margin = Rect2(42.00, 25, 82, 49)
+
+[sub_resource type="AtlasTexture" id="F11"]
+
+atlas = ExtResource("1")
+
+region = Rect2(1204, 680, 266, 295)
+
+margin = Rect2(40.00, 24, 80, 48)
+
+[resource]
+
+animations = [
+{"frames": [{"duration": 1.0, "texture": SubResource("F0")}], "loop": true, "name": &"idle_se", "speed": 1.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("F4")}, {"duration": 1.0, "texture": SubResource("F8")}], "loop": true, "name": &"walk_se", "speed": 6.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("F1")}], "loop": true, "name": &"idle_sw", "speed": 1.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("F5")}, {"duration": 1.0, "texture": SubResource("F9")}], "loop": true, "name": &"walk_sw", "speed": 6.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("F2")}], "loop": true, "name": &"idle_ne", "speed": 1.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("F6")}, {"duration": 1.0, "texture": SubResource("F10")}], "loop": true, "name": &"walk_ne", "speed": 6.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("F3")}], "loop": true, "name": &"idle_nw", "speed": 1.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("F7")}, {"duration": 1.0, "texture": SubResource("F11")}], "loop": true, "name": &"walk_nw", "speed": 6.0}
+]

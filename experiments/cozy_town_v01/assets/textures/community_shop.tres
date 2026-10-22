@@ -1,0 +1,8 @@
+[gd_resource type="AtlasTexture" load_steps=2 format=3]
+
+[ext_resource type="Texture2D" path="res://experiments/cozy_town_v01/assets/sources/community_shop.png" id="1"]
+
+[resource]
+atlas = ExtResource("1")
+region = Rect2(126, 66, 1119, 1068)
+filter_clip = true

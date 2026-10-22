@@ -1,0 +1,280 @@
+{
+  "tool": "built-in image_gen.imagegen",
+  "jobs": [
+    {
+      "id": "plaza_noon",
+      "file": "backgrounds/plaza_noon.png",
+      "transparent": false,
+      "refs": [
+        "/Users/n/Documents/project-kingdom/experiments/anime_isometric_concepts_v05/01_garden_street.png",
+        "/Users/n/Documents/project-kingdom/experiments/anime_town_concepts_v04/01_garden_square.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: clean static hub background plate for Project Kingdom, a painted-anime isometric RPG. Reference 1 supplies ONLY the elevated orthographic gameplay camera and blue/cream/teal material language; reference 2 supplies ONLY the charming plaza architecture and atmosphere. Generate one finished wide landscape PNG, approximately 16:9, at the largest native size available.\nCamera: fixed orthographic three-quarter isometric view looking down about 35 degrees; no sky, no horizon, no lens distortion, no vanishing point. Consistent straight verticals, roofs and two walls visible, no crooked or leaning houses. This is a full continuous town map filling all edges, not a floating diorama.\nLayout: a generous pedestrian plaza with a broad clear oval/circular warm-stone paved center and a subtly patterned round fountain placement socket, but NO fountain yet. Six distinct permanent buildings enclose the rear and sides: a welcoming cream community hall with clock gable at upper middle, a blue-and-ivory-awning bakery at upper left, a green-awning grocer beside it, a small bookshop at upper right, and two different cream cottages wrapping the far left and right edges. Blue slate roofs, teal shutters, chimneys, climbing vines and modest window flowerboxes. Buildings sit on one consistent ground grid. The plaza has unobstructed exits at lower-left, lower-right and between the rear buildings. Low planted flowerbeds and low garden walls may border the buildings, but the central and foreground plaza remain open and easy to navigate.\nStyle: original hand-painted anime background, soft gouache/watercolor materials, delicate architectural drawing, luminous cream stone, natural greens and muted blue roofs. The supplied square is the mood reference, not a location to reproduce literally. Preserve broad calm masses and believable buildings.\nLighting: neutral softly diffused noon daylight, modest cool ambient shade. Avoid strong directional cast shadows and avoid hard baked tree silhouettes: separately animated objects must be added later.\nCRITICAL CLEAN PLATE: no people, cats, dogs, animals, vendors, carts, stalls, freestanding trees, lamps, benches, noticeboards, postboxes, cars, fountain, game characters, UI, text overlays, location labels, icons or watermark. All of these movable/occluding objects will be separate assets. No pixel art, photorealism or glossy 3D rendering. This is an empty reusable BACKGROUND, not a gameplay screenshot.",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-329528a6-9113-4b3c-84d8-a05f15f530e4.png"
+    },
+    {
+      "id": "cat_adventurer",
+      "file": "characters/cat_adventurer.png",
+      "transparent": true,
+      "refs": [
+        "/Users/n/Documents/project-kingdom/experiments/anime_isometric_concepts_v05/01_garden_street.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: actual transparent game sprite POSE/WALK SHEET, not a poster. The reference supplies original anime character language and isometric view only; do not reproduce its environment, UI or other characters.\nSubject: one original bipedal orange tabby CAT adventurer with cream muzzle, amber eyes, red neckerchief, cream shirt, simple brown leather vest, olive trousers, small brown satchel and boots. A modest short sword stays lowered in the right paw; no giant shield hiding the body. Same outfit, anatomy, head size, equipment and scale in all frames, appealing clean anime outlines with soft flat cel shading, around 3.5 heads tall. No pixel art or glossy CGI.\nOUTPUT: exactly twelve complete isolated full-body character poses in a precise FOUR COLUMN by THREE ROW regular grid on genuinely transparent alpha, wide landscape canvas. No drawn grid, no labels, no text, no floor, no scenery, no cast shadows. All cells equal size with generous transparent gutters. Never crop ears, tails, weapons or feet, and never let one pose touch another cell.\nCOLUMN DIRECTIONS remain constant in every row: column 1 faces southeast (down-right, front three-quarter); column 2 southwest (down-left, front three-quarter); column 3 northeast (up-right, rear three-quarter); column 4 northwest (up-left, rear three-quarter). An elevated camera looking down about 35 degrees sees the top of the head and shoulders. The back views must genuinely show the back, not another front view.\nROW 1: standing idle. ROW 2: walking contact pose A, left leg forward and right leg back with a gentle opposite arm swing. ROW 3: complementary walking contact pose B, right leg forward and left leg back. These are alternate walk phases, not different character designs.\nREGISTRATION: equal apparent character height and foot baseline in all twelve cells, body centered within each cell; keep visible padding. Neutral diffuse illumination, no strong baked sunny highlights. Intended for small readable isometric RPG characters and later independent day/night tinting. Keep the exact face, proportions, clothing and tail identity consistent. Alpha background must be empty, not white or a painted checkerboard.",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-da63c2d4-83d1-4430-97e5-06885895234c.png"
+    },
+    {
+      "id": "dog_warden",
+      "file": "characters/dog_warden.png",
+      "transparent": true,
+      "refs": [
+        "/Users/n/Documents/project-kingdom/experiments/anime_isometric_concepts_v05/01_garden_street.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: actual transparent game sprite POSE/WALK SHEET, not a poster. The reference supplies original anime character language and isometric view only; do not reproduce its environment, UI or other characters.\nSubject: one original bipedal friendly-looking but capable beagle DOG warden with tan-and-cream fur, dark floppy ears, blue cap and blue jacket, cream trousers, brown boots and modest shoulder protection. A small blue-and-gold shield and short sword are carried low. Same outfit, anatomy, head size, equipment and scale in all frames, appealing clean anime outlines with soft flat cel shading, around 3.5 heads tall. No pixel art or glossy CGI.\nOUTPUT: exactly twelve complete isolated full-body character poses in a precise FOUR COLUMN by THREE ROW regular grid on genuinely transparent alpha, wide landscape canvas. No drawn grid, no labels, no text, no floor, no scenery, no cast shadows. All cells equal size with generous transparent gutters. Never crop ears, tails, weapons or feet, and never let one pose touch another cell.\nCOLUMN DIRECTIONS remain constant in every row: column 1 faces southeast (down-right, front three-quarter); column 2 southwest (down-left, front three-quarter); column 3 northeast (up-right, rear three-quarter); column 4 northwest (up-left, rear three-quarter). An elevated camera looking down about 35 degrees sees the top of the head and shoulders. The back views must genuinely show the back, not another front view.\nROW 1: standing idle. ROW 2: walking contact pose A, left leg forward and right leg back with a gentle opposite arm swing. ROW 3: complementary walking contact pose B, right leg forward and left leg back. These are alternate walk phases, not different character designs.\nREGISTRATION: equal apparent character height and foot baseline in all twelve cells, body centered within each cell; keep visible padding. Neutral diffuse illumination, no strong baked sunny highlights. Intended for small readable isometric RPG characters and later independent day/night tinting. Keep the exact face, proportions, clothing and tail identity consistent. Alpha background must be empty, not white or a painted checkerboard.",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-eebf5077-afa2-4898-a491-3de4d9e7e05f.png"
+    },
+    {
+      "id": "plaza_dawn",
+      "file": "backgrounds/plaza_dawn.png",
+      "transparent": false,
+      "refs": [
+        "/Users/n/Documents/project-kingdom/experiments/anime_hub_assets_v06/backgrounds/plaza_noon.png"
+      ],
+      "prompt": "Use case: lighting-weather. Asset type: dawn lighting variant of the SAME fixed isometric game background. Image 1 is the EDIT TARGET, not loose inspiration.\nChange ONLY illumination, color grading, material highlights, shadow color and existing window/lamp illumination to dawn: pale peach-pink first light, soft lavender-blue ambient shadows, restrained warm highlights, a few gently glowing windows.\nABSOLUTE INVARIANTS: preserve the exact input canvas dimensions, crop, orthographic camera, building silhouettes, every wall/roof/door/window position and shape, clock, garden borders, paving pattern, circular paving socket, path exits and all fine drawn edges. Keep every pixel feature in its existing place. No translation, zoom, perspective change, redrawing, replacing geometry or shifting details. This must register directly with the original for a lighting transition.\nDo not add or remove any objects, people, stars, sky, moon, fog, trees, lamps, furniture or vendors. Preserve the empty walkable plaza and the original painted anime linework and textures. Do not make the scene unreadably dark. Do not introduce a floor gradient that hides geometry; change light on the existing art. No text, labels, UI or watermark. Output just the full scene, one image, no side-by-side comparisons. The source is a clean game background, so movable objects remain absent.",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-480e9422-1c76-4f8d-b75c-7163424d62ef.png"
+    },
+    {
+      "id": "plaza_dusk",
+      "file": "backgrounds/plaza_dusk.png",
+      "transparent": false,
+      "refs": [
+        "/Users/n/Documents/project-kingdom/experiments/anime_hub_assets_v06/backgrounds/plaza_noon.png"
+      ],
+      "prompt": "Use case: lighting-weather. Asset type: dusk lighting variant of the SAME fixed isometric game background. Image 1 is the EDIT TARGET, not loose inspiration.\nChange ONLY illumination, color grading, material highlights, shadow color and existing window/lamp illumination to dusk: warm amber sunset fading into muted mauve-blue shade, warm shop windows and doorway lamps becoming visible.\nABSOLUTE INVARIANTS: preserve the exact input canvas dimensions, crop, orthographic camera, building silhouettes, every wall/roof/door/window position and shape, clock, garden borders, paving pattern, circular paving socket, path exits and all fine drawn edges. Keep every pixel feature in its existing place. No translation, zoom, perspective change, redrawing, replacing geometry or shifting details. This must register directly with the original for a lighting transition.\nDo not add or remove any objects, people, stars, sky, moon, fog, trees, lamps, furniture or vendors. Preserve the empty walkable plaza and the original painted anime linework and textures. Do not make the scene unreadably dark. Do not introduce a floor gradient that hides geometry; change light on the existing art. No text, labels, UI or watermark. Output just the full scene, one image, no side-by-side comparisons. The source is a clean game background, so movable objects remain absent.",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-e893c1ff-e075-4a76-acaf-afb4bd3b4404.png"
+    },
+    {
+      "id": "plaza_night",
+      "file": "backgrounds/plaza_night.png",
+      "transparent": false,
+      "refs": [
+        "/Users/n/Documents/project-kingdom/experiments/anime_hub_assets_v06/backgrounds/plaza_noon.png"
+      ],
+      "prompt": "Use case: lighting-weather. Asset type: night lighting variant of the SAME fixed isometric game background. Image 1 is the EDIT TARGET, not loose inspiration.\nChange ONLY illumination, color grading, material highlights, shadow color and existing window/lamp illumination to night: cool deep blue nocturnal ambient light, readable soft blue paving, warm amber shop windows and existing doorway lamps illuminated, tranquil moonlit atmosphere without any sky.\nABSOLUTE INVARIANTS: preserve the exact input canvas dimensions, crop, orthographic camera, building silhouettes, every wall/roof/door/window position and shape, clock, garden borders, paving pattern, circular paving socket, path exits and all fine drawn edges. Keep every pixel feature in its existing place. No translation, zoom, perspective change, redrawing, replacing geometry or shifting details. This must register directly with the original for a lighting transition.\nDo not add or remove any objects, people, stars, sky, moon, fog, trees, lamps, furniture or vendors. Preserve the empty walkable plaza and the original painted anime linework and textures. Do not make the scene unreadably dark. Do not introduce a floor gradient that hides geometry; change light on the existing art. No text, labels, UI or watermark. Output just the full scene, one image, no side-by-side comparisons. The source is a clean game background, so movable objects remain absent.",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-501476a7-e972-4dc6-b488-c751c055ee55.png"
+    },
+    {
+      "id": "community_hall",
+      "file": "buildings/community_hall.png",
+      "transparent": true,
+      "refs": [
+        "/Users/n/Documents/project-kingdom/experiments/anime_hub_assets_v06/backgrounds/plaza_noon.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: reusable transparent architecture cutout for a painted-anime isometric RPG. Reference is the art/camera and exact architecture design reference.\nIsolate and reconstruct the COMPLETE community hall seen at the upper center of the reference as ONE standalone building: cream plaster and warm pale stone, teal entrance doors and shutters, blue slate hipped/gabled roof, symmetrical front, central clock pediment, modest upper dormers and brick chimneys, a little climbing ivy and window flowerboxes attached to its walls. Include the entire uncropped roof ridge, chimneys, two visible building walls, door threshold and front steps. Keep its original design rather than inventing a castle.\nUse the same elevated orthographic 35-degree three-quarter camera: front facade facing lower-left, right wall facing lower-right, straight upright verticals and coherent roof slopes. Warm gouache/watercolor surface detail with delicate architectural lines, original anime town art. Neutral diffuse light, unlit windows, no long cast shadow.\nA single isolated cutout on genuinely transparent alpha with generous empty padding all around. No ground tile, background scenery, unrelated plants, nearby buildings, characters, fountain, labels, plaque text, UI, checkerboard drawing or watermark. This is an actual environment asset, not a concept scene, not a 3D glossy render or pixel art. Entire building and steps must be visible and untouched by the image edges.",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-c9013004-df46-4b78-b29e-bd99b322efb9.png"
+    },
+    {
+      "id": "bakery",
+      "file": "buildings/bakery.png",
+      "transparent": true,
+      "refs": [
+        "/Users/n/Documents/project-kingdom/experiments/anime_hub_assets_v06/backgrounds/plaza_noon.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: ONE reusable transparent building cutout for the same painted-anime isometric hub as the reference.\nSubject: a welcoming two-storey bakery, cream plaster, teal timber frames, blue slate roof with a dormer and brick chimney, blue-and-ivory striped fabric awning, glazed shopfront with shelves of bread inside, small bread-shaped hanging shop emblem without lettering, attached window flowerboxes. An original charming vintage-town building, no castle or fantasy fortress.\nMatch the reference's orthographic isometric camera looking down around 35 degrees: the front facade faces lower-left and the right wall lower-right. Show roofs and both walls with straight upright verticals and consistent roof/door/window axes. Preserve believable house proportions; no leaning, skewed or warped architecture. Show the COMPLETE building, roof, chimney, attached details and threshold, with generous empty margin on every side; do not crop any edge.\nStyle: warm gouache/watercolor anime background painting, delicate hand-drawn architectural detail, creamy stone, blue roofs and muted teal, natural attached foliage, no pixel art, photorealistic rendering or glossy CGI. Neutral diffuse light, no strong directional baked sun, no glowing light halo, no long cast shadow.\nOutput a single isolated building on genuinely transparent alpha. No opaque matte or painted checkerboard, no ground tile or surrounding plaza, no separate outdoor furniture, people, vendors, trees, adjacent houses, fountain, lamps on ground, caption, UI, legible sign lettering, labels or watermark. Attached steps/window boxes are allowed. This is a reusable environment asset, not a whole scene.",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-768e56ce-44b9-4a46-bae8-a0a336853e9b.png"
+    },
+    {
+      "id": "grocer_shop",
+      "file": "buildings/grocer_shop.png",
+      "transparent": true,
+      "refs": [
+        "/Users/n/Documents/project-kingdom/experiments/anime_hub_assets_v06/backgrounds/plaza_noon.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: ONE reusable transparent building cutout for the same painted-anime isometric hub as the reference.\nSubject: a friendly two-storey neighborhood grocery, warm cream plaster, teal shutters, moss-green canvas awning, blue slate gable roof, modest arched doorway and glazed shop window with neatly arranged produce inside, attached climbing vine and small window boxes. An original charming vintage-town building, no castle or fantasy fortress.\nMatch the reference's orthographic isometric camera looking down around 35 degrees: the front facade faces lower-left and the right wall lower-right. Show roofs and both walls with straight upright verticals and consistent roof/door/window axes. Preserve believable house proportions; no leaning, skewed or warped architecture. Show the COMPLETE building, roof, chimney, attached details and threshold, with generous empty margin on every side; do not crop any edge.\nStyle: warm gouache/watercolor anime background painting, delicate hand-drawn architectural detail, creamy stone, blue roofs and muted teal, natural attached foliage, no pixel art, photorealistic rendering or glossy CGI. Neutral diffuse light, no strong directional baked sun, no glowing light halo, no long cast shadow.\nOutput a single isolated building on genuinely transparent alpha. No opaque matte or painted checkerboard, no ground tile or surrounding plaza, no separate outdoor furniture, people, vendors, trees, adjacent houses, fountain, lamps on ground, caption, UI, legible sign lettering, labels or watermark. Attached steps/window boxes are allowed. This is a reusable environment asset, not a whole scene.",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-54d7e202-fab3-4f1a-b41d-74d246617ce4.png"
+    },
+    {
+      "id": "bookshop",
+      "file": "buildings/bookshop.png",
+      "transparent": true,
+      "refs": [
+        "/Users/n/Documents/project-kingdom/experiments/anime_hub_assets_v06/backgrounds/plaza_noon.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: ONE reusable transparent building cutout for the same painted-anime isometric hub as the reference.\nSubject: a cozy narrow two-storey bookshop, pale ochre plaster and warm stone, teal wooden shopfront, a slightly projecting upper bay window, blue slate roof with two dormers, a small open-book hanging emblem without words, books visible INSIDE the window, an attached flowering vine. An original charming vintage-town building, no castle or fantasy fortress.\nMatch the reference's orthographic isometric camera looking down around 35 degrees: the front facade faces lower-left and the right wall lower-right. Show roofs and both walls with straight upright verticals and consistent roof/door/window axes. Preserve believable house proportions; no leaning, skewed or warped architecture. Show the COMPLETE building, roof, chimney, attached details and threshold, with generous empty margin on every side; do not crop any edge.\nStyle: warm gouache/watercolor anime background painting, delicate hand-drawn architectural detail, creamy stone, blue roofs and muted teal, natural attached foliage, no pixel art, photorealistic rendering or glossy CGI. Neutral diffuse light, no strong directional baked sun, no glowing light halo, no long cast shadow.\nOutput a single isolated building on genuinely transparent alpha. No opaque matte or painted checkerboard, no ground tile or surrounding plaza, no separate outdoor furniture, people, vendors, trees, adjacent houses, fountain, lamps on ground, caption, UI, legible sign lettering, labels or watermark. Attached steps/window boxes are allowed. This is a reusable environment asset, not a whole scene.",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-44234e5c-05c9-4a8d-adf0-f81dcfa38ad8.png"
+    },
+    {
+      "id": "ivy_cottage",
+      "file": "buildings/ivy_cottage.png",
+      "transparent": true,
+      "refs": [
+        "/Users/n/Documents/project-kingdom/experiments/anime_hub_assets_v06/backgrounds/plaza_noon.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: ONE reusable transparent building cutout for the same painted-anime isometric hub as the reference.\nSubject: a modest two-storey residential cottage with a blue slate gabled roof and brick chimney, cream plaster walls, teal front door and shutters, small side bay window, abundant attached climbing ivy around one corner, daisies in attached sill planters, a few shallow entrance steps. An original charming vintage-town building, no castle or fantasy fortress.\nMatch the reference's orthographic isometric camera looking down around 35 degrees: the front facade faces lower-left and the right wall lower-right. Show roofs and both walls with straight upright verticals and consistent roof/door/window axes. Preserve believable house proportions; no leaning, skewed or warped architecture. Show the COMPLETE building, roof, chimney, attached details and threshold, with generous empty margin on every side; do not crop any edge.\nStyle: warm gouache/watercolor anime background painting, delicate hand-drawn architectural detail, creamy stone, blue roofs and muted teal, natural attached foliage, no pixel art, photorealistic rendering or glossy CGI. Neutral diffuse light, no strong directional baked sun, no glowing light halo, no long cast shadow.\nOutput a single isolated building on genuinely transparent alpha. No opaque matte or painted checkerboard, no ground tile or surrounding plaza, no separate outdoor furniture, people, vendors, trees, adjacent houses, fountain, lamps on ground, caption, UI, legible sign lettering, labels or watermark. Attached steps/window boxes are allowed. This is a reusable environment asset, not a whole scene.",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-aafc2466-6293-45b0-b68d-e1d49fbc1725.png"
+    },
+    {
+      "id": "balcony_cottage",
+      "file": "buildings/balcony_cottage.png",
+      "transparent": true,
+      "refs": [
+        "/Users/n/Documents/project-kingdom/experiments/anime_hub_assets_v06/backgrounds/plaza_noon.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: ONE reusable transparent building cutout for the same painted-anime isometric hub as the reference.\nSubject: a distinct two-storey residential house, cream and pale peach plaster, blue slate hipped roof with a small dormer, teal shutters, a graceful modest timber balcony with a simple dark iron railing and flowerboxes above the front door, a brick chimney, a low integral stone plinth. An original charming vintage-town building, no castle or fantasy fortress.\nMatch the reference's orthographic isometric camera looking down around 35 degrees: the front facade faces lower-left and the right wall lower-right. Show roofs and both walls with straight upright verticals and consistent roof/door/window axes. Preserve believable house proportions; no leaning, skewed or warped architecture. Show the COMPLETE building, roof, chimney, attached details and threshold, with generous empty margin on every side; do not crop any edge.\nStyle: warm gouache/watercolor anime background painting, delicate hand-drawn architectural detail, creamy stone, blue roofs and muted teal, natural attached foliage, no pixel art, photorealistic rendering or glossy CGI. Neutral diffuse light, no strong directional baked sun, no glowing light halo, no long cast shadow.\nOutput a single isolated building on genuinely transparent alpha. No opaque matte or painted checkerboard, no ground tile or surrounding plaza, no separate outdoor furniture, people, vendors, trees, adjacent houses, fountain, lamps on ground, caption, UI, legible sign lettering, labels or watermark. Attached steps/window boxes are allowed. This is a reusable environment asset, not a whole scene.",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-47285119-e54a-41de-8db1-6a148a3e0e53.png"
+    },
+    {
+      "id": "cat_baker",
+      "file": "characters/cat_baker.png",
+      "transparent": true,
+      "refs": [
+        "/Users/n/Documents/project-kingdom/experiments/anime_isometric_concepts_v05/01_garden_street.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: ONE reusable NPC character cutout for the reference's original painted-anime isometric RPG.\nSubject: a warm cream-and-ginger cat baker, rounded friendly face, white rolled-sleeve shirt, pale flour-dusted apron over warm brown trousers, modest baker cap, brown shoes, carrying one small bread basket at waist height. Inviting vendor expression. One bipedal anthropomorphic animal, appealing and expressive, around 3.5 heads tall, not a realistic animal or human. Preserve clean delicate anime outlines, soft simple cel-shading and restrained warm palette compatible with the reference. Outfit and props make the NPC's role readable when small.\nCamera: same elevated 35-degree isometric three-quarter gameplay view, facing southeast/down-right, see the top of the head and shoulders slightly. Full standing figure from ear tips to both complete feet and tail. Neutral idle gesture and clear silhouette, body centered, plenty of padding, all feet on one implied baseline.\nLighting: neutral diffuse illustration, no hard baked sunlight or cast ground shadow, no glow. Output a single complete isolated figure on genuine transparent alpha. No scene, ground, pedestal, extra characters, duplicate views, grid, text, labels, UI, opaque background, painted checkerboard, watermark, pixel art or glossy 3D render. This is an actual single NPC sprite source, not a character-design presentation board.",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-aab26ab3-b6ed-45ea-9390-5a363118bf24.png"
+    },
+    {
+      "id": "dog_grocer",
+      "file": "characters/dog_grocer.png",
+      "transparent": true,
+      "refs": [
+        "/Users/n/Documents/project-kingdom/experiments/anime_isometric_concepts_v05/01_garden_street.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: ONE reusable NPC character cutout for the reference's original painted-anime isometric RPG.\nSubject: a friendly stocky brown spaniel dog produce seller, floppy ears, moss-green apron over a cream shirt and ochre trousers, a small flat cap, worn brown shoes, holding a modest basket of apples and carrots. Neutral civilian vendor, not a soldier. One bipedal anthropomorphic animal, appealing and expressive, around 3.5 heads tall, not a realistic animal or human. Preserve clean delicate anime outlines, soft simple cel-shading and restrained warm palette compatible with the reference. Outfit and props make the NPC's role readable when small.\nCamera: same elevated 35-degree isometric three-quarter gameplay view, facing southeast/down-right, see the top of the head and shoulders slightly. Full standing figure from ear tips to both complete feet and tail. Neutral idle gesture and clear silhouette, body centered, plenty of padding, all feet on one implied baseline.\nLighting: neutral diffuse illustration, no hard baked sunlight or cast ground shadow, no glow. Output a single complete isolated figure on genuine transparent alpha. No scene, ground, pedestal, extra characters, duplicate views, grid, text, labels, UI, opaque background, painted checkerboard, watermark, pixel art or glossy 3D render. This is an actual single NPC sprite source, not a character-design presentation board.",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-42305232-0584-4c44-97a8-c8a76f77ba4f.png"
+    },
+    {
+      "id": "cat_bookseller",
+      "file": "characters/cat_bookseller.png",
+      "transparent": true,
+      "refs": [
+        "/Users/n/Documents/project-kingdom/experiments/anime_isometric_concepts_v05/01_garden_street.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: ONE reusable NPC character cutout for the reference's original painted-anime isometric RPG.\nSubject: a thoughtful gray-and-cream cat bookseller with small round spectacles, ochre cardigan over a cream shirt, dark teal trousers and brown shoes, holding one closed clothbound book against the chest. Approachable quiet shopkeeper, not a wizard. One bipedal anthropomorphic animal, appealing and expressive, around 3.5 heads tall, not a realistic animal or human. Preserve clean delicate anime outlines, soft simple cel-shading and restrained warm palette compatible with the reference. Outfit and props make the NPC's role readable when small.\nCamera: same elevated 35-degree isometric three-quarter gameplay view, facing southeast/down-right, see the top of the head and shoulders slightly. Full standing figure from ear tips to both complete feet and tail. Neutral idle gesture and clear silhouette, body centered, plenty of padding, all feet on one implied baseline.\nLighting: neutral diffuse illustration, no hard baked sunlight or cast ground shadow, no glow. Output a single complete isolated figure on genuine transparent alpha. No scene, ground, pedestal, extra characters, duplicate views, grid, text, labels, UI, opaque background, painted checkerboard, watermark, pixel art or glossy 3D render. This is an actual single NPC sprite source, not a character-design presentation board.",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-b2af4152-d693-4c8f-b1ef-e586d57b7475.png"
+    },
+    {
+      "id": "cat_elder",
+      "file": "characters/cat_elder.png",
+      "transparent": true,
+      "refs": [
+        "/Users/n/Documents/project-kingdom/experiments/anime_isometric_concepts_v05/01_garden_street.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: ONE reusable NPC character cutout for the reference's original painted-anime isometric RPG.\nSubject: a kindly elderly silver tabby cat resident with a soft lavender shawl over a simple cream blouse and muted teal long skirt, comfortable shoes, small round spectacles and a modest walking cane held in one paw. Gentle upright standing pose, no chair. One bipedal anthropomorphic animal, appealing and expressive, around 3.5 heads tall, not a realistic animal or human. Preserve clean delicate anime outlines, soft simple cel-shading and restrained warm palette compatible with the reference. Outfit and props make the NPC's role readable when small.\nCamera: same elevated 35-degree isometric three-quarter gameplay view, facing southeast/down-right, see the top of the head and shoulders slightly. Full standing figure from ear tips to both complete feet and tail. Neutral idle gesture and clear silhouette, body centered, plenty of padding, all feet on one implied baseline.\nLighting: neutral diffuse illustration, no hard baked sunlight or cast ground shadow, no glow. Output a single complete isolated figure on genuine transparent alpha. No scene, ground, pedestal, extra characters, duplicate views, grid, text, labels, UI, opaque background, painted checkerboard, watermark, pixel art or glossy 3D render. This is an actual single NPC sprite source, not a character-design presentation board.",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-6be7d991-2309-4b86-8959-362bc9c974f1.png"
+    },
+    {
+      "id": "dog_courier",
+      "file": "characters/dog_courier.png",
+      "transparent": true,
+      "refs": [
+        "/Users/n/Documents/project-kingdom/experiments/anime_isometric_concepts_v05/01_garden_street.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: ONE reusable NPC character cutout for the reference's original painted-anime isometric RPG.\nSubject: an energetic small tan-and-cream corgi dog postal courier, teal-blue short jacket and matching cap, cream shirt and warm brown trousers, sturdy shoes, brown crossbody mailbag and one envelope in a paw. Civilian postal worker, not a guard. One bipedal anthropomorphic animal, appealing and expressive, around 3.5 heads tall, not a realistic animal or human. Preserve clean delicate anime outlines, soft simple cel-shading and restrained warm palette compatible with the reference. Outfit and props make the NPC's role readable when small.\nCamera: same elevated 35-degree isometric three-quarter gameplay view, facing southeast/down-right, see the top of the head and shoulders slightly. Full standing figure from ear tips to both complete feet and tail. Neutral idle gesture and clear silhouette, body centered, plenty of padding, all feet on one implied baseline.\nLighting: neutral diffuse illustration, no hard baked sunlight or cast ground shadow, no glow. Output a single complete isolated figure on genuine transparent alpha. No scene, ground, pedestal, extra characters, duplicate views, grid, text, labels, UI, opaque background, painted checkerboard, watermark, pixel art or glossy 3D render. This is an actual single NPC sprite source, not a character-design presentation board.",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-b2c61554-d673-4620-adc6-0d61e5b1211a.png"
+    },
+    {
+      "id": "bakery_stall",
+      "file": "vendors/bakery_stall.png",
+      "subject": "one small wooden bakery market cart with two modest wheels, a blue-and-ivory striped fabric canopy on slender posts, an inviting counter with baskets of baguettes and round bread, a small folded cream cloth, visible open space behind the counter where a separately animated baker can stand. No baker or customer is baked into the asset",
+      "transparent": true,
+      "refs": [
+        "/Users/n/Documents/project-kingdom/experiments/anime_hub_assets_v06/backgrounds/plaza_noon.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: ONE reusable transparent scenery/market cutout for the original painted-anime isometric plaza in the reference.\nSubject: one small wooden bakery market cart with two modest wheels, a blue-and-ivory striped fabric canopy on slender posts, an inviting counter with baskets of baguettes and round bread, a small folded cream cloth, visible open space behind the counter where a separately animated baker can stand. No baker or customer is baked into the asset.\nCamera and style: elevated orthographic three-quarter view looking down around 35 degrees, front surfaces toward lower-left and right sides toward lower-right, coherent perspective and complete visible object. Match the reference's hand-painted gouache/watercolor detail, delicate anime background drawing, warm natural materials, cream/teal/blue accents and muted natural foliage. No pixel art, photorealism or glossy CGI.\nNeutral diffuse lighting, no strong baked directional highlights, no long cast shadow, no glowing halo. Keep attached details part of this single object, but do not add unrelated scenery.\nOutput one complete isolated object on truly transparent alpha, with at least ten percent clear margin on every side. No ground plane, pedestal, surrounding plaza, other objects or buildings, NPCs, characters, animals, text, labels, UI, opaque background, painted checkerboard or watermark. Do not crop any canopy, leaf tips, roots, wheels, posts or counter.",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-4faa9553-c6a5-441c-a172-2eba0d5ff209.png"
+    },
+    {
+      "id": "produce_stall",
+      "file": "vendors/produce_stall.png",
+      "subject": "one charming wooden produce market stall with a soft moss-green-and-cream canvas canopy, low counter and a few neatly arranged crates of apples, carrots, cabbages and tomatoes, a cloth-covered side shelf, visible open standing space behind the counter for a separately animated vendor. No person or animal is included",
+      "transparent": true,
+      "refs": [
+        "/Users/n/Documents/project-kingdom/experiments/anime_hub_assets_v06/backgrounds/plaza_noon.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: ONE reusable transparent scenery/market cutout for the original painted-anime isometric plaza in the reference.\nSubject: one charming wooden produce market stall with a soft moss-green-and-cream canvas canopy, low counter and a few neatly arranged crates of apples, carrots, cabbages and tomatoes, a cloth-covered side shelf, visible open standing space behind the counter for a separately animated vendor. No person or animal is included.\nCamera and style: elevated orthographic three-quarter view looking down around 35 degrees, front surfaces toward lower-left and right sides toward lower-right, coherent perspective and complete visible object. Match the reference's hand-painted gouache/watercolor detail, delicate anime background drawing, warm natural materials, cream/teal/blue accents and muted natural foliage. No pixel art, photorealism or glossy CGI.\nNeutral diffuse lighting, no strong baked directional highlights, no long cast shadow, no glowing halo. Keep attached details part of this single object, but do not add unrelated scenery.\nOutput one complete isolated object on truly transparent alpha, with at least ten percent clear margin on every side. No ground plane, pedestal, surrounding plaza, other objects or buildings, NPCs, characters, animals, text, labels, UI, opaque background, painted checkerboard or watermark. Do not crop any canopy, leaf tips, roots, wheels, posts or counter.",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-01b8953d-ae20-412a-a885-3292efdcef45.png"
+    },
+    {
+      "id": "elm_tree",
+      "file": "scenery/elm_tree.png",
+      "subject": "one complete mature leafy elm tree, gently branching warm-brown trunk, natural rounded irregular canopy of many softly painted green leaf clusters, subtle holes revealing genuine transparency between branches, a fully visible simple root flare with no ground tile. Entire crown and root base remain comfortably inside the canvas. Suitable for subtle wind deformation while its lower trunk stays anchored",
+      "transparent": true,
+      "refs": [
+        "/Users/n/Documents/project-kingdom/experiments/anime_hub_assets_v06/backgrounds/plaza_noon.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: ONE reusable transparent scenery/market cutout for the original painted-anime isometric plaza in the reference.\nSubject: one complete mature leafy elm tree, gently branching warm-brown trunk, natural rounded irregular canopy of many softly painted green leaf clusters, subtle holes revealing genuine transparency between branches, a fully visible simple root flare with no ground tile. Entire crown and root base remain comfortably inside the canvas. Suitable for subtle wind deformation while its lower trunk stays anchored.\nCamera and style: elevated orthographic three-quarter view looking down around 35 degrees, front surfaces toward lower-left and right sides toward lower-right, coherent perspective and complete visible object. Match the reference's hand-painted gouache/watercolor detail, delicate anime background drawing, warm natural materials, cream/teal/blue accents and muted natural foliage. No pixel art, photorealism or glossy CGI.\nNeutral diffuse lighting, no strong baked directional highlights, no long cast shadow, no glowing halo. Keep attached details part of this single object, but do not add unrelated scenery.\nOutput one complete isolated object on truly transparent alpha, with at least ten percent clear margin on every side. No ground plane, pedestal, surrounding plaza, other objects or buildings, NPCs, characters, animals, text, labels, UI, opaque background, painted checkerboard or watermark. Do not crop any canopy, leaf tips, roots, wheels, posts or counter.",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-6d6eb7e6-6004-4f1d-8025-ff92dacc1909.png"
+    },
+    {
+      "id": "willow_tree",
+      "file": "scenery/willow_tree.png",
+      "subject": "one complete graceful willow tree, a gently curved but grounded brown trunk, broad green crown with distinct long draping leaf fronds and naturally open transparent spaces between some fronds, fully visible simple root flare and no ground tile. Entire tree inside the canvas with generous margin. Suitable for soft wind motion of hanging foliage",
+      "transparent": true,
+      "refs": [
+        "/Users/n/Documents/project-kingdom/experiments/anime_hub_assets_v06/backgrounds/plaza_noon.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: ONE reusable transparent scenery/market cutout for the original painted-anime isometric plaza in the reference.\nSubject: one complete graceful willow tree, a gently curved but grounded brown trunk, broad green crown with distinct long draping leaf fronds and naturally open transparent spaces between some fronds, fully visible simple root flare and no ground tile. Entire tree inside the canvas with generous margin. Suitable for soft wind motion of hanging foliage.\nCamera and style: elevated orthographic three-quarter view looking down around 35 degrees, front surfaces toward lower-left and right sides toward lower-right, coherent perspective and complete visible object. Match the reference's hand-painted gouache/watercolor detail, delicate anime background drawing, warm natural materials, cream/teal/blue accents and muted natural foliage. No pixel art, photorealism or glossy CGI.\nNeutral diffuse lighting, no strong baked directional highlights, no long cast shadow, no glowing halo. Keep attached details part of this single object, but do not add unrelated scenery.\nOutput one complete isolated object on truly transparent alpha, with at least ten percent clear margin on every side. No ground plane, pedestal, surrounding plaza, other objects or buildings, NPCs, characters, animals, text, labels, UI, opaque background, painted checkerboard or watermark. Do not crop any canopy, leaf tips, roots, wheels, posts or counter.",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-6c6414a4-5e33-4545-87b3-121a7fd43d29.png"
+    },
+    {
+      "id": "fountain",
+      "file": "scenery/fountain.png",
+      "transparent": true,
+      "refs": [
+        "/Users/n/Documents/project-kingdom/experiments/anime_hub_assets_v06/backgrounds/plaza_noon.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: ONE reusable transparent environment prop cutout for the reference's original painted-anime hub.\nSubject: one complete modest round pale-stone plaza fountain, low circular basin and central two-tier stone pedestal, a small gentle stream of water falling into clear blue water. Viewed from the elevated isometric camera so the circular rim is an ellipse. Attractive but not monumental, complete base with no surrounding paving.\nMatch the same fixed elevated orthographic isometric three-quarter camera looking down around 35 degrees. All structural verticals stay upright; show top and two sides where appropriate. Match the reference's cream stone, blue slate, teal/green ironwork, warm wood and hand-painted gouache/watercolor detail with delicate lines. Neutral diffuse light, no strong directional cast shadow, no baked pool of light or ground halo. No pixelation, photorealism, glossy CGI or floating diorama.\nProduce one complete isolated prop on genuine transparent alpha with generous clear margin all around. Do not crop any top, base, flower, water stream, wheel, foot or corner. No ground plane, surrounding plaza, floor tile, other props, trees, neighboring buildings, characters, people, animals, readable text, caption, labels, UI, opaque matte, painted checkerboard or watermark. This is an actual reusable asset, not a scene or prop design sheet.",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-39a18b7d-f586-45b9-86ab-bf14bb0b6a07.png"
+    },
+    {
+      "id": "bench",
+      "file": "scenery/bench.png",
+      "transparent": true,
+      "refs": [
+        "/Users/n/Documents/project-kingdom/experiments/anime_hub_assets_v06/backgrounds/plaza_noon.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: ONE reusable transparent environment prop cutout for the reference's original painted-anime hub.\nSubject: one complete charming park bench with warm weathered timber seat and back slats and dark green iron legs and armrests. Elevated isometric three-quarter view, front faces lower-left and right end visible, empty seat, no people or extra objects.\nMatch the same fixed elevated orthographic isometric three-quarter camera looking down around 35 degrees. All structural verticals stay upright; show top and two sides where appropriate. Match the reference's cream stone, blue slate, teal/green ironwork, warm wood and hand-painted gouache/watercolor detail with delicate lines. Neutral diffuse light, no strong directional cast shadow, no baked pool of light or ground halo. No pixelation, photorealism, glossy CGI or floating diorama.\nProduce one complete isolated prop on genuine transparent alpha with generous clear margin all around. Do not crop any top, base, flower, water stream, wheel, foot or corner. No ground plane, surrounding plaza, floor tile, other props, trees, neighboring buildings, characters, people, animals, readable text, caption, labels, UI, opaque matte, painted checkerboard or watermark. This is an actual reusable asset, not a scene or prop design sheet.",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-0b133d51-5a9f-4297-b145-a95ae7acaf3f.png"
+    },
+    {
+      "id": "street_lamp",
+      "file": "scenery/street_lamp.png",
+      "transparent": true,
+      "refs": [
+        "/Users/n/Documents/project-kingdom/experiments/anime_hub_assets_v06/backgrounds/plaza_noon.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: ONE reusable transparent environment prop cutout for the reference's original painted-anime hub.\nSubject: one complete slim vintage dark green iron streetlamp, a single glass lantern with a modest decorative cap, subtle brass accents and a sturdy small square foot. Glass is neutral pale warm cream but NOT glowing, no large light halo, entire pole and lantern visible.\nMatch the same fixed elevated orthographic isometric three-quarter camera looking down around 35 degrees. All structural verticals stay upright; show top and two sides where appropriate. Match the reference's cream stone, blue slate, teal/green ironwork, warm wood and hand-painted gouache/watercolor detail with delicate lines. Neutral diffuse light, no strong directional cast shadow, no baked pool of light or ground halo. No pixelation, photorealism, glossy CGI or floating diorama.\nProduce one complete isolated prop on genuine transparent alpha with generous clear margin all around. Do not crop any top, base, flower, water stream, wheel, foot or corner. No ground plane, surrounding plaza, floor tile, other props, trees, neighboring buildings, characters, people, animals, readable text, caption, labels, UI, opaque matte, painted checkerboard or watermark. This is an actual reusable asset, not a scene or prop design sheet.",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-016f48c9-27f6-4393-95b5-5abf9589c662.png"
+    },
+    {
+      "id": "notice_board",
+      "file": "scenery/notice_board.png",
+      "transparent": true,
+      "refs": [
+        "/Users/n/Documents/project-kingdom/experiments/anime_hub_assets_v06/backgrounds/plaza_noon.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: ONE reusable transparent environment prop cutout for the reference's original painted-anime hub.\nSubject: one complete freestanding wooden community noticeboard with two posts, a modest blue slate pitched rain canopy and a few pale paper notices pinned inside a timber frame. Notices have abstract tiny marks, no legible text, no character drawings. Complete post feet visible.\nMatch the same fixed elevated orthographic isometric three-quarter camera looking down around 35 degrees. All structural verticals stay upright; show top and two sides where appropriate. Match the reference's cream stone, blue slate, teal/green ironwork, warm wood and hand-painted gouache/watercolor detail with delicate lines. Neutral diffuse light, no strong directional cast shadow, no baked pool of light or ground halo. No pixelation, photorealism, glossy CGI or floating diorama.\nProduce one complete isolated prop on genuine transparent alpha with generous clear margin all around. Do not crop any top, base, flower, water stream, wheel, foot or corner. No ground plane, surrounding plaza, floor tile, other props, trees, neighboring buildings, characters, people, animals, readable text, caption, labels, UI, opaque matte, painted checkerboard or watermark. This is an actual reusable asset, not a scene or prop design sheet.",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-ec4e5b5d-b4ae-4919-b69d-fcbc01e87acc.png"
+    },
+    {
+      "id": "postbox",
+      "file": "scenery/postbox.png",
+      "transparent": true,
+      "refs": [
+        "/Users/n/Documents/project-kingdom/experiments/anime_hub_assets_v06/backgrounds/plaza_noon.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: ONE reusable transparent environment prop cutout for the reference's original painted-anime hub.\nSubject: one complete charming red vintage neighborhood postbox, rounded rectangular cast-metal body, small brass mail slot and a simple pale collection-time panel with abstract marks, mounted on a short sturdy red pedestal. Entire top and base visible, no lettering or crest copied from real postal services.\nMatch the same fixed elevated orthographic isometric three-quarter camera looking down around 35 degrees. All structural verticals stay upright; show top and two sides where appropriate. Match the reference's cream stone, blue slate, teal/green ironwork, warm wood and hand-painted gouache/watercolor detail with delicate lines. Neutral diffuse light, no strong directional cast shadow, no baked pool of light or ground halo. No pixelation, photorealism, glossy CGI or floating diorama.\nProduce one complete isolated prop on genuine transparent alpha with generous clear margin all around. Do not crop any top, base, flower, water stream, wheel, foot or corner. No ground plane, surrounding plaza, floor tile, other props, trees, neighboring buildings, characters, people, animals, readable text, caption, labels, UI, opaque matte, painted checkerboard or watermark. This is an actual reusable asset, not a scene or prop design sheet.",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-cbcb0994-7483-42d2-a3d2-2e1234590c87.png"
+    },
+    {
+      "id": "flower_planter",
+      "file": "scenery/flower_planter.png",
+      "transparent": true,
+      "refs": [
+        "/Users/n/Documents/project-kingdom/experiments/anime_hub_assets_v06/backgrounds/plaza_noon.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: ONE reusable transparent environment prop cutout for the reference's original painted-anime hub.\nSubject: one complete low rectangular weathered terracotta-and-timber flower planter filled with white daisies, a few muted blue hydrangeas, soft pink blossoms and natural green foliage. Elevated isometric three-quarter view with top and two sides visible. Flower and leaf tips fully contained with clear padding.\nMatch the same fixed elevated orthographic isometric three-quarter camera looking down around 35 degrees. All structural verticals stay upright; show top and two sides where appropriate. Match the reference's cream stone, blue slate, teal/green ironwork, warm wood and hand-painted gouache/watercolor detail with delicate lines. Neutral diffuse light, no strong directional cast shadow, no baked pool of light or ground halo. No pixelation, photorealism, glossy CGI or floating diorama.\nProduce one complete isolated prop on genuine transparent alpha with generous clear margin all around. Do not crop any top, base, flower, water stream, wheel, foot or corner. No ground plane, surrounding plaza, floor tile, other props, trees, neighboring buildings, characters, people, animals, readable text, caption, labels, UI, opaque matte, painted checkerboard or watermark. This is an actual reusable asset, not a scene or prop design sheet.",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-f1885e14-e224-4545-b163-f2d65cf5a11c.png"
+    }
+  ]
+}

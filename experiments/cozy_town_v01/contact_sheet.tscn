@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://experiments/cozy_town_v01/tools/contact_sheet.gd" id="1"]
+
+[node name="AssetContactSheet" type="Node2D"]
+texture_filter = 1
+script = ExtResource("1")

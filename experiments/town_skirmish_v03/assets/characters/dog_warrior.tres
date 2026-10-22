@@ -1,0 +1,137 @@
+[gd_resource type="SpriteFrames" load_steps=18 format=3]
+
+[ext_resource type="Texture2D" path="res://experiments/town_skirmish_v03/assets/characters/dog_warrior.png" id="1"]
+
+[sub_resource type="AtlasTexture" id="idle_0"]
+atlas = ExtResource("1")
+region = Rect2(51, 92, 236, 209)
+margin = Rect2(54.0, 79, 84, 111)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="idle_1"]
+atlas = ExtResource("1")
+region = Rect2(364, 92, 237, 209)
+margin = Rect2(53.5, 79, 83, 111)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="idle_2"]
+atlas = ExtResource("1")
+region = Rect2(685, 92, 229, 209)
+margin = Rect2(61.5, 79, 91, 111)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="idle_3"]
+atlas = ExtResource("1")
+region = Rect2(989, 92, 238, 209)
+margin = Rect2(52.0, 79, 82, 111)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="run_0"]
+atlas = ExtResource("1")
+region = Rect2(51, 386, 234, 219)
+margin = Rect2(54.0, 69, 86, 101)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="run_1"]
+atlas = ExtResource("1")
+region = Rect2(359, 385, 248, 218)
+margin = Rect2(48.5, 70, 72, 102)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="run_2"]
+atlas = ExtResource("1")
+region = Rect2(668, 386, 247, 218)
+margin = Rect2(44.5, 70, 73, 102)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="run_3"]
+atlas = ExtResource("1")
+region = Rect2(989, 386, 240, 215)
+margin = Rect2(52.0, 73, 80, 105)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="attack_0"]
+atlas = ExtResource("1")
+region = Rect2(59, 697, 225, 210)
+margin = Rect2(62.0, 78, 95, 110)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="attack_1"]
+atlas = ExtResource("1")
+region = Rect2(375, 648, 197, 259)
+margin = Rect2(64.5, 29, 123, 61)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="attack_2"]
+atlas = ExtResource("1")
+region = Rect2(655, 709, 285, 198)
+margin = Rect2(31.5, 90, 35, 122)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="attack_3"]
+atlas = ExtResource("1")
+region = Rect2(977, 716, 259, 191)
+margin = Rect2(40.0, 97, 61, 129)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="guard_0"]
+atlas = ExtResource("1")
+region = Rect2(60, 987, 206, 198)
+margin = Rect2(63.0, 90, 114, 122)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="guard_1"]
+atlas = ExtResource("1")
+region = Rect2(372, 987, 205, 198)
+margin = Rect2(61.5, 90, 115, 122)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="guard_2"]
+atlas = ExtResource("1")
+region = Rect2(683, 987, 208, 198)
+margin = Rect2(59.5, 90, 112, 122)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="guard_3"]
+atlas = ExtResource("1")
+region = Rect2(995, 987, 211, 198)
+margin = Rect2(58.0, 90, 109, 122)
+filter_clip = true
+
+[resource]
+animations = [{
+"frames": [{"duration": 1.0, "texture": SubResource("idle_0")},
+{"duration": 1.0, "texture": SubResource("idle_1")},
+{"duration": 1.0, "texture": SubResource("idle_2")},
+{"duration": 1.0, "texture": SubResource("idle_3")}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+},
+{
+"frames": [{"duration": 1.0, "texture": SubResource("run_0")},
+{"duration": 1.0, "texture": SubResource("run_1")},
+{"duration": 1.0, "texture": SubResource("run_2")},
+{"duration": 1.0, "texture": SubResource("run_3")}],
+"loop": true,
+"name": &"run",
+"speed": 10.0
+},
+{
+"frames": [{"duration": 1.0, "texture": SubResource("attack_0")},
+{"duration": 1.0, "texture": SubResource("attack_1")},
+{"duration": 1.0, "texture": SubResource("attack_2")},
+{"duration": 1.0, "texture": SubResource("attack_3")}],
+"loop": false,
+"name": &"attack",
+"speed": 10.0
+},
+{
+"frames": [{"duration": 1.0, "texture": SubResource("guard_0")},
+{"duration": 1.0, "texture": SubResource("guard_1")},
+{"duration": 1.0, "texture": SubResource("guard_2")},
+{"duration": 1.0, "texture": SubResource("guard_3")}],
+"loop": true,
+"name": &"guard",
+"speed": 5.0
+}]

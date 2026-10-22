@@ -1,0 +1,23 @@
+[
+  {
+    "file": "01_garden_square.png",
+    "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-34f162e5-6105-437a-a837-19f6082510c6.png",
+    "width": 1672,
+    "height": 941,
+    "sha256": "0602e9de5906aad674349c1aaa162ebebb31c2b9f0f7f03aa0c9c25dbd866199"
+  },
+  {
+    "file": "02_lane_after_rain.png",
+    "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-b3615ad8-ca90-43ba-a46e-a12741e1250f.png",
+    "width": 1672,
+    "height": 941,
+    "sha256": "d8d43adb912426cf59a60c8f089bebe62fd59758df2eadf33ee838e6f4947252"
+  },
+  {
+    "file": "03_valley_world.png",
+    "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-4ce2c155-bdb0-4c25-a295-ccb4848fb980.png",
+    "width": 1672,
+    "height": 941,
+    "sha256": "08ece6aad0a438c356692d54bfa0022844701f0b1cd8b6e1a0a9c2d78b74f473"
+  }
+]

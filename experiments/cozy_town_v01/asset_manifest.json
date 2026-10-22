@@ -1,0 +1,595 @@
+{
+  "logical_grid": 32,
+  "composition_size": [
+    640,
+    384
+  ],
+  "alpha_cutoff": 0.97,
+  "assets": [
+    {
+      "id": "house",
+      "label": "House exterior",
+      "category": "building",
+      "status": "reusable scene candidate",
+      "source": "assets/sources/house.png",
+      "texture": "assets/textures/house.tres",
+      "scene": "assets/scenes/house.tscn",
+      "source_size": [
+        1182,
+        1330
+      ],
+      "source_region": [
+        132,
+        93,
+        948,
+        1143
+      ],
+      "body_bounds": [
+        135,
+        96,
+        1077,
+        1233
+      ],
+      "logical_target": [
+        128,
+        144
+      ],
+      "display_body_size": [
+        119.3,
+        144.0
+      ],
+      "scale": 0.1266490765171504,
+      "anchor": [
+        60.03166226912929,
+        144.37994722955148
+      ],
+      "source_sha256": "b31077e036377693b740262de73a5ce41911f8900fcf1a297a02d9fb7d6c5226",
+      "fully_transparent_pixels": 709853,
+      "partial_alpha_pixels": 861976,
+      "source_was_edited_by_packager": false,
+      "region_note": "source body bounds",
+      "detail_opacity": 1.0,
+      "requires_alpha_cutout": true
+    },
+    {
+      "id": "community_shop",
+      "label": "Neighborhood shop",
+      "category": "building",
+      "status": "reusable scene candidate",
+      "source": "assets/sources/community_shop.png",
+      "texture": "assets/textures/community_shop.tres",
+      "scene": "assets/scenes/community_shop.tscn",
+      "source_size": [
+        1322,
+        1190
+      ],
+      "source_region": [
+        126,
+        66,
+        1119,
+        1068
+      ],
+      "body_bounds": [
+        129,
+        69,
+        1242,
+        1131
+      ],
+      "logical_target": [
+        160,
+        144
+      ],
+      "display_body_size": [
+        150.92,
+        144.0
+      ],
+      "scale": 0.13559322033898305,
+      "anchor": [
+        75.86440677966101,
+        144.40677966101694
+      ],
+      "source_sha256": "ab1d422349e44682992010e950a040e5a9957cf32dda4fa45c84c006d09a774e",
+      "fully_transparent_pixels": 632957,
+      "partial_alpha_pixels": 939236,
+      "source_was_edited_by_packager": false,
+      "region_note": "source body bounds",
+      "detail_opacity": 1.0,
+      "requires_alpha_cutout": true
+    },
+    {
+      "id": "tree",
+      "label": "Street tree",
+      "category": "prop",
+      "status": "reusable scene candidate",
+      "source": "assets/sources/tree.png",
+      "texture": "assets/textures/tree.tres",
+      "scene": "assets/scenes/tree.tscn",
+      "source_size": [
+        1024,
+        1536
+      ],
+      "source_region": [
+        44,
+        120,
+        951,
+        1234
+      ],
+      "body_bounds": [
+        47,
+        123,
+        992,
+        1351
+      ],
+      "logical_target": [
+        64,
+        96
+      ],
+      "display_body_size": [
+        64.0,
+        83.17
+      ],
+      "scale": 0.06772486772486773,
+      "anchor": [
+        32.2031746031746,
+        83.36931216931218
+      ],
+      "source_sha256": "add295bc959d57c9df0286dec729e36fe31165b8598a42efa548ca7aa7ce0981",
+      "fully_transparent_pixels": 901410,
+      "partial_alpha_pixels": 671454,
+      "source_was_edited_by_packager": false,
+      "region_note": "source body bounds",
+      "detail_opacity": 1.0,
+      "requires_alpha_cutout": true
+    },
+    {
+      "id": "resident",
+      "label": "Resident concept",
+      "category": "character",
+      "status": "concept pose",
+      "source": "assets/sources/resident.png",
+      "texture": "assets/textures/resident.tres",
+      "scene": "assets/scenes/resident.tscn",
+      "source_size": [
+        1024,
+        1536
+      ],
+      "source_region": [
+        219,
+        21,
+        545,
+        1457
+      ],
+      "body_bounds": [
+        222,
+        24,
+        761,
+        1475
+      ],
+      "logical_target": [
+        24,
+        40
+      ],
+      "display_body_size": [
+        14.86,
+        40.0
+      ],
+      "scale": 0.027567195037904894,
+      "anchor": [
+        7.512060647829084,
+        40.08270158511372
+      ],
+      "source_sha256": "07443b31e72832873aef71969c8e5efc768bb257f4055716224e0e9fa14d6afc",
+      "fully_transparent_pixels": 1065329,
+      "partial_alpha_pixels": 507535,
+      "source_was_edited_by_packager": false,
+      "region_note": "source body bounds",
+      "detail_opacity": 1.0,
+      "requires_alpha_cutout": true
+    },
+    {
+      "id": "old_car",
+      "label": "Vintage car",
+      "category": "prop",
+      "status": "reusable scene candidate",
+      "source": "assets/sources/old_car.png",
+      "texture": "assets/textures/old_car.tres",
+      "scene": "assets/scenes/old_car.tscn",
+      "source_size": [
+        1774,
+        887
+      ],
+      "source_region": [
+        207,
+        159,
+        1365,
+        638
+      ],
+      "body_bounds": [
+        210,
+        162,
+        1569,
+        794
+      ],
+      "logical_target": [
+        80,
+        40
+      ],
+      "display_body_size": [
+        80.0,
+        37.2
+      ],
+      "scale": 0.05886681383370125,
+      "anchor": [
+        40.1766004415011,
+        37.38042678440029
+      ],
+      "source_sha256": "0bc880e779ff5afa7acd9e8345a930d0a48ee6d91870b05c4a8653e5cef847c2",
+      "fully_transparent_pixels": 960160,
+      "partial_alpha_pixels": 612204,
+      "source_was_edited_by_packager": false,
+      "region_note": "source body bounds",
+      "detail_opacity": 1.0,
+      "requires_alpha_cutout": true
+    },
+    {
+      "id": "bench",
+      "label": "Park bench",
+      "category": "prop",
+      "status": "reusable scene candidate",
+      "source": "assets/sources/bench.png",
+      "texture": "assets/textures/bench.tres",
+      "scene": "assets/scenes/bench.tscn",
+      "source_size": [
+        1536,
+        1024
+      ],
+      "source_region": [
+        105,
+        157,
+        1327,
+        747
+      ],
+      "body_bounds": [
+        108,
+        160,
+        1429,
+        901
+      ],
+      "logical_target": [
+        48,
+        32
+      ],
+      "display_body_size": [
+        48.0,
+        26.93
+      ],
+      "scale": 0.036336109008327025,
+      "anchor": [
+        24.10900832702498,
+        27.034065102195306
+      ],
+      "source_sha256": "1c9f35d6b93124c21309be3caacdf90855a88600c7952e818a75432cdf4e5048",
+      "fully_transparent_pixels": 941833,
+      "partial_alpha_pixels": 631031,
+      "source_was_edited_by_packager": false,
+      "region_note": "source body bounds",
+      "detail_opacity": 1.0,
+      "requires_alpha_cutout": true
+    },
+    {
+      "id": "notice_board",
+      "label": "Community board",
+      "category": "prop",
+      "status": "reusable scene candidate",
+      "source": "assets/sources/notice_board.png",
+      "texture": "assets/textures/notice_board.tres",
+      "scene": "assets/scenes/notice_board.tscn",
+      "source_size": [
+        1161,
+        1355
+      ],
+      "source_region": [
+        128,
+        262,
+        902,
+        932
+      ],
+      "body_bounds": [
+        131,
+        265,
+        1027,
+        1191
+      ],
+      "logical_target": [
+        48,
+        56
+      ],
+      "display_body_size": [
+        48.0,
+        49.61
+      ],
+      "scale": 0.05357142857142857,
+      "anchor": [
+        24.160714285714285,
+        49.76785714285714
+      ],
+      "source_sha256": "b7914cf38dd9037a5e5982d8bcc6e58f4bb099986bd14931ec34196039a6fed2",
+      "fully_transparent_pixels": 1004550,
+      "partial_alpha_pixels": 567548,
+      "source_was_edited_by_packager": false,
+      "region_note": "source body bounds",
+      "detail_opacity": 1.0,
+      "requires_alpha_cutout": true
+    },
+    {
+      "id": "street_lamp",
+      "label": "Street lamp",
+      "category": "prop",
+      "status": "reusable scene candidate",
+      "source": "assets/sources/street_lamp.png",
+      "texture": "assets/textures/street_lamp.tres",
+      "scene": "assets/scenes/street_lamp.tscn",
+      "source_size": [
+        793,
+        1983
+      ],
+      "source_region": [
+        201,
+        137,
+        403,
+        1741
+      ],
+      "body_bounds": [
+        204,
+        140,
+        601,
+        1875
+      ],
+      "logical_target": [
+        16,
+        64
+      ],
+      "display_body_size": [
+        14.64,
+        64.0
+      ],
+      "scale": 0.03688760806916427,
+      "anchor": [
+        7.4328530259366,
+        64.1106628242075
+      ],
+      "source_sha256": "3c2eecfb725af2951b1174dae3e11201ff6a6443ee2f1457d46637eb923fa219",
+      "fully_transparent_pixels": 1305496,
+      "partial_alpha_pixels": 265607,
+      "source_was_edited_by_packager": false,
+      "region_note": "source body bounds",
+      "detail_opacity": 1.0,
+      "requires_alpha_cutout": true
+    },
+    {
+      "id": "fence",
+      "label": "Garden fence",
+      "category": "prop",
+      "status": "reusable scene candidate",
+      "source": "assets/sources/fence.png",
+      "texture": "assets/textures/fence.tres",
+      "scene": "assets/scenes/fence.tscn",
+      "source_size": [
+        1536,
+        1024
+      ],
+      "source_region": [
+        94,
+        213,
+        1358,
+        573
+      ],
+      "body_bounds": [
+        97,
+        216,
+        1449,
+        783
+      ],
+      "logical_target": [
+        64,
+        32
+      ],
+      "display_body_size": [
+        64.0,
+        26.84
+      ],
+      "scale": 0.047337278106508875,
+      "anchor": [
+        32.142011834319526,
+        26.98224852071006
+      ],
+      "source_sha256": "f49609eb0a95ec21e6073b0af435a5047c276726bf597e2292162b6af3b9e249",
+      "fully_transparent_pixels": 986021,
+      "partial_alpha_pixels": 586843,
+      "source_was_edited_by_packager": false,
+      "region_note": "source body bounds",
+      "detail_opacity": 1.0,
+      "requires_alpha_cutout": true
+    },
+    {
+      "id": "planter",
+      "label": "Flower planter",
+      "category": "prop",
+      "status": "reusable scene candidate",
+      "source": "assets/sources/planter.png",
+      "texture": "assets/textures/planter.tres",
+      "scene": "assets/scenes/planter.tscn",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_region": [
+        199,
+        255,
+        1051,
+        637
+      ],
+      "body_bounds": [
+        202,
+        258,
+        1247,
+        889
+      ],
+      "logical_target": [
+        32,
+        24
+      ],
+      "display_body_size": [
+        32.0,
+        19.32
+      ],
+      "scale": 0.03062200956937799,
+      "anchor": [
+        16.091866028708136,
+        19.414354066985645
+      ],
+      "source_sha256": "e99db3864efdbf7c03ff10f13f6bc8b61dcde1d236e6a8efa10242d5c373b133",
+      "fully_transparent_pixels": 1032423,
+      "partial_alpha_pixels": 538608,
+      "source_was_edited_by_packager": false,
+      "region_note": "source body bounds",
+      "detail_opacity": 1.0,
+      "requires_alpha_cutout": true
+    },
+    {
+      "id": "grass_tile",
+      "label": "Sage grass",
+      "category": "ground",
+      "status": "mockup texture",
+      "source": "assets/sources/grass_tile.png",
+      "texture": "assets/textures/grass_tile.tres",
+      "scene": "assets/scenes/grass_tile.tscn",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "source_region": [
+        450,
+        450,
+        256,
+        256
+      ],
+      "body_bounds": [
+        450,
+        450,
+        706,
+        706
+      ],
+      "logical_target": [
+        32,
+        32
+      ],
+      "display_body_size": [
+        32.0,
+        32.0
+      ],
+      "scale": 0.125,
+      "anchor": [
+        16.0,
+        32.0
+      ],
+      "source_sha256": "2d6b18396670d9ec3fd5035dae227726e43895230c7cbd66d90e8f988bd3b91d",
+      "fully_transparent_pixels": 0,
+      "partial_alpha_pixels": 0,
+      "source_was_edited_by_packager": false,
+      "region_note": "quiet 256px excerpt; seams still require authoring",
+      "detail_opacity": 0.25,
+      "requires_alpha_cutout": false
+    },
+    {
+      "id": "pavement_tile",
+      "label": "Biscuit paving",
+      "category": "ground",
+      "status": "mockup texture",
+      "source": "assets/sources/pavement_tile.png",
+      "texture": "assets/textures/pavement_tile.tres",
+      "scene": "assets/scenes/pavement_tile.tscn",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "source_region": [
+        0,
+        0,
+        1254,
+        1254
+      ],
+      "body_bounds": [
+        0,
+        0,
+        1254,
+        1254
+      ],
+      "logical_target": [
+        32,
+        32
+      ],
+      "display_body_size": [
+        32.0,
+        32.0
+      ],
+      "scale": 0.025518341307814992,
+      "anchor": [
+        16.0,
+        32.0
+      ],
+      "source_sha256": "4a54951dc6ba02265c490d7dbd5afce0445346c8aacf229d71d92c8d0368c024",
+      "fully_transparent_pixels": 0,
+      "partial_alpha_pixels": 0,
+      "source_was_edited_by_packager": false,
+      "region_note": "source body bounds",
+      "detail_opacity": 1.0,
+      "requires_alpha_cutout": false
+    },
+    {
+      "id": "road_tile",
+      "label": "Warm gray road",
+      "category": "ground",
+      "status": "mockup texture",
+      "source": "assets/sources/road_tile.png",
+      "texture": "assets/textures/road_tile.tres",
+      "scene": "assets/scenes/road_tile.tscn",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "source_region": [
+        0,
+        0,
+        1254,
+        1254
+      ],
+      "body_bounds": [
+        0,
+        0,
+        1254,
+        1254
+      ],
+      "logical_target": [
+        32,
+        32
+      ],
+      "display_body_size": [
+        32.0,
+        32.0
+      ],
+      "scale": 0.025518341307814992,
+      "anchor": [
+        16.0,
+        32.0
+      ],
+      "source_sha256": "4a7c785c0669726cdfeb6226343e0fd6e32c142fbcd8e95f9cea08fd1d96549d",
+      "fully_transparent_pixels": 0,
+      "partial_alpha_pixels": 0,
+      "source_was_edited_by_packager": false,
+      "region_note": "source body bounds",
+      "detail_opacity": 1.0,
+      "requires_alpha_cutout": false
+    }
+  ]
+}

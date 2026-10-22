@@ -1,0 +1,1110 @@
+{
+  "source_png_count": 27,
+  "transparent_png_count": 23,
+  "issues": [],
+  "background_registration": {
+    "method": "Read-only integer phase correlation of luminance-gradient images, globally and on 32 local patches. No warping or image rewriting.",
+    "limit": "Diagnostic only; zero measured shift is not proof of pixel-identical geometry between differently lit paintings.",
+    "variants": {
+      "dawn": {
+        "same_size": true,
+        "global_shift_px": [
+          0,
+          0
+        ],
+        "global_confidence": 844.83,
+        "local_median_shift_px": 0.0,
+        "local_p95_shift_px": 0.0,
+        "local_max_shift_px": 0.0,
+        "patches": [
+          {
+            "center": [
+              96,
+              96
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 110.92
+          },
+          {
+            "center": [
+              307,
+              96
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 64.58
+          },
+          {
+            "center": [
+              518,
+              96
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 103.72
+          },
+          {
+            "center": [
+              730,
+              96
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 71.03
+          },
+          {
+            "center": [
+              941,
+              96
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 67.08
+          },
+          {
+            "center": [
+              1153,
+              96
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 83.28
+          },
+          {
+            "center": [
+              1364,
+              96
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 44.25
+          },
+          {
+            "center": [
+              1576,
+              96
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 90.75
+          },
+          {
+            "center": [
+              96,
+              345
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 73.16
+          },
+          {
+            "center": [
+              307,
+              345
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 115.13
+          },
+          {
+            "center": [
+              518,
+              345
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 57.2
+          },
+          {
+            "center": [
+              730,
+              345
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 51.22
+          },
+          {
+            "center": [
+              941,
+              345
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 66.87
+          },
+          {
+            "center": [
+              1153,
+              345
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 56.53
+          },
+          {
+            "center": [
+              1364,
+              345
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 57.57
+          },
+          {
+            "center": [
+              1576,
+              345
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 60.8
+          },
+          {
+            "center": [
+              96,
+              595
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 137.1
+          },
+          {
+            "center": [
+              307,
+              595
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 46.55
+          },
+          {
+            "center": [
+              518,
+              595
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 124.15
+          },
+          {
+            "center": [
+              730,
+              595
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 120.15
+          },
+          {
+            "center": [
+              941,
+              595
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 117.63
+          },
+          {
+            "center": [
+              1153,
+              595
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 121.29
+          },
+          {
+            "center": [
+              1364,
+              595
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 73.67
+          },
+          {
+            "center": [
+              1576,
+              595
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 88.87
+          },
+          {
+            "center": [
+              96,
+              845
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 56.15
+          },
+          {
+            "center": [
+              307,
+              845
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 97.42
+          },
+          {
+            "center": [
+              518,
+              845
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 120.49
+          },
+          {
+            "center": [
+              730,
+              845
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 124.63
+          },
+          {
+            "center": [
+              941,
+              845
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 66.08
+          },
+          {
+            "center": [
+              1153,
+              845
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 96.02
+          },
+          {
+            "center": [
+              1364,
+              845
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 63.48
+          },
+          {
+            "center": [
+              1576,
+              845
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 78.82
+          }
+        ],
+        "status": "prototype candidate; inspect transitions before production"
+      },
+      "dusk": {
+        "same_size": true,
+        "global_shift_px": [
+          0,
+          0
+        ],
+        "global_confidence": 768.23,
+        "local_median_shift_px": 0.0,
+        "local_p95_shift_px": 0.0,
+        "local_max_shift_px": 0.0,
+        "patches": [
+          {
+            "center": [
+              96,
+              96
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 95.55
+          },
+          {
+            "center": [
+              307,
+              96
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 56.29
+          },
+          {
+            "center": [
+              518,
+              96
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 62.54
+          },
+          {
+            "center": [
+              730,
+              96
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 61.89
+          },
+          {
+            "center": [
+              941,
+              96
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 59.26
+          },
+          {
+            "center": [
+              1153,
+              96
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 78.15
+          },
+          {
+            "center": [
+              1364,
+              96
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 37.13
+          },
+          {
+            "center": [
+              1576,
+              96
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 84.21
+          },
+          {
+            "center": [
+              96,
+              345
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 69.64
+          },
+          {
+            "center": [
+              307,
+              345
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 96.01
+          },
+          {
+            "center": [
+              518,
+              345
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 37.69
+          },
+          {
+            "center": [
+              730,
+              345
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 52.39
+          },
+          {
+            "center": [
+              941,
+              345
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 60.53
+          },
+          {
+            "center": [
+              1153,
+              345
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 42.37
+          },
+          {
+            "center": [
+              1364,
+              345
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 57.66
+          },
+          {
+            "center": [
+              1576,
+              345
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 56.84
+          },
+          {
+            "center": [
+              96,
+              595
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 129.84
+          },
+          {
+            "center": [
+              307,
+              595
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 48.47
+          },
+          {
+            "center": [
+              518,
+              595
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 118.47
+          },
+          {
+            "center": [
+              730,
+              595
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 121.74
+          },
+          {
+            "center": [
+              941,
+              595
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 114.49
+          },
+          {
+            "center": [
+              1153,
+              595
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 115.03
+          },
+          {
+            "center": [
+              1364,
+              595
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 65.01
+          },
+          {
+            "center": [
+              1576,
+              595
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 85.38
+          },
+          {
+            "center": [
+              96,
+              845
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 59.46
+          },
+          {
+            "center": [
+              307,
+              845
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 98.5
+          },
+          {
+            "center": [
+              518,
+              845
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 120.98
+          },
+          {
+            "center": [
+              730,
+              845
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 116.73
+          },
+          {
+            "center": [
+              941,
+              845
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 56.54
+          },
+          {
+            "center": [
+              1153,
+              845
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 85.76
+          },
+          {
+            "center": [
+              1364,
+              845
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 62.66
+          },
+          {
+            "center": [
+              1576,
+              845
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 72.75
+          }
+        ],
+        "status": "prototype candidate; inspect transitions before production"
+      },
+      "night": {
+        "same_size": true,
+        "global_shift_px": [
+          0,
+          0
+        ],
+        "global_confidence": 701.56,
+        "local_median_shift_px": 0.0,
+        "local_p95_shift_px": 0.0,
+        "local_max_shift_px": 0.0,
+        "patches": [
+          {
+            "center": [
+              96,
+              96
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 107.22
+          },
+          {
+            "center": [
+              307,
+              96
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 58.63
+          },
+          {
+            "center": [
+              518,
+              96
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 70.82
+          },
+          {
+            "center": [
+              730,
+              96
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 52.5
+          },
+          {
+            "center": [
+              941,
+              96
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 53.02
+          },
+          {
+            "center": [
+              1153,
+              96
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 81.01
+          },
+          {
+            "center": [
+              1364,
+              96
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 44.59
+          },
+          {
+            "center": [
+              1576,
+              96
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 92.64
+          },
+          {
+            "center": [
+              96,
+              345
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 59.85
+          },
+          {
+            "center": [
+              307,
+              345
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 86.59
+          },
+          {
+            "center": [
+              518,
+              345
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 34.83
+          },
+          {
+            "center": [
+              730,
+              345
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 53.9
+          },
+          {
+            "center": [
+              941,
+              345
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 53.43
+          },
+          {
+            "center": [
+              1153,
+              345
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 51.24
+          },
+          {
+            "center": [
+              1364,
+              345
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 46.14
+          },
+          {
+            "center": [
+              1576,
+              345
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 61.63
+          },
+          {
+            "center": [
+              96,
+              595
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 123.72
+          },
+          {
+            "center": [
+              307,
+              595
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 40.74
+          },
+          {
+            "center": [
+              518,
+              595
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 85.25
+          },
+          {
+            "center": [
+              730,
+              595
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 112.86
+          },
+          {
+            "center": [
+              941,
+              595
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 109.74
+          },
+          {
+            "center": [
+              1153,
+              595
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 119.96
+          },
+          {
+            "center": [
+              1364,
+              595
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 68.59
+          },
+          {
+            "center": [
+              1576,
+              595
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 96.14
+          },
+          {
+            "center": [
+              96,
+              845
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 59.3
+          },
+          {
+            "center": [
+              307,
+              845
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 81.14
+          },
+          {
+            "center": [
+              518,
+              845
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 90.08
+          },
+          {
+            "center": [
+              730,
+              845
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 106.67
+          },
+          {
+            "center": [
+              941,
+              845
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 65.16
+          },
+          {
+            "center": [
+              1153,
+              845
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 94.09
+          },
+          {
+            "center": [
+              1364,
+              845
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 73.44
+          },
+          {
+            "center": [
+              1576,
+              845
+            ],
+            "shift_px": [
+              0,
+              0
+            ],
+            "confidence": 80.86
+          }
+        ],
+        "status": "prototype candidate; inspect transitions before production"
+      }
+    }
+  },
+  "scope": "Checks actual alpha, padding, source hashes and frame registration. Does not certify drawing quality, pixel-perfect relighting or finished animation."
+}

@@ -1,0 +1,49 @@
+{
+  "adapter": "Apple M1 (Apple7)",
+  "canvas": "1920x1080 fixed viewport; two full-size plates during transitions",
+  "engine": "4.7.2-stable (official)",
+  "max_fps": 60,
+  "notes": "Native graphical measurements after warmup. Benchmark health keeps three dog AIs and attacks active. All long frames retained. Maximize still renders the same fixed 1080p canvas.",
+  "renderer": "forward_plus",
+  "samples": [
+    {
+      "case": "walking_noon",
+      "draw_calls": 46.0,
+      "focused_fraction": 1.0,
+      "fps": 59.9,
+      "frames_above_20_ms": 2,
+      "frames_above_33_ms": 0,
+      "p95_ms": 17.49,
+      "p99_ms": 18.51,
+      "render_size": "(1920.0, 1080.0)",
+      "window_size": "(1280, 720)",
+      "worst_ms": 27.41
+    },
+    {
+      "case": "three_dogs_and_background_crossfade",
+      "draw_calls": 56.0,
+      "focused_fraction": 1.0,
+      "fps": 60.0,
+      "frames_above_20_ms": 1,
+      "frames_above_33_ms": 0,
+      "p95_ms": 17.5,
+      "p99_ms": 18.06,
+      "render_size": "(1920.0, 1080.0)",
+      "window_size": "(1280, 720)",
+      "worst_ms": 20.56
+    },
+    {
+      "case": "maximized_three_dogs_and_crossfade",
+      "draw_calls": 56.0,
+      "focused_fraction": 1.0,
+      "fps": 60.0,
+      "frames_above_20_ms": 0,
+      "frames_above_33_ms": 0,
+      "p95_ms": 17.02,
+      "p99_ms": 17.83,
+      "render_size": "(1920.0, 1080.0)",
+      "window_size": "(5120, 2556)",
+      "worst_ms": 18.18
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3]
+[ext_resource type="Script" path="res://experiments/anime_hub_assets_v06/tools/asset_review.gd" id="1"]
+[node name="AssetReview" type="Node2D"]
+script = ExtResource("1")

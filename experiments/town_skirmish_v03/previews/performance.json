@@ -1,0 +1,59 @@
+{
+  "adapter": "Apple M1 (Apple7)",
+  "captured_at_utc": "2026-10-21 20:06:14",
+  "engine": "4.7.2-stable (official)",
+  "max_fps": 60,
+  "notes": "Benchmark-only high health preserves every combatant. Samples follow warmup and resize settling. Focus and long-frame counts are reported, not filtered out.",
+  "renderer": "forward_plus",
+  "samples": [
+    {
+      "case": "six_dogs_active_combat",
+      "draw_calls": 239.0,
+      "focused_fraction": 1.0,
+      "fps": 60.0,
+      "frames": 481,
+      "frames_above_20_ms": 0,
+      "frames_above_33_ms": 0,
+      "p95_ms": 17.28,
+      "p99_ms": 18.05,
+      "render_scale": 1.0,
+      "render_size": "(1920.0, 1080.0)",
+      "window_size": "(1920, 1080)",
+      "worst_ms": 18.64
+    },
+    {
+      "case": "maximized_active_combat",
+      "draw_calls": 234.0,
+      "focused_fraction": 1.0,
+      "fps": 59.9,
+      "frames": 480,
+      "frames_above_20_ms": 2,
+      "frames_above_33_ms": 1,
+      "p95_ms": 17.6,
+      "p99_ms": 18.68,
+      "render_scale": 1.0,
+      "render_size": "(1920.0, 1080.0)",
+      "window_size": "(5120, 2556)",
+      "worst_ms": 51.86
+    },
+    {
+      "case": "running_camera_and_combat",
+      "draw_calls": 232.0,
+      "focused_fraction": 1.0,
+      "fps": 60.0,
+      "frames": 481,
+      "frames_above_20_ms": 0,
+      "frames_above_33_ms": 0,
+      "p95_ms": 17.24,
+      "p99_ms": 17.7,
+      "render_scale": 1.0,
+      "render_size": "(1920.0, 1080.0)",
+      "window_size": "(1920, 1080)",
+      "worst_ms": 18.29
+    }
+  ],
+  "screen_size": "(5120, 2880)",
+  "shading": "Material-local cavity shading and contact shadows; full-resolution scene, FXAA, subtle DOF. Full-screen SSAO and bloom disabled.",
+  "target": "Native 1920x1080, 60 FPS; no dynamic resolution or 3D upscaling.",
+  "vsync": 1
+}

@@ -1,0 +1,15 @@
+{
+  "tool": "built-in image_gen",
+  "assets": [
+    {
+      "id": "warm_plaster",
+      "prompt": "Use case: stylized-concept. Asset type: square seamless albedo material texture for real 3D walls in a cozy HD-2D town game. Input original cottage is PALETTE AND MATERIAL DETAIL REFERENCE ONLY. Create a flat, perfectly straight-on, evenly lit swatch of warm cream/ivory aged lime plaster, subtle fine hand-painted pixel-like grain, tiny warm beige flecks and a few faint hairline age cracks, understated value variation. The whole image is ONE wall material swatch, edge to edge. NOT a picture of a wall in perspective, NO building, windows, doors, plants, wood framing, bricks, corners, border, vignette, lettering or cast shadow. Warm ivory dominant, not grey. Seamless repeating edges, no directional light gradient, no dramatic large cracks. Sophisticated finely clustered pixel-like material detail matching the original cottage. Square, opaque texture.",
+      "source": "Generated images are saved to /Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88 as /Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-aa8b00c9-3cc0-487e-a774-7f470d18a38e.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "blue_slate",
+      "prompt": "Use case: stylized-concept. Asset type: square seamless roof albedo texture for real 3D sloping roofs in a cozy HD-2D town game. Input original cottage is COLOR AND MATERIAL DETAIL REFERENCE ONLY. A perfectly straight-on flat texture of overlapping small rectangular blue slate roof shingles in eight evenly spaced horizontal courses, each course offset by half a tile. Muted slate blue, navy seams, softly varied blue-grey stone surfaces, tiny warm age speckles, crisp fine pixel-like illustrated texture. Every row is parallel to image top/bottom; every vertical seam is straight. Absolutely NO perspective, NO sloping lines, NO roof ridge, building outline, background, border, plants, chimney, labels, sunlight gradient or cast shadow. Entire image filled edge to edge with the regular shingle pattern, seamlessly tileable in X and Y. Fine illustrated HD-2D material texture, not chunky pixels or smooth vector. Square, opaque texture.",
+      "source": "Generated images are saved to /Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88 as /Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-36d8a6e6-5187-4ad2-9e42-05792cff53da.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Texture2D" path="res://experiments/cozy_town_v01/assets/textures/community_shop.tres" id="1"]
+
+[ext_resource type="Shader" path="res://experiments/cozy_town_v01/tools/pixel_cutout.gdshader" id="2"]
+
+[sub_resource type="ShaderMaterial" id="Cutout"]
+shader = ExtResource("2")
+shader_parameter/alpha_cutoff = 0.97
+
+[node name="community_shop" type="Node2D"]
+texture_filter = 1
+
+[node name="Sprite" type="Sprite2D" parent="."]
+material = SubResource("Cutout")
+position = Vector2(-75.86440677966101, -144.40677966101694)
+scale = Vector2(0.13559322033898305, 0.13559322033898305)
+texture = ExtResource("1")
+centered = false

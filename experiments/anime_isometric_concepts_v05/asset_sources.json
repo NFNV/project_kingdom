@@ -1,0 +1,23 @@
+[
+  {
+    "file": "01_garden_street.png",
+    "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-73b61d78-44f4-41f2-a129-1219e0c0c7fd.png",
+    "width": 1672,
+    "height": 941,
+    "sha256": "965c9f4faa9b9132edc2453289b3a91f66017ec46f7d460c9b9f4becb1f08e09"
+  },
+  {
+    "file": "02_garden_hall_capture.png",
+    "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-6a840aa4-deb1-493c-b846-88b1f481fe89.png",
+    "width": 1672,
+    "height": 941,
+    "sha256": "b92d45dfc3e11420f4136e04f8df2494f1bbc177671033ed986b291e0ee662f2"
+  },
+  {
+    "file": "03_riverside_exploration.png",
+    "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-146bb626-2145-4993-84a1-5e19838edb22.png",
+    "width": 1672,
+    "height": 941,
+    "sha256": "0acde2fd24b8440e6243d46eb9114dfdee49fc23b10f033c9bfe998e034a5705"
+  }
+]

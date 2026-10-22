@@ -1,0 +1,6 @@
+{
+  "checks": 45,
+  "failures": [],
+  "passed": 45,
+  "scope": "Actual movement, obstacle navigation, proximity quest, melee, challenge outcomes, time wrap and pause at 1080p canvas."
+}

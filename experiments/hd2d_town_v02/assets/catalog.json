@@ -1,0 +1,239 @@
+{
+  "bench": {
+    "file": "bench.png",
+    "source_size": [
+      1536,
+      1024
+    ],
+    "region": [
+      167,
+      40,
+      1203,
+      962
+    ],
+    "sha256": "9c8a2db60ca66e39f2f4ad8c2c30f2427c8aa9d308b748c574eaaa113158dc4f",
+    "readiness": "Fixed-angle scenery card; baked local shading"
+  },
+  "cottage": {
+    "file": "cottage.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "region": [
+      56,
+      40,
+      1151,
+      1157
+    ],
+    "sha256": "2b090df68d8e97af2ff5dd6c041ffc4e12ab003d356059db5a3eb48af7b012f9",
+    "readiness": "Fixed-angle scenery card; baked local shading"
+  },
+  "garden": {
+    "file": "garden.png",
+    "source_size": [
+      1947,
+      808
+    ],
+    "region": [
+      51,
+      27,
+      1852,
+      750
+    ],
+    "sha256": "67e62525a9069e8ee7be6a79a5c43840558f59fdfc68aab570b60c351f514ef4",
+    "readiness": "Fixed-angle scenery card; baked local shading"
+  },
+  "lamp": {
+    "file": "lamp.png",
+    "source_size": [
+      1024,
+      1536
+    ],
+    "region": [
+      377,
+      58,
+      366,
+      1425
+    ],
+    "sha256": "558842feae9a25a03f76449f80eae7dd640d17ade789da4ee2af534332af0bc8",
+    "readiness": "Fixed-angle scenery card; baked local shading"
+  },
+  "notice_board": {
+    "file": "notice_board.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "region": [
+      147,
+      63,
+      972,
+      1154
+    ],
+    "sha256": "392ac9804cf6223edd605027b4bc4ddabd6b6d21ce437dfb43d7a901d37432e5",
+    "readiness": "Fixed-angle scenery card; baked local shading"
+  },
+  "old_car": {
+    "file": "old_car.png",
+    "source_size": [
+      1536,
+      1024
+    ],
+    "region": [
+      92,
+      49,
+      1346,
+      936
+    ],
+    "sha256": "1d88a1f2927993fe34ce0fe7bb3e88d10d924f4d5957eef73c89709ee08e1296",
+    "readiness": "Fixed-angle scenery card; baked local shading"
+  },
+  "resident_walk": {
+    "file": "resident_walk.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "region": [
+      121,
+      23,
+      1011,
+      1194
+    ],
+    "sha256": "e0a386012e5b8acb57171be05835e8216c90636ab91b1efb86a2721b4d1266e1",
+    "readiness": "Animation concept sheet; needs pixel registration review",
+    "frames": [
+      [
+        140,
+        26,
+        140,
+        274
+      ],
+      [
+        424,
+        23,
+        131,
+        277
+      ],
+      [
+        708,
+        28,
+        128,
+        272
+      ],
+      [
+        984,
+        24,
+        130,
+        277
+      ],
+      [
+        135,
+        327,
+        150,
+        279
+      ],
+      [
+        419,
+        327,
+        138,
+        279
+      ],
+      [
+        700,
+        327,
+        146,
+        279
+      ],
+      [
+        985,
+        328,
+        142,
+        278
+      ],
+      [
+        121,
+        635,
+        156,
+        275
+      ],
+      [
+        419,
+        636,
+        139,
+        274
+      ],
+      [
+        686,
+        635,
+        149,
+        275
+      ],
+      [
+        986,
+        638,
+        146,
+        272
+      ],
+      [
+        137,
+        936,
+        141,
+        281
+      ],
+      [
+        422,
+        937,
+        128,
+        280
+      ],
+      [
+        701,
+        935,
+        140,
+        282
+      ],
+      [
+        993,
+        933,
+        120,
+        284
+      ]
+    ],
+    "frame_canvas": [
+      180,
+      300
+    ]
+  },
+  "shop": {
+    "file": "shop.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "region": [
+      63,
+      44,
+      1155,
+      1172
+    ],
+    "sha256": "e6edd0943d0076964fe2bc2144f2883a79b57d20b98abf1b21076ca31f422d22",
+    "readiness": "Fixed-angle scenery card; baked local shading"
+  },
+  "tree": {
+    "file": "tree.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "region": [
+      15,
+      28,
+      1224,
+      1194
+    ],
+    "sha256": "96bf4744fa4353079271a05dc1dc8214918109028ce544ef606ab30cc12e1139",
+    "readiness": "Fixed-angle scenery card; baked local shading"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "checks": 93,
+  "errors": [],
+  "passed": 93,
+  "renderer": "forward_plus",
+  "scope": "Native resource loading, source dimensions, transparent atlas bounds, registered frame canvases and baseline, all review pages and lighting presets. Not a gameplay/FPS test."
+}
