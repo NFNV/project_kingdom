@@ -40,6 +40,35 @@ func _walk(at: Vector2, actions: Array, frames: int) -> Vector2:
 	return game.player.position
 
 
+func _travel_route(exit_id: String, expected_zone: String) -> void:
+	var original: String = game.zone
+	var at: Vector2 = game.exits[exit_id]["at"]
+	var path: PackedVector2Array = game.find_path(game.player.position,at)
+	_check(not path.is_empty(),"A walkable route reaches "+original+" / "+exit_id)
+	game.player.route = path
+	for tick in 1800:
+		await physics_frame
+		if game.zone==expected_zone and not game.transitioning:
+			break
+	_check(game.zone==expected_zone and not game.transitioning,"Walking through "+exit_id+" arrives in "+expected_zone)
+	if game.zone!=expected_zone:
+		print("TRAVEL DEBUG ",original," ",game.player.position," target ",at," route ",game.player.route)
+	_check(game.is_walkable(game.player.position,14),"Arrival in "+expected_zone+" has a safe collision footprint")
+
+
+func _visit_landmark(id: String) -> void:
+	var path: PackedVector2Array = game.find_path(game.player.position,game.interactables[id]["at"])
+	_check(not path.is_empty(),"Path reaches resting place "+id)
+	game.player.route = path
+	for tick in 1200:
+		await physics_frame
+		if game.nearest==id:
+			break
+	_check(game.nearest==id,"The cat physically reaches "+id)
+	game.interact()
+	_check(game.discoveries.has(id),"Proximity interaction records "+id)
+
+
 func _run() -> void:
 	game = load(ROOT+"demo.tscn").instantiate()
 	root.add_child(game)
@@ -50,8 +79,8 @@ func _run() -> void:
 	_check(root.get_texture().get_size()==Vector2(1920,1080),"Internal canvas is 1920x1080")
 	_check(game.player.controlled,"Cat is controlled")
 	_check(game.player.sprite.sprite_frames.has_animation("walk_nw"),"Registered directional character resources load")
-	_check(game.interactables.size()==7,"All five residents, postbox and warden are interactive")
-	_check(game.quest_stage==0 and not game.combat_active,"Demo starts with an available quest and optional combat")
+	_check(game.interactables.size()==9,"All residents, postbox and three peaceful wardens are interactive")
+	_check(game.quest_stage==0 and not game.combat_active,"Demo starts with an available quest and no combat")
 	var start := Vector2(800,930)
 	var end := await _walk(start,["hub_right"],30)
 	var walk_distance: float = game.Actor.ground_vector(end-start).length()
@@ -94,52 +123,60 @@ func _run() -> void:
 	_check(game.quest_stage==5,"Full five-step delivery quest completes")
 	game.interact("baker")
 	_check(game.quest_stage==5,"Repeated NPC conversation cannot duplicate quest progress")
-	# Passive warden is harmless until explicitly challenged.
-	_check(game.dogs.is_empty(),"No hostile wardens spawn before challenge")
+	# Talking to every warden and legacy challenge calls remain harmless.
+	_check(game.dogs.size()==3,"Three peaceful dog wardens inhabit the town")
+	for id in ["warden","guard_west","guard_east"]:
+		game.interact(id)
+	_check(not game.combat_active,"Warden conversation never starts a fight")
 	game.start_challenge()
-	_check(game.dogs.size()==3 and game.combat_active,"Optional challenge spawns three opponents")
+	_check(not game.combat_active,"Legacy challenge entry cannot enable combat")
 	for dog in game.dogs:
-		dog.set_physics_process(false)
-		dog.position = Vector2(1200,960)
-	await _settle(Vector2(800,930))
-	var victim = game.dogs[0]
-	victim.position = Vector2(865,930)
-	victim.grace = 0
-	game.player.cooldown = 0
-	_check(game.player.try_attack(Vector2.RIGHT),"Cat can start an aimed swing")
-	_check(not game.player.try_attack(Vector2.RIGHT),"Attack cooldown prevents immediate repeated swings")
-	game.player.resolve_hits()
-	_check(victim.health==2,"Melee swing damages an in-range opponent")
-	victim.grace = 0
-	game.player.resolve_hits()
-	_check(victim.health==2,"One swing cannot hit the same opponent twice")
-	game.player.swing_hits.clear()
-	victim.position = Vector2(730,930)
-	game.player.resolve_hits()
-	_check(victim.health==2,"Melee facing cone excludes opponents behind the cat")
-	game.player.swing_hits.clear()
-	game.player.position = Vector2(970,730)
-	victim.position = Vector2(970,665)
-	game.player.facing = Vector2.UP
-	game.player.resolve_hits()
-	_check(victim.health==2,"Melee cannot pass through the fountain")
-	game.player.grace = 0
-	game.player.health = 5
-	_check(game.player.receive_hit(Vector2.LEFT),"Enemy damage reduces cat health")
-	_check(game.player.health==4 and not game.player.receive_hit(Vector2.LEFT),"Damage grants temporary invulnerability")
-	game.player.grace = 0
-	game.player.health = 1
-	game.player.receive_hit(Vector2.LEFT)
-	_check(not game.combat_active and game.player.active and game.player.health==5,"Defeat safely ends challenge and restores the cat")
-	_check(game.quest_stage==5,"Sparring defeat preserves completed deliveries")
+		dog.enemy = true
+		dog.cooldown = 0
+	game.combat_active = true
+	await _settle(Vector2(1110,850))
+	var health_before: int = game.player.health
+	for tick in 120:
+		await physics_frame
+	_check(game.player.health==health_before,"Even stale enemy flags cannot make wardens damage the cat")
+	_check(not game.dogs[0].try_attack(),"Wardens cannot start an attack in peaceful mode")
+	_check(not game.player.receive_hit(Vector2.LEFT),"Exploration player rejects damage")
+	_check(not game.dogs[0].receive_hit(Vector2.LEFT),"Friendly wardens reject damage")
 	game.start_challenge()
-	for dog in game.dogs:
-		dog.set_physics_process(false)
-		dog.health = 1
-		dog.grace = 0
-		dog.receive_hit(Vector2.RIGHT)
-	_check(not game.combat_active and game.challenge_won,"All three opponents yielding wins the challenge")
-	_check(game.victory_count==3,"Victory counts all three opponents")
+	_check(game.CYCLE_SECONDS==1200.0,"Full day/night cycle lasts twenty minutes")
+	game.clock = 1.0
+	game.auto_clock = true
+	game._process(60.0)
+	game.auto_clock = false
+	_check(absf(game.clock-1.2)<0.001,"One real minute advances exactly one twentieth of a full cycle")
+	game.ui.clock_dial.set_phase(1.0)
+	_check(is_equal_approx(game.ui.clock_dial.hour,12.0),"Celestial dial shows noon for noon lighting")
+	game.ui.clock_dial.set_phase(3.0)
+	_check(is_equal_approx(game.ui.clock_dial.hour,0.0),"Celestial dial shows midnight for night lighting")
+	game.clock = 1.4
+	await _travel_route("southeast","trail")
+	_check(game.quest_stage==5 and absf(game.clock-1.4)<.001,"Town errands and clock survive travel into the forest")
+	_check(game.dogs.is_empty(),"Forest contains no hostile dog actors")
+	for id in ["old_elm","meadow"]:
+		await _visit_landmark(id)
+	_check(game.discoveries.size()==2,"Both trail memories can be discovered")
+	await _travel_route("river","river")
+	await _visit_landmark("river_view")
+	_check(game.discoveries.size()==3,"River viewpoint completes the forest journal")
+	var across_bridge = game.Map.point(1200,100)
+	var bridge_route: PackedVector2Array = game.find_path(game.player.position,across_bridge)
+	_check(not bridge_route.is_empty(),"The footbridge connects both riverbanks")
+	game.player.route = bridge_route
+	for tick in 1200:
+		await physics_frame
+		if game.player.route.is_empty():
+			break
+	_check(game.player.position.distance_to(across_bridge)<50,"Actual walking crosses the bridge without entering the water")
+	await _travel_route("trail","trail")
+	await _travel_route("town","town")
+	_check(game.quest_stage==5 and game.discoveries.size()==3,"Returning home preserves town and forest progress")
+	_check(absf(game.clock-1.4)<.001,"The shared clock is not reset by any zone transition")
+	_check(game.player.get_parent()==game.world,"The same playable cat transfers into the current ground-sorted scene")
 	game.clock = 3.95
 	game.advance_time()
 	for tick in 30:
@@ -159,7 +196,7 @@ func _run() -> void:
 	for action in InputMap.get_actions():
 		if action.begins_with("hub_"):
 			Input.action_release(action)
-	var report := {"checks":checks,"passed":checks-failures.size(),"failures":failures,"scope":"Actual movement, obstacle navigation, proximity quest, melee, challenge outcomes, time wrap and pause at 1080p canvas."}
+	var report := {"checks":checks,"passed":checks-failures.size(),"failures":failures,"scope":"Movement/collision, delivery quest, peaceful warden regression, twenty-minute clock, physical southeast exit, both forest areas, bridge, complete return journey and persistent progress."}
 	FileAccess.open(ProjectSettings.globalize_path(ROOT+"test_results.json"),FileAccess.WRITE).store_string(JSON.stringify(report,"  ")+"\n")
 	print("Playable hub: ",checks-failures.size(),"/",checks," checks passed.")
 	quit(0 if failures.is_empty() else 1)

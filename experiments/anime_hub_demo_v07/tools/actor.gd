@@ -50,7 +50,7 @@ static func ground_vector(vector: Vector2) -> Vector2:
 
 
 func _physics_process(delta: float) -> void:
-	if hub.paused or not active:
+	if hub.paused or hub.transitioning or not active:
 		return
 	grace = maxf(0,grace-delta)
 	cooldown = maxf(0,cooldown-delta)
@@ -101,6 +101,9 @@ func follow_route() -> Vector2:
 
 
 func _enemy_intent(delta: float) -> Vector2:
+	if hub.peaceful_mode:
+		windup = 0
+		return Vector2.ZERO
 	if not enemy or not hub.combat_active or not hub.player.active:
 		return Vector2.ZERO
 	var offset: Vector2 = hub.player.position-position
@@ -119,6 +122,8 @@ func _enemy_intent(delta: float) -> Vector2:
 
 
 func try_attack(aim := Vector2.ZERO) -> bool:
+	if hub.peaceful_mode:
+		return false
 	if not active or hub.paused or cooldown>0 or swing>0:
 		return false
 	if not controlled and not enemy:
@@ -132,6 +137,8 @@ func try_attack(aim := Vector2.ZERO) -> bool:
 
 
 func resolve_hits() -> void:
+	if hub.peaceful_mode:
+		return
 	var targets: Array = hub.dogs if controlled else [hub.player]
 	for target in targets:
 		if not target.active or target in swing_hits:
@@ -146,6 +153,8 @@ func resolve_hits() -> void:
 
 
 func receive_hit(from: Vector2) -> bool:
+	if hub.peaceful_mode:
+		return false
 	if not active or grace>0:
 		return false
 	health -= 1

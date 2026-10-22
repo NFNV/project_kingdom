@@ -1,0 +1,59 @@
+{
+  "assets": [
+    {
+      "file": "assets/forest/mosswood_day.png",
+      "size": [
+        1672,
+        941
+      ],
+      "sha256": "ed855b5a9d93095c75b8a18d6c427a8214864359f5ebaba166e3caff28a47d5f",
+      "source_copy_matches": true
+    },
+    {
+      "file": "assets/forest/riverbend_day.png",
+      "size": [
+        1672,
+        941
+      ],
+      "sha256": "93ac2aa87ab48964fc11a5fa972793d724d9dcfc38dc0aeb3d04c1ae235c9fe2",
+      "source_copy_matches": true
+    },
+    {
+      "file": "assets/forest/mosswood_night.png",
+      "size": [
+        1672,
+        941
+      ],
+      "sha256": "9d6b80340db6172ceb13dedcb68bbbba90f5378dc859f2de308390bb65d93cea",
+      "source_copy_matches": true
+    },
+    {
+      "file": "assets/forest/riverbend_night.png",
+      "size": [
+        1672,
+        941
+      ],
+      "sha256": "3715b64fa75414c6ab14369caaf10e9f29bafda5a3df83c6f61c3cb0f52e2d8f",
+      "source_copy_matches": true
+    }
+  ],
+  "day_night_registration": {
+    "mosswood": {
+      "global_shift_px": [
+        0,
+        0
+      ],
+      "local_max_shift_px": 1.0,
+      "local_p95_shift_px": 1.0
+    },
+    "riverbend": {
+      "global_shift_px": [
+        0,
+        0
+      ],
+      "local_max_shift_px": 1.0,
+      "local_p95_shift_px": 1.0
+    }
+  },
+  "limit": "Read-only integer gradient phase correlation is a prototype alignment diagnostic, not proof of identical painted details."
+}

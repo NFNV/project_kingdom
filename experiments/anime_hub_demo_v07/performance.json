@@ -1,49 +1,75 @@
 {
   "adapter": "Apple M1 (Apple7)",
-  "canvas": "1920x1080 fixed viewport; two full-size plates during transitions",
+  "canvas": "1920x1080 fixed viewport; original forest day/night plates, native celestial clock",
   "engine": "4.7.2-stable (official)",
   "max_fps": 60,
-  "notes": "Native graphical measurements after warmup. Benchmark health keeps three dog AIs and attacks active. All long frames retained. Maximize still renders the same fixed 1080p canvas.",
+  "notes": "Focused graphical measurements after warmup. Actual cat movement, peaceful wardens, animated wind/leaves/fireflies, clock and background crossfades. All long frames retained. Maximize still renders the same 1080p canvas. Scene loads occur during short travel fades and outside steady-state samples.",
   "renderer": "forward_plus",
   "samples": [
     {
-      "case": "walking_noon",
-      "draw_calls": 46.0,
-      "focused_fraction": 1.0,
-      "fps": 59.9,
-      "frames_above_20_ms": 2,
-      "frames_above_33_ms": 0,
-      "p95_ms": 17.49,
-      "p99_ms": 18.51,
-      "render_size": "(1920.0, 1080.0)",
-      "window_size": "(1280, 720)",
-      "worst_ms": 27.41
-    },
-    {
-      "case": "three_dogs_and_background_crossfade",
-      "draw_calls": 56.0,
+      "case": "town_day_with_celestial_clock",
+      "draw_calls": 119.0,
       "focused_fraction": 1.0,
       "fps": 60.0,
-      "frames_above_20_ms": 1,
+      "frames_above_20_ms": 3,
       "frames_above_33_ms": 0,
-      "p95_ms": 17.5,
-      "p99_ms": 18.06,
+      "p95_ms": 18.95,
+      "p99_ms": 19.97,
       "render_size": "(1920.0, 1080.0)",
       "window_size": "(1280, 720)",
-      "worst_ms": 20.56
+      "worst_ms": 21.99
     },
     {
-      "case": "maximized_three_dogs_and_crossfade",
-      "draw_calls": 56.0,
+      "case": "forest_trail_day_wind_and_clock",
+      "draw_calls": 114.0,
       "focused_fraction": 1.0,
       "fps": 60.0,
       "frames_above_20_ms": 0,
       "frames_above_33_ms": 0,
-      "p95_ms": 17.02,
-      "p99_ms": 17.83,
+      "p95_ms": 17.72,
+      "p99_ms": 18.16,
+      "render_size": "(1920.0, 1080.0)",
+      "window_size": "(1280, 720)",
+      "worst_ms": 19.04
+    },
+    {
+      "case": "forest_trail_day_night_crossfade",
+      "draw_calls": 131.0,
+      "focused_fraction": 1.0,
+      "fps": 60.0,
+      "frames_above_20_ms": 0,
+      "frames_above_33_ms": 0,
+      "p95_ms": 17.74,
+      "p99_ms": 18.12,
+      "render_size": "(1920.0, 1080.0)",
+      "window_size": "(1280, 720)",
+      "worst_ms": 18.39
+    },
+    {
+      "case": "river_glade_twilight",
+      "draw_calls": 119.0,
+      "focused_fraction": 1.0,
+      "fps": 59.9,
+      "frames_above_20_ms": 2,
+      "frames_above_33_ms": 0,
+      "p95_ms": 18.54,
+      "p99_ms": 19.66,
+      "render_size": "(1920.0, 1080.0)",
+      "window_size": "(1280, 720)",
+      "worst_ms": 24.35
+    },
+    {
+      "case": "maximized_river_at_night",
+      "draw_calls": 119.0,
+      "focused_fraction": 1.0,
+      "fps": 60.0,
+      "frames_above_20_ms": 0,
+      "frames_above_33_ms": 0,
+      "p95_ms": 17.85,
+      "p99_ms": 18.26,
       "render_size": "(1920.0, 1080.0)",
       "window_size": "(5120, 2556)",
-      "worst_ms": 18.18
+      "worst_ms": 19.24
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
-  "checks": 45,
+  "checks": 72,
   "failures": [],
-  "passed": 45,
-  "scope": "Actual movement, obstacle navigation, proximity quest, melee, challenge outcomes, time wrap and pause at 1080p canvas."
+  "passed": 72,
+  "scope": "Movement/collision, delivery quest, peaceful warden regression, twenty-minute clock, physical southeast exit, both forest areas, bridge, complete return journey and persistent progress."
 }

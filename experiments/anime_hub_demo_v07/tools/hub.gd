@@ -3,19 +3,32 @@ extends Node2D
 const ART := "res://experiments/anime_hub_assets_v06/"
 const ROOT := "res://experiments/anime_hub_demo_v07/"
 const Actor := preload("res://experiments/anime_hub_demo_v07/tools/actor.gd")
+const Map := preload("res://experiments/anime_hub_demo_v07/tools/woodland_map.gd")
+const Hud := preload("res://experiments/anime_hub_demo_v07/tools/hud.gd")
+const CYCLE_SECONDS := 1200.0
 const SIZE := Vector2i(1920,1080)
 const TIMES := ["Dawn","Noon","Dusk","Night"]
 const TINTS := [Color(1.0,0.88,0.80),Color.WHITE,Color(0.86,0.70,0.67),Color(0.43,0.52,0.74)]
 var FLOOR := PackedVector2Array([Vector2(760,465),Vector2(1150,460),Vector2(1315,570),Vector2(1590,735),Vector2(1360,835),Vector2(1460,990),Vector2(1270,1060),Vector2(410,1060),Vector2(500,925),Vector2(370,770),Vector2(430,685),Vector2(650,580)])
+var town_floor := FLOOR.duplicate()
 const OBJECTIVES := [
 	"Visit Pippa at the blue bakery cart.",
 	"Take the warm bread to Elder Mallow by the bench.",
 	"Pick up a fruit basket from Moss at the green stall.",
 	"Bring the fruit basket to Pip, the courier.",
 	"Post Pip's letter in the red postbox.",
-	"Morning rounds complete! Try Bram's sparring challenge."
+	"Morning rounds complete! Explore Mosswood through the southeast gate."
 ]
 const QUEST_TARGETS := ["baker","elder","grocer","courier","postbox","warden"]
+var zone := "town"
+var zone_root: Node2D
+var exits: Dictionary = {}
+var near_exit := ""
+var discoveries: Dictionary = {}
+var transitioning := false
+var travel_cooldown := 0.0
+var peaceful_mode := true
+var trail_effects: Node2D
 var catalog: Dictionary
 var world: Node2D
 var player: CharacterBody2D
@@ -26,7 +39,7 @@ var blockers: Array[PackedVector2Array] = []
 var navigation := AStarGrid2D.new()
 var backgrounds: Array[Sprite2D] = []
 var actor_tint := Color.WHITE
-var ui: CanvasLayer
+var ui
 var objective: Label
 var time_label: Label
 var status_label: Label
@@ -66,33 +79,25 @@ func _ready() -> void:
 	_install_input()
 	catalog = JSON.parse_string(FileAccess.get_file_as_string(ART+"catalog.json"))["assets"]
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
-	for time in TIMES:
-		var plate := Sprite2D.new()
-		plate.texture = load(ART+"backgrounds/plaza_"+time.to_lower()+".png")
-		plate.centered = false
-		plate.scale = Vector2(SIZE)/plate.texture.get_size()
-		add_child(plate)
-		backgrounds.append(plate)
-	world = Node2D.new()
-	world.y_sort_enabled = true
-	add_child(world)
-	_build_plaza()
-	_build_navigation()
-	player = _actor(true,spawn)
+	_load_zone("town","start")
 	_build_ui()
 	_update_lighting()
 	_update_hud()
 	if DisplayServer.get_name()!="headless":
 		DisplayServer.window_move_to_foreground()
-	_say("Welcome to Garden Square", "WASD to walk, Shift to run. Follow the gold marker to Pippa's cart; press E nearby.")
+	_say("Welcome to Garden Square", "WASD to walk, Shift to run. The wardens are friendly. Visit Pippa, or take the southeast gate into Mosswood.")
 	if "--night" in OS.get_cmdline_user_args():
 		clock = 3.0
+	if "--trail" in OS.get_cmdline_user_args():
+		_load_zone("trail","town")
+	elif "--river" in OS.get_cmdline_user_args():
+		_load_zone("river","trail")
 	if "--capture" in OS.get_cmdline_user_args():
 		_capture.call_deferred()
 
 
 func _install_input() -> void:
-	var bindings := {"left":[KEY_A,KEY_LEFT],"right":[KEY_D,KEY_RIGHT],"up":[KEY_W,KEY_UP],"down":[KEY_S,KEY_DOWN],"run":[KEY_SHIFT],"attack":[KEY_SPACE],"interact":[KEY_E],"time":[KEY_T],"pause":[KEY_ESCAPE],"restart":[KEY_R],"fullscreen":[KEY_F11]}
+	var bindings := {"left":[KEY_A,KEY_LEFT],"right":[KEY_D,KEY_RIGHT],"up":[KEY_W,KEY_UP],"down":[KEY_S,KEY_DOWN],"run":[KEY_SHIFT],"attack":[KEY_SPACE],"interact":[KEY_E],"time":[KEY_T],"pause":[KEY_ESCAPE],"restart":[KEY_R],"fullscreen":[KEY_F11],"journal":[KEY_J],"debug":[KEY_F3]}
 	for action in bindings:
 		var name := "hub_"+str(action)
 		if not InputMap.has_action(name):
@@ -101,6 +106,150 @@ func _install_input() -> void:
 				var event := InputEventKey.new()
 				event.physical_keycode = key
 				InputMap.action_add_event(name,event)
+
+
+func zone_title() -> String:
+	return Map.NAMES[zone]
+
+
+func _load_zone(destination: String, entry: String) -> void:
+	if is_instance_valid(player):
+		player.get_parent().remove_child(player)
+	if is_instance_valid(zone_root):
+		remove_child(zone_root)
+		zone_root.queue_free()
+	zone = destination
+	backgrounds.clear()
+	pieces.clear()
+	dogs.clear()
+	interactables.clear()
+	blockers.clear()
+	ripples = null
+	trail_effects = null
+	nearest = ""
+	near_exit = ""
+	zone_root = Node2D.new()
+	add_child(zone_root)
+	var files: Array = []
+	if zone=="town":
+		FLOOR = town_floor.duplicate()
+		for time in TIMES:
+			files.append(ART+"backgrounds/plaza_"+time.to_lower()+".png")
+	else:
+		FLOOR = Map.floor_for(zone)
+		var id := "mosswood" if zone=="trail" else "riverbend"
+		files = [ROOT+"assets/forest/"+id+"_day.png",ROOT+"assets/forest/"+id+"_night.png"]
+	for file in files:
+		var plate := Sprite2D.new()
+		plate.texture = load(file)
+		plate.centered = false
+		plate.scale = Vector2(SIZE)/plate.texture.get_size()
+		plate.z_index = -10+backgrounds.size()
+		zone_root.add_child(plate)
+		backgrounds.append(plate)
+	world = Node2D.new()
+	world.y_sort_enabled = true
+	zone_root.add_child(world)
+	if zone=="town":
+		_build_plaza()
+	else:
+		_build_forest()
+	exits = Map.exits_for(zone)
+	_build_navigation()
+	if not is_instance_valid(player):
+		player = _actor(true,Map.arrival(zone,entry))
+	else:
+		world.add_child(player)
+		player.position = Map.arrival(zone,entry)
+	player.intent = Vector2.ZERO
+	player.velocity = Vector2.ZERO
+	player.route.clear()
+	player.reset_physics_interpolation()
+	travel_cooldown = 1.2
+	var markings := Node2D.new()
+	markings.z_index = 1
+	zone_root.add_child(markings)
+	markings.draw.connect(_draw_exit_marks.bind(markings))
+	markings.queue_redraw()
+	_update_lighting()
+	_update_hud()
+	get_window().title = "Project Kingdom — "+zone_title()
+
+
+func _build_forest() -> void:
+	_solid(FLOOR,true)
+	interactables = Map.landmarks(zone)
+	if zone=="trail":
+		_solid(_ellipse(Map.point(1100,540),Map.point(110,70)))
+		_solid(_ellipse(Map.point(456,453),Map.point(47,37)))
+		_piece("elm_tree",Vector2(-10,1040),350)
+		_piece("willow_tree",Vector2(1970,765),300)
+	else:
+		_solid(_ellipse(Map.point(1085,540),Map.point(93,65)))
+		_piece("elm_tree",Vector2(1910,1075),330)
+		_piece("willow_tree",Vector2(-10,900),290)
+	trail_effects = Node2D.new()
+	trail_effects.z_index = 2
+	zone_root.add_child(trail_effects)
+	trail_effects.draw.connect(_draw_forest_air)
+
+
+func _draw_exit_marks(node: Node2D) -> void:
+	for id in exits:
+		var at: Vector2 = exits[id]["at"]
+		node.draw_set_transform(at,0,Vector2(1,.48))
+		node.draw_arc(Vector2.ZERO,31,0,TAU,32,Color(.13,.25,.17,.7),6,true)
+		node.draw_arc(Vector2.ZERO,31,0,TAU,32,Color(1,.86,.5,.95),2,true)
+		node.draw_set_transform(Vector2.ZERO)
+		var arrow := Vector2(1,.65).normalized() if id in ["southeast","river"] else Vector2(-1,-.2).normalized()
+		node.draw_line(at-arrow*14,at+arrow*16,Color("ffedb6"),3,true)
+		node.draw_line(at+arrow*16,at+arrow.rotated(2.6)*13,Color("ffedb6"),3,true)
+		node.draw_line(at+arrow*16,at+arrow.rotated(-2.6)*13,Color("ffedb6"),3,true)
+		var sign := StyleBoxFlat.new()
+		sign.bg_color = Color("294236")
+		sign.border_color = Color("c4ab72")
+		sign.set_border_width_all(1)
+		sign.set_corner_radius_all(5)
+		node.draw_style_box(sign,Rect2(at+Vector2(-82,-57),Vector2(164,29)))
+		node.draw_string(ThemeDB.fallback_font,at+Vector2(-76,-36),"Mosswood" if zone=="town" else ("Garden Square" if id=="town" else ("Riverbend" if id=="river" else "Mosswood")),HORIZONTAL_ALIGNMENT_CENTER,152,16,Color("fff1cb"))
+
+
+func _draw_forest_air() -> void:
+	if not is_instance_valid(trail_effects):
+		return
+	var night := clampf(1.0-actor_tint.g,0,1)
+	for i in 18:
+		var at := Vector2(fposmod(i*173.7+elapsed*(7+i%3),1840)+40,300+fposmod(i*67.3,620)+sin(elapsed*.7+i)*13)
+		if night>.25:
+			var alpha := (.35+.3*sin(elapsed*1.6+i))*night
+			trail_effects.draw_circle(at,5,Color(.9,1,.4,alpha*.14))
+			trail_effects.draw_circle(at,1.6,Color(.95,1,.52,alpha))
+		else:
+			trail_effects.draw_set_transform(at,sin(elapsed*.5+i)*.7,Vector2(1,.4))
+			trail_effects.draw_circle(Vector2.ZERO,3,Color(.81,.82,.38,.38))
+	trail_effects.draw_set_transform(Vector2.ZERO)
+
+
+func request_travel(exit_id: String) -> void:
+	if paused or transitioning or not exits.has(exit_id):
+		return
+	transitioning = true
+	var target: Dictionary = exits[exit_id]
+	_travel.call_deferred(target["to"],target["entry"])
+
+
+func _travel(destination: String, entry: String) -> void:
+	var tween := create_tween()
+	tween.tween_property(ui.fade,"modulate:a",1.0,.22)
+	await tween.finished
+	_load_zone(destination,entry)
+	dialogue_left = 0
+	talk_panel.hide()
+	await get_tree().physics_frame
+	tween = create_tween()
+	tween.tween_property(ui.fade,"modulate:a",0.0,.28)
+	await tween.finished
+	transitioning = false
 
 
 func _piece(id: String, at: Vector2, height: float) -> Node2D:
@@ -147,7 +296,7 @@ func _solid(polygon: PackedVector2Array, boundary := false) -> StaticBody2D:
 	else:
 		blockers.append(polygon)
 	body.add_child(shape)
-	add_child(body)
+	zone_root.add_child(body)
 	return body
 
 
@@ -181,8 +330,10 @@ func _build_plaza() -> void:
 	_piece("willow_tree",Vector2(1930,960),500)
 	_piece("flower_planter",Vector2(1240,1020),78)
 	_solid(_ellipse(Vector2(1240,1007),Vector2(52,16)))
-	var warden = _actor(false,Vector2(1150,850))
-	interactables["warden"] = {"name":"Bram · Warden","at":warden.position,"anchor":warden,"height":108}
+	for item in [["warden","Bram · Warden",Vector2(1150,850)],["guard_west","Oak · Warden",Vector2(760,545)],["guard_east","Fern · Warden",Vector2(1300,910)]]:
+		var warden = _actor(false,item[2])
+		dogs.append(warden)
+		interactables[item[0]] = {"name":item[1],"at":warden.position,"anchor":warden,"height":108}
 	# Animated water highlights are drawn over the painted water, using native 2D.
 	ripples = Node2D.new()
 	ripples.position = Vector2(970,700)
@@ -243,8 +394,17 @@ func clear_line(from: Vector2, to: Vector2, exclude: Array[RID] = []) -> bool:
 
 
 func _physics_process(_delta: float) -> void:
-	if paused or not is_instance_valid(player):
+	if paused or transitioning or not is_instance_valid(player):
 		return
+	near_exit = ""
+	if travel_cooldown<=0:
+		for id in exits:
+			var offset: Vector2 = exits[id]["at"]-player.position
+			if Actor.ground_vector(offset).length()<130:
+				near_exit = id
+				if offset.length()<33:
+					request_travel(id)
+					return
 	nearest = ""
 	var distance := 150.0
 	for id in interactables:
@@ -252,7 +412,7 @@ func _physics_process(_delta: float) -> void:
 			continue
 		var item: Dictionary = interactables[id]
 		var candidate: float = Actor.ground_vector(item["at"]-player.position).length()
-		var quest_target: bool = id==QUEST_TARGETS[mini(quest_stage,5)]
+		var quest_target: bool = zone=="town" and quest_stage<5 and id==QUEST_TARGETS[quest_stage]
 		if candidate<150 and (candidate<distance or quest_target):
 			var excluded: Array[RID] = []
 			if item.has("body"):
@@ -265,7 +425,10 @@ func _physics_process(_delta: float) -> void:
 
 
 func interact(id := "") -> void:
-	if paused or combat_active:
+	if paused or transitioning:
+		return
+	if id.is_empty() and near_exit!="":
+		request_travel(near_exit)
 		return
 	if id.is_empty():
 		id = nearest
@@ -279,8 +442,14 @@ func interact(id := "") -> void:
 		"bookseller":"This town was built around its spring. Some say the water remembers every wish.",
 		"postbox":"A sturdy red postbox. Today's collection hasn't gone yet."
 	}
-	if id=="warden":
-		start_challenge()
+	if zone!="town":
+		var landmark: Dictionary = interactables[id]
+		discoveries[id] = true
+		_say(landmark["name"],landmark["memory"])
+		_update_hud()
+		return
+	if id in ["warden","guard_west","guard_east"]:
+		_say(interactables[id]["name"],"Safe travels, friend. The southeast gate leads into Mosswood. Follow the path to the river, and take your time — we'll look after the square.")
 		return
 	var text: String = lines.get(id,"")
 	if quest_stage<5 and id==QUEST_TARGETS[quest_stage]:
@@ -297,60 +466,16 @@ func interact(id := "") -> void:
 
 
 func start_challenge() -> void:
-	if combat_active:
-		return
-	for dog in dogs:
-		if is_instance_valid(dog):
-			dog.queue_free()
-	dogs.clear()
-	combat_active = true
-	player.health = player.maximum_health
-	player.active = true
-	player.grace = 1.5
-	victory_count = 0
-	var homes := [Vector2(600,975),Vector2(1125,980),Vector2(1240,820)]
-	for home in homes:
-		var dog = _actor(false,home)
-		dog.enemy = true
-		dog.health = 3
-		dog.maximum_health = 3
-		dog.cooldown = 1.5
-		dogs.append(dog)
-	_say("Bram · Friendly sparring", "Three wardens, three hits each. Space or left click to swing; keep moving. Red rings warn of a strike!")
-	_update_hud()
-
-
-func actor_yielded(actor) -> void:
-	if actor==player:
-		_end_challenge(false)
-		return
-	victory_count += 1
-	var tween := create_tween()
-	tween.tween_property(actor,"modulate:a",0.0,0.5)
-	if victory_count>=dogs.size():
-		_end_challenge(true)
-	_update_hud()
-
-
-func _end_challenge(won: bool) -> void:
+	# Kept as a compatibility guard: conversations can never start combat.
 	combat_active = false
-	challenge_won = challenge_won or won
 	for dog in dogs:
 		dog.enemy = false
-		dog.active = false
-		dog.velocity = Vector2.ZERO
-		var tween := create_tween()
-		tween.tween_property(dog,"modulate:a",0.0,0.5)
-	player.active = true
-	player.health = player.maximum_health
-	player.grace = 2.0
-	player.knockback = Vector2.ZERO
-	player.swing = 0
-	if not won:
-		player.position = spawn
-		player.reset_physics_interpolation()
-	_say("Bram · Warden", "Well played! The square has a new champion. Speak to me for another round." if won else "Good practice! Take a breath — your deliveries are safe. Speak to me whenever you'd like to try again.")
-	_update_hud()
+		dog.windup = 0
+		dog.swing = 0
+
+
+func actor_yielded(_actor_node) -> void:
+	pass
 
 
 func advance_time() -> void:
@@ -362,16 +487,20 @@ func _process(delta: float) -> void:
 		return
 	if not paused:
 		elapsed += delta
+		travel_cooldown = maxf(0,travel_cooldown-delta)
 		if clock_target>=0:
 			clock = move_toward(clock,clock_target,delta/2.0)
 			if is_equal_approx(clock,clock_target):
 				clock = fposmod(clock,4.0)
 				clock_target = -1.0
 		elif auto_clock:
-			clock = fposmod(clock+delta/60.0,4.0)
+			clock = fposmod(clock+delta*4.0/CYCLE_SECONDS,4.0)
 		dialogue_left = maxf(0,dialogue_left-delta)
 		talk_panel.visible = dialogue_left>0
-		ripples.queue_redraw()
+		if is_instance_valid(ripples):
+			ripples.queue_redraw()
+		if is_instance_valid(trail_effects):
+			trail_effects.queue_redraw()
 		_update_lighting()
 		_update_prompt()
 	hud_timer += delta
@@ -384,18 +513,22 @@ func _update_lighting() -> void:
 	var base := int(floorf(clock))%4
 	var next := (base+1)%4
 	var weight := smoothstep(0.35,1.0,fposmod(clock,1.0))
-	for i in 4:
-		backgrounds[i].visible = i==base or (i==next and weight>0)
-		backgrounds[i].modulate.a = weight if i==next else 1.0
-		# The next plate must draw over the base, including Night -> Dawn.
-		backgrounds[i].z_index = -9 if i==next else -10
 	actor_tint = TINTS[base].lerp(TINTS[next],weight)
+	if zone=="town":
+		for i in 4:
+			backgrounds[i].visible = i==base or (i==next and weight>0)
+			backgrounds[i].modulate.a = weight if i==next else 1.0
+			backgrounds[i].z_index = -9 if i==next else -10
+	else:
+		var night_weights := [0.16,0.0,0.24,1.0]
+		backgrounds[0].modulate = Color.WHITE.lerp(actor_tint,0.20)
+		backgrounds[1].modulate.a = lerpf(night_weights[base],night_weights[next],weight)
 	for piece in pieces:
 		piece.modulate = actor_tint
-	var night := clampf((1.0-actor_tint.g)*2.0,0.0,1.0)
-	ripples.modulate = Color(1,1,1,1.0-night*0.55)
-	var warden = interactables["warden"]["anchor"]
-	warden.sprite.modulate = actor_tint
+	if is_instance_valid(ripples):
+		ripples.modulate.a = clampf(actor_tint.g,0.4,1.0)
+	if is_instance_valid(ui):
+		ui.clock_dial.set_phase(clock)
 
 
 func _draw_water() -> void:
@@ -406,72 +539,19 @@ func _draw_water() -> void:
 	ripples.draw_set_transform(Vector2.ZERO)
 
 
-func _panel(at: Vector2, size: Vector2, parent: Node, color := Color("183533")) -> Panel:
-	var panel := Panel.new()
-	panel.position = at
-	panel.size = size
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(color,0.93)
-	style.border_color = Color(0.88,0.77,0.51,0.55)
-	style.set_border_width_all(1)
-	style.set_corner_radius_all(12)
-	style.shadow_color = Color(0,0,0,0.12)
-	style.shadow_size = 6
-	panel.add_theme_stylebox_override("panel",style)
-	parent.add_child(panel)
-	return panel
-
-
-func _label(text: String, at: Vector2, font_size: int, parent: Node, width := 0.0, color := Color("fff1d2")) -> Label:
-	var label := Label.new()
-	label.text = text
-	label.position = at
-	label.add_theme_font_size_override("font_size",font_size)
-	label.add_theme_color_override("font_color",color)
-	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	if width>0:
-		label.size.x = width
-		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	parent.add_child(label)
-	return label
-
-
 func _build_ui() -> void:
-	ui = CanvasLayer.new()
+	ui = Hud.new()
+	ui.hub = self
 	add_child(ui)
-	var title := _panel(Vector2(28,25),Vector2(390,125),ui)
-	_label("PROJECT KINGDOM",Vector2(20,10),16,title,0,Color("d8c38e"))
-	_label("Garden Square",Vector2(20,32),32,title)
-	time_label = _label("",Vector2(20,81),18,title)
-	var tasks := _panel(Vector2(1380,25),Vector2(512,152),ui)
-	_label("MORNING ROUNDS",Vector2(20,12),16,tasks,0,Color("d8c38e"))
-	objective = _label("",Vector2(20,42),21,tasks,472)
-	status_label = _label("",Vector2(20,113),16,tasks)
-	var controls := _panel(Vector2(28,1006),Vector2(1864,50),ui)
-	_label("WASD / Arrows  Walk     Shift  Run     E  Talk / Use     Space / Left click  Swing     Right click  Walk to point",Vector2(18,12),18,controls)
-	_label("T  Time     Esc  Pause     F11  Full screen",Vector2(1430,12),17,controls)
-	talk_panel = _panel(Vector2(470,830),Vector2(980,144),ui)
-	talk_name = _label("",Vector2(24,15),20,talk_panel,930,Color("f4cd7b"))
-	talk_text = _label("",Vector2(24,49),21,talk_panel,930)
-	prompt = _panel(Vector2.ZERO,Vector2(280,41),ui)
-	prompt.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	prompt_text = _label("",Vector2(13,7),18,prompt)
-	quest_marker = _label("▼",Vector2.ZERO,34,ui,0,Color("ffdb85"))
-	quest_marker.add_theme_color_override("font_shadow_color",Color("453b2a"))
-	quest_marker.add_theme_constant_override("shadow_offset_y",2)
-	quest_marker.add_theme_color_override("font_outline_color",Color("453b2a"))
-	quest_marker.add_theme_constant_override("outline_size",5)
-	pause_overlay = Control.new()
-	pause_overlay.size = Vector2(SIZE)
-	ui.add_child(pause_overlay)
-	var shade := ColorRect.new()
-	shade.color = Color(0.04,0.09,0.09,0.65)
-	shade.size = Vector2(SIZE)
-	pause_overlay.add_child(shade)
-	var menu := _panel(Vector2(650,350),Vector2(620,340),pause_overlay)
-	_label("A moment in the square",Vector2(42,35),32,menu)
-	_label("Esc  Resume\nR  Restart the demo\nF11  Toggle full screen\nClose the window to quit",Vector2(42,105),24,menu)
-	pause_overlay.visible = false
+	objective = ui.objective
+	status_label = ui.status_label
+	talk_panel = ui.talk_panel
+	talk_name = ui.talk_name
+	talk_text = ui.talk_text
+	prompt = ui.prompt
+	prompt_text = ui.prompt_text
+	quest_marker = ui.quest_marker
+	pause_overlay = ui.pause_overlay
 
 
 func _say(speaker: String, text: String) -> void:
@@ -482,13 +562,8 @@ func _say(speaker: String, text: String) -> void:
 
 
 func _update_hud() -> void:
-	objective.text = "Spar with the three wardens. Watch for red strike rings." if combat_active else OBJECTIVES[quest_stage]
-	if combat_active:
-		status_label.text = "Sparring  %d / 3 yielded    Health  %d / %d" % [victory_count,player.health,player.maximum_health]
-	else:
-		status_label.text = "%d / 5 errands%s" % [mini(quest_stage,5),"   ·   Sparring champion" if challenge_won else "   ·   E near Bram to spar"]
-	var base := int(floorf(clock))%4
-	time_label.text = "%s  ·  %d FPS  ·  T to change time" % [TIMES[base],Engine.get_frames_per_second()]
+	if is_instance_valid(ui):
+		ui.refresh()
 
 
 func _update_prompt() -> void:
@@ -497,16 +572,16 @@ func _update_prompt() -> void:
 		var offset_y := -165.0 if dialogue_left>0 else 25.0
 		prompt.position = (player.global_position+Vector2(-140,offset_y)).clamp(Vector2(15,170),Vector2(1620,940))
 		prompt_text.text = "E   "+interactables[nearest]["name"]
-	quest_marker.visible = not combat_active
+	quest_marker.visible = zone=="town" and quest_stage<5 and not transitioning
 	if quest_marker.visible:
-		var target: Dictionary = interactables[QUEST_TARGETS[mini(quest_stage,5)]]
+		var target: Dictionary = interactables[QUEST_TARGETS[quest_stage]]
 		quest_marker.position = target["at"]+Vector2(-14,-target["height"]-38+sin(elapsed*2.3)*5)
 
 
 func set_paused(value: bool) -> void:
 	paused = value
 	pause_overlay.visible = value
-	for actor in [player,interactables["warden"]["anchor"]]+dogs:
+	for actor in [player]+dogs:
 		if is_instance_valid(actor):
 			actor.sprite.speed_scale = 0.0 if value else 1.0
 
@@ -520,7 +595,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_tree().reload_current_scene()
 	elif event.is_action_pressed("hub_fullscreen"):
 		get_window().mode = Window.MODE_WINDOWED if get_window().mode==Window.MODE_FULLSCREEN else Window.MODE_FULLSCREEN
-	elif not paused:
+	elif event.is_action_pressed("hub_journal"):
+		ui.journal_panel.visible = not ui.journal_panel.visible
+	elif event.is_action_pressed("hub_debug"):
+		ui.debug_visible = not ui.debug_visible
+	elif not paused and not transitioning:
 		if event.is_action_pressed("hub_interact"):
 			interact()
 		elif event.is_action_pressed("hub_time"):
@@ -541,7 +620,7 @@ func _capture() -> void:
 	talk_panel.hide()
 	await RenderingServer.frame_post_draw
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(ROOT+"previews"))
-	var filename := "night.png" if "--night" in OS.get_cmdline_user_args() else "playable.png"
+	var filename := zone+("_night.png" if "--night" in OS.get_cmdline_user_args() else "_day.png")
 	get_viewport().get_texture().get_image().save_png(ProjectSettings.globalize_path(ROOT+"previews/"+filename))
 	print("Playable hub captured: ",filename)
 	if "--quit-after-capture" in OS.get_cmdline_user_args():

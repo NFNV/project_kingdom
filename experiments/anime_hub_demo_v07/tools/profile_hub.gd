@@ -21,35 +21,47 @@ func _run() -> void:
 	game.auto_clock = false
 	game.player.automated = true
 	game.dialogue_left = 0
-	await create_timer(4.0).timeout
-	await _sample("walking_noon",6.0)
-	game.start_challenge()
-	game.player.health = 9999
-	for dog in game.dogs:
-		dog.health = 9999
-	Input.action_press("hub_attack")
-	game.clock = 2.65
+	await create_timer(3.0).timeout
+	await _sample("town_day_with_celestial_clock",6.0)
+	game._load_zone("trail","town")
+	game.player.position = game.Map.point(850,515)
+	game.player.reset_physics_interpolation()
 	await create_timer(2.0).timeout
-	await _sample("three_dogs_and_background_crossfade",6.0)
+	await _sample("forest_trail_day_wind_and_clock",6.0)
+	game.clock = 2.7
+	await create_timer(1.0).timeout
+	await _sample("forest_trail_day_night_crossfade",6.0)
+	game._load_zone("river","trail")
+	game.player.position = game.Map.point(750,590)
+	game.player.reset_physics_interpolation()
+	await create_timer(2.0).timeout
+	await _sample("river_glade_twilight",6.0)
 	root.mode = Window.MODE_MAXIMIZED
 	DisplayServer.window_move_to_foreground()
+	game.clock = 3.0
 	await create_timer(2.0).timeout
-	await _sample("maximized_three_dogs_and_crossfade",6.0)
-	Input.action_release("hub_attack")
+	await _sample("maximized_river_at_night",6.0)
 	game.player.intent = Vector2.ZERO
-	var report := {"engine":Engine.get_version_info()["string"],"renderer":RenderingServer.get_current_rendering_method(),"adapter":RenderingServer.get_video_adapter_name(),"canvas":"1920x1080 fixed viewport; two full-size plates during transitions", "max_fps":Engine.max_fps,"samples":results,"notes":"Native graphical measurements after warmup. Benchmark health keeps three dog AIs and attacks active. All long frames retained. Maximize still renders the same fixed 1080p canvas."}
+	var report := {"engine":Engine.get_version_info()["string"],"renderer":RenderingServer.get_current_rendering_method(),"adapter":RenderingServer.get_video_adapter_name(),"canvas":"1920x1080 fixed viewport; original forest day/night plates, native celestial clock", "max_fps":Engine.max_fps,"samples":results,"notes":"Focused graphical measurements after warmup. Actual cat movement, peaceful wardens, animated wind/leaves/fireflies, clock and background crossfades. All long frames retained. Maximize still renders the same 1080p canvas. Scene loads occur during short travel fades and outside steady-state samples."}
 	FileAccess.open(ProjectSettings.globalize_path(ROOT+"performance.json"),FileAccess.WRITE).store_string(JSON.stringify(report,"  ")+"\n")
 	quit()
 
 
 func _sample(label: String, duration: float) -> void:
+	DisplayServer.window_move_to_foreground()
+	await create_timer(0.6).timeout
 	var intervals: Array[float] = []
 	var start := Time.get_ticks_usec()
 	var previous := start
 	var focused := 0
 	while Time.get_ticks_usec()-start<duration*1000000:
 		var seconds := (Time.get_ticks_usec()-start)/1000000.0
-		var goal := Vector2(970+180*cos(seconds*0.9),900+65*sin(seconds*0.9))
+		var center := Vector2(970,900)
+		if game.zone=="trail":
+			center = game.Map.point(850,515)
+		elif game.zone=="river":
+			center = game.Map.point(750,590)
+		var goal := center+Vector2(95*cos(seconds*.9),50*sin(seconds*.9))
 		game.player.intent = game.Actor.ground_vector(goal-game.player.position).normalized()
 		await process_frame
 		var now := Time.get_ticks_usec()
