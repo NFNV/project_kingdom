@@ -2,35 +2,1459 @@
   "cat": {
     "se": {
       "height": 252.0,
-      "source": "cat_se.png"
+      "source": "cat_se.png",
+      "body_registration": {
+        "walk": {
+          "head_ground_height": 200.36674528301887,
+          "poses": [
+            {
+              "scale": 0.9863636363636363,
+              "head_width": 110.0,
+              "head_center": [
+                144.0,
+                60.0
+              ]
+            },
+            {
+              "scale": 1.0235849056603774,
+              "head_width": 106.0,
+              "head_center": [
+                116.0,
+                58.5
+              ]
+            },
+            {
+              "scale": 1.014018691588785,
+              "head_width": 107.0,
+              "head_center": [
+                147.5,
+                57.5
+              ]
+            },
+            {
+              "scale": 1.0235849056603774,
+              "head_width": 106.0,
+              "head_center": [
+                116.0,
+                57.0
+              ]
+            },
+            {
+              "scale": 1.0235849056603774,
+              "head_width": 106.0,
+              "head_center": [
+                138.0,
+                57.5
+              ]
+            },
+            {
+              "scale": 1.0333333333333334,
+              "head_width": 105.0,
+              "head_center": [
+                118.5,
+                56.0
+              ]
+            },
+            {
+              "scale": 1.0235849056603774,
+              "head_width": 106.0,
+              "head_center": [
+                131.0,
+                56.5
+              ]
+            },
+            {
+              "scale": 1.0333333333333334,
+              "head_width": 105.0,
+              "head_center": [
+                120.5,
+                56.0
+              ]
+            }
+          ]
+        },
+        "run": {
+          "head_ground_height": 177.2166666666667,
+          "poses": [
+            {
+              "scale": 1.0235849056603774,
+              "head_width": 106.0,
+              "head_center": [
+                157.0,
+                55.0
+              ]
+            },
+            {
+              "scale": 1.014018691588785,
+              "head_width": 107.0,
+              "head_center": [
+                143.5,
+                56.0
+              ]
+            },
+            {
+              "scale": 1.014018691588785,
+              "head_width": 107.0,
+              "head_center": [
+                162.5,
+                56.0
+              ]
+            },
+            {
+              "scale": 1.0333333333333334,
+              "head_width": 105.0,
+              "head_center": [
+                152.5,
+                56.0
+              ]
+            },
+            {
+              "scale": 1.0432692307692308,
+              "head_width": 104.0,
+              "head_center": [
+                152.0,
+                54.0
+              ]
+            },
+            {
+              "scale": 1.0333333333333334,
+              "head_width": 105.0,
+              "head_center": [
+                145.5,
+                55.5
+              ]
+            },
+            {
+              "scale": 1.0333333333333334,
+              "head_width": 105.0,
+              "head_center": [
+                157.5,
+                55.5
+              ]
+            },
+            {
+              "scale": 1.014018691588785,
+              "head_width": 107.0,
+              "head_center": [
+                145.5,
+                56.5
+              ]
+            }
+          ]
+        },
+        "idle": {
+          "head_ground_height": 196.58229833823785,
+          "poses": [
+            {
+              "scale": 0.9954128440366973,
+              "head_width": 109.0,
+              "head_center": [
+                110.5,
+                57.0
+              ]
+            },
+            {
+              "scale": 0.9863636363636363,
+              "head_width": 110.0,
+              "head_center": [
+                110.0,
+                57.0
+              ]
+            },
+            {
+              "scale": 1.0235849056603774,
+              "head_width": 106.0,
+              "head_center": [
+                106.0,
+                56.5
+              ]
+            },
+            {
+              "scale": 1.0046296296296295,
+              "head_width": 108.0,
+              "head_center": [
+                114.0,
+                57.5
+              ]
+            }
+          ]
+        }
+      },
+      "head_width": 108.5
     },
     "sw": {
       "height": 256.5,
-      "source": "cat_sw.png"
+      "source": "cat_sw.png",
+      "body_registration": {
+        "walk": {
+          "head_ground_height": 201.87938596491227,
+          "poses": [
+            {
+              "scale": 1.0,
+              "head_width": 115.0,
+              "head_center": [
+                68.5,
+                64.5
+              ]
+            },
+            {
+              "scale": 1.0176991150442478,
+              "head_width": 113.0,
+              "head_center": [
+                82.5,
+                65.5
+              ]
+            },
+            {
+              "scale": 1.0087719298245614,
+              "head_width": 114.0,
+              "head_center": [
+                68.0,
+                65.0
+              ]
+            },
+            {
+              "scale": 1.0087719298245614,
+              "head_width": 114.0,
+              "head_center": [
+                68.0,
+                63.5
+              ]
+            },
+            {
+              "scale": 1.0300967395198855,
+              "head_width": 111.63999999999999,
+              "head_center": [
+                66.18,
+                61.5
+              ]
+            },
+            {
+              "scale": 1.0267857142857142,
+              "head_width": 112.0,
+              "head_center": [
+                66.0,
+                63.0
+              ]
+            },
+            {
+              "scale": 1.0360360360360361,
+              "head_width": 111.0,
+              "head_center": [
+                65.5,
+                61.5
+              ]
+            },
+            {
+              "scale": 1.0360360360360361,
+              "head_width": 111.0,
+              "head_center": [
+                73.5,
+                61.4699999999998
+              ]
+            }
+          ]
+        },
+        "run": {
+          "head_ground_height": 183.14872001432133,
+          "poses": [
+            {
+              "scale": 0.9913793103448276,
+              "head_width": 116.0,
+              "head_center": [
+                68.0,
+                61.0
+              ]
+            },
+            {
+              "scale": 1.0087719298245614,
+              "head_width": 114.0,
+              "head_center": [
+                68.0,
+                64.0
+              ]
+            },
+            {
+              "scale": 1.0087719298245614,
+              "head_width": 114.0,
+              "head_center": [
+                68.0,
+                62.5
+              ]
+            },
+            {
+              "scale": 1.0176991150442478,
+              "head_width": 113.0,
+              "head_center": [
+                67.5,
+                63.5
+              ]
+            },
+            {
+              "scale": 1.0,
+              "head_width": 115.0,
+              "head_center": [
+                67.5,
+                60.0
+              ]
+            },
+            {
+              "scale": 1.0087719298245614,
+              "head_width": 114.0,
+              "head_center": [
+                67.0,
+                61.5
+              ]
+            },
+            {
+              "scale": 1.0293591120658767,
+              "head_width": 111.72000000000025,
+              "head_center": [
+                65.86000000000013,
+                58.0
+              ]
+            },
+            {
+              "scale": 1.0360360360360361,
+              "head_width": 111.0,
+              "head_center": [
+                65.5,
+                60.0
+              ]
+            }
+          ]
+        },
+        "idle": {
+          "head_ground_height": 196.38720197930724,
+          "poses": [
+            {
+              "scale": 1.0087719298245614,
+              "head_width": 114.0,
+              "head_center": [
+                67.0,
+                57.0
+              ]
+            },
+            {
+              "scale": 0.9829059829059829,
+              "head_width": 117.0,
+              "head_center": [
+                68.5,
+                59.5
+              ]
+            },
+            {
+              "scale": 1.0087719298245614,
+              "head_width": 114.0,
+              "head_center": [
+                68.0,
+                61.0
+              ]
+            },
+            {
+              "scale": 0.9913793103448276,
+              "head_width": 116.0,
+              "head_center": [
+                68.0,
+                59.5
+              ]
+            }
+          ]
+        }
+      },
+      "head_width": 115.0
     },
     "ne": {
       "height": 270.5,
-      "source": "cat_ne.png"
+      "source": "cat_ne.png",
+      "body_registration": {
+        "walk": {
+          "head_ground_height": 207.12809405940595,
+          "poses": [
+            {
+              "scale": 1.0396039603960396,
+              "head_width": 101.0,
+              "head_center": [
+                128.5,
+                60.0
+              ]
+            },
+            {
+              "scale": 1.0606060606060606,
+              "head_width": 99.0,
+              "head_center": [
+                120.5,
+                59.0
+              ]
+            },
+            {
+              "scale": 1.0324483775811228,
+              "head_width": 101.69999999999982,
+              "head_center": [
+                124.84999999999991,
+                62.5
+              ]
+            },
+            {
+              "scale": 1.05,
+              "head_width": 100.0,
+              "head_center": [
+                127.0,
+                59.5
+              ]
+            },
+            {
+              "scale": 1.0194174757281553,
+              "head_width": 103.0,
+              "head_center": [
+                118.5,
+                59.5
+              ]
+            },
+            {
+              "scale": 1.0194174757281553,
+              "head_width": 103.0,
+              "head_center": [
+                90.5,
+                60.0
+              ]
+            },
+            {
+              "scale": 1.0294117647058822,
+              "head_width": 102.0,
+              "head_center": [
+                125.0,
+                59.5
+              ]
+            },
+            {
+              "scale": 1.0194174757281553,
+              "head_width": 103.0,
+              "head_center": [
+                128.5,
+                59.0
+              ]
+            }
+          ]
+        },
+        "run": {
+          "head_ground_height": 197.35280373831776,
+          "poses": [
+            {
+              "scale": 1.0096153846153846,
+              "head_width": 104.0,
+              "head_center": [
+                150.0,
+                56.0
+              ]
+            },
+            {
+              "scale": 1.0,
+              "head_width": 105.0,
+              "head_center": [
+                154.5,
+                57.5
+              ]
+            },
+            {
+              "scale": 1.0096153846153846,
+              "head_width": 104.0,
+              "head_center": [
+                150.0,
+                55.68000000000001
+              ]
+            },
+            {
+              "scale": 1.0239906377998833,
+              "head_width": 102.53999999999996,
+              "head_center": [
+                152.26999999999998,
+                54.999999999999986
+              ]
+            },
+            {
+              "scale": 0.9905660377358491,
+              "head_width": 106.0,
+              "head_center": [
+                143.0,
+                55.0
+              ]
+            },
+            {
+              "scale": 0.9813084112149533,
+              "head_width": 107.0,
+              "head_center": [
+                151.5,
+                56.0
+              ]
+            },
+            {
+              "scale": 1.0115606936416168,
+              "head_width": 103.80000000000018,
+              "head_center": [
+                138.9000000000001,
+                56.0
+              ]
+            },
+            {
+              "scale": 1.0096153846153846,
+              "head_width": 104.0,
+              "head_center": [
+                143.0,
+                55.0
+              ]
+            }
+          ]
+        },
+        "idle": {
+          "head_ground_height": 211.5,
+          "poses": [
+            {
+              "scale": 1.0,
+              "head_width": 105.0,
+              "head_center": [
+                114.5,
+                59.0
+              ]
+            },
+            {
+              "scale": 1.0396039603960396,
+              "head_width": 101.0,
+              "head_center": [
+                106.5,
+                59.0
+              ]
+            },
+            {
+              "scale": 0.979660384400072,
+              "head_width": 107.18000000000029,
+              "head_center": [
+                116.59000000000015,
+                58.0
+              ]
+            },
+            {
+              "scale": 1.0,
+              "head_width": 105.0,
+              "head_center": [
+                113.5,
+                59.0
+              ]
+            }
+          ]
+        }
+      },
+      "head_width": 105.0
     },
     "nw": {
       "height": 248.0,
-      "source": "cat_nw.png"
+      "source": "cat_nw.png",
+      "body_registration": {
+        "walk": {
+          "head_ground_height": 202.1956077630235,
+          "poses": [
+            {
+              "scale": 1.0416666666666667,
+              "head_width": 88.32,
+              "head_center": [
+                57.84,
+                57.5
+              ]
+            },
+            {
+              "scale": 1.0454545454545454,
+              "head_width": 88.0,
+              "head_center": [
+                52.0,
+                57.5
+              ]
+            },
+            {
+              "scale": 1.0952380952380953,
+              "head_width": 84.0,
+              "head_center": [
+                55.0,
+                58.42
+              ]
+            },
+            {
+              "scale": 1.0823529411764705,
+              "head_width": 85.0,
+              "head_center": [
+                55.5,
+                57.5
+              ]
+            },
+            {
+              "scale": 1.0337078651685394,
+              "head_width": 89.0,
+              "head_center": [
+                54.5,
+                57.0
+              ]
+            },
+            {
+              "scale": 1.0337078651685394,
+              "head_width": 89.0,
+              "head_center": [
+                52.5,
+                57.5
+              ]
+            },
+            {
+              "scale": 1.0454545454545454,
+              "head_width": 88.0,
+              "head_center": [
+                54.0,
+                58.0
+              ]
+            },
+            {
+              "scale": 1.0454545454545454,
+              "head_width": 88.0,
+              "head_center": [
+                56.0,
+                58.0
+              ]
+            }
+          ]
+        },
+        "run": {
+          "head_ground_height": 196.84669163545567,
+          "poses": [
+            {
+              "scale": 1.0337078651685394,
+              "head_width": 89.0,
+              "head_center": [
+                51.5,
+                56.0
+              ]
+            },
+            {
+              "scale": 1.0222222222222221,
+              "head_width": 90.0,
+              "head_center": [
+                52.0,
+                55.5
+              ]
+            },
+            {
+              "scale": 1.0454545454545454,
+              "head_width": 88.0,
+              "head_center": [
+                52.0,
+                56.5
+              ]
+            },
+            {
+              "scale": 1.0222222222222221,
+              "head_width": 90.0,
+              "head_center": [
+                52.0,
+                57.0
+              ]
+            },
+            {
+              "scale": 1.0574712643678161,
+              "head_width": 87.0,
+              "head_center": [
+                51.5,
+                56.0
+              ]
+            },
+            {
+              "scale": 1.0222222222222221,
+              "head_width": 90.0,
+              "head_center": [
+                51.0,
+                57.0
+              ]
+            },
+            {
+              "scale": 1.0574712643678161,
+              "head_width": 87.0,
+              "head_center": [
+                52.5,
+                56.5
+              ]
+            },
+            {
+              "scale": 1.010989010989011,
+              "head_width": 91.0,
+              "head_center": [
+                52.5,
+                57.0
+              ]
+            }
+          ]
+        },
+        "idle": {
+          "head_ground_height": 191.69918176755345,
+          "poses": [
+            {
+              "scale": 0.989247311827957,
+              "head_width": 93.0,
+              "head_center": [
+                52.5,
+                57.5
+              ]
+            },
+            {
+              "scale": 1.010989010989011,
+              "head_width": 91.0,
+              "head_center": [
+                58.5,
+                56.5
+              ]
+            },
+            {
+              "scale": 0.989247311827957,
+              "head_width": 93.0,
+              "head_center": [
+                52.5,
+                59.0
+              ]
+            },
+            {
+              "scale": 1.018149623727313,
+              "head_width": 90.35999999999999,
+              "head_center": [
+                56.82000000000001,
+                56.5
+              ]
+            }
+          ]
+        }
+      },
+      "head_width": 92.0
     },
     "e": {
       "height": 264.0,
-      "source": "cat_e.png"
+      "source": "cat_e.png",
+      "body_registration": {
+        "walk": {
+          "head_ground_height": 196.6231983527797,
+          "poses": [
+            {
+              "scale": 1.032258064516129,
+              "head_width": 93.0,
+              "head_center": [
+                137.5,
+                56.0
+              ]
+            },
+            {
+              "scale": 1.032258064516129,
+              "head_width": 93.0,
+              "head_center": [
+                129.5,
+                55.5
+              ]
+            },
+            {
+              "scale": 1.0434782608695652,
+              "head_width": 92.0,
+              "head_center": [
+                116.0,
+                54.07
+              ]
+            },
+            {
+              "scale": 1.032258064516129,
+              "head_width": 93.0,
+              "head_center": [
+                124.5,
+                54.5
+              ]
+            },
+            {
+              "scale": 1.0212765957446808,
+              "head_width": 94.0,
+              "head_center": [
+                133.0,
+                55.0
+              ]
+            },
+            {
+              "scale": 1.0434782608695652,
+              "head_width": 92.0,
+              "head_center": [
+                131.0,
+                53.870000000000005
+              ]
+            },
+            {
+              "scale": 1.0105263157894737,
+              "head_width": 95.0,
+              "head_center": [
+                116.5,
+                54.5
+              ]
+            },
+            {
+              "scale": 1.0212765957446808,
+              "head_width": 94.0,
+              "head_center": [
+                128.0,
+                54.5
+              ]
+            }
+          ]
+        },
+        "run": {
+          "head_ground_height": 176.07905477980665,
+          "poses": [
+            {
+              "scale": 0.9795918367346939,
+              "head_width": 98.0,
+              "head_center": [
+                179.0,
+                56.0
+              ]
+            },
+            {
+              "scale": 0.9896907216494846,
+              "head_width": 97.0,
+              "head_center": [
+                171.5,
+                55.5
+              ]
+            },
+            {
+              "scale": 1.0,
+              "head_width": 96.0,
+              "head_center": [
+                171.0,
+                55.5
+              ]
+            },
+            {
+              "scale": 1.0,
+              "head_width": 96.0,
+              "head_center": [
+                164.0,
+                54.5
+              ]
+            },
+            {
+              "scale": 1.0,
+              "head_width": 96.0,
+              "head_center": [
+                168.0,
+                54.5
+              ]
+            },
+            {
+              "scale": 0.9896907216494846,
+              "head_width": 97.0,
+              "head_center": [
+                168.5,
+                53.5
+              ]
+            },
+            {
+              "scale": 1.0105263157894737,
+              "head_width": 95.0,
+              "head_center": [
+                176.5,
+                55.0
+              ]
+            },
+            {
+              "scale": 1.0058675607711651,
+              "head_width": 95.44,
+              "head_center": [
+                134.28,
+                53.0
+              ]
+            }
+          ]
+        },
+        "idle": {
+          "head_ground_height": 207.5,
+          "poses": [
+            {
+              "scale": 1.0,
+              "head_width": 96.0,
+              "head_center": [
+                109.0,
+                54.5
+              ]
+            },
+            {
+              "scale": 1.0,
+              "head_width": 96.0,
+              "head_center": [
+                119.0,
+                55.5
+              ]
+            },
+            {
+              "scale": 1.0,
+              "head_width": 96.0,
+              "head_center": [
+                115.0,
+                55.5
+              ]
+            },
+            {
+              "scale": 0.9896907216494846,
+              "head_width": 97.0,
+              "head_center": [
+                119.5,
+                56.45
+              ]
+            }
+          ]
+        }
+      },
+      "head_width": 96.0
     },
     "w": {
       "height": 256.0,
-      "source": "cat_w.png"
+      "source": "cat_w.png",
+      "body_registration": {
+        "walk": {
+          "head_ground_height": 193.78772405168814,
+          "poses": [
+            {
+              "scale": 1.0108378491037928,
+              "head_width": 95.96000000000004,
+              "head_center": [
+                65.98000000000002,
+                59.5
+              ]
+            },
+            {
+              "scale": 1.0210526315789474,
+              "head_width": 95.0,
+              "head_center": [
+                56.5,
+                59.0
+              ]
+            },
+            {
+              "scale": 1.0543478260869565,
+              "head_width": 92.0,
+              "head_center": [
+                56.0,
+                58.5
+              ]
+            },
+            {
+              "scale": 1.0319148936170213,
+              "head_width": 94.0,
+              "head_center": [
+                56.0,
+                59.42
+              ]
+            },
+            {
+              "scale": 1.0210526315789474,
+              "head_width": 95.0,
+              "head_center": [
+                61.5,
+                57.5
+              ]
+            },
+            {
+              "scale": 1.0319148936170213,
+              "head_width": 94.0,
+              "head_center": [
+                58.0,
+                58.0
+              ]
+            },
+            {
+              "scale": 1.0543478260869565,
+              "head_width": 92.0,
+              "head_center": [
+                56.0,
+                56.0
+              ]
+            },
+            {
+              "scale": 1.0319148936170213,
+              "head_width": 94.0,
+              "head_center": [
+                59.0,
+                57.5
+              ]
+            }
+          ]
+        },
+        "run": {
+          "head_ground_height": 176.236875,
+          "poses": [
+            {
+              "scale": 0.97,
+              "head_width": 100.0,
+              "head_center": [
+                58.0,
+                60.0
+              ]
+            },
+            {
+              "scale": 0.9897959183673469,
+              "head_width": 98.0,
+              "head_center": [
+                57.0,
+                59.0
+              ]
+            },
+            {
+              "scale": 0.9797979797979798,
+              "head_width": 99.0,
+              "head_center": [
+                56.5,
+                57.5
+              ]
+            },
+            {
+              "scale": 0.9797979797979798,
+              "head_width": 99.0,
+              "head_center": [
+                60.5,
+                60.5
+              ]
+            },
+            {
+              "scale": 0.9897959183673469,
+              "head_width": 98.0,
+              "head_center": [
+                56.0,
+                58.0
+              ]
+            },
+            {
+              "scale": 1.0104166666666667,
+              "head_width": 96.0,
+              "head_center": [
+                55.0,
+                57.5
+              ]
+            },
+            {
+              "scale": 1.0104166666666667,
+              "head_width": 96.0,
+              "head_center": [
+                57.0,
+                56.0
+              ]
+            },
+            {
+              "scale": 1.0104166666666667,
+              "head_width": 96.0,
+              "head_center": [
+                56.0,
+                58.0
+              ]
+            }
+          ]
+        },
+        "idle": {
+          "head_ground_height": 198.0,
+          "poses": [
+            {
+              "scale": 1.0,
+              "head_width": 97.0,
+              "head_center": [
+                58.5,
+                58.0
+              ]
+            },
+            {
+              "scale": 1.0319148936170213,
+              "head_width": 94.0,
+              "head_center": [
+                60.0,
+                56.5
+              ]
+            },
+            {
+              "scale": 0.9897959183673469,
+              "head_width": 98.0,
+              "head_center": [
+                59.0,
+                57.5
+              ]
+            },
+            {
+              "scale": 1.0,
+              "head_width": 97.0,
+              "head_center": [
+                58.5,
+                58.0
+              ]
+            }
+          ]
+        }
+      },
+      "head_width": 97.0
     },
     "s": {
-      "height": 253.5,
-      "source": "cat_s.png"
+      "height": 261.5,
+      "source": "cat_s_v2.png",
+      "body_registration": {
+        "walk": {
+          "head_ground_height": 208.61598373983742,
+          "poses": [
+            {
+              "scale": 1.0201612903225807,
+              "head_width": 124.0,
+              "head_center": [
+                91.0,
+                60.5
+              ]
+            },
+            {
+              "scale": 1.0201612903225807,
+              "head_width": 124.0,
+              "head_center": [
+                90.0,
+                60.0
+              ]
+            },
+            {
+              "scale": 1.0284552845528456,
+              "head_width": 123.0,
+              "head_center": [
+                91.5,
+                60.0
+              ]
+            },
+            {
+              "scale": 1.0284552845528456,
+              "head_width": 123.0,
+              "head_center": [
+                89.5,
+                61.0
+              ]
+            },
+            {
+              "scale": 1.012,
+              "head_width": 125.0,
+              "head_center": [
+                92.5,
+                61.0
+              ]
+            },
+            {
+              "scale": 1.0201612903225807,
+              "head_width": 124.0,
+              "head_center": [
+                90.0,
+                60.0
+              ]
+            },
+            {
+              "scale": 1.0201612903225807,
+              "head_width": 124.0,
+              "head_center": [
+                92.0,
+                60.5
+              ]
+            },
+            {
+              "scale": 1.0201612903225807,
+              "head_width": 124.0,
+              "head_center": [
+                90.0,
+                60.5
+              ]
+            }
+          ]
+        },
+        "run": {
+          "head_ground_height": 203.97716935483874,
+          "poses": [
+            {
+              "scale": 0.9960629921259843,
+              "head_width": 127.0,
+              "head_center": [
+                92.5,
+                60.5
+              ]
+            },
+            {
+              "scale": 1.012,
+              "head_width": 125.0,
+              "head_center": [
+                87.5,
+                61.5
+              ]
+            },
+            {
+              "scale": 0.9960629921259843,
+              "head_width": 127.0,
+              "head_center": [
+                91.5,
+                60.0
+              ]
+            },
+            {
+              "scale": 1.012,
+              "head_width": 125.0,
+              "head_center": [
+                89.5,
+                60.0
+              ]
+            },
+            {
+              "scale": 1.003968253968254,
+              "head_width": 126.0,
+              "head_center": [
+                90.0,
+                60.5
+              ]
+            },
+            {
+              "scale": 1.0201612903225807,
+              "head_width": 124.0,
+              "head_center": [
+                88.0,
+                61.0
+              ]
+            },
+            {
+              "scale": 1.012,
+              "head_width": 125.0,
+              "head_center": [
+                90.5,
+                60.0
+              ]
+            },
+            {
+              "scale": 1.0201612903225807,
+              "head_width": 124.0,
+              "head_center": [
+                90.0,
+                60.5
+              ]
+            }
+          ]
+        },
+        "idle": {
+          "head_ground_height": 200.5031324209474,
+          "poses": [
+            {
+              "scale": 0.9960629921259843,
+              "head_width": 127.0,
+              "head_center": [
+                89.5,
+                61.5
+              ]
+            },
+            {
+              "scale": 1.003968253968254,
+              "head_width": 126.0,
+              "head_center": [
+                91.0,
+                60.0
+              ]
+            },
+            {
+              "scale": 0.98828125,
+              "head_width": 128.0,
+              "head_center": [
+                91.0,
+                61.0
+              ]
+            },
+            {
+              "scale": 1.003968253968254,
+              "head_width": 126.0,
+              "head_center": [
+                90.0,
+                60.5
+              ]
+            }
+          ]
+        }
+      },
+      "head_width": 126.5
     },
     "n": {
       "height": 245.0,
-      "source": "cat_n.png"
+      "source": "cat_n.png",
+      "body_registration": {
+        "walk": {
+          "head_ground_height": 193.27253639417694,
+          "poses": [
+            {
+              "scale": 0.9845360824742269,
+              "head_width": 97.0,
+              "head_center": [
+                114.5,
+                52.0
+              ]
+            },
+            {
+              "scale": 1.0052631578947369,
+              "head_width": 95.0,
+              "head_center": [
+                112.5,
+                51.5
+              ]
+            },
+            {
+              "scale": 1.0159574468085106,
+              "head_width": 94.0,
+              "head_center": [
+                101.0,
+                48.0
+              ]
+            },
+            {
+              "scale": 1.0253382005582994,
+              "head_width": 93.13999999999999,
+              "head_center": [
+                104.43,
+                49.0
+              ]
+            },
+            {
+              "scale": 0.9947916666666666,
+              "head_width": 96.0,
+              "head_center": [
+                81.0,
+                51.0
+              ]
+            },
+            {
+              "scale": 1.0052631578947369,
+              "head_width": 95.0,
+              "head_center": [
+                93.5,
+                50.5
+              ]
+            },
+            {
+              "scale": 1.0052631578947369,
+              "head_width": 95.0,
+              "head_center": [
+                98.5,
+                52.0
+              ]
+            },
+            {
+              "scale": 1.0052631578947369,
+              "head_width": 95.0,
+              "head_center": [
+                103.5,
+                50.5
+              ]
+            }
+          ]
+        },
+        "run": {
+          "head_ground_height": 186.55019568691756,
+          "poses": [
+            {
+              "scale": 0.9845360824742269,
+              "head_width": 97.0,
+              "head_center": [
+                114.5,
+                49.0
+              ]
+            },
+            {
+              "scale": 0.9744897959183674,
+              "head_width": 98.0,
+              "head_center": [
+                120.0,
+                48.5
+              ]
+            },
+            {
+              "scale": 0.9808956450287594,
+              "head_width": 97.35999999999999,
+              "head_center": [
+                117.32000000000001,
+                51.0
+              ]
+            },
+            {
+              "scale": 0.968756340028404,
+              "head_width": 98.57999999999993,
+              "head_center": [
+                109.28999999999996,
+                49.5
+              ]
+            },
+            {
+              "scale": 1.0159574468085106,
+              "head_width": 94.0,
+              "head_center": [
+                111.0,
+                47.5
+              ]
+            },
+            {
+              "scale": 0.9845360824742269,
+              "head_width": 97.0,
+              "head_center": [
+                115.5,
+                53.0
+              ]
+            },
+            {
+              "scale": 0.9744897959183674,
+              "head_width": 98.0,
+              "head_center": [
+                117.0,
+                52.0
+              ]
+            },
+            {
+              "scale": 0.9845360824742269,
+              "head_width": 97.0,
+              "head_center": [
+                107.5,
+                52.5
+              ]
+            }
+          ]
+        },
+        "idle": {
+          "head_ground_height": 193.75400219298245,
+          "poses": [
+            {
+              "scale": 1.0052631578947369,
+              "head_width": 95.0,
+              "head_center": [
+                105.5,
+                51.5
+              ]
+            },
+            {
+              "scale": 0.9947916666666666,
+              "head_width": 96.0,
+              "head_center": [
+                103.0,
+                56.0
+              ]
+            },
+            {
+              "scale": 1.0159574468085106,
+              "head_width": 94.0,
+              "head_center": [
+                101.0,
+                51.0
+              ]
+            },
+            {
+              "scale": 0.9845360824742269,
+              "head_width": 97.0,
+              "head_center": [
+                88.5,
+                52.5
+              ]
+            }
+          ]
+        }
+      },
+      "head_width": 95.5
     }
   },
   "warden": {

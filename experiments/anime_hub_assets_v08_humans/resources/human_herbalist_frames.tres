@@ -1,0 +1,35 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3]
+
+[ext_resource type="Texture2D" path="res://experiments/anime_hub_assets_v08_humans/characters/human_herbalist.png" id="P"]
+
+[sub_resource type="AtlasTexture" id="se"]
+atlas = ExtResource("P")
+region = Rect2(161, 23, 289, 737)
+margin = Rect2(419.0, 247, 735, 287)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="sw"]
+atlas = ExtResource("P")
+region = Rect2(573, 24, 293, 737)
+margin = Rect2(306.0, 247, 731, 287)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="ne"]
+atlas = ExtResource("P")
+region = Rect2(159, 769, 297, 731)
+margin = Rect2(326.0, 253, 727, 293)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="nw"]
+atlas = ExtResource("P")
+region = Rect2(571, 771, 302, 731)
+margin = Rect2(395.0, 253, 722, 293)
+filter_clip = true
+
+[resource]
+animations = [
+{"frames": [{"duration": 1.0, "texture": SubResource("se")}], "loop": true, "name": &"idle_se", "speed": 1.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("sw")}], "loop": true, "name": &"idle_sw", "speed": 1.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("ne")}], "loop": true, "name": &"idle_ne", "speed": 1.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("nw")}], "loop": true, "name": &"idle_nw", "speed": 1.0}
+]

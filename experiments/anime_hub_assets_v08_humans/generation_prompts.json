@@ -1,0 +1,86 @@
+{
+  "tool": "image_gen.imagegen",
+  "scope": "Four human adult directional idle assets. Generated bitmap originals preserved without pixel edits; source PNG sheets plus native Godot atlas resources.",
+  "reference_images": [
+    "../anime_hub_assets_v06/characters/cat_adventurer.png",
+    "characters/human_wayfarer.png"
+  ],
+  "animal_reference_height": 108,
+  "jobs": [
+    {
+      "id": "human_wayfarer",
+      "name": "Wayfarer",
+      "height": 172,
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-407da1af-39c9-4426-bea4-5a7c8589a0e2.png",
+      "columns": 2,
+      "rows": 2,
+      "directions": [
+        "se",
+        "sw",
+        "ne",
+        "nw"
+      ],
+      "prompt": "Use case: stylized-concept.\nAsset type: original HUMAN character turnaround sprites for an isometric painted-anime RPG, transparent PNG.\nReference image: the orange cat sheet is a PAINTING STYLE AND COSTUME-WORLD reference ONLY. Create a true adult HUMAN, no animal ears, no animal tail, no fur. This world contains small anthropomorphic cats and dogs alongside significantly taller human adults.\nSubject: a kind, confident adult human woman wayfarer, about 28, chestnut hair in a practical loose braid, warm brown eyes, cream rolled-sleeve blouse, muted teal short travelling coat, rust red neck scarf, brown utility belt and leather crossbody satchel, fitted olive trousers and worn brown lace-up boots. Empty hands, relaxed ready-to-walk stance. Original design.\nProportions: mature young adult anime anatomy, about 5.5 to 6 heads tall, long legs and normal human arms/hands. NOT chibi, NOT childlike. Humans will be rendered about 1.6 times the height of the existing animal adventurer. Charming approachable silhouette and readable costume.\nStyle: match the reference's softly hand-painted anime game illustration, warm sunlight, tasteful fine outlines, gentle cel shading with subtle watercolor texture. Cohesive with a lush peaceful European-inspired town. No photorealism, no pixel art.\nLayout: EXACTLY four full-body views in a 2-column by 2-row sheet, equally sized bodies and evenly spaced cells with generous fully transparent gutters. Top-left FRONT RIGHT / southeast (face toward lower right); top-right FRONT LEFT / southwest (face toward lower left); bottom-left BACK RIGHT / northeast (back of head and shoulders visible, face oriented upper right); bottom-right BACK LEFT / northwest. The same exact woman in all four views; costume details and accessory attachment sides rotate physically rather than magically swapping. Orthographic isometric game camera elevated 30 degrees, upright vertical bodies, both boots entirely visible, fixed perspective and scale. Neutral idle pose in every view.\nTransparency: actual clear alpha background, no colored matte or checkerboard. No ground plane, no cast shadow under feet, no text, no labels, no border/grid. No other characters or props. Do not include the reference cat in the output.",
+      "reference_images": [
+        "../anime_hub_assets_v06/characters/cat_adventurer.png"
+      ]
+    },
+    {
+      "id": "human_warden",
+      "name": "Town Warden",
+      "height": 180,
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-2f4e1b5f-35bf-4844-a4ff-772ab03fed97.png",
+      "columns": 2,
+      "rows": 2,
+      "directions": [
+        "se",
+        "sw",
+        "ne",
+        "nw"
+      ],
+      "prompt": "Use case: stylized-concept.\nAsset type: original HUMAN turnaround sprites for the same isometric painted-anime RPG as the references.\nImage 1 is the established HUMAN WAYFARER STYLE, adult anatomy/proportions, perspective, four-view layout and visual scale reference. Create a DIFFERENT human character described below. Image 2 is a supporting ANIMAL painting/costume-world style reference only, NOT the anatomy. Do not include either reference character in the output.\nSubject: an adult HUMAN man town warden, about 40, tall upright lean build, light olive skin, short dark hair with a few grey streaks and a neat moustache. Navy civic uniform coat with brass buttons and modest gold piping, small navy peaked cap, cream shirt, charcoal trousers, brown leather belt and tall practical brown boots. A small utility pouch and a short sword securely SHEATHED at the belt, both hands EMPTY. Friendly watchful expression, an approachable municipal guard rather than a war knight.\nAdult HUMAN proportions: 5.5 to 6 heads tall with longer legs, normal adult human hands and limbs, natural human ears. No animal ears, no tail or fur, no chibi body or childlike proportions. Human adults stand about 1.6 times taller than the game's animal citizens. Match image 1's head-to-body ratio and linework.\nLayout: EXACTLY four FULL-BODY views, 2 columns \u00d7 2 rows. Top left FRONT RIGHT/southeast, face toward lower right; top right FRONT LEFT/southwest, face toward lower left; bottom left BACK RIGHT/northeast, back and face oriented upper right; bottom right BACK LEFT/northwest. Equal-size bodies in all four cells, evenly spaced clear transparent gutters, complete hair/head and both boots inside every cell. The same single character, matching face, costume details and colors across all views. Accessory attachment sides must stay physically consistent as the body rotates.\nCamera: orthographic isometric RPG view elevated 30 degrees, upright vertical bodies, relaxed neutral idle stance in all views.\nStyle: same warm, charming softly hand-painted anime illustration as the references, fine clean outlines, gentle cel shading and subtle painted texture. Peaceful lush European-inspired market-town setting but NO scenery in the image.\nOutput a genuinely transparent clear-alpha PNG. No colored matte, no gradients or scenery behind characters, no checkerboard, no cast shadow or floor beneath boots, no other characters, no grid, text, labels, border or watermark.",
+      "reference_images": [
+        "characters/human_wayfarer.png",
+        "../anime_hub_assets_v06/characters/cat_adventurer.png"
+      ]
+    },
+    {
+      "id": "human_herbalist",
+      "name": "Herbalist",
+      "height": 168,
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-9dac8d6e-f7fa-4c77-8127-e978b847c5c0.png",
+      "columns": 2,
+      "rows": 2,
+      "directions": [
+        "se",
+        "sw",
+        "ne",
+        "nw"
+      ],
+      "prompt": "Use case: stylized-concept.\nAsset type: original HUMAN turnaround sprites for the same isometric painted-anime RPG as the references.\nImage 1 is the established HUMAN WAYFARER STYLE, adult anatomy/proportions, perspective, four-view layout and visual scale reference. Create a DIFFERENT human character described below. Image 2 is a supporting ANIMAL painting/costume-world style reference only, NOT the anatomy. Do not include either reference character in the output.\nSubject: an adult HUMAN woman herbalist and shopkeeper, about 45, warm medium brown skin, dark curly hair in a practical loose bun, small round brass spectacles, kind clever expression. Sage green linen apron over an ivory blouse with rolled sleeves and a muted terracotta calf-length skirt, sturdy dark brown ankle boots, small herb pouches attached to her belt. Both hands EMPTY and relaxed; no basket or large object obscuring her silhouette. A welcoming original town vendor.\nAdult HUMAN proportions: 5.5 to 6 heads tall with longer legs, normal adult human hands and limbs, natural human ears. No animal ears, no tail or fur, no chibi body or childlike proportions. Human adults stand about 1.6 times taller than the game's animal citizens. Match image 1's head-to-body ratio and linework.\nLayout: EXACTLY four FULL-BODY views, 2 columns \u00d7 2 rows. Top left FRONT RIGHT/southeast, face toward lower right; top right FRONT LEFT/southwest, face toward lower left; bottom left BACK RIGHT/northeast, back and face oriented upper right; bottom right BACK LEFT/northwest. Equal-size bodies in all four cells, evenly spaced clear transparent gutters, complete hair/head and both boots inside every cell. The same single character, matching face, costume details and colors across all views. Accessory attachment sides must stay physically consistent as the body rotates.\nCamera: orthographic isometric RPG view elevated 30 degrees, upright vertical bodies, relaxed neutral idle stance in all views.\nStyle: same warm, charming softly hand-painted anime illustration as the references, fine clean outlines, gentle cel shading and subtle painted texture. Peaceful lush European-inspired market-town setting but NO scenery in the image.\nOutput a genuinely transparent clear-alpha PNG. No colored matte, no gradients or scenery behind characters, no checkerboard, no cast shadow or floor beneath boots, no other characters, no grid, text, labels, border or watermark.",
+      "reference_images": [
+        "characters/human_wayfarer.png",
+        "../anime_hub_assets_v06/characters/cat_adventurer.png"
+      ]
+    },
+    {
+      "id": "human_smith",
+      "name": "Blacksmith",
+      "height": 178,
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-94901f20-19fe-489d-9a84-92a2c4b25fa5.png",
+      "columns": 2,
+      "rows": 2,
+      "directions": [
+        "se",
+        "sw",
+        "ne",
+        "nw"
+      ],
+      "prompt": "Use case: stylized-concept.\nAsset type: original HUMAN turnaround sprites for the same isometric painted-anime RPG as the references.\nImage 1 is the established HUMAN WAYFARER STYLE, adult anatomy/proportions, perspective, four-view layout and visual scale reference. Create a DIFFERENT human character described below. Image 2 is a supporting ANIMAL painting/costume-world style reference only, NOT the anatomy. Do not include either reference character in the output.\nSubject: an adult HUMAN man blacksmith, about 38, dark brown skin, broad shoulders and sturdy adult build, short tightly curled black hair and a neatly trimmed beard, calm warm expression. A worn chestnut leather work apron with small pockets over a charcoal rolled-sleeve work shirt, slate trousers, heavy brown work boots, a hammer holstered securely on the belt, EMPTY relaxed hands. No helmet, no armor and no giant weapon. An original hardworking town craftsperson.\nAdult HUMAN proportions: 5.5 to 6 heads tall with longer legs, normal adult human hands and limbs, natural human ears. No animal ears, no tail or fur, no chibi body or childlike proportions. Human adults stand about 1.6 times taller than the game's animal citizens. Match image 1's head-to-body ratio and linework.\nLayout: EXACTLY four FULL-BODY views, 2 columns \u00d7 2 rows. Top left FRONT RIGHT/southeast, face toward lower right; top right FRONT LEFT/southwest, face toward lower left; bottom left BACK RIGHT/northeast, back and face oriented upper right; bottom right BACK LEFT/northwest. Equal-size bodies in all four cells, evenly spaced clear transparent gutters, complete hair/head and both boots inside every cell. The same single character, matching face, costume details and colors across all views. Accessory attachment sides must stay physically consistent as the body rotates.\nCamera: orthographic isometric RPG view elevated 30 degrees, upright vertical bodies, relaxed neutral idle stance in all views.\nStyle: same warm, charming softly hand-painted anime illustration as the references, fine clean outlines, gentle cel shading and subtle painted texture. Peaceful lush European-inspired market-town setting but NO scenery in the image.\nOutput a genuinely transparent clear-alpha PNG. No colored matte, no gradients or scenery behind characters, no checkerboard, no cast shadow or floor beneath boots, no other characters, no grid, text, labels, border or watermark.",
+      "reference_images": [
+        "characters/human_wayfarer.png",
+        "../anime_hub_assets_v06/characters/cat_adventurer.png"
+      ]
+    }
+  ]
+}

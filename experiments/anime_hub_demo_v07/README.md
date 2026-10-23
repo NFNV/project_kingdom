@@ -106,11 +106,19 @@ separate run poses, and four idle/blink poses**. Its sword stays sheathed during
 peaceful exploration. Gait phase follows distance actually travelled, so collision
 or releasing movement stops the stepping. Direction hysteresis prevents tiny
 steering changes from repeatedly flipping the character.
+The player now uses per-pose anatomical alignment and size correction rather than
+anchoring each drawing to its lowest boot. That removes accidental body jumps as
+a foot lifts, keeps the head size steady, and leaves a small authored gait bob.
+Starting/stopping and direction changes ease between the average stances.
+The downward cycle now uses a replacement south-facing sheet: every drawing
+keeps a centered face/chest and the tail on the same side. This fixes the
+alternating front/angled poses and swapping tail visible in the supplied clips.
 
 All five civilian types have eight idle poses and four occupational/greeting
 poses. The baker offers bread, Mallow adjusts her spectacles, Sage reads and turns
 a page, Moss inspects an apple, and Pip raises a letter. Their idle/gesture timing
-is staggered. Clover uses the baker's animation behind the counter. The three
+is staggered. Clover uses the baker's animation mirrored toward the customer side
+of the counter, including during greetings. The three
 friendly wardens have eight walking poses and four idle poses in four directions,
 walk short routes with resting pauses, stop when approached, and face the cat.
 Their conversation prompts follow their current positions. Combat remains off.
@@ -128,7 +136,7 @@ This is prototype alignment, not a guarantee of identical painted detail.
 
 ## Verification
 
-[test_results.json](test_results.json) records 164 gameplay checks: movement,
+[test_results.json](test_results.json) records 209 gameplay checks: movement,
 physical collision, the delivery route, friendly-warden regressions, the longer
 clock, physically walking through every connection, all three resting places,
 walking over the bridge, returning home, persistent progress and pause/resume. New checks cover real camera following,
@@ -140,6 +148,14 @@ resources, all eight poses during real walking, the separate running state,
 brief blinks, turning deadband, no stepping against obstacles, actual patrol
 movement and collision clearance, moving conversation targets, greeting triggers,
 and freezing character/NPC animation on pause.
+Additional checks measure source head landmarks through the actual native atlas
+and sprite transforms across every player pose, consistent head size across all
+gaits, easing when starting a run, caller placement, and Clover's persistent facing.
+The downward regression walks and runs through all eight south poses using actual
+input and verifies that every frame uses the repaired sheet without mirroring.
+The separate [front-art audit](assets/motion/front_cycle_v2_audit.json) reads source
+pixels for centered muzzle landmarks and a consistent tail side. It checks all
+20 replacement poses and also detects the failures in the preserved old sheet.
 
 [performance.json](performance.json) records native graphical measurements on the
 current machine with moving characters and camera, fountain effects, the bakery,
@@ -147,12 +163,15 @@ its merchant interface, the clock, forest effects, lighting
 crossfades and a maximized window. Warmup precedes each six-second sample; long
 frames are retained. Travel/loading fades are outside steady-state measurements.
 
-The native run on Apple M1 / Metal / Godot 4.7.2 measured approximately **60 FPS**
-(59.9–60.1 over short samples) across all seven cases, including walking/running,
-patrolling wardens, animated residents, and the shop. Every sample was fully
-focused. One forest sample retained a **53.66 ms** long frame; all other cases
-had worst frames under 20 ms. These short samples describe this demo on this
-machine, not a guarantee of hitch-free playback or other hardware.
+The latest native run on Apple M1 / Metal / Godot 4.7.2 averaged **60 FPS** in
+all six normal-window cases. Those samples were mostly unfocused; their worst
+frame was 28.11 ms. The first maximized sample averaged 48.2 FPS with a 659.76 ms
+hitch, so it is retained rather than discarded. A separate, fully focused
+[maximized recheck](performance_maximized_check.json), after eight seconds of
+warmup, measured 60.1 and 59.7 FPS. Its worst frames were 19.3 and 51.94 ms.
+The cause of the initial hitch is unconfirmed. These short samples describe this
+demo on this machine; occasional hitches remain and playback is not guaranteed
+to stay at 60 FPS on other hardware.
 
 ```sh
 Godot --headless --path . --fixed-fps 60 --script res://experiments/anime_hub_demo_v07/tools/test_hub.gd
@@ -178,13 +197,23 @@ Godot --path . --script res://experiments/anime_hub_demo_v07/tools/capture_hub.g
 The final [motion assets and prompt index](assets/motion/README.md) include 268
 registered poses across 17 sheets. Generation used **built-in imagegen**. PNGs
 remain byte-identical to the selected outputs; native AtlasTexture regions and
-margins register heads and planted boot baselines on a shared canvas. Registration
+margins register anatomical head centers for the player and ground anchors for
+other residents on a shared canvas. Player scale and texture offsets are calibrated
+per pose, while the physics ground anchor stays fixed. Registration
 uses detected transparent gutters rather than assuming perfectly equal AI cells.
 The runtime reads only the final catalog and SpriteFrames resources.
 
 [Character motion preview](previews/character_motion.png) shows the directions and
-states rendered by Godot. To watch the animated gallery:
+states rendered by Godot. The [body alignment comparison](previews/body_registration.png)
+shows complete walk/run cycles before and after correction, using the same PNGs.
+The [downward-cycle comparison](previews/downward_cycle.png) compares the old
+south drawings with the new sheet, both using the current registration code.
+To watch the animated gallery:
 
 ```sh
 Godot --path . --script res://experiments/anime_hub_demo_v07/tools/preview_motion.gd
 ```
+
+Recreate the registration comparison with `tools/review_registration.gd`.
+Add `-- --front-cycle` to recreate the downward-art comparison. Run
+`python3 experiments/anime_hub_demo_v07/tools/audit_front_cycle.py` for its pixel audit.

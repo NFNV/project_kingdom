@@ -71,6 +71,7 @@ func _visit_landmark(id: String) -> void:
 
 
 func _check_motion() -> void:
+	_check_body_registration()
 	var frames: SpriteFrames = game.player.sprite.sprite_frames
 	for direction in ["e","se","s","sw","w","nw","n","ne"]:
 		_check(frames.get_frame_count("walk_"+direction)==8 and frames.get_frame_count("run_"+direction)==8,"Eight drawn walk and run poses load for "+direction)
@@ -107,6 +108,22 @@ func _check_motion() -> void:
 	motion.facing_direction = "e"
 	_check(motion.direction_for(Vector2.from_angle(PI/8.0+.03))=="e","Facing deadband rejects tiny changes near a sector boundary")
 	_check(motion.direction_for(Vector2.DOWN)=="s" and motion.direction_for(Vector2.UP)=="n","Cardinal motion has true front and back views")
+	for running in [false,true]:
+		await _settle(Vector2(970,810))
+		if running:
+			Input.action_press("hub_run")
+		Input.action_press("hub_down")
+		var south_poses: Dictionary = {}
+		var correct_sheet := true
+		for tick in 40:
+			await physics_frame
+			south_poses[motion.frame] = true
+			var texture: AtlasTexture = motion.sprite_frames.get_frame_texture(motion.animation,motion.frame)
+			correct_sheet = correct_sheet and texture.atlas.resource_path.ends_with("cat_s_v2.png") and not motion.flip_h
+		_check(motion.animation==("run_s" if running else "walk_s") and south_poses.size()==8,"Downward "+("running" if running else "walking")+" plays a complete eight-pose south cycle")
+		_check(correct_sheet,"Downward motion consistently uses the repaired front drawings without runtime mirroring")
+		Input.action_release("hub_down")
+		Input.action_release("hub_run")
 	await _settle(Vector2(970,805))
 	Input.action_press("hub_up")
 	for tick in 100:
@@ -140,6 +157,7 @@ func _check_motion() -> void:
 	for resident in game.residents:
 		_check(resident.sprite.sprite_frames.get_frame_count("idle_se")==8 and resident.sprite.sprite_frames.get_frame_count("gesture_se")==4,"Civilian has idle and occupational gesture sequences: "+resident.resident_id)
 	var baker = game.interactables.baker.anchor
+	_check(not baker.sprite.flip_h,"Clover's facing correction does not mirror Pippa in the square")
 	var greetings_before: int = baker.sprite.gesture_count
 	game.interact("baker")
 	_check(baker.sprite.gesture_count>greetings_before,"Speaking to the baker triggers a welcoming gesture")
@@ -150,6 +168,40 @@ func _check_motion() -> void:
 		await physics_frame
 	_check(is_equal_approx(baker.sprite.idle_clock,idle_before) and is_equal_approx(motion.phase,gait_before),"Pause freezes both civilian gestures and character gait")
 	game.set_paused(false)
+
+
+func _check_body_registration() -> void:
+	var probe = load(ROOT+"tools/motion_sprite.gd").new()
+	root.add_child(probe)
+	probe.position = Vector2(140,220)
+	probe.configure("cat",108)
+	for direction in ["e","se","s","sw","w","nw","n","ne"]:
+		var width_low := INF
+		var width_high := -INF
+		for gait in ["idle","walk","run"]:
+			var low := Vector2(INF,INF)
+			var high := Vector2(-INF,-INF)
+			var poses: Array = probe.metadata[direction].body_registration[gait].poses
+			for index in poses.size():
+				probe.set_pose(gait,direction,index)
+				var atlas: AtlasTexture = probe.sprite_frames.get_frame_texture(probe.animation,index)
+				var landmark := Vector2(poses[index].head_center[0],poses[index].head_center[1])
+				# Measure the source landmark through the actual native atlas + sprite
+				# transform, so an incorrect offset, scale or atlas margin fails this.
+				var rendered: Vector2 = (atlas.margin.position+landmark+probe.offset)*probe.scale+probe.position
+				low = low.min(rendered)
+				high = high.max(rendered)
+				var width: float = float(poses[index].head_width)*probe.scale.x
+				width_low = minf(width_low,width)
+				width_high = maxf(width_high,width)
+			_check(high.x-low.x<.05 and high.y-low.y<=2.41,"Rendered body stays aligned across all "+gait+" frames: "+direction)
+		_check(width_high-width_low<.05,"Head size remains consistent across idle, walk and run: "+direction)
+	probe.set_pose("idle","e",0)
+	var before: Vector2 = probe.body_origin
+	probe.set_pose("run","e",0,1.0/60.0)
+	_check(probe.body_origin.distance_to(before)<3,"Starting a run eases the stance rather than snapping the whole body")
+	_check(probe.position==Vector2(140,220),"Pose registration preserves the caller's sprite placement")
+	probe.queue_free()
 
 
 func _run() -> void:
@@ -293,6 +345,14 @@ func _run() -> void:
 	_check(game.nearest=="shop_vendor","Cat physically reaches the customer side of the counter")
 	_check(not game.is_walkable(Vector2(1080,490),0),"Sales counter has a solid collision footprint")
 	_check(game.interactables.shop_vendor.anchor.position.y<game.world.get_node("bakery_counter").position.y,"Vendor is depth sorted behind the sales counter")
+	var clover = game.interactables.shop_vendor.anchor
+	_check(clover.sprite.flip_h and game.interactables.shop_vendor.at.x<clover.position.x,"Clover faces left across the counter toward the customer")
+	clover.greet()
+	for pose in 4:
+		clover.sprite.set_pose("gesture","se",pose)
+		_check(clover.sprite.flip_h,"Clover keeps facing the customer during greeting pose "+str(pose))
+	clover.sprite.set_pose("idle","se",0)
+	_check(clover.sprite.flip_h,"Clover keeps facing the customer when returning to idle")
 	game.interact()
 	_check(game.shopping and game.ui.merchant.visible,"E opens the vendor's usable shop")
 	var before_shop: Vector2 = game.player.position
@@ -344,7 +404,7 @@ func _run() -> void:
 	for action in InputMap.get_actions():
 		if action.begins_with("hub_"):
 			Input.action_release(action)
-	var report := {"checks":checks,"passed":checks-failures.size(),"failures":failures,"scope":"Eight-direction walk/run/idle, drawn civilian gestures, actual friendly patrols, conversation tracking, pause and blocked-motion animation regression. Movement/collision, delivery quest, peaceful warden regression, twenty-minute clock, camera tracking/projection/limits, spilling fountain, furnished bakery entry/return, counter collision, vendor purchases and modal input, physical southeast exit, both forest areas, bridge, complete return journey and persistent progress."}
+	var report := {"checks":checks,"passed":checks-failures.size(),"failures":failures,"scope":"Actual downward walk/run exercises every south pose on the repaired sheet without mirroring. Rendered body-landmark stability and consistent head size across every player pose, eased stance transitions, caller sprite placement and vendor facing through idle/greetings. Eight-direction walk/run/idle, drawn civilian gestures, actual friendly patrols, conversation tracking, pause and blocked-motion animation regression. Movement/collision, delivery quest, peaceful warden regression, twenty-minute clock, camera tracking/projection/limits, spilling fountain, furnished bakery entry/return, counter collision, vendor purchases and modal input, physical southeast exit, both forest areas, bridge, complete return journey and persistent progress."}
 	FileAccess.open(ProjectSettings.globalize_path(ROOT+"test_results.json"),FileAccess.WRITE).store_string(JSON.stringify(report,"  ")+"\n")
 	print("Playable hub: ",checks-failures.size(),"/",checks," checks passed.")
 	quit(0 if failures.is_empty() else 1)

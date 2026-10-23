@@ -1,0 +1,33 @@
+{
+  "adapter": "Apple M1 (Apple7)",
+  "engine": "4.7.2-stable (official)",
+  "notes": "Follow-up for the large hitch in the seven-case run. Eight seconds of warmup after maximizing. Native 1920x1080 viewport, camera movement, night lighting and drawn character cycles. Focus is recorded, not assumed.",
+  "samples": [
+    {
+      "case": "maximized_river_night_after_eight_second_warmup",
+      "draw_calls": 108.0,
+      "focused_fraction": 1.0,
+      "fps": 60.1,
+      "frames_above_20_ms": 0,
+      "frames_above_33_ms": 0,
+      "p95_ms": 17.49,
+      "p99_ms": 17.87,
+      "render_size": "(1920.0, 1080.0)",
+      "window_size": "(2880, 1476)",
+      "worst_ms": 19.3
+    },
+    {
+      "case": "maximized_river_night_repeat",
+      "draw_calls": 108.0,
+      "focused_fraction": 1.0,
+      "fps": 59.7,
+      "frames_above_20_ms": 1,
+      "frames_above_33_ms": 1,
+      "p95_ms": 17.42,
+      "p99_ms": 17.55,
+      "render_size": "(1920.0, 1080.0)",
+      "window_size": "(2880, 1476)",
+      "worst_ms": 51.94
+    }
+  ]
+}

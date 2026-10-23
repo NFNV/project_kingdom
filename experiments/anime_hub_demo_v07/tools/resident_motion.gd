@@ -30,3 +30,9 @@ func _process(delta: float) -> void:
 func greet() -> void:
 	sprite.greet()
 	gesture_wait = 9.0
+
+
+func face_towards(customer_position: Vector2) -> void:
+	# These civilian sheets show a front-right view. Mirroring the sprite keeps
+	# every idle/greeting frame facing the customer without moving its anchor.
+	sprite.flip_h = customer_position.x < position.x

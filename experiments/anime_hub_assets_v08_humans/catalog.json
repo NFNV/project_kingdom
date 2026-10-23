@@ -1,0 +1,465 @@
+{
+  "animal_reference_height": 108,
+  "canvas": [
+    1024,
+    1024
+  ],
+  "sprite_offset": [
+    -512,
+    -984
+  ],
+  "assets": {
+    "human_wayfarer": {
+      "name": "Wayfarer",
+      "file": "characters/human_wayfarer.png",
+      "native_frames": "resources/human_wayfarer_frames.tres",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-407da1af-39c9-4426-bea4-5a7c8589a0e2.png",
+      "sha256": "cc16c2d1ccef8c7ce432caf8e0849af873e15963d9f2f5dd5bcf815ee11791f3",
+      "byte_identical_copy": true,
+      "size": [
+        1024,
+        1536
+      ],
+      "transparent_fraction": 0.6857,
+      "recommended_height_at_1080p": 172,
+      "height_vs_animals": 1.593,
+      "directions": [
+        "se",
+        "sw",
+        "ne",
+        "nw"
+      ],
+      "x_partitions": [
+        0,
+        512,
+        1024
+      ],
+      "y_partitions": [
+        0,
+        763,
+        1536
+      ],
+      "frames": {
+        "se": {
+          "region": [
+            146,
+            26,
+            295,
+            720
+          ],
+          "margin": [
+            414.0,
+            264,
+            729,
+            304
+          ],
+          "height": 720,
+          "anchor_source": [
+            244.0,
+            746
+          ],
+          "scale_at_recommended_height": 0.2388888888888889
+        },
+        "sw": {
+          "region": [
+            585,
+            27,
+            292,
+            723
+          ],
+          "margin": [
+            306.0,
+            261,
+            732,
+            301
+          ],
+          "height": 723,
+          "anchor_source": [
+            791.0,
+            750
+          ],
+          "scale_at_recommended_height": 0.23789764868603042
+        },
+        "ne": {
+          "region": [
+            159,
+            777,
+            279,
+            717
+          ],
+          "margin": [
+            343.0,
+            267,
+            745,
+            307
+          ],
+          "height": 717,
+          "anchor_source": [
+            328.0,
+            1494
+          ],
+          "scale_at_recommended_height": 0.2398884239888424
+        },
+        "nw": {
+          "region": [
+            603,
+            782,
+            285,
+            712
+          ],
+          "margin": [
+            397.0,
+            272,
+            739,
+            312
+          ],
+          "height": 712,
+          "anchor_source": [
+            718.0,
+            1494
+          ],
+          "scale_at_recommended_height": 0.24157303370786518
+        }
+      }
+    },
+    "human_warden": {
+      "name": "Town Warden",
+      "file": "characters/human_warden.png",
+      "native_frames": "resources/human_warden_frames.tres",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-2f4e1b5f-35bf-4844-a4ff-772ab03fed97.png",
+      "sha256": "90e246d86c15057275bb828667fd383c29b05a4b8f18e1f5baa3e6af96f52aff",
+      "byte_identical_copy": true,
+      "size": [
+        1024,
+        1536
+      ],
+      "transparent_fraction": 0.6506,
+      "recommended_height_at_1080p": 180,
+      "height_vs_animals": 1.667,
+      "directions": [
+        "se",
+        "sw",
+        "ne",
+        "nw"
+      ],
+      "x_partitions": [
+        0,
+        524,
+        1024
+      ],
+      "y_partitions": [
+        0,
+        760,
+        1536
+      ],
+      "frames": {
+        "se": {
+          "region": [
+            154,
+            9,
+            300,
+            750
+          ],
+          "margin": [
+            425.0,
+            234,
+            724,
+            274
+          ],
+          "height": 750,
+          "anchor_source": [
+            241.0,
+            759
+          ],
+          "scale_at_recommended_height": 0.24
+        },
+        "sw": {
+          "region": [
+            588,
+            9,
+            303,
+            751
+          ],
+          "margin": [
+            295.0,
+            233,
+            721,
+            273
+          ],
+          "height": 751,
+          "anchor_source": [
+            805.0,
+            760
+          ],
+          "scale_at_recommended_height": 0.2396804260985353
+        },
+        "ne": {
+          "region": [
+            165,
+            762,
+            304,
+            740
+          ],
+          "margin": [
+            332.0,
+            244,
+            720,
+            284
+          ],
+          "height": 740,
+          "anchor_source": [
+            345.0,
+            1502
+          ],
+          "scale_at_recommended_height": 0.24324324324324326
+        },
+        "nw": {
+          "region": [
+            580,
+            761,
+            311,
+            743
+          ],
+          "margin": [
+            387.0,
+            241,
+            713,
+            281
+          ],
+          "height": 743,
+          "anchor_source": [
+            705.0,
+            1504
+          ],
+          "scale_at_recommended_height": 0.24226110363391656
+        }
+      }
+    },
+    "human_herbalist": {
+      "name": "Herbalist",
+      "file": "characters/human_herbalist.png",
+      "native_frames": "resources/human_herbalist_frames.tres",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-9dac8d6e-f7fa-4c77-8127-e978b847c5c0.png",
+      "sha256": "97fceefb591fad4aedd91966df80b29f2345f80a773af7132fe74b8076059fb3",
+      "byte_identical_copy": true,
+      "size": [
+        1024,
+        1536
+      ],
+      "transparent_fraction": 0.6196,
+      "recommended_height_at_1080p": 168,
+      "height_vs_animals": 1.556,
+      "directions": [
+        "se",
+        "sw",
+        "ne",
+        "nw"
+      ],
+      "x_partitions": [
+        0,
+        513,
+        1024
+      ],
+      "y_partitions": [
+        0,
+        764,
+        1536
+      ],
+      "frames": {
+        "se": {
+          "region": [
+            161,
+            23,
+            289,
+            737
+          ],
+          "margin": [
+            419.0,
+            247,
+            735,
+            287
+          ],
+          "height": 737,
+          "anchor_source": [
+            254.0,
+            760
+          ],
+          "scale_at_recommended_height": 0.22795115332428764
+        },
+        "sw": {
+          "region": [
+            573,
+            24,
+            293,
+            737
+          ],
+          "margin": [
+            306.0,
+            247,
+            731,
+            287
+          ],
+          "height": 737,
+          "anchor_source": [
+            779.0,
+            761
+          ],
+          "scale_at_recommended_height": 0.22795115332428764
+        },
+        "ne": {
+          "region": [
+            159,
+            769,
+            297,
+            731
+          ],
+          "margin": [
+            326.0,
+            253,
+            727,
+            293
+          ],
+          "height": 731,
+          "anchor_source": [
+            345.0,
+            1500
+          ],
+          "scale_at_recommended_height": 0.22982216142270862
+        },
+        "nw": {
+          "region": [
+            571,
+            771,
+            302,
+            731
+          ],
+          "margin": [
+            395.0,
+            253,
+            722,
+            293
+          ],
+          "height": 731,
+          "anchor_source": [
+            688.0,
+            1502
+          ],
+          "scale_at_recommended_height": 0.22982216142270862
+        }
+      }
+    },
+    "human_smith": {
+      "name": "Blacksmith",
+      "file": "characters/human_smith.png",
+      "native_frames": "resources/human_smith_frames.tres",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-94901f20-19fe-489d-9a84-92a2c4b25fa5.png",
+      "sha256": "fc838a152889aff8d63d44e4630b70bd7d2f425c89c88729b9ab63012386bde2",
+      "byte_identical_copy": true,
+      "size": [
+        1024,
+        1536
+      ],
+      "transparent_fraction": 0.6111,
+      "recommended_height_at_1080p": 178,
+      "height_vs_animals": 1.648,
+      "directions": [
+        "se",
+        "sw",
+        "ne",
+        "nw"
+      ],
+      "x_partitions": [
+        0,
+        516,
+        1024
+      ],
+      "y_partitions": [
+        0,
+        768,
+        1536
+      ],
+      "frames": {
+        "se": {
+          "region": [
+            132,
+            13,
+            332,
+            755
+          ],
+          "margin": [
+            408.0,
+            229,
+            692,
+            269
+          ],
+          "height": 755,
+          "anchor_source": [
+            236.0,
+            768
+          ],
+          "scale_at_recommended_height": 0.23576158940397351
+        },
+        "sw": {
+          "region": [
+            568,
+            15,
+            320,
+            753
+          ],
+          "margin": [
+            287.0,
+            231,
+            704,
+            271
+          ],
+          "height": 753,
+          "anchor_source": [
+            793.0,
+            768
+          ],
+          "scale_at_recommended_height": 0.23638778220451528
+        },
+        "ne": {
+          "region": [
+            145,
+            769,
+            323,
+            742
+          ],
+          "margin": [
+            319.0,
+            242,
+            701,
+            282
+          ],
+          "height": 742,
+          "anchor_source": [
+            338.0,
+            1511
+          ],
+          "scale_at_recommended_height": 0.2398921832884097
+        },
+        "nw": {
+          "region": [
+            565,
+            769,
+            320,
+            741
+          ],
+          "margin": [
+            377.0,
+            243,
+            704,
+            283
+          ],
+          "height": 741,
+          "anchor_source": [
+            700.0,
+            1510
+          ],
+          "scale_at_recommended_height": 0.24021592442645073
+        }
+      }
+    }
+  }
+}

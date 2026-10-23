@@ -438,6 +438,7 @@ func _build_bakery() -> void:
 	_solid(PackedVector2Array([Vector2(1264,454),Vector2(1361,512),Vector2(1454,478),Vector2(1367,418)]))
 	var vendor_at := Bakery.iso(4.3,1.55)
 	var vendor := _animated_resident("shop_vendor","cat_baker",vendor_at,118)
+	vendor.face_towards(Bakery.iso(4.5,4.2))
 	var body := _solid(_ellipse(vendor_at,Vector2(20,12)))
 	interactables["shop_vendor"] = {"name":"Clover · Bakery keeper","at":Bakery.iso(4.5,4.2),"anchor":vendor,"body":body,"height":118.0}
 	_furniture("bakery_counter",Bakery.iso(4.6,3.25),186)

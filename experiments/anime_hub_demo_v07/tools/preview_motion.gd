@@ -32,7 +32,7 @@ func _build() -> void:
 	background.color = Color("294036")
 	stage.add_child(background)
 	_label("PROJECT KINGDOM  /  CHARACTER MOTION",Vector2(50,25),26)
-	_label("Eight directions. Separate walking, running, and blinking idle poses. Registered feet and shared scale.",Vector2(50,67),19)
+	_label("Eight directions. Separate walk, run and blinking idle. Stable body alignment and consistent head size.",Vector2(50,67),19)
 	for row in 3:
 		var state: String = ["walk","run","idle"][row]
 		_label(state.to_upper(),Vector2(35,170+row*210),18)

@@ -1,0 +1,35 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3]
+
+[ext_resource type="Texture2D" path="res://experiments/anime_hub_assets_v08_humans/characters/human_smith.png" id="P"]
+
+[sub_resource type="AtlasTexture" id="se"]
+atlas = ExtResource("P")
+region = Rect2(132, 13, 332, 755)
+margin = Rect2(408.0, 229, 692, 269)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="sw"]
+atlas = ExtResource("P")
+region = Rect2(568, 15, 320, 753)
+margin = Rect2(287.0, 231, 704, 271)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="ne"]
+atlas = ExtResource("P")
+region = Rect2(145, 769, 323, 742)
+margin = Rect2(319.0, 242, 701, 282)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="nw"]
+atlas = ExtResource("P")
+region = Rect2(565, 769, 320, 741)
+margin = Rect2(377.0, 243, 704, 283)
+filter_clip = true
+
+[resource]
+animations = [
+{"frames": [{"duration": 1.0, "texture": SubResource("se")}], "loop": true, "name": &"idle_se", "speed": 1.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("sw")}], "loop": true, "name": &"idle_sw", "speed": 1.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("ne")}], "loop": true, "name": &"idle_ne", "speed": 1.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("nw")}], "loop": true, "name": &"idle_nw", "speed": 1.0}
+]

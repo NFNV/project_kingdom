@@ -1,0 +1,337 @@
+{
+  "previous": {
+    "poses": [
+      {
+        "pose": 0,
+        "muzzle_center_bias": 0.0688,
+        "left_peripheral_orange_pixels": 767,
+        "right_peripheral_orange_pixels": 62,
+        "front_centered": false,
+        "tail_stays_right": false
+      },
+      {
+        "pose": 1,
+        "muzzle_center_bias": -0.1182,
+        "left_peripheral_orange_pixels": 35,
+        "right_peripheral_orange_pixels": 1458,
+        "front_centered": false,
+        "tail_stays_right": true
+      },
+      {
+        "pose": 2,
+        "muzzle_center_bias": 0.0676,
+        "left_peripheral_orange_pixels": 604,
+        "right_peripheral_orange_pixels": 127,
+        "front_centered": false,
+        "tail_stays_right": false
+      },
+      {
+        "pose": 3,
+        "muzzle_center_bias": -0.1296,
+        "left_peripheral_orange_pixels": 121,
+        "right_peripheral_orange_pixels": 916,
+        "front_centered": false,
+        "tail_stays_right": true
+      },
+      {
+        "pose": 4,
+        "muzzle_center_bias": 0.0545,
+        "left_peripheral_orange_pixels": 211,
+        "right_peripheral_orange_pixels": 867,
+        "front_centered": false,
+        "tail_stays_right": true
+      },
+      {
+        "pose": 5,
+        "muzzle_center_bias": -0.1574,
+        "left_peripheral_orange_pixels": 119,
+        "right_peripheral_orange_pixels": 1238,
+        "front_centered": false,
+        "tail_stays_right": true
+      },
+      {
+        "pose": 6,
+        "muzzle_center_bias": 0.0688,
+        "left_peripheral_orange_pixels": 7,
+        "right_peripheral_orange_pixels": 88,
+        "front_centered": false,
+        "tail_stays_right": false
+      },
+      {
+        "pose": 7,
+        "muzzle_center_bias": -0.1262,
+        "left_peripheral_orange_pixels": 117,
+        "right_peripheral_orange_pixels": 1045,
+        "front_centered": false,
+        "tail_stays_right": true
+      },
+      {
+        "pose": 8,
+        "muzzle_center_bias": -0.0391,
+        "left_peripheral_orange_pixels": 0,
+        "right_peripheral_orange_pixels": 557,
+        "front_centered": true,
+        "tail_stays_right": true
+      },
+      {
+        "pose": 9,
+        "muzzle_center_bias": -0.1364,
+        "left_peripheral_orange_pixels": 0,
+        "right_peripheral_orange_pixels": 1256,
+        "front_centered": false,
+        "tail_stays_right": true
+      },
+      {
+        "pose": 10,
+        "muzzle_center_bias": -0.0702,
+        "left_peripheral_orange_pixels": 0,
+        "right_peripheral_orange_pixels": 1032,
+        "front_centered": false,
+        "tail_stays_right": true
+      },
+      {
+        "pose": 11,
+        "muzzle_center_bias": -0.1364,
+        "left_peripheral_orange_pixels": 16,
+        "right_peripheral_orange_pixels": 1451,
+        "front_centered": false,
+        "tail_stays_right": true
+      },
+      {
+        "pose": 12,
+        "muzzle_center_bias": -0.0565,
+        "left_peripheral_orange_pixels": 0,
+        "right_peripheral_orange_pixels": 704,
+        "front_centered": false,
+        "tail_stays_right": true
+      },
+      {
+        "pose": 13,
+        "muzzle_center_bias": -0.1273,
+        "left_peripheral_orange_pixels": 0,
+        "right_peripheral_orange_pixels": 468,
+        "front_centered": false,
+        "tail_stays_right": true
+      },
+      {
+        "pose": 14,
+        "muzzle_center_bias": 0.0439,
+        "left_peripheral_orange_pixels": 90,
+        "right_peripheral_orange_pixels": 795,
+        "front_centered": true,
+        "tail_stays_right": true
+      },
+      {
+        "pose": 15,
+        "muzzle_center_bias": -0.1273,
+        "left_peripheral_orange_pixels": 0,
+        "right_peripheral_orange_pixels": 1112,
+        "front_centered": false,
+        "tail_stays_right": true
+      },
+      {
+        "pose": 16,
+        "muzzle_center_bias": -0.0172,
+        "left_peripheral_orange_pixels": 155,
+        "right_peripheral_orange_pixels": 1172,
+        "front_centered": true,
+        "tail_stays_right": true
+      },
+      {
+        "pose": 17,
+        "muzzle_center_bias": -0.0299,
+        "left_peripheral_orange_pixels": 128,
+        "right_peripheral_orange_pixels": 967,
+        "front_centered": true,
+        "tail_stays_right": true
+      },
+      {
+        "pose": 18,
+        "muzzle_center_bias": -0.0088,
+        "left_peripheral_orange_pixels": 19,
+        "right_peripheral_orange_pixels": 1179,
+        "front_centered": true,
+        "tail_stays_right": true
+      },
+      {
+        "pose": 19,
+        "muzzle_center_bias": -0.0217,
+        "left_peripheral_orange_pixels": 154,
+        "right_peripheral_orange_pixels": 915,
+        "front_centered": true,
+        "tail_stays_right": true
+      }
+    ],
+    "front_centered_count": 6,
+    "tail_stays_right_count": 17,
+    "max_muzzle_bias": 0.1574
+  },
+  "selected": {
+    "poses": [
+      {
+        "pose": 0,
+        "muzzle_center_bias": -0.0081,
+        "left_peripheral_orange_pixels": 0,
+        "right_peripheral_orange_pixels": 948,
+        "front_centered": true,
+        "tail_stays_right": true
+      },
+      {
+        "pose": 1,
+        "muzzle_center_bias": -0.0081,
+        "left_peripheral_orange_pixels": 42,
+        "right_peripheral_orange_pixels": 912,
+        "front_centered": true,
+        "tail_stays_right": true
+      },
+      {
+        "pose": 2,
+        "muzzle_center_bias": -0.0122,
+        "left_peripheral_orange_pixels": 128,
+        "right_peripheral_orange_pixels": 953,
+        "front_centered": true,
+        "tail_stays_right": true
+      },
+      {
+        "pose": 3,
+        "muzzle_center_bias": -0.0041,
+        "left_peripheral_orange_pixels": 0,
+        "right_peripheral_orange_pixels": 1011,
+        "front_centered": true,
+        "tail_stays_right": true
+      },
+      {
+        "pose": 4,
+        "muzzle_center_bias": -0.004,
+        "left_peripheral_orange_pixels": 155,
+        "right_peripheral_orange_pixels": 911,
+        "front_centered": true,
+        "tail_stays_right": true
+      },
+      {
+        "pose": 5,
+        "muzzle_center_bias": -0.0081,
+        "left_peripheral_orange_pixels": 12,
+        "right_peripheral_orange_pixels": 1014,
+        "front_centered": true,
+        "tail_stays_right": true
+      },
+      {
+        "pose": 6,
+        "muzzle_center_bias": 0.0,
+        "left_peripheral_orange_pixels": 39,
+        "right_peripheral_orange_pixels": 1038,
+        "front_centered": true,
+        "tail_stays_right": true
+      },
+      {
+        "pose": 7,
+        "muzzle_center_bias": -0.0161,
+        "left_peripheral_orange_pixels": 38,
+        "right_peripheral_orange_pixels": 926,
+        "front_centered": true,
+        "tail_stays_right": true
+      },
+      {
+        "pose": 8,
+        "muzzle_center_bias": -0.0039,
+        "left_peripheral_orange_pixels": 4,
+        "right_peripheral_orange_pixels": 785,
+        "front_centered": true,
+        "tail_stays_right": true
+      },
+      {
+        "pose": 9,
+        "muzzle_center_bias": -0.012,
+        "left_peripheral_orange_pixels": 0,
+        "right_peripheral_orange_pixels": 784,
+        "front_centered": true,
+        "tail_stays_right": true
+      },
+      {
+        "pose": 10,
+        "muzzle_center_bias": -0.0039,
+        "left_peripheral_orange_pixels": 0,
+        "right_peripheral_orange_pixels": 553,
+        "front_centered": true,
+        "tail_stays_right": true
+      },
+      {
+        "pose": 11,
+        "muzzle_center_bias": -0.012,
+        "left_peripheral_orange_pixels": 9,
+        "right_peripheral_orange_pixels": 897,
+        "front_centered": true,
+        "tail_stays_right": true
+      },
+      {
+        "pose": 12,
+        "muzzle_center_bias": 0.0,
+        "left_peripheral_orange_pixels": 0,
+        "right_peripheral_orange_pixels": 1003,
+        "front_centered": true,
+        "tail_stays_right": true
+      },
+      {
+        "pose": 13,
+        "muzzle_center_bias": -0.0081,
+        "left_peripheral_orange_pixels": 0,
+        "right_peripheral_orange_pixels": 909,
+        "front_centered": true,
+        "tail_stays_right": true
+      },
+      {
+        "pose": 14,
+        "muzzle_center_bias": -0.012,
+        "left_peripheral_orange_pixels": 0,
+        "right_peripheral_orange_pixels": 795,
+        "front_centered": true,
+        "tail_stays_right": true
+      },
+      {
+        "pose": 15,
+        "muzzle_center_bias": -0.0081,
+        "left_peripheral_orange_pixels": 2,
+        "right_peripheral_orange_pixels": 1036,
+        "front_centered": true,
+        "tail_stays_right": true
+      },
+      {
+        "pose": 16,
+        "muzzle_center_bias": 0.0039,
+        "left_peripheral_orange_pixels": 29,
+        "right_peripheral_orange_pixels": 948,
+        "front_centered": true,
+        "tail_stays_right": true
+      },
+      {
+        "pose": 17,
+        "muzzle_center_bias": -0.0079,
+        "left_peripheral_orange_pixels": 67,
+        "right_peripheral_orange_pixels": 1025,
+        "front_centered": true,
+        "tail_stays_right": true
+      },
+      {
+        "pose": 18,
+        "muzzle_center_bias": 0.0,
+        "left_peripheral_orange_pixels": 39,
+        "right_peripheral_orange_pixels": 896,
+        "front_centered": true,
+        "tail_stays_right": true
+      },
+      {
+        "pose": 19,
+        "muzzle_center_bias": 0.0,
+        "left_peripheral_orange_pixels": 40,
+        "right_peripheral_orange_pixels": 1005,
+        "front_centered": true,
+        "tail_stays_right": true
+      }
+    ],
+    "front_centered_count": 20,
+    "tail_stays_right_count": 20,
+    "max_muzzle_bias": 0.0161
+  },
+  "notes": "Read-only color/landmark heuristics for this orange cat, with native visual review. Muzzle bias is normalized by head width. Peripheral orange detects the tail side, with some paw pixels. These checks target the recorded discontinuities; they do not certify animation quality or gait anatomy."
+}

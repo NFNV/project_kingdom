@@ -1,0 +1,868 @@
+{
+  "asset": {
+    "id": "cat_s",
+    "kind": "cat",
+    "direction": "s",
+    "columns": 4,
+    "rows": 5,
+    "reference": "/Users/n/Documents/project-kingdom/experiments/anime_hub_assets_v06/characters/cat_adventurer.png",
+    "prompt": "Use case: stylized-concept. Create a production animation sprite sheet. Image 1 is the EXACT orange tabby adventurer character design and painted anime art style to preserve. Image 2 is a technical skeleton POSE GUIDE only. Transfer the character from image 1 onto the TWENTY EXACT successive body/limb poses of image 2, one pose per cell, FOUR columns by FIVE rows. First eight poses walk, second eight run. The LAST ROW has four planted-feet idle poses: relaxed, inhale, a short eyes-closed blink, exhale. IMPORTANT: The blue and red skeleton limbs denote the SAME left and right limbs across frames. They must alternate: frames 1-4 plant one leg, frames 5-8 plant the opposite leg. Passing frames bring the legs together with the lifting foot behind; contact frames extend opposite feet. The two contact frames must have opposite anatomical legs leading. Do NOT repeat one leading leg for the entire sheet. Match guide limb placement and screen direction; change the skeleton's plain shapes to the cat's anatomy and original clothing. Preserve orange striped fur, cream muzzle, red scarf, cream shirt, brown vest/backpack, olive trousers, brown boots and a small sword SHEATHED securely at the belt. Keep the same character size and identity in all cells; realistic smooth body weight transfer, secondary tail/scarf motion. All figures face the SAME direction shown in the pose guide. Keep boots, tail and ears inside each cell with clear gutters. Transparent background, no ground/shadow/guide/grid/text/labels or colored skeleton bones in the final art. Do NOT copy the guide's bone colors into the outfit. Draw a different stance for every guide pose. Anatomically correct two arms and two legs. A genuine coherent cycle rather than similar pose variations. All drawings on this sheet face direct front toward the viewer. Both paws are EMPTY throughout; stow the sword in its belt sheath in every walk, run AND idle pose. No hand-to-hand weapon swapping. Preserve the original short, large-headed anime-cat proportions, not the guide's tall torso. Keep the pelvis and ground anchor steady from cell to cell.",
+    "guide": "/Users/n/Documents/project-kingdom/experiments/anime_hub_demo_v07/assets/motion/guides/s.png",
+    "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-ba7c95ea-eccd-40c3-b996-3e409e987823.png"
+  },
+  "registration": {
+    "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-ba7c95ea-eccd-40c3-b996-3e409e987823.png",
+    "sha256": "10b7dfae2727a7e11810ce24bdbf38698c236589a9be290589c4f97f2d9be0b4",
+    "byte_identical_copy": true,
+    "size": [
+      1121,
+      1403
+    ],
+    "transparent_fraction": 0.5824,
+    "x_partitions": [
+      0,
+      304,
+      574,
+      856,
+      1121
+    ],
+    "y_partitions": [
+      0,
+      299,
+      574,
+      838,
+      1102,
+      1403
+    ],
+    "pose_count": 20,
+    "distinct_pose_regions": 20,
+    "height_range": [
+      231,
+      258
+    ],
+    "frames": [
+      {
+        "region": [
+          58,
+          29,
+          162,
+          258
+        ],
+        "margin": [
+          161.5,
+          196.5,
+          350,
+          254
+        ],
+        "source_anchor": [
+          152.5,
+          88.5
+        ],
+        "height": 258,
+        "head": {
+          "center": [
+            94.5,
+            59.5
+          ],
+          "width": 109.0
+        },
+        "foot_margin": [
+          161,
+          230,
+          350,
+          254
+        ]
+      },
+      {
+        "region": [
+          355,
+          28,
+          188,
+          255
+        ],
+        "margin": [
+          190.0,
+          197.5,
+          324,
+          257
+        ],
+        "source_anchor": [
+          421.0,
+          86.5
+        ],
+        "height": 255,
+        "head": {
+          "center": [
+            66.0,
+            58.5
+          ],
+          "width": 110.0
+        },
+        "foot_margin": [
+          191,
+          233,
+          324,
+          257
+        ]
+      },
+      {
+        "region": [
+          606,
+          29,
+          164,
+          257
+        ],
+        "margin": [
+          163.5,
+          195.5,
+          348,
+          255
+        ],
+        "source_anchor": [
+          698.5,
+          89.5
+        ],
+        "height": 257,
+        "head": {
+          "center": [
+            92.5,
+            60.5
+          ],
+          "width": 111.0
+        },
+        "foot_margin": [
+          163,
+          231,
+          348,
+          255
+        ]
+      },
+      {
+        "region": [
+          913,
+          32,
+          171,
+          254
+        ],
+        "margin": [
+          188.0,
+          198.5,
+          341,
+          258
+        ],
+        "source_anchor": [
+          981.0,
+          89.5
+        ],
+        "height": 254,
+        "head": {
+          "center": [
+            68.0,
+            57.5
+          ],
+          "width": 108.0
+        },
+        "foot_margin": [
+          190,
+          234,
+          341,
+          258
+        ]
+      },
+      {
+        "region": [
+          72,
+          313,
+          174,
+          256
+        ],
+        "margin": [
+          183.0,
+          198.0,
+          338,
+          256
+        ],
+        "source_anchor": [
+          145.0,
+          371.0
+        ],
+        "height": 256,
+        "head": {
+          "center": [
+            73.0,
+            58.0
+          ],
+          "width": 110.0
+        },
+        "foot_margin": [
+          182,
+          232,
+          338,
+          256
+        ]
+      },
+      {
+        "region": [
+          354,
+          312,
+          182,
+          252
+        ],
+        "margin": [
+          188.0,
+          198.5,
+          330,
+          260
+        ],
+        "source_anchor": [
+          422.0,
+          369.5
+        ],
+        "height": 252,
+        "head": {
+          "center": [
+            68.0,
+            57.5
+          ],
+          "width": 108.0
+        },
+        "foot_margin": [
+          189,
+          236,
+          330,
+          260
+        ]
+      },
+      {
+        "region": [
+          612,
+          313,
+          157,
+          256
+        ],
+        "margin": [
+          167.5,
+          197.5,
+          355,
+          256
+        ],
+        "source_anchor": [
+          700.5,
+          371.5
+        ],
+        "height": 256,
+        "head": {
+          "center": [
+            88.5,
+            58.5
+          ],
+          "width": 109.0
+        },
+        "foot_margin": [
+          167,
+          232,
+          355,
+          256
+        ]
+      },
+      {
+        "region": [
+          917,
+          315,
+          170,
+          249
+        ],
+        "margin": [
+          188.5,
+          199.5,
+          342,
+          263
+        ],
+        "source_anchor": [
+          984.5,
+          371.5
+        ],
+        "height": 249,
+        "head": {
+          "center": [
+            67.5,
+            56.5
+          ],
+          "width": 107.0
+        },
+        "foot_margin": [
+          190,
+          239,
+          342,
+          263
+        ]
+      },
+      {
+        "region": [
+          66,
+          581,
+          179,
+          250
+        ],
+        "margin": [
+          181.5,
+          197.5,
+          333,
+          262
+        ],
+        "source_anchor": [
+          140.5,
+          639.5
+        ],
+        "height": 250,
+        "head": {
+          "center": [
+            74.5,
+            58.5
+          ],
+          "width": 115.0
+        },
+        "foot_margin": [
+          182,
+          238,
+          333,
+          262
+        ]
+      },
+      {
+        "region": [
+          347,
+          580,
+          195,
+          233
+        ],
+        "margin": [
+          189.0,
+          198.5,
+          317,
+          279
+        ],
+        "source_anchor": [
+          414.0,
+          637.5
+        ],
+        "height": 233,
+        "head": {
+          "center": [
+            67.0,
+            57.5
+          ],
+          "width": 110.0
+        },
+        "foot_margin": [
+          190,
+          255,
+          317,
+          279
+        ]
+      },
+      {
+        "region": [
+          620,
+          582,
+          189,
+          250
+        ],
+        "margin": [
+          187.0,
+          196.0,
+          323,
+          262
+        ],
+        "source_anchor": [
+          689.0,
+          642.0
+        ],
+        "height": 250,
+        "head": {
+          "center": [
+            69.0,
+            60.0
+          ],
+          "width": 114.0
+        },
+        "foot_margin": [
+          189,
+          238,
+          323,
+          262
+        ]
+      },
+      {
+        "region": [
+          903,
+          585,
+          199,
+          231
+        ],
+        "margin": [
+          180.0,
+          199.5,
+          313,
+          281
+        ],
+        "source_anchor": [
+          979.0,
+          641.5
+        ],
+        "height": 231,
+        "head": {
+          "center": [
+            76.0,
+            56.5
+          ],
+          "width": 110.0
+        },
+        "foot_margin": [
+          181,
+          257,
+          313,
+          281
+        ]
+      },
+      {
+        "region": [
+          76,
+          845,
+          180,
+          252
+        ],
+        "margin": [
+          187.5,
+          197.0,
+          332,
+          260
+        ],
+        "source_anchor": [
+          144.5,
+          904.0
+        ],
+        "height": 252,
+        "head": {
+          "center": [
+            68.5,
+            59.0
+          ],
+          "width": 115.0
+        },
+        "foot_margin": [
+          188,
+          236,
+          332,
+          260
+        ]
+      },
+      {
+        "region": [
+          343,
+          843,
+          183,
+          244
+        ],
+        "margin": [
+          190.0,
+          198.0,
+          329,
+          268
+        ],
+        "source_anchor": [
+          409.0,
+          901.0
+        ],
+        "height": 244,
+        "head": {
+          "center": [
+            66.0,
+            58.0
+          ],
+          "width": 110.0
+        },
+        "foot_margin": [
+          190,
+          244,
+          329,
+          268
+        ]
+      },
+      {
+        "region": [
+          617,
+          846,
+          189,
+          253
+        ],
+        "margin": [
+          177.0,
+          196.5,
+          323,
+          259
+        ],
+        "source_anchor": [
+          696.0,
+          905.5
+        ],
+        "height": 253,
+        "head": {
+          "center": [
+            79.0,
+            59.5
+          ],
+          "width": 114.0
+        },
+        "foot_margin": [
+          178,
+          235,
+          323,
+          259
+        ]
+      },
+      {
+        "region": [
+          912,
+          847,
+          183,
+          244
+        ],
+        "margin": [
+          185.0,
+          199.5,
+          329,
+          268
+        ],
+        "source_anchor": [
+          983.0,
+          903.5
+        ],
+        "height": 244,
+        "head": {
+          "center": [
+            71.0,
+            56.5
+          ],
+          "width": 110.0
+        },
+        "foot_margin": [
+          185,
+          244,
+          329,
+          268
+        ]
+      },
+      {
+        "region": [
+          71,
+          1109,
+          194,
+          253
+        ],
+        "margin": [
+          176.0,
+          199.0,
+          318,
+          259
+        ],
+        "source_anchor": [
+          151.0,
+          1166.0
+        ],
+        "height": 253,
+        "head": {
+          "center": [
+            80.0,
+            57.0
+          ],
+          "width": 116.0
+        },
+        "foot_margin": [
+          176,
+          235,
+          318,
+          259
+        ]
+      },
+      {
+        "region": [
+          347,
+          1107,
+          185,
+          255
+        ],
+        "margin": [
+          178.5,
+          199.5,
+          327,
+          257
+        ],
+        "source_anchor": [
+          424.5,
+          1163.5
+        ],
+        "height": 255,
+        "head": {
+          "center": [
+            77.5,
+            56.5
+          ],
+          "width": 117.0
+        },
+        "foot_margin": [
+          178,
+          233,
+          327,
+          257
+        ]
+      },
+      {
+        "region": [
+          619,
+          1109,
+          186,
+          253
+        ],
+        "margin": [
+          179.0,
+          196.5,
+          326,
+          259
+        ],
+        "source_anchor": [
+          696.0,
+          1168.5
+        ],
+        "height": 253,
+        "head": {
+          "center": [
+            77.0,
+            59.5
+          ],
+          "width": 114.0
+        },
+        "foot_margin": [
+          181,
+          235,
+          326,
+          259
+        ]
+      },
+      {
+        "region": [
+          906,
+          1108,
+          182,
+          254
+        ],
+        "margin": [
+          177.5,
+          196.0,
+          330,
+          258
+        ],
+        "source_anchor": [
+          984.5,
+          1168.0
+        ],
+        "height": 254,
+        "head": {
+          "center": [
+            78.5,
+            60.0
+          ],
+          "width": 115.0
+        },
+        "foot_margin": [
+          178,
+          234,
+          330,
+          258
+        ]
+      }
+    ]
+  },
+  "calibration": {
+    "height": 253.5,
+    "source": "cat_s.png",
+    "body_registration": {
+      "walk": {
+        "head_ground_height": 207.95347222222222,
+        "poses": [
+          {
+            "scale": 1.0596330275229358,
+            "head_width": 109.0,
+            "head_center": [
+              94.5,
+              59.5
+            ]
+          },
+          {
+            "scale": 1.05,
+            "head_width": 110.0,
+            "head_center": [
+              66.0,
+              58.5
+            ]
+          },
+          {
+            "scale": 1.0405405405405406,
+            "head_width": 111.0,
+            "head_center": [
+              92.5,
+              60.5
+            ]
+          },
+          {
+            "scale": 1.0694444444444444,
+            "head_width": 108.0,
+            "head_center": [
+              68.0,
+              57.5
+            ]
+          },
+          {
+            "scale": 1.05,
+            "head_width": 110.0,
+            "head_center": [
+              73.0,
+              58.0
+            ]
+          },
+          {
+            "scale": 1.0694444444444444,
+            "head_width": 108.0,
+            "head_center": [
+              68.0,
+              57.5
+            ]
+          },
+          {
+            "scale": 1.0596330275229358,
+            "head_width": 109.0,
+            "head_center": [
+              88.5,
+              58.5
+            ]
+          },
+          {
+            "scale": 1.0794392523364487,
+            "head_width": 107.0,
+            "head_center": [
+              67.5,
+              56.5
+            ]
+          }
+        ]
+      },
+      "run": {
+        "head_ground_height": 193.16956521739132,
+        "poses": [
+          {
+            "scale": 1.0043478260869565,
+            "head_width": 115.0,
+            "head_center": [
+              74.5,
+              58.5
+            ]
+          },
+          {
+            "scale": 1.05,
+            "head_width": 110.0,
+            "head_center": [
+              67.0,
+              57.5
+            ]
+          },
+          {
+            "scale": 1.013157894736842,
+            "head_width": 114.0,
+            "head_center": [
+              69.0,
+              60.0
+            ]
+          },
+          {
+            "scale": 1.05,
+            "head_width": 110.0,
+            "head_center": [
+              76.0,
+              56.5
+            ]
+          },
+          {
+            "scale": 1.0043478260869565,
+            "head_width": 115.0,
+            "head_center": [
+              68.5,
+              59.0
+            ]
+          },
+          {
+            "scale": 1.05,
+            "head_width": 110.0,
+            "head_center": [
+              66.0,
+              58.0
+            ]
+          },
+          {
+            "scale": 1.013157894736842,
+            "head_width": 114.0,
+            "head_center": [
+              79.0,
+              59.5
+            ]
+          },
+          {
+            "scale": 1.05,
+            "head_width": 110.0,
+            "head_center": [
+              71.0,
+              56.5
+            ]
+          }
+        ]
+      },
+      "idle": {
+        "head_ground_height": 195.55515030946066,
+        "poses": [
+          {
+            "scale": 0.9956896551724138,
+            "head_width": 116.0,
+            "head_center": [
+              80.0,
+              57.0
+            ]
+          },
+          {
+            "scale": 0.9871794871794872,
+            "head_width": 117.0,
+            "head_center": [
+              77.5,
+              56.5
+            ]
+          },
+          {
+            "scale": 1.013157894736842,
+            "head_width": 114.0,
+            "head_center": [
+              77.0,
+              59.5
+            ]
+          },
+          {
+            "scale": 1.0043478260869565,
+            "head_width": 115.0,
+            "head_center": [
+              78.5,
+              60.0
+            ]
+          }
+        ]
+      }
+    },
+    "head_width": 115.5
+  }
+}

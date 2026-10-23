@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://experiments/anime_hub_assets_v08_humans/tools/preview_humans.gd" id="1"]
+
+[node name="HumanAssetsPreview" type="Node2D"]
+script = ExtResource("1")

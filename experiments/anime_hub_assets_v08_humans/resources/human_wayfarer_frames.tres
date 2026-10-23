@@ -1,0 +1,35 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3]
+
+[ext_resource type="Texture2D" path="res://experiments/anime_hub_assets_v08_humans/characters/human_wayfarer.png" id="P"]
+
+[sub_resource type="AtlasTexture" id="se"]
+atlas = ExtResource("P")
+region = Rect2(146, 26, 295, 720)
+margin = Rect2(414.0, 264, 729, 304)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="sw"]
+atlas = ExtResource("P")
+region = Rect2(585, 27, 292, 723)
+margin = Rect2(306.0, 261, 732, 301)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="ne"]
+atlas = ExtResource("P")
+region = Rect2(159, 777, 279, 717)
+margin = Rect2(343.0, 267, 745, 307)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="nw"]
+atlas = ExtResource("P")
+region = Rect2(603, 782, 285, 712)
+margin = Rect2(397.0, 272, 739, 312)
+filter_clip = true
+
+[resource]
+animations = [
+{"frames": [{"duration": 1.0, "texture": SubResource("se")}], "loop": true, "name": &"idle_se", "speed": 1.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("sw")}], "loop": true, "name": &"idle_sw", "speed": 1.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("ne")}], "loop": true, "name": &"idle_ne", "speed": 1.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("nw")}], "loop": true, "name": &"idle_nw", "speed": 1.0}
+]

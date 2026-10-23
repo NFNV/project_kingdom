@@ -1,0 +1,35 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3]
+
+[ext_resource type="Texture2D" path="res://experiments/anime_hub_assets_v08_humans/characters/human_warden.png" id="P"]
+
+[sub_resource type="AtlasTexture" id="se"]
+atlas = ExtResource("P")
+region = Rect2(154, 9, 300, 750)
+margin = Rect2(425.0, 234, 724, 274)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="sw"]
+atlas = ExtResource("P")
+region = Rect2(588, 9, 303, 751)
+margin = Rect2(295.0, 233, 721, 273)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="ne"]
+atlas = ExtResource("P")
+region = Rect2(165, 762, 304, 740)
+margin = Rect2(332.0, 244, 720, 284)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="nw"]
+atlas = ExtResource("P")
+region = Rect2(580, 761, 311, 743)
+margin = Rect2(387.0, 241, 713, 281)
+filter_clip = true
+
+[resource]
+animations = [
+{"frames": [{"duration": 1.0, "texture": SubResource("se")}], "loop": true, "name": &"idle_se", "speed": 1.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("sw")}], "loop": true, "name": &"idle_sw", "speed": 1.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("ne")}], "loop": true, "name": &"idle_ne", "speed": 1.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("nw")}], "loop": true, "name": &"idle_nw", "speed": 1.0}
+]
