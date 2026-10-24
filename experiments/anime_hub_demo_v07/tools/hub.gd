@@ -5,6 +5,8 @@ const ROOT := "res://experiments/anime_hub_demo_v07/"
 const Actor := preload("res://experiments/anime_hub_demo_v07/tools/actor.gd")
 const Map := preload("res://experiments/anime_hub_demo_v07/tools/woodland_map.gd")
 const Resident := preload("res://experiments/anime_hub_demo_v07/tools/resident_motion.gd")
+const Human := preload("res://experiments/anime_hub_demo_v07/tools/human_resident.gd")
+const HUMAN_ART := "res://experiments/anime_hub_assets_v08_humans/"
 const Bakery := preload("res://experiments/anime_hub_demo_v07/tools/bakery_room.gd")
 const FountainFX := preload("res://experiments/anime_hub_demo_v07/tools/fountain_fx.gd")
 const Hud := preload("res://experiments/anime_hub_demo_v07/tools/hud.gd")
@@ -37,6 +39,8 @@ var world: Node2D
 var player: CharacterBody2D
 var dogs: Array = []
 var residents: Array[Node2D] = []
+var humans: Array[Node2D] = []
+var human_catalog: Dictionary
 var pieces: Array[CanvasItem] = []
 var occluders: Array[Sprite2D] = []
 var interactables: Dictionary = {}
@@ -93,6 +97,7 @@ func _ready() -> void:
 	get_tree().physics_interpolation = true
 	_install_input()
 	catalog = JSON.parse_string(FileAccess.get_file_as_string(ART+"catalog.json"))["assets"]
+	human_catalog = JSON.parse_string(FileAccess.get_file_as_string(HUMAN_ART+"catalog.json"))["assets"]
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	_load_zone("town","start")
 	_build_ui()
@@ -149,6 +154,7 @@ func _load_zone(destination: String, entry: String) -> void:
 	occluders.clear()
 	dogs.clear()
 	residents.clear()
+	humans.clear()
 	interactables.clear()
 	blockers.clear()
 	ripples = null
@@ -200,7 +206,7 @@ func _load_zone(destination: String, entry: String) -> void:
 	if not is_instance_valid(camera):
 		camera = Camera2D.new()
 		camera.name = "FollowCamera"
-		camera.zoom = Vector2(1.7,1.7)
+		camera.zoom = Vector2(1.5,1.5)
 		camera.position = Vector2(0,-55)
 		camera.position_smoothing_enabled = false
 		camera.process_callback = Camera2D.CAMERA2D_PROCESS_PHYSICS
@@ -355,7 +361,7 @@ func _animated_resident(id: String, asset: String, at: Vector2, height: float) -
 	anchor.hub = self
 	anchor.asset = asset
 	anchor.resident_id = id
-	anchor.height = height
+	anchor.height = height*Actor.ANIMAL_SCALE
 	anchor.position = at
 	world.add_child(anchor)
 	residents.append(anchor)
@@ -366,7 +372,23 @@ func _animated_resident(id: String, asset: String, at: Vector2, height: float) -
 func _resident(id: String, name_text: String, asset: String, at: Vector2, height := 108.0) -> void:
 	var anchor := _animated_resident(id,asset,at,height)
 	var body := _solid(_ellipse(at+Vector2(0,-5),Vector2(21,13)))
-	interactables[id] = {"name":name_text,"at":at,"anchor":anchor,"body":body,"height":height}
+	interactables[id] = {"name":name_text,"at":at,"anchor":anchor,"body":body,"height":anchor.height}
+
+
+func _human_resident(id: String, name_text: String, asset: String, at: Vector2, facing: String) -> void:
+	var human := Human.new()
+	human.name = id
+	human.hub = self
+	human.asset = asset
+	human.resident_id = id
+	human.data = human_catalog[asset]
+	human.position = at
+	human.facing_direction = facing
+	world.add_child(human)
+	humans.append(human)
+	pieces.append(human.sprite)
+	var body := _solid(_ellipse(at+Vector2(0,-5),Vector2(22,14)))
+	interactables[id] = {"name":name_text,"at":at,"anchor":human,"body":body,"height":human.height}
 
 
 func _build_plaza() -> void:
@@ -382,6 +404,10 @@ func _build_plaza() -> void:
 	_resident("elder","Elder Mallow","cat_elder",Vector2(660,850),104)
 	_resident("bookseller","Sage · Bookseller","cat_bookseller",Vector2(1220,740))
 	_resident("courier","Pip · Courier","dog_courier",Vector2(1365,850))
+	_human_resident("rhea","Rhea · Wayfarer","human_wayfarer",Vector2(1085,980),"nw")
+	_human_resident("alden","Captain Alden · Town Warden","human_warden",Vector2(1185,575),"sw")
+	_human_resident("iris","Iris · Herbalist","human_herbalist",Vector2(730,940),"se")
+	_human_resident("tomas","Tomas · Blacksmith","human_smith",Vector2(740,760),"se")
 	_piece("bench",Vector2(590,829),80)
 	_solid(_ellipse(Vector2(590,815),Vector2(57,17)))
 	_piece("postbox",Vector2(1430,785),108)
@@ -403,7 +429,7 @@ func _build_plaza() -> void:
 			"guard_east":PackedVector2Array([Vector2(1300,910),Vector2(1360,945),Vector2(1260,975)])
 		}[item[0]]
 		dogs.append(warden)
-		interactables[item[0]] = {"name":item[1],"at":warden.position,"anchor":warden,"height":108}
+		interactables[item[0]] = {"name":item[1],"at":warden.position,"anchor":warden,"height":warden.sprite.display_height}
 	# Animated water highlights are drawn over the painted water, using native 2D.
 	ripples = FountainFX.new()
 	ripples.hub = self
@@ -440,7 +466,7 @@ func _build_bakery() -> void:
 	var vendor := _animated_resident("shop_vendor","cat_baker",vendor_at,118)
 	vendor.face_towards(Bakery.iso(4.5,4.2))
 	var body := _solid(_ellipse(vendor_at,Vector2(20,12)))
-	interactables["shop_vendor"] = {"name":"Clover · Bakery keeper","at":Bakery.iso(4.5,4.2),"anchor":vendor,"body":body,"height":118.0}
+	interactables["shop_vendor"] = {"name":"Clover · Bakery keeper","at":Bakery.iso(4.5,4.2),"anchor":vendor,"body":body,"height":vendor.height}
 	_furniture("bakery_counter",Bakery.iso(4.6,3.25),186)
 	_solid(PackedVector2Array([Vector2(939,464),Vector2(1155,551),Vector2(1204,504),Vector2(992,414)]))
 	_furniture("bakery_table",Bakery.iso(2.5,5.8),150)
@@ -525,7 +551,45 @@ func find_path(from: Vector2, to: Vector2) -> PackedVector2Array:
 	var end := _nav_cell(to)
 	if start.x<0 or end.x<0:
 		return PackedVector2Array()
-	return navigation.get_point_path(start,end)
+	var path := navigation.get_point_path(start,end)
+	if not path.is_empty() and clear_line(from,navigation.get_point_position(start)):
+		return path
+	# Padding can leave tiny disconnected pockets next to solid NPCs/props. The
+	# geometrically closest free cell may belong to one of those pockets. Try
+	# nearby joins, preserving physical clearance from the actor's actual feet.
+	var starts := _nearby_nav_cells(from)
+	var ends := _nearby_nav_cells(to)
+	for alternative_start in starts:
+		var join := navigation.get_point_position(alternative_start)
+		if not _can_join_navigation(from,join):
+			continue
+		for alternative_end in ends:
+			path = navigation.get_point_path(alternative_start,alternative_end)
+			if not path.is_empty():
+				return path
+	return PackedVector2Array()
+
+
+func _nearby_nav_cells(point: Vector2) -> Array[Vector2i]:
+	var center := Vector2i((point-Vector2(16,16))/32)
+	var cells: Array[Vector2i] = []
+	for x in range(maxi(0,center.x-3),mini(60,center.x+4)):
+		for y in range(maxi(0,center.y-3),mini(34,center.y+4)):
+			var cell := Vector2i(x,y)
+			if not navigation.is_point_solid(cell):
+				cells.append(cell)
+	cells.sort_custom(func(a: Vector2i,b: Vector2i): return navigation.get_point_position(a).distance_squared_to(point)<navigation.get_point_position(b).distance_squared_to(point))
+	return cells.slice(0,12)
+
+
+func _can_join_navigation(from: Vector2, to: Vector2) -> bool:
+	if not clear_line(from,to):
+		return false
+	var steps := maxi(1,int(ceilf(from.distance_to(to)/8.0)))
+	for i in range(steps+1):
+		if not is_walkable(from.lerp(to,float(i)/steps),14):
+			return false
+	return true
 
 
 func clear_line(from: Vector2, to: Vector2, exclude: Array[RID] = []) -> bool:
@@ -584,7 +648,11 @@ func interact(id := "") -> void:
 		"grocer":"Fresh apples from the valley. Even the wardens stop by for a bite.",
 		"courier":"One square, a hundred stories. That's what I love about my rounds.",
 		"bookseller":"This town was built around its spring. Some say the water remembers every wish.",
-		"postbox":"A sturdy red postbox. Today's collection hasn't gone yet."
+		"postbox":"A sturdy red postbox. Today's collection hasn't gone yet.",
+		"rhea":"I've just come back from Mosswood. Take the southeast gate and follow the trail past the meadow. The river is worth the walk.",
+		"alden":"Small paws or long strides, everyone is welcome here. Bram and I keep the square peaceful. Enjoy your visit.",
+		"iris":"The meadow is full of chamomile. Clover brews it into a lovely tea at the Bluebird Bakery, under the blue awning.",
+		"tomas":"Market carts, gate hinges, and that stubborn lamppost... I'm never short of work here. A town runs on the little things."
 	}
 	if zone=="bakery":
 		if id=="shop_vendor":

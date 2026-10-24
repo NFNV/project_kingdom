@@ -1,7 +1,7 @@
 # Garden Square & Mosswood — playable exploration demo
 
 Walk as the cat adventurer through a painted anime town, a woodland trail, and
-a riverside glade, and an enterable bakery. A close 1.7× camera follows the cat
+a riverside glade, and an enterable bakery. A 1.5× camera follows the cat
 through every area and stops at the painted scene edges. The three dog wardens are peaceful residents. Talking to Bram
 no longer starts sparring, and attacks/damage are disabled in this version.
 
@@ -123,6 +123,34 @@ friendly wardens have eight walking poses and four idle poses in four directions
 walk short routes with resting pauses, stop when approached, and face the cat.
 Their conversation prompts follow their current positions. Combat remains off.
 
+Four taller human residents now share the square with the animals. Approach and
+press **E** to speak to each one:
+
+| Resident | Location |
+|---|---|
+| Rhea · Wayfarer | Southern paving, west of the Mosswood gate |
+| Captain Alden · Town Warden | Town-hall side, northeast of the fountain |
+| Iris · Herbalist | Southwest paving near the bench |
+| Tomas · Blacksmith | West side of the fountain |
+
+They use the [human asset pack](../anime_hub_assets_v08_humans/README.md) at
+109–117 world pixels tall versus the cat's 73. Humans are reduced 35% and
+all cats and dogs 32.5%, including Clover inside the bakery. Foot anchors and
+interaction prompts follow the smaller sprites, and stride length scales with
+their height. Each has four actual standing
+views, turns toward nearby visitors with a directional deadband, breathes gently,
+and acknowledges a conversation. Feet stay planted, the shared ground sorting
+places people correctly, and clothes follow day/night tint. These humans stay at
+their town posts; their prepared artwork has no walk/run cycle. Their dialogue
+offers local flavour and directions; purchases remain available at Clover's bakery.
+
+Each human has a solid foot collider included in navigation. When a padded grid
+pocket is disconnected, pathfinding chooses a nearby reachable join with physical
+clearance, so clicking away after a conversation does not trap the cat by the NPC.
+The human residents are recreated on returning to town and do not appear indoors
+or in the forest. The delivery errand, animal wardens and existing economy remain
+available alongside their conversations.
+
 The new art remains a prototype: some silhouettes and changes between directions
 can still benefit from animation-artist cleanup.
 There is one enterable interior. Audio, combat, and disk saves are not included.
@@ -136,7 +164,7 @@ This is prototype alignment, not a guarantee of identical painted detail.
 
 ## Verification
 
-[test_results.json](test_results.json) records 209 gameplay checks: movement,
+[test_results.json](test_results.json) records 255 gameplay checks: movement,
 physical collision, the delivery route, friendly-warden regressions, the longer
 clock, physically walking through every connection, all three resting places,
 walking over the bridge, returning home, persistent progress and pause/resume. New checks cover real camera following,
@@ -156,6 +184,10 @@ input and verifies that every frame uses the repaired sheet without mirroring.
 The separate [front-art audit](assets/motion/front_cycle_v2_audit.json) reads source
 pixels for centered muzzle landmarks and a consistent tail side. It checks all
 20 replacement poses and also detects the failures in the preserved old sheet.
+Human checks physically approach each resident, use the E prompt, verify distinct
+dialogue/greetings, walk into their colliders, leave for the next conversation,
+approach from all four directions, check planted feet and relative height, pause
+their idle motion, and verify night tint and recreation after area visits.
 
 [performance.json](performance.json) records native graphical measurements on the
 current machine with moving characters and camera, fountain effects, the bakery,
@@ -163,15 +195,15 @@ its merchant interface, the clock, forest effects, lighting
 crossfades and a maximized window. Warmup precedes each six-second sample; long
 frames are retained. Travel/loading fades are outside steady-state measurements.
 
-The latest native run on Apple M1 / Metal / Godot 4.7.2 averaged **60 FPS** in
-all six normal-window cases. Those samples were mostly unfocused; their worst
-frame was 28.11 ms. The first maximized sample averaged 48.2 FPS with a 659.76 ms
-hitch, so it is retained rather than discarded. A separate, fully focused
-[maximized recheck](performance_maximized_check.json), after eight seconds of
-warmup, measured 60.1 and 59.7 FPS. Its worst frames were 19.3 and 51.94 ms.
-The cause of the initial hitch is unconfirmed. These short samples describe this
-demo on this machine; occasional hitches remain and playback is not guaranteed
-to stay at 60 FPS on other hardware.
+The last native run, before the camera pullback from 1.7× to 1.5×, on Apple M1 /
+Metal / Godot 4.7.2 averaged **60 FPS in town**
+with four humans, five animal civilians and three patrolling dog wardens. The town
+sample's worst frame was 19.21 ms. All seven cases were fully focused and averaged
+59.8–60 FPS, including the maximized window, while rendering the fixed 1920×1080
+canvas. One forest sample retained a **52.54 ms** hitch; the other six cases had
+worst frames below 20 ms. These short samples describe this demo on this machine;
+occasional hitches remain and playback is not guaranteed to stay at 60 FPS on
+other hardware. Scene-load/travel fades are outside the steady-state samples.
 
 ```sh
 Godot --headless --path . --fixed-fps 60 --script res://experiments/anime_hub_demo_v07/tools/test_hub.gd
@@ -183,6 +215,12 @@ Native screenshots: [bakery counter](previews/bakery_counter.png),
 [town](previews/town_day.png),
 [forest trail](previews/trail_day.png),
 [river glade at night](previews/river_night.png).
+Human NPC captures: [town overview](previews/human_npcs_day.png),
+[night lighting](previews/human_npcs_night.png), and
+[Captain Alden conversation](previews/human_alden_conversation.png).
+The human overview uses a temporary 1.25× camera to show all four placements;
+the existing conversation captures were taken at 1.7×. The default follow camera
+is now 1.5×, showing a little more of the surroundings.
 
 
 Recreate the close-camera screenshots with:
@@ -190,6 +228,8 @@ Recreate the close-camera screenshots with:
 ```sh
 Godot --path . --script res://experiments/anime_hub_demo_v07/tools/capture_hub.gd
 ```
+
+Add `-- --humans` to capture the human overview, lighting, and four conversations.
 
 
 ## Animation authoring and preview

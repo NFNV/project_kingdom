@@ -204,6 +204,68 @@ func _check_body_registration() -> void:
 	probe.queue_free()
 
 
+func _check_humans() -> void:
+	_check(game.humans.size()==4,"Four human NPCs return after bakery and forest visits without duplicates")
+	var before_quest: int = game.quest_stage
+	var before_coins: int = game.coins
+	var speakers: Dictionary = {}
+	for human in game.humans:
+		var id: String = human.resident_id
+		var item: Dictionary = game.interactables[id]
+		var actual_height: float = human.sprite.sprite_frames.get_frame_texture(human.sprite.animation,0).region.size.y*human.sprite.scale.y
+		_check(actual_height>108.0 and actual_height<118.0 and actual_height>game.player.sprite.display_height,"Smaller human remains proportionally taller than the cat: "+id)
+		_check(human.get_parent()==game.world and game.world.y_sort_enabled,"Human depth sorts from its ground anchor: "+id)
+		_check(item.body.collision_layer==1,"Human has a solid walk-blocking footprint: "+id)
+		var path: PackedVector2Array = game.find_path(game.player.position,human.position)
+		_check(not path.is_empty(),"Navigation can approach human NPC: "+id)
+		game.player.route = path
+		for tick in 1500:
+			await physics_frame
+			if game.nearest==id:
+				break
+		_check(game.nearest==id,"The cat physically reaches the human's talk prompt: "+id)
+		var greetings_before: int = human.greeting_count
+		game.interact()
+		_check(game.talk_name.text==item.name and game.talk_text.text.length()>60,"E opens the human's named conversation: "+id)
+		speakers[game.talk_name.text] = true
+		_check(human.greeting_count==greetings_before+1,"Human acknowledges the conversation: "+id)
+		# Continue into the footprint with actual actor movement, not a path check.
+		game.player.route.clear()
+		game.player.automated = true
+		game.player.intent = game.Actor.ground_vector(human.position-game.player.position).normalized()
+		for tick in 70:
+			await physics_frame
+		game.player.intent = Vector2.ZERO
+		game.player.automated = false
+		_check(game.is_walkable(game.player.position,12),"The cat cannot walk through the human: "+id)
+	_check(speakers.size()==4,"All four human NPCs have separate named conversations")
+	_check(game.quest_stage==before_quest and game.coins==before_coins and not game.combat_active,"Human conversations preserve errands, money and peaceful play")
+	var smith = game.interactables.tomas.anchor
+	for view in [[Vector2(800,820),"se"],[Vector2(700,800),"sw"],[Vector2(800,700),"ne"],[Vector2(700,700),"nw"]]:
+		await _settle(view[0])
+		for tick in 3:
+			await physics_frame
+		_check(smith.sprite.animation=="idle_"+view[1] and not smith.sprite.flip_h,"Approaching a human selects the real "+view[1]+" view")
+		var texture: AtlasTexture = smith.sprite.sprite_frames.get_frame_texture(smith.sprite.animation,0)
+		var foot_y: float = (texture.margin.position.y+texture.region.size.y+smith.sprite.offset.y)*smith.sprite.scale.y
+		_check(absf(foot_y)<.01,"Turning and breathing keep the human's feet planted: "+view[1])
+	var phase_before: float = smith.idle_clock
+	var scale_before: Vector2 = smith.sprite.scale
+	game.set_paused(true)
+	for tick in 30:
+		await physics_frame
+	_check(smith.idle_clock==phase_before and smith.sprite.scale==scale_before,"Pause freezes human idle motion")
+	game.set_paused(false)
+	game.clock = 3.0
+	game._update_lighting()
+	var tinted := true
+	for human in game.humans:
+		tinted = tinted and human.sprite.modulate.is_equal_approx(game.actor_tint)
+	_check(tinted,"Humans receive the same night lighting as animal residents")
+	game.clock = 1.0
+	game._update_lighting()
+
+
 func _run() -> void:
 	game = load(ROOT+"demo.tscn").instantiate()
 	root.add_child(game)
@@ -214,7 +276,7 @@ func _run() -> void:
 	_check(root.get_texture().get_size()==Vector2(1920,1080),"Internal canvas is 1920x1080")
 	_check(game.player.controlled,"Cat is controlled")
 	_check(game.player.sprite.sprite_frames.has_animation("walk_nw"),"Registered directional character resources load")
-	_check(game.interactables.size()==9,"All residents, postbox and three peaceful wardens are interactive")
+	_check(game.interactables.size()==13,"Animal residents, four humans, postbox and three peaceful wardens are interactive")
 	_check(game.quest_stage==0 and not game.combat_active,"Demo starts with an available quest and no combat")
 	var start := Vector2(800,930)
 	var end := await _walk(start,["hub_right"],30)
@@ -313,7 +375,7 @@ func _run() -> void:
 	_check(absf(game.clock-1.4)<.001,"The shared clock is not reset by any zone transition")
 	_check(game.player.get_parent()==game.world,"The same playable cat transfers into the current ground-sorted scene")
 	# Close camera follows the same actor across the new room and every return trip.
-	_check(game.camera.get_parent()==game.player and is_equal_approx(game.camera.zoom.x,1.7),"Close camera is attached to the cat at 1.7x zoom")
+	_check(game.camera.get_parent()==game.player and is_equal_approx(game.camera.zoom.x,1.5),"Follow camera is attached to the cat at the wider 1.5x zoom")
 	await _settle(Vector2(960,630))
 	game.camera.force_update_scroll()
 	var screen_before: Vector2 = game.get_canvas_transform()*game.player.position
@@ -336,6 +398,7 @@ func _run() -> void:
 	await _travel_route("bakery","bakery")
 	_check(game.backgrounds.is_empty() and is_instance_valid(game.bakery_room),"Bakery uses an authored walkable room rather than a painted background")
 	_check(game.interactables.has("shop_vendor"),"Bakery has its own vendor NPC")
+	_check(game.humans.is_empty(),"Outdoor humans do not leak into the bakery interior")
 	_check(game.camera.get_parent()==game.player,"The follow camera survives entering the house")
 	game.player.route = game.find_path(game.player.position,game.interactables.shop_vendor.at)
 	for tick in 500:
@@ -383,6 +446,7 @@ func _run() -> void:
 	_check(game.coins==3 and game.inventory.honey==1,"Reentering the bakery cannot reset or duplicate purchased goods")
 	await _travel_route("town","town")
 	await _check_motion()
+	await _check_humans()
 	game.clock = 3.95
 	game.advance_time()
 	for tick in 30:
@@ -404,7 +468,7 @@ func _run() -> void:
 	for action in InputMap.get_actions():
 		if action.begins_with("hub_"):
 			Input.action_release(action)
-	var report := {"checks":checks,"passed":checks-failures.size(),"failures":failures,"scope":"Actual downward walk/run exercises every south pose on the repaired sheet without mirroring. Rendered body-landmark stability and consistent head size across every player pose, eased stance transitions, caller sprite placement and vendor facing through idle/greetings. Eight-direction walk/run/idle, drawn civilian gestures, actual friendly patrols, conversation tracking, pause and blocked-motion animation regression. Movement/collision, delivery quest, peaceful warden regression, twenty-minute clock, camera tracking/projection/limits, spilling fountain, furnished bakery entry/return, counter collision, vendor purchases and modal input, physical southeast exit, both forest areas, bridge, complete return journey and persistent progress."}
+	var report := {"checks":checks,"passed":checks-failures.size(),"failures":failures,"scope":"Four taller human NPCs: physical approach, E conversations, greetings, collision, actual four-direction facing, fixed feet during breathing, pause, shared night tint, peaceful quest/economy preservation and recreation after zone visits. Navigation recovers from disconnected padded grid pockets beside solid NPCs and props. Actual downward walk/run exercises every south pose on the repaired sheet without mirroring. Rendered body-landmark stability and consistent head size across every player pose, eased stance transitions, caller sprite placement and vendor facing through idle/greetings. Eight-direction walk/run/idle, drawn civilian gestures, actual friendly patrols, conversation tracking, pause and blocked-motion animation regression. Movement/collision, delivery quest, peaceful warden regression, twenty-minute clock, camera tracking/projection/limits, spilling fountain, furnished bakery entry/return, counter collision, vendor purchases and modal input, physical southeast exit, both forest areas, bridge, complete return journey and persistent progress."}
 	FileAccess.open(ProjectSettings.globalize_path(ROOT+"test_results.json"),FileAccess.WRITE).store_string(JSON.stringify(report,"  ")+"\n")
 	print("Playable hub: ",checks-failures.size(),"/",checks," checks passed.")
 	quit(0 if failures.is_empty() else 1)

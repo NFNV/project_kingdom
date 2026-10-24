@@ -3,99 +3,104 @@
   "canvas": "1920x1080 fixed viewport; close actor-follow camera, animated fountain, authored bakery and forest plates",
   "engine": "4.7.2-stable (official)",
   "max_fps": 60,
-  "notes": "Graphical measurements after warmup; foreground focus is requested before each sample and actual focused fractions are recorded. Actual cat movement with a 1.7x following camera, animated civilians and friendly patrolling wardens, eight-direction drawn walk/run cycles, flowing water and splashes, bakery steam/fire, vendor interface, animated wind/leaves/fireflies, clock and background crossfades. All long frames retained. Maximize still renders the same 1080p canvas. Scene loads occur during short travel fades and outside steady-state samples.",
+  "notes": "Graphical measurements after warmup; foreground focus is requested before each sample and actual focused fractions are recorded. Actual cat movement with a 1.7x following camera, animated animal civilians, four taller human NPCs with directional idle/breathing, and friendly patrolling wardens, eight-direction drawn walk/run cycles, flowing water and splashes, bakery steam/fire, vendor interface, animated wind/leaves/fireflies, clock and background crossfades. All long frames retained. Maximize still renders the same 1080p canvas. Scene loads occur during short travel fades and outside steady-state samples.",
   "renderer": "forward_plus",
   "samples": [
     {
       "case": "town_walk_run_patrols_and_fountain",
-      "draw_calls": 274.0,
-      "focused_fraction": 0.06,
+      "draw_calls": 282.0,
+      "focused_fraction": 1.0,
       "fps": 60.0,
-      "frames_above_20_ms": 2,
+      "frames_above_20_ms": 0,
       "frames_above_33_ms": 0,
-      "p95_ms": 16.95,
-      "p99_ms": 17.51,
+      "p95_ms": 17.12,
+      "p99_ms": 17.41,
       "render_size": "(1920.0, 1080.0)",
       "window_size": "(1280, 720)",
-      "worst_ms": 22.94
+      "worst_ms": 19.21
     },
     {
       "case": "furnished_bakery_follow_camera_and_fire",
       "draw_calls": 160.0,
-      "focused_fraction": 0.0,
+      "focused_fraction": 1.0,
       "fps": 60.0,
-      "frames_above_20_ms": 1,
+      "frames_above_20_ms": 0,
       "frames_above_33_ms": 0,
-      "p95_ms": 16.92,
-      "p99_ms": 17.55,
+      "p95_ms": 17.03,
+      "p99_ms": 17.28,
       "render_size": "(1920.0, 1080.0)",
       "window_size": "(1280, 720)",
-      "worst_ms": 22.32
+      "worst_ms": 17.57
     },
     {
       "case": "bakery_vendor_interface_and_animation",
       "draw_calls": 178.0,
-      "focused_fraction": 0.01,
+      "focused_fraction": 1.0,
       "fps": 60.0,
-      "frames_above_20_ms": 1,
+      "frames_above_20_ms": 0,
       "frames_above_33_ms": 0,
-      "p95_ms": 16.95,
-      "p99_ms": 17.61,
+      "p95_ms": 16.85,
+      "p99_ms": 17.39,
       "render_size": "(1920.0, 1080.0)",
       "window_size": "(1280, 720)",
-      "worst_ms": 22.44
+      "worst_ms": 17.58
     },
     {
       "case": "forest_trail_day_wind_and_clock",
       "draw_calls": 112.0,
-      "focused_fraction": 0.06,
-      "fps": 60.0,
+      "focused_fraction": 1.0,
+      "fps": 59.8,
       "frames_above_20_ms": 1,
-      "frames_above_33_ms": 0,
-      "p95_ms": 17.04,
-      "p99_ms": 17.57,
+      "frames_above_33_ms": 1,
+      "p95_ms": 17.65,
+      "p99_ms": 18.1,
       "render_size": "(1920.0, 1080.0)",
       "window_size": "(1280, 720)",
-      "worst_ms": 28.11
+      "worst_ms": 52.54
     },
     {
       "case": "forest_trail_day_night_crossfade",
       "draw_calls": 129.0,
-      "focused_fraction": 0.0,
+      "focused_fraction": 1.0,
       "fps": 60.0,
       "frames_above_20_ms": 0,
       "frames_above_33_ms": 0,
-      "p95_ms": 17.06,
-      "p99_ms": 17.26,
+      "p95_ms": 17.77,
+      "p99_ms": 18.11,
       "render_size": "(1920.0, 1080.0)",
       "window_size": "(1280, 720)",
-      "worst_ms": 18.63
+      "worst_ms": 18.27
     },
     {
       "case": "river_glade_twilight",
       "draw_calls": 108.0,
-      "focused_fraction": 0.0,
+      "focused_fraction": 1.0,
       "fps": 60.0,
       "frames_above_20_ms": 0,
       "frames_above_33_ms": 0,
-      "p95_ms": 17.06,
-      "p99_ms": 17.54,
+      "p95_ms": 17.13,
+      "p99_ms": 17.76,
       "render_size": "(1920.0, 1080.0)",
       "window_size": "(1280, 720)",
-      "worst_ms": 17.68
+      "worst_ms": 17.84
     },
     {
       "case": "maximized_river_at_night",
       "draw_calls": 108.0,
-      "focused_fraction": 0.75,
-      "fps": 48.2,
-      "frames_above_20_ms": 10,
-      "frames_above_33_ms": 3,
-      "p95_ms": 18.18,
-      "p99_ms": 55.62,
+      "focused_fraction": 1.0,
+      "fps": 60.0,
+      "frames_above_20_ms": 0,
+      "frames_above_33_ms": 0,
+      "p95_ms": 16.94,
+      "p99_ms": 17.12,
       "render_size": "(1920.0, 1080.0)",
-      "window_size": "(2880, 1476)",
-      "worst_ms": 659.76
+      "window_size": "(5120, 2556)",
+      "worst_ms": 18.84
     }
-  ]
+  ],
+  "town_population": {
+    "animal_civilians": 5,
+    "dog_wardens": 3,
+    "humans": 4
+  }
 }

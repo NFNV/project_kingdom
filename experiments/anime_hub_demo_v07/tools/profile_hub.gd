@@ -20,6 +20,7 @@ func _run() -> void:
 	DisplayServer.window_move_to_foreground()
 	game.auto_clock = false
 	game.player.automated = true
+	var town_population := {"humans":game.humans.size(),"animal_civilians":game.residents.size(),"dog_wardens":game.dogs.size()}
 	game.dialogue_left = 0
 	await create_timer(3.0).timeout
 	await _sample("town_walk_run_patrols_and_fountain",6.0)
@@ -47,10 +48,10 @@ func _run() -> void:
 	root.mode = Window.MODE_MAXIMIZED
 	DisplayServer.window_move_to_foreground()
 	game.clock = 3.0
-	await create_timer(2.0).timeout
+	await create_timer(5.0).timeout
 	await _sample("maximized_river_at_night",6.0)
 	game.player.intent = Vector2.ZERO
-	var report := {"engine":Engine.get_version_info()["string"],"renderer":RenderingServer.get_current_rendering_method(),"adapter":RenderingServer.get_video_adapter_name(),"canvas":"1920x1080 fixed viewport; close actor-follow camera, animated fountain, authored bakery and forest plates", "max_fps":Engine.max_fps,"samples":results,"notes":"Graphical measurements after warmup; foreground focus is requested before each sample and actual focused fractions are recorded. Actual cat movement with a 1.7x following camera, animated civilians and friendly patrolling wardens, eight-direction drawn walk/run cycles, flowing water and splashes, bakery steam/fire, vendor interface, animated wind/leaves/fireflies, clock and background crossfades. All long frames retained. Maximize still renders the same 1080p canvas. Scene loads occur during short travel fades and outside steady-state samples."}
+	var report := {"engine":Engine.get_version_info()["string"],"renderer":RenderingServer.get_current_rendering_method(),"adapter":RenderingServer.get_video_adapter_name(),"canvas":"1920x1080 fixed viewport; close actor-follow camera, animated fountain, authored bakery and forest plates", "max_fps":Engine.max_fps,"town_population":town_population,"samples":results,"notes":"Graphical measurements after warmup; foreground focus is requested before each sample and actual focused fractions are recorded. Actual cat movement with a 1.5x following camera, animated animal civilians, four taller human NPCs with directional idle/breathing, and friendly patrolling wardens, eight-direction drawn walk/run cycles, flowing water and splashes, bakery steam/fire, vendor interface, animated wind/leaves/fireflies, clock and background crossfades. All long frames retained. Maximize still renders the same 1080p canvas. Scene loads occur during short travel fades and outside steady-state samples."}
 	FileAccess.open(ProjectSettings.globalize_path(ROOT+"performance.json"),FileAccess.WRITE).store_string(JSON.stringify(report,"  ")+"\n")
 	quit()
 

@@ -32,6 +32,10 @@ func _run() -> void:
 	root.add_child(game)
 	game.auto_clock = false
 	await create_timer(2).timeout
+	if "--humans" in OS.get_cmdline_user_args():
+		await _capture_humans()
+		quit()
+		return
 	await _place(Vector2(840,905))
 	await _save("town_day")
 	await _place(Vector2(970,810))
@@ -60,3 +64,22 @@ func _run() -> void:
 	await _save("bakery_night")
 	print("Captured close fountain, doorway, furnished bakery, shop and night interior.")
 	quit()
+
+
+func _capture_humans() -> void:
+	# A wider overview shows all four placements; individual conversations use
+	# the playable 1.5x follow camera, unchanged from normal play.
+	game.camera.zoom = Vector2(1.25,1.25)
+	await _place(Vector2(1000,810))
+	await _save("human_npcs_day")
+	game.clock = 3
+	await create_timer(.3).timeout
+	await _save("human_npcs_night")
+	game.clock = 1
+	game.camera.zoom = Vector2(1.5,1.5)
+	for example in [["tomas",Vector2(800,820)],["alden",Vector2(1125,650)],["iris",Vector2(790,990)],["rhea",Vector2(1130,1010)]]:
+		await _place(example[1])
+		game.interact(example[0])
+		await create_timer(.25).timeout
+		await _save("human_"+example[0]+"_conversation")
+	print("Captured four human NPC conversations and shared day/night lighting.")

@@ -3,7 +3,10 @@
 Four adult humans in the town's painted anime style. Each has four transparent
 directional idle views: front right (SE), front left (SW), back right (NE), and
 back left (NW). These are turnaround/idle assets; walking, running, and gestures
-are future animation work. The playable demo's residents are unchanged.
+are future animation work. The [playable demo](../anime_hub_demo_v07/README.md)
+now includes all four as friendly NPCs: Rhea, Captain Alden, Iris, and Tomas.
+Their controller adds turning, subtle idle breathing and a conversation nod while
+preserving the foot anchor; the existing animal residents remain in the square.
 
 | Character | Role | World height | Height versus animals |
 |---|---|---:|---:|

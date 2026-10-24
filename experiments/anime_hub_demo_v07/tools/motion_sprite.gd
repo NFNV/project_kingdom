@@ -52,7 +52,7 @@ func tick(delta: float, travelled: float, vector: Vector2, running := false) -> 
 	if travelled>.025:
 		var heading := direction_for(vector)
 		var gait := "run" if running and eight_directions else "walk"
-		var cycle_length := 164.0 if gait=="run" else (118.0 if actor_id=="cat" else 100.0)
+		var cycle_length := (164.0 if gait=="run" else (118.0 if actor_id=="cat" else 100.0))*display_height/108.0
 		if state=="idle" or state=="gesture":
 			phase = 0.0
 		phase = fposmod(phase+travelled/cycle_length,1.0)

@@ -1,6 +1,6 @@
 {
-  "checks": 209,
+  "checks": 255,
   "failures": [],
-  "passed": 209,
-  "scope": "Actual downward walk/run exercises every south pose on the repaired sheet without mirroring. Rendered body-landmark stability and consistent head size across every player pose, eased stance transitions, caller sprite placement and vendor facing through idle/greetings. Eight-direction walk/run/idle, drawn civilian gestures, actual friendly patrols, conversation tracking, pause and blocked-motion animation regression. Movement/collision, delivery quest, peaceful warden regression, twenty-minute clock, camera tracking/projection/limits, spilling fountain, furnished bakery entry/return, counter collision, vendor purchases and modal input, physical southeast exit, both forest areas, bridge, complete return journey and persistent progress."
+  "passed": 255,
+  "scope": "Four taller human NPCs: physical approach, E conversations, greetings, collision, actual four-direction facing, fixed feet during breathing, pause, shared night tint, peaceful quest/economy preservation and recreation after zone visits. Navigation recovers from disconnected padded grid pockets beside solid NPCs and props. Actual downward walk/run exercises every south pose on the repaired sheet without mirroring. Rendered body-landmark stability and consistent head size across every player pose, eased stance transitions, caller sprite placement and vendor facing through idle/greetings. Eight-direction walk/run/idle, drawn civilian gestures, actual friendly patrols, conversation tracking, pause and blocked-motion animation regression. Movement/collision, delivery quest, peaceful warden regression, twenty-minute clock, camera tracking/projection/limits, spilling fountain, furnished bakery entry/return, counter collision, vendor purchases and modal input, physical southeast exit, both forest areas, bridge, complete return journey and persistent progress."
 }

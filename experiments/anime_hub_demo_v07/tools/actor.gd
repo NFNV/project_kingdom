@@ -2,6 +2,7 @@ extends CharacterBody2D
 
 const ART := "res://experiments/anime_hub_assets_v06/"
 const GROUND_Y := 0.65
+const ANIMAL_SCALE := 0.675
 const Motion := preload("res://experiments/anime_hub_demo_v07/tools/motion_sprite.gd")
 var hub: Node2D
 var controlled := false
@@ -40,7 +41,7 @@ func _ready() -> void:
 	add_child(shape)
 	sprite = Motion.new()
 	add_child(sprite)
-	sprite.configure("cat" if controlled else "warden",108.0,float(get_instance_id()%37)*.13)
+	sprite.configure("cat" if controlled else "warden",108.0*ANIMAL_SCALE,float(get_instance_id()%37)*.13)
 	physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_ON
 	queue_redraw()
 
@@ -216,7 +217,7 @@ func _draw() -> void:
 		return
 	# Small contact shadow stays at the feet and shares the actor's ground sort.
 	draw_set_transform(Vector2(0,-2),0,Vector2(1,0.34))
-	draw_circle(Vector2.ZERO,24,Color(0.09,0.13,0.13,0.2))
+	draw_circle(Vector2.ZERO,24*ANIMAL_SCALE,Color(0.09,0.13,0.13,0.2))
 	if windup>0:
 		draw_arc(Vector2.ZERO,46,0,TAU,36,Color(1,0.4,0.2,0.7),3,true)
 	draw_set_transform(Vector2.ZERO)
