@@ -33,6 +33,9 @@ var discoveries: Dictionary = {}
 var transitioning := false
 var travel_cooldown := 0.0
 var peaceful_mode := true
+var forest_defeated: Dictionary = {}
+var forest_recoveries := 0
+var world_size := SIZE
 var trail_effects: Node2D
 var catalog: Dictionary
 var world: Node2D
@@ -117,6 +120,9 @@ func _ready() -> void:
 		camera.force_update_scroll()
 	elif "--trail" in OS.get_cmdline_user_args():
 		_load_zone("trail","town")
+	elif "--wilds" in OS.get_cmdline_user_args():
+		_load_zone("wilds","river")
+		_say("Briarwood Wilds", "Dog bandits hold the forest clearings. Space or left click to strike; Q fires Wind Slash. Step away from red warning circles. The west trail leads back to safety.")
 	elif "--river" in OS.get_cmdline_user_args():
 		_load_zone("river","trail")
 	if "--capture" in OS.get_cmdline_user_args():
@@ -124,7 +130,7 @@ func _ready() -> void:
 
 
 func _install_input() -> void:
-	var bindings := {"left":[KEY_A,KEY_LEFT],"right":[KEY_D,KEY_RIGHT],"up":[KEY_W,KEY_UP],"down":[KEY_S,KEY_DOWN],"run":[KEY_SHIFT],"attack":[KEY_SPACE],"interact":[KEY_E],"time":[KEY_T],"pause":[KEY_ESCAPE],"restart":[KEY_R],"fullscreen":[KEY_F11],"journal":[KEY_J],"debug":[KEY_F3]}
+	var bindings := {"left":[KEY_A,KEY_LEFT],"right":[KEY_D,KEY_RIGHT],"up":[KEY_W,KEY_UP],"down":[KEY_S,KEY_DOWN],"run":[KEY_SHIFT],"attack":[KEY_SPACE],"skill":[KEY_Q],"interact":[KEY_E],"time":[KEY_T],"pause":[KEY_ESCAPE],"restart":[KEY_R],"fullscreen":[KEY_F11],"journal":[KEY_J],"debug":[KEY_F3]}
 	for action in bindings:
 		var name := "hub_"+str(action)
 		if not InputMap.has_action(name):
@@ -149,6 +155,9 @@ func _load_zone(destination: String, entry: String) -> void:
 	if is_instance_valid(ui):
 		ui.merchant.hide()
 	zone = destination
+	world_size = Map.world_size(zone)
+	peaceful_mode = zone!="wilds"
+	combat_active = false
 	backgrounds.clear()
 	pieces.clear()
 	occluders.clear()
@@ -171,6 +180,9 @@ func _load_zone(destination: String, entry: String) -> void:
 			files.append(ART+"backgrounds/plaza_"+time.to_lower()+".png")
 	elif zone=="bakery":
 		FLOOR = Bakery.floor_polygon()
+	elif zone=="wilds":
+		FLOOR = Map.floor_for(zone)
+		files = [ROOT+"assets/forest/briarwood_ground.png"]
 	else:
 		FLOOR = Map.floor_for(zone)
 		var id := "mosswood" if zone=="trail" else "riverbend"
@@ -179,8 +191,12 @@ func _load_zone(destination: String, entry: String) -> void:
 		var plate := Sprite2D.new()
 		plate.texture = load(file)
 		plate.centered = false
-		plate.scale = Vector2(SIZE)/plate.texture.get_size()
+		plate.scale = Vector2(world_size)/plate.texture.get_size()
 		plate.z_index = -10+backgrounds.size()
+		if zone=="wilds":
+			var ground_material := ShaderMaterial.new()
+			ground_material.shader = load(ROOT+"assets/forest/forest_floor.gdshader")
+			plate.material = ground_material
 		zone_root.add_child(plate)
 		backgrounds.append(plate)
 	world = Node2D.new()
@@ -190,6 +206,8 @@ func _load_zone(destination: String, entry: String) -> void:
 		_build_plaza()
 	elif zone=="bakery":
 		_build_bakery()
+	elif zone=="wilds":
+		Map.Wilds.build(self)
 	else:
 		_build_forest()
 	exits = Map.exits_for(zone)
@@ -199,9 +217,23 @@ func _load_zone(destination: String, entry: String) -> void:
 	else:
 		world.add_child(player)
 		player.position = Map.arrival(zone,entry)
+	player.active = true
+	player.health = player.maximum_health
+	player.collision_layer = 2
+	player.grace = 1.5 if zone=="wilds" else 0.0
+	player.cooldown = 0
+	player.swing = 0
+	player.attack_kind = "light"
+	player.attack_duration = .46
+	player.skill_buffer = 0
+	player.skill_launched = false
+	player.windup = 0
+	player.knockback = Vector2.ZERO
+	player.sprite.modulate.a = 1
 	player.intent = Vector2.ZERO
 	player.velocity = Vector2.ZERO
 	player.route.clear()
+	player.stop_motion()
 	player.reset_physics_interpolation()
 	if not is_instance_valid(camera):
 		camera = Camera2D.new()
@@ -215,6 +247,8 @@ func _load_zone(destination: String, entry: String) -> void:
 		camera.limit_right = SIZE.x
 		camera.limit_bottom = SIZE.y
 		player.add_child(camera)
+	camera.limit_right = world_size.x
+	camera.limit_bottom = world_size.y
 	camera.make_current()
 	camera.reset_physics_interpolation()
 	camera.reset_smoothing()
@@ -255,7 +289,11 @@ func _draw_exit_marks(node: Node2D) -> void:
 		node.draw_arc(Vector2.ZERO,31,0,TAU,32,Color(.13,.25,.17,.7),6,true)
 		node.draw_arc(Vector2.ZERO,31,0,TAU,32,Color(1,.86,.5,.95),2,true)
 		node.draw_set_transform(Vector2.ZERO)
-		var arrow := Vector2(1,.65).normalized() if id in ["southeast","river"] else Vector2(-1,-.2).normalized()
+		var arrow := Vector2(1,.65).normalized() if id in ["southeast","river","wilds"] else Vector2(-1,-.2).normalized()
+		if zone=="wilds":
+			arrow = Vector2(-1,0)
+		elif id=="wilds":
+			arrow = Vector2(1,-.65).normalized()
 		node.draw_line(at-arrow*14,at+arrow*16,Color("ffedb6"),3,true)
 		node.draw_line(at+arrow*16,at+arrow.rotated(2.6)*13,Color("ffedb6"),3,true)
 		node.draw_line(at+arrow*16,at+arrow.rotated(-2.6)*13,Color("ffedb6"),3,true)
@@ -273,8 +311,8 @@ func _draw_forest_air() -> void:
 	if not is_instance_valid(trail_effects):
 		return
 	var night := clampf(1.0-actor_tint.g,0,1)
-	for i in 18:
-		var at := Vector2(fposmod(i*173.7+elapsed*(7+i%3),1840)+40,300+fposmod(i*67.3,620)+sin(elapsed*.7+i)*13)
+	for i in (75 if zone=="wilds" else 18):
+		var at := Vector2(fposmod(i*173.7+elapsed*(7+i%3),world_size.x-80)+40,120+fposmod(i*167.3,world_size.y-240)+sin(elapsed*.7+i)*13)
 		if night>.25:
 			var alpha := (.35+.3*sin(elapsed*1.6+i))*night
 			trail_effects.draw_circle(at,5,Color(.9,1,.4,alpha*.14))
@@ -300,6 +338,8 @@ func _travel(destination: String, entry: String) -> void:
 	_load_zone(destination,entry)
 	dialogue_left = 0
 	talk_panel.hide()
+	if destination=="wilds":
+		_say("Briarwood Wilds", "Dog bandits guard four woodland clearings. Space or left click to attack; Q fires Wind Slash. Dodge the red warning circles. Follow the western trail to retreat.")
 	await get_tree().physics_frame
 	tween = create_tween()
 	tween.tween_property(ui.fade,"modulate:a",0.0,.28)
@@ -520,13 +560,17 @@ func is_walkable(point: Vector2, padding := 20.0) -> bool:
 
 
 func _build_navigation() -> void:
-	navigation.region = Rect2i(0,0,60,34)
+	var grid_size := Vector2i(ceili(world_size.x/32.0),ceili(world_size.y/32.0))
+	navigation.region = Rect2i(Vector2i.ZERO,grid_size)
 	navigation.cell_size = Vector2(32,32)
 	navigation.offset = Vector2(16,16)
 	navigation.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_ONLY_IF_NO_OBSTACLES
 	navigation.update()
-	for x in 60:
-		for y in 34:
+	if zone=="wilds":
+		Map.Wilds.build_navigation(self)
+		return
+	for x in grid_size.x:
+		for y in grid_size.y:
 			var cell := Vector2i(x,y)
 			navigation.set_point_solid(cell,not is_walkable(navigation.get_point_position(cell)))
 
@@ -535,8 +579,8 @@ func _nav_cell(point: Vector2) -> Vector2i:
 	var center := Vector2i((point-Vector2(16,16))/32)
 	var best := Vector2i(-1,-1)
 	var best_distance := INF
-	for x in range(maxi(0,center.x-5),mini(60,center.x+6)):
-		for y in range(maxi(0,center.y-5),mini(34,center.y+6)):
+	for x in range(maxi(0,center.x-5),mini(navigation.region.size.x,center.x+6)):
+		for y in range(maxi(0,center.y-5),mini(navigation.region.size.y,center.y+6)):
 			var cell := Vector2i(x,y)
 			if not navigation.is_point_solid(cell):
 				var distance := navigation.get_point_position(cell).distance_squared_to(point)
@@ -573,8 +617,8 @@ func find_path(from: Vector2, to: Vector2) -> PackedVector2Array:
 func _nearby_nav_cells(point: Vector2) -> Array[Vector2i]:
 	var center := Vector2i((point-Vector2(16,16))/32)
 	var cells: Array[Vector2i] = []
-	for x in range(maxi(0,center.x-3),mini(60,center.x+4)):
-		for y in range(maxi(0,center.y-3),mini(34,center.y+4)):
+	for x in range(maxi(0,center.x-3),mini(navigation.region.size.x,center.x+4)):
+		for y in range(maxi(0,center.y-3),mini(navigation.region.size.y,center.y+4)):
 			var cell := Vector2i(x,y)
 			if not navigation.is_point_solid(cell):
 				cells.append(cell)
@@ -598,7 +642,7 @@ func clear_line(from: Vector2, to: Vector2, exclude: Array[RID] = []) -> bool:
 
 
 func _physics_process(_delta: float) -> void:
-	if paused or shopping or transitioning or not is_instance_valid(player):
+	if paused or shopping or transitioning or not is_instance_valid(player) or not player.active:
 		return
 	near_exit = ""
 	if travel_cooldown<=0:
@@ -682,6 +726,8 @@ func interact(id := "") -> void:
 
 
 func start_challenge() -> void:
+	if not peaceful_mode:
+		return
 	# Kept as a compatibility guard: conversations can never start combat.
 	combat_active = false
 	for dog in dogs:
@@ -690,8 +736,37 @@ func start_challenge() -> void:
 		dog.swing = 0
 
 
-func actor_yielded(_actor_node) -> void:
-	pass
+func actor_yielded(actor_node) -> void:
+	if zone!="wilds":
+		return
+	if actor_node==player:
+		transitioning = true
+		_recover_in_forest.call_deferred()
+		return
+	if forest_defeated.has(actor_node.resident_id):
+		return
+	forest_defeated[actor_node.resident_id] = true
+	coins += 2
+	var fade: Tween = actor_node.create_tween()
+	fade.tween_property(actor_node.sprite,"modulate:a",0.0,.35)
+	combat_active = dogs.any(func(dog): return dog.active)
+	if not combat_active:
+		_say("The forest is quiet", "All twelve bandits have fled. The clearings are safe to explore. Your coin rewards and progress will remain when you return.")
+	_update_hud()
+
+
+func _recover_in_forest() -> void:
+	var fade := create_tween()
+	fade.tween_property(ui.fade,"modulate:a",1.0,.3)
+	await fade.finished
+	forest_recoveries += 1
+	_load_zone("wilds","river")
+	await get_tree().physics_frame
+	_say("A moment to catch your breath", "You return to the sheltered western trail with full health. Defeated bandits stay defeated, and your coins are safe. Try drawing one pack away from the others.")
+	fade = create_tween()
+	fade.tween_property(ui.fade,"modulate:a",0.0,.3)
+	await fade.finished
+	transitioning = false
 
 
 func advance_time() -> void:
@@ -739,6 +814,8 @@ func _update_lighting() -> void:
 		actor_tint = Color("fff1db").lerp(Color("c7b99e"),clampf(1.0-actor_tint.g,0,1)*.6)
 		if is_instance_valid(bakery_room):
 			bakery_room.queue_redraw()
+	elif zone=="wilds":
+		backgrounds[0].modulate = Color.WHITE.lerp(actor_tint,.85)
 	else:
 		var night_weights := [0.16,0.0,0.24,1.0]
 		backgrounds[0].modulate = Color.WHITE.lerp(actor_tint,0.20)
@@ -784,7 +861,7 @@ func _update_hud() -> void:
 
 
 func _update_prompt() -> void:
-	prompt.visible = (not nearest.is_empty() or not near_exit.is_empty()) and not combat_active and not shopping and not transitioning
+	prompt.visible = (not nearest.is_empty() or not near_exit.is_empty()) and (not combat_active or near_exit!="") and not shopping and not transitioning
 	if prompt.visible:
 		var offset_y := -165.0 if dialogue_left>0 else 25.0
 		prompt.position = (get_canvas_transform()*player.global_position+Vector2(-140,offset_y)).clamp(Vector2(15,170),Vector2(1620,940))
@@ -803,6 +880,13 @@ func set_paused(value: bool) -> void:
 	for actor in [player]+dogs:
 		if is_instance_valid(actor):
 			actor.sprite.speed_scale = 0.0
+
+
+func _input(event: InputEvent) -> void:
+	# Skill input must not disappear into a GUI control or an in-progress slash.
+	if event.is_action_pressed("hub_skill") and not event.is_echo():
+		if player.try_skill():
+			get_viewport().set_input_as_handled()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -828,7 +912,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("hub_debug"):
 		ui.debug_visible = not ui.debug_visible
 	elif not paused and not transitioning:
-		if event.is_action_pressed("hub_interact"):
+		if event.is_action_pressed("hub_skill"):
+			player.try_skill()
+		elif event.is_action_pressed("hub_interact"):
 			interact()
 		elif event.is_action_pressed("hub_time"):
 			advance_time()

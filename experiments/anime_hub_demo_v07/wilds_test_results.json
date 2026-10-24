@@ -1,0 +1,6 @@
+{
+  "checks": 45,
+  "failures": [],
+  "passed": 45,
+  "scope": "Physical bridge entry, large-map navigation and camera, all four clearings, local hostile packs, telegraphed attacks and movement dodge, actual Space melee damage, unique coin rewards, pause, checkpoint recovery, physical retreat and reentry, persistent clears and friendly town regression."
+}

@@ -1,0 +1,211 @@
+{
+  "asset": "cat_sword_attack.png",
+  "sha256": "fb25325edb3af02e60fdf44125b386b5d75c200ed7b2eae882985da70fc2e535",
+  "size": [
+    1122,
+    1402
+  ],
+  "directions": {
+    "se": [
+      {
+        "region": [
+          36,
+          23,
+          215,
+          307
+        ],
+        "foot_x": 182.0,
+        "foot_y": 330,
+        "head_width": 135,
+        "display_scale": 0.233333
+      },
+      {
+        "region": [
+          313,
+          61,
+          292,
+          270
+        ],
+        "foot_x": 454.5,
+        "foot_y": 331,
+        "head_width": 136,
+        "display_scale": 0.231618
+      },
+      {
+        "region": [
+          580,
+          61,
+          300,
+          268
+        ],
+        "foot_x": 726.0,
+        "foot_y": 329,
+        "head_width": 139,
+        "display_scale": 0.226619
+      },
+      {
+        "region": [
+          860,
+          60,
+          251,
+          267
+        ],
+        "foot_x": 986.5,
+        "foot_y": 327,
+        "head_width": 134,
+        "display_scale": 0.235075
+      }
+    ],
+    "sw": [
+      {
+        "region": [
+          42,
+          369,
+          238,
+          273
+        ],
+        "foot_x": 162.0,
+        "foot_y": 642,
+        "head_width": 135,
+        "display_scale": 0.233333
+      },
+      {
+        "region": [
+          271,
+          375,
+          303,
+          274
+        ],
+        "foot_x": 425.0,
+        "foot_y": 649,
+        "head_width": 137,
+        "display_scale": 0.229927
+      },
+      {
+        "region": [
+          566,
+          373,
+          300,
+          275
+        ],
+        "foot_x": 713.5,
+        "foot_y": 648,
+        "head_width": 142,
+        "display_scale": 0.221831
+      },
+      {
+        "region": [
+          895,
+          372,
+          222,
+          269
+        ],
+        "foot_x": 1010.0,
+        "foot_y": 641,
+        "head_width": 133,
+        "display_scale": 0.236842
+      }
+    ],
+    "ne": [
+      {
+        "region": [
+          31,
+          671,
+          233,
+          306
+        ],
+        "foot_x": 169.5,
+        "foot_y": 977,
+        "head_width": 128,
+        "display_scale": 0.246094
+      },
+      {
+        "region": [
+          305,
+          698,
+          300,
+          279
+        ],
+        "foot_x": 443.5,
+        "foot_y": 977,
+        "head_width": 126,
+        "display_scale": 0.25
+      },
+      {
+        "region": [
+          587,
+          695,
+          301,
+          277
+        ],
+        "foot_x": 735.0,
+        "foot_y": 972,
+        "head_width": 133,
+        "display_scale": 0.236842
+      },
+      {
+        "region": [
+          869,
+          694,
+          240,
+          277
+        ],
+        "foot_x": 988.0,
+        "foot_y": 971,
+        "head_width": 131,
+        "display_scale": 0.240458
+      }
+    ],
+    "nw": [
+      {
+        "region": [
+          33,
+          1015,
+          247,
+          293
+        ],
+        "foot_x": 133.0,
+        "foot_y": 1308,
+        "head_width": 129,
+        "display_scale": 0.244186
+      },
+      {
+        "region": [
+          299,
+          1024,
+          285,
+          279
+        ],
+        "foot_x": 459.0,
+        "foot_y": 1303,
+        "head_width": 129,
+        "display_scale": 0.244186
+      },
+      {
+        "region": [
+          598,
+          1027,
+          257,
+          272
+        ],
+        "foot_x": 740.0,
+        "foot_y": 1299,
+        "head_width": 135,
+        "display_scale": 0.233333
+      },
+      {
+        "region": [
+          873,
+          1020,
+          244,
+          286
+        ],
+        "foot_x": 1001.0,
+        "foot_y": 1306,
+        "head_width": 133,
+        "display_scale": 0.236842
+      }
+    ]
+  },
+  "notes": "Read-only connected-component analysis, not an assumed equal grid. Native alpha polygons isolate each complete figure so overlapping bounding boxes cannot introduce neighboring sword tips or clipped ears. Original generated PNG is unchanged."
+}

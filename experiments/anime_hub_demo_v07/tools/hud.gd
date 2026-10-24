@@ -25,6 +25,16 @@ var shop_balance: Label
 var shop_feedback: Label
 var shop_satchel: Label
 var shop_buttons: Array[Button] = []
+var controls_label: Label
+var combat_panel: Panel
+var health_label: Label
+var health_bar: ProgressBar
+var forest_panel: Panel
+var forest_map: Control
+var skill_panel: Panel
+var skill_label: Label
+var skill_bar: ProgressBar
+var skill_button: Button
 
 
 func _ready() -> void:
@@ -43,7 +53,7 @@ func _ready() -> void:
 	objective = label("",Vector2(20,41),20,journal_panel,350,Color("2e4239"),true)
 	status_label = label("",Vector2(20,128),13,journal_panel,354,Color("7e7054"))
 	var controls := panel(Vector2(28,1012),Vector2(746,44),null,true)
-	label("WASD  walk     SHIFT  run     E  talk / use     Right click  walk to point",Vector2(16,11),15,controls,0,Color("f0e4c8"))
+	controls_label = label("WASD  walk     SHIFT  run     E  talk / use     Right click  walk to point",Vector2(16,11),15,controls,0,Color("f0e4c8"))
 	var actions := panel(Vector2(1515,1012),Vector2(377,44),null,true)
 	label("J  journal     T  time     Esc  pause     F11  full screen",Vector2(14,12),13,actions,0,Color("f0e4c8"))
 	route_label = label("",Vector2(1140,972),17,self,720,Color("fff2ca"),true)
@@ -62,6 +72,64 @@ func _ready() -> void:
 	debug_label.add_theme_color_override("font_shadow_color",Color("20382d"))
 	debug_label.add_theme_constant_override("shadow_offset_y",2)
 	debug_label.hide()
+	combat_panel = panel(Vector2(28,195),Vector2(300,99),null,true)
+	health_label = label("",Vector2(17,12),19,combat_panel,0,Color("fff0cc"),true)
+	health_bar = ProgressBar.new()
+	health_bar.position = Vector2(18,44)
+	health_bar.size = Vector2(263,15)
+	health_bar.show_percentage = false
+	var bar_back := StyleBoxFlat.new()
+	bar_back.bg_color = Color("132c25")
+	bar_back.set_corner_radius_all(5)
+	health_bar.add_theme_stylebox_override("background",bar_back)
+	var bar_fill := StyleBoxFlat.new()
+	bar_fill.bg_color = Color("b8d88e")
+	bar_fill.set_corner_radius_all(5)
+	health_bar.add_theme_stylebox_override("fill",bar_fill)
+	combat_panel.add_child(health_bar)
+	label("Move away from red attack warnings",Vector2(18,68),13,combat_panel,0,Color("d9c49b"))
+	combat_panel.hide()
+	skill_panel = panel(Vector2(28,310),Vector2(300,97),null,true)
+	skill_button = Button.new()
+	skill_button.position = Vector2(12,7)
+	skill_button.size = Vector2(276,30)
+	skill_button.text = "Q  ·  WIND SLASH"
+	skill_button.focus_mode = Control.FOCUS_NONE
+	skill_button.tooltip_text = "Q or click: launch a piercing wind blade. Three damage, six-second cooldown. Can be queued during a normal attack."
+	skill_button.add_theme_font_size_override("font_size",18)
+	for state in ["normal","hover","pressed","disabled"]:
+		var button_style := StyleBoxFlat.new()
+		button_style.bg_color = Color("38687a") if state=="hover" else Color("284c53")
+		button_style.border_color = Color("a4d8db")
+		button_style.set_border_width_all(1)
+		button_style.set_corner_radius_all(5)
+		skill_button.add_theme_stylebox_override(state,button_style)
+	skill_button.add_theme_color_override("font_color",Color("f9ebbb"))
+	skill_button.pressed.connect(func(): hub.player.try_skill())
+	skill_panel.add_child(skill_button)
+	skill_label = label("",Vector2(18,40),14,skill_panel,263,Color("deead7"))
+	skill_bar = ProgressBar.new()
+	skill_bar.position = Vector2(18,73)
+	skill_bar.size = Vector2(263,9)
+	skill_bar.max_value = 6.0
+	skill_bar.show_percentage = false
+	skill_bar.add_theme_font_size_override("font_size",1)
+	skill_bar.add_theme_stylebox_override("background",bar_back)
+	var skill_fill := StyleBoxFlat.new()
+	skill_fill.bg_color = Color("9bcad3")
+	skill_fill.set_corner_radius_all(4)
+	skill_bar.add_theme_stylebox_override("fill",skill_fill)
+	skill_panel.add_child(skill_bar)
+	skill_panel.hide()
+	forest_panel = panel(Vector2(28,423),Vector2(250,182),null,true)
+	label("BRIARWOOD  /  WEST TRAIL HOME",Vector2(15,13),11,forest_panel,0,Color("ddc791"))
+	forest_map = Control.new()
+	forest_map.position = Vector2(15,43)
+	forest_map.size = Vector2(220,124)
+	forest_map.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	forest_panel.add_child(forest_map)
+	forest_map.draw.connect(_draw_forest_map)
+	forest_panel.hide()
 	pause_overlay = Control.new()
 	pause_overlay.size = Vector2(1920,1080)
 	add_child(pause_overlay)
@@ -132,13 +200,28 @@ func label(text: String, at: Vector2, font_size: int, parent: Node, width := 0.0
 
 func refresh() -> void:
 	location_label.text = hub.zone_title()
-	location_subtitle.text = {"town":"Southeast gate  →  Mosswood Trail","trail":"Old elm paths  /  Riverbend to the southeast","river":"Riverbend Glade  /  The way home lies west","bakery":"Warm bread, meadow tea, and a place to rest"}[hub.zone]
+	location_subtitle.text = {"town":"Southeast gate  →  Mosswood Trail","trail":"Old elm paths  /  Riverbend to the southeast","river":"Across the bridge  →  Briarwood Wilds","bakery":"Warm bread, meadow tea, and a place to rest","wilds":"Four clearings  /  West trail to Riverbend"}[hub.zone]
+	combat_panel.visible = hub.zone=="wilds"
+	skill_panel.visible = hub.zone!="bakery"
+	skill_panel.position.y = 310 if hub.zone=="wilds" else 195
+	skill_button.disabled = hub.peaceful_mode or hub.player.skill_cooldown>0 or not hub.player.active
+	skill_bar.value = hub.player.SKILL_COOLDOWN-hub.player.skill_cooldown
+	skill_label.text = "Use this skill in Briarwood Wilds" if hub.peaceful_mode else ("Queued — releases after this swing" if hub.player.skill_buffer>0 else ("Ready — Q or click  /  piercing blade" if hub.player.skill_cooldown<=0 else "Recharging  %.1f s" % hub.player.skill_cooldown))
+	forest_panel.visible = hub.zone=="wilds"
+	controls_label.text = "WASD move   Shift run   Space / Click sword   Q wind slash   Right click walk" if hub.zone=="wilds" else "WASD  walk     SHIFT  run     E  talk / use     Right click  walk to point"
 	if hub.zone=="town":
 		objective.text = hub.OBJECTIVES[hub.quest_stage]
 		status_label.text = "%d / 5 deliveries  ·  The wardens are friendly" % mini(hub.quest_stage,5)
 	elif hub.zone=="bakery":
 		objective.text = "Meet Clover at the counter. E to browse today's baking."
 		status_label.text = "%d coins  ·  Front door leads back to the square" % hub.coins
+	elif hub.zone=="wilds":
+		objective.text = "Drive the dog bandits from the four forest clearings." if hub.combat_active else "Briarwood is quiet. Explore or take the western trail home."
+		status_label.text = "%d / 12 bandits defeated  ·  %d coins" % [hub.forest_defeated.size(),hub.coins]
+		health_label.text = "Adventurer    %d / %d" % [hub.player.health,hub.player.maximum_health]
+		health_bar.max_value = hub.player.maximum_health
+		health_bar.value = hub.player.health
+		forest_map.queue_redraw()
 	else:
 		objective.text = "Follow the woodland paths. Find a quiet place to take in the view."
 		if hub.discoveries.size()==3:
@@ -150,6 +233,37 @@ func refresh() -> void:
 	if hub.near_exit!="":
 		suffix = "E  ·  "+hub.exits[hub.near_exit]["label"]
 	route_label.text = suffix
+	if hub.zone=="wilds" and suffix.is_empty() and hub.combat_active:
+		var closest := INF
+		var offset := Vector2.ZERO
+		for dog in hub.dogs:
+			if dog.active and dog.position.distance_to(hub.player.position)<closest:
+				closest = dog.position.distance_to(hub.player.position)
+				offset = dog.position-hub.player.position
+		var direction := ("north" if offset.y<0 else "south")+("east" if offset.x>0 else "west")
+		route_label.text = "Nearest bandits: %s  /  %d m" % [direction,ceili(closest/32.0)]
+
+
+func _draw_forest_map() -> void:
+	if hub.zone!="wilds":
+		return
+	var ratio := forest_map.size/Vector2(hub.world_size)
+	forest_map.draw_rect(Rect2(Vector2.ZERO,forest_map.size),Color("355442"))
+	var path := PackedVector2Array()
+	for point in hub.Map.Wilds.ROUTE:
+		path.append(point*ratio)
+	forest_map.draw_polyline(path,Color("b6a47a"),3,true)
+	for index in hub.Map.Wilds.CAMPS.size():
+		var cleared := true
+		for member in 3:
+			cleared = cleared and hub.forest_defeated.has("wild_dog_%d_%d" % [index,member])
+		var at: Vector2 = hub.Map.Wilds.CAMPS[index]*ratio
+		forest_map.draw_circle(at,5,Color("a3cb83") if cleared else Color("e38a65"))
+		forest_map.draw_arc(at,6,0,TAU,16,Color("ffe3ad"),1,true)
+	forest_map.draw_circle(Vector2(250,1900)*ratio,4,Color("ffebba"))
+	var player_at: Vector2 = hub.player.position*ratio
+	forest_map.draw_circle(player_at,5,Color("173c4e"))
+	forest_map.draw_circle(player_at,3,Color("bceaff"))
 
 
 func _build_merchant() -> void:

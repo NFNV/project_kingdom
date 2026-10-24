@@ -1,0 +1,46 @@
+{
+  "adapter": "Apple M1 (Apple7)",
+  "camera_zoom": 1.5,
+  "engine": "4.7.2-stable (official)",
+  "hostile_dogs": 12,
+  "internal_canvas": "(1920.0, 1080.0)",
+  "notes": "Native graphical renderer, six seconds per case after warmup; actual movement, active dog pursuit/attack telegraphs, shared wind shaders, layered tree occlusion, native HUD/minimap, 1080p internal canvas and 60 FPS cap. Temporary player invulnerability keeps the same encounter alive during each performance sample; normal demo health and combat remain unchanged.",
+  "renderer": "forward_plus",
+  "samples": [
+    {
+      "case": "western_forest_walk",
+      "draw_calls": 213.0,
+      "focused_fraction": 1.0,
+      "fps": 60.3,
+      "frames_above_20_ms": 0,
+      "frames_above_33_ms": 0,
+      "p95_ms": 16.94,
+      "p99_ms": 17.97,
+      "worst_ms": 18.65
+    },
+    {
+      "case": "active_three_dog_pack",
+      "draw_calls": 228.0,
+      "focused_fraction": 1.0,
+      "fps": 60.3,
+      "frames_above_20_ms": 0,
+      "frames_above_33_ms": 0,
+      "p95_ms": 17.0,
+      "p99_ms": 18.66,
+      "worst_ms": 18.71
+    },
+    {
+      "case": "deep_forest_night_pack",
+      "draw_calls": 311.0,
+      "focused_fraction": 1.0,
+      "fps": 60.3,
+      "frames_above_20_ms": 0,
+      "frames_above_33_ms": 0,
+      "p95_ms": 16.86,
+      "p99_ms": 17.11,
+      "worst_ms": 18.41
+    }
+  ],
+  "trees": 272,
+  "world_size": "(4608, 2592)"
+}

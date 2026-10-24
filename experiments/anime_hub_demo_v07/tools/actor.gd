@@ -4,6 +4,10 @@ const ART := "res://experiments/anime_hub_assets_v06/"
 const GROUND_Y := 0.65
 const ANIMAL_SCALE := 0.675
 const Motion := preload("res://experiments/anime_hub_demo_v07/tools/motion_sprite.gd")
+const Sword := preload("res://experiments/anime_hub_demo_v07/tools/cat_sword.gd")
+const SKILL_COOLDOWN := 6.0
+const WindSlash := preload("res://experiments/anime_hub_demo_v07/tools/wind_slash.gd")
+const CombatArt := preload("res://experiments/anime_hub_demo_v07/tools/cat_combat.gd")
 var hub: Node2D
 var controlled := false
 var enemy := false
@@ -29,6 +33,16 @@ var patrol := PackedVector2Array()
 var patrol_index := 1
 var patrol_wait := 2.0
 var moved_distance := 0.0
+var home := Vector2.ZERO
+var alerted := false
+var weapon: Node2D
+var skill_cooldown := 0.0
+var attack_kind := "light"
+var attack_duration := .46
+var combat_art: Polygon2D
+var skill_buffer := 0.0
+var skill_launched := false
+var skill_casts := 0
 
 
 func _ready() -> void:
@@ -42,6 +56,14 @@ func _ready() -> void:
 	sprite = Motion.new()
 	add_child(sprite)
 	sprite.configure("cat" if controlled else "warden",108.0*ANIMAL_SCALE,float(get_instance_id()%37)*.13)
+	if controlled:
+		weapon = Sword.new()
+		weapon.actor = self
+		add_child(weapon)
+		weapon.sync_pose()
+		combat_art = CombatArt.new()
+		add_child(combat_art)
+		combat_art.hide()
 	physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_ON
 	queue_redraw()
 
@@ -56,9 +78,17 @@ func _physics_process(delta: float) -> void:
 	if hub.shopping:
 		velocity = Vector2.ZERO
 		sprite.tick(delta,0.0,facing)
+		if is_instance_valid(weapon):
+			weapon.sync_pose()
 		return
 	grace = maxf(0,grace-delta)
 	cooldown = maxf(0,cooldown-delta)
+	skill_cooldown = maxf(0,skill_cooldown-delta)
+	if skill_buffer>0:
+		skill_buffer = maxf(0,skill_buffer-delta)
+		if cooldown<=0 and swing<=0:
+			skill_buffer = 0
+			try_skill()
 	flash = maxf(0,flash-delta*4)
 	knockback = knockback.move_toward(Vector2.ZERO,1000*delta)
 	if controlled:
@@ -68,7 +98,7 @@ func _physics_process(delta: float) -> void:
 				route.clear()
 			elif not route.is_empty():
 				intent = follow_route()
-			if Input.is_action_pressed("hub_attack"):
+			if Input.is_action_pressed("hub_attack") and skill_buffer<=0:
 				try_attack()
 	else:
 		intent = _enemy_intent(delta)
@@ -78,7 +108,7 @@ func _physics_process(delta: float) -> void:
 	if controlled and Input.is_action_pressed("hub_run"):
 		speed = 325.0
 	if swing>0 or windup>0:
-		speed *= 0.2
+		speed *= 0.0 if controlled else 0.2
 	if not controlled and hub.peaceful_mode:
 		speed = 74.0
 	var before := position
@@ -91,13 +121,21 @@ func _physics_process(delta: float) -> void:
 			try_attack()
 	if swing>0:
 		swing = maxf(0,swing-delta)
-		if swing<0.22:
+		var attack_elapsed := attack_duration-swing
+		if attack_kind=="wind" and attack_elapsed>=.22 and not skill_launched:
+			_launch_wind_slash()
+		elif attack_kind=="light" and attack_elapsed>=(.14 if controlled else .10):
 			resolve_hits()
 	_update_animation(delta,moved_distance)
 	var tint: Color = hub.actor_tint
+	if enemy:
+		tint *= Color(1.0,.82,.72)
 	sprite.modulate = tint.lerp(Color(1.0,0.4,0.3),flash)
 	if grace>0 and controlled:
 		sprite.modulate.a = 0.55 if int(grace*14)%2==0 else 1.0
+	if is_instance_valid(weapon):
+		weapon.sync_pose()
+		_update_combat_art()
 	queue_redraw()
 
 
@@ -116,7 +154,23 @@ func _enemy_intent(delta: float) -> Vector2:
 	if not enemy or not hub.combat_active or not hub.player.active:
 		return Vector2.ZERO
 	var offset: Vector2 = hub.player.position-position
-	if ground_vector(offset).length()<88 and hub.clear_line(position,hub.player.position):
+	var distance := ground_vector(offset).length()
+	var player_from_home := ground_vector(hub.player.position-home).length()
+	if player_from_home>650 or ground_vector(position-home).length()>700:
+		alerted = false
+	if not alerted and distance<350 and player_from_home<600 and hub.clear_line(position,hub.player.position):
+		alerted = true
+	if not alerted:
+		windup = 0
+		path_timer -= delta
+		if ground_vector(position-home).length()<28:
+			route.clear()
+			return Vector2.ZERO
+		if path_timer<=0:
+			path_timer = .7
+			route = hub.find_path(position,home)
+		return follow_route()
+	if distance<78 and hub.clear_line(position,hub.player.position):
 		if cooldown<=0 and windup<=0 and swing<=0:
 			facing = ground_vector(offset).normalized()
 			windup = 0.70
@@ -131,7 +185,7 @@ func _enemy_intent(delta: float) -> Vector2:
 
 
 func try_attack(aim := Vector2.ZERO) -> bool:
-	if hub.peaceful_mode:
+	if hub.peaceful_mode or hub.transitioning or hub.shopping:
 		return false
 	if not active or hub.paused or cooldown>0 or swing>0:
 		return false
@@ -139,10 +193,53 @@ func try_attack(aim := Vector2.ZERO) -> bool:
 		return false
 	if aim.length()>0.1:
 		facing = ground_vector(aim).normalized()
-	swing = 0.32
-	cooldown = 0.48 if controlled else 1.25
+	attack_kind = "light"
+	attack_duration = .46 if controlled else .32
+	swing = attack_duration
+	cooldown = .50 if controlled else 1.25
 	swing_hits.clear()
 	return true
+
+
+func try_skill() -> bool:
+	if not controlled or not active or hub.peaceful_mode or hub.paused or hub.transitioning or hub.shopping:
+		return false
+	if skill_cooldown>0:
+		return false
+	if cooldown>0 or swing>0:
+		skill_buffer = .70
+		return true
+	attack_kind = "wind"
+	attack_duration = .65
+	swing = attack_duration
+	cooldown = .72
+	skill_launched = false
+	skill_buffer = 0
+	skill_cooldown = SKILL_COOLDOWN
+	swing_hits.clear()
+	route.clear()
+	return true
+
+
+func _launch_wind_slash() -> void:
+	skill_launched = true
+	skill_casts += 1
+	var wave := WindSlash.new()
+	wave.hub = hub
+	wave.heading = facing.normalized()
+	wave.position = position+Vector2(facing.x,facing.y*GROUND_Y)*22
+	hub.world.add_child(wave)
+	wave.reset_physics_interpolation()
+
+
+func _update_combat_art() -> void:
+	var attacking := swing>0
+	sprite.visible = not attacking
+	combat_art.visible = attacking and active
+	weapon.visible = not attacking and active
+	if attacking:
+		combat_art.pose(facing,1.0-swing/attack_duration,attack_kind=="wind")
+		combat_art.modulate = sprite.modulate
 
 
 func resolve_hits() -> void:
@@ -153,7 +250,7 @@ func resolve_hits() -> void:
 		if not target.active or target in swing_hits:
 			continue
 		var offset := ground_vector(target.position-position)
-		if offset.length()>112 or (offset.length()>20 and facing.dot(offset.normalized())<0.15):
+		if offset.length()>96.0 or (offset.length()>20 and facing.dot(offset.normalized())<.15):
 			continue
 		if not hub.clear_line(position,target.position):
 			continue
@@ -161,15 +258,17 @@ func resolve_hits() -> void:
 		target.receive_hit(facing)
 
 
-func receive_hit(from: Vector2) -> bool:
-	if hub.peaceful_mode:
+func receive_hit(from: Vector2, damage := 1, force := 170.0) -> bool:
+	if hub.peaceful_mode or hub.transitioning:
 		return false
 	if not active or grace>0:
 		return false
-	health -= 1
+	health = maxi(0,health-damage)
 	grace = 0.75 if controlled else 0.28
 	flash = 1.0
-	knockback = Vector2(from.x,from.y*GROUND_Y)*170
+	knockback = Vector2(from.x,from.y*GROUND_Y)*force
+	if enemy:
+		alerted = true
 	if health<=0:
 		active = false
 		enemy = false
@@ -201,7 +300,7 @@ func _friendly_intent(delta: float) -> Vector2:
 
 func _update_animation(delta: float, distance: float) -> void:
 	var running := controlled and Input.is_action_pressed("hub_run")
-	sprite.tick(delta,distance,facing,running)
+	sprite.tick(delta,0.0 if controlled and swing>0 else distance,facing,running)
 	direction = sprite.facing_direction
 
 
@@ -210,6 +309,9 @@ func stop_motion() -> void:
 	velocity = Vector2.ZERO
 	route.clear()
 	sprite.set_pose("idle",direction,0)
+	if is_instance_valid(weapon):
+		weapon.sync_pose()
+		_update_combat_art()
 
 
 func _draw() -> void:
@@ -219,14 +321,22 @@ func _draw() -> void:
 	draw_set_transform(Vector2(0,-2),0,Vector2(1,0.34))
 	draw_circle(Vector2.ZERO,24*ANIMAL_SCALE,Color(0.09,0.13,0.13,0.2))
 	if windup>0:
-		draw_arc(Vector2.ZERO,46,0,TAU,36,Color(1,0.4,0.2,0.7),3,true)
+		draw_circle(Vector2.ZERO,46,Color(1,.24,.12,.10))
+		draw_arc(Vector2.ZERO,46,-PI/2,-PI/2+TAU*(1.0-windup/.70),36,Color(1,.3,.14,.9),3,true)
 	draw_set_transform(Vector2.ZERO)
 	if enemy and hub.combat_active:
 		for i in maximum_health:
-			draw_circle(Vector2((i-(maximum_health-1)*0.5)*12,-120),4,Color("f7e4a3") if i<health else Color("6c5e54"))
+			draw_circle(Vector2((i-(maximum_health-1)*0.5)*10,-sprite.display_height-12),3,Color("eea07f") if i<health else Color("473e38"))
 	if swing>0:
-		var progress := 1.0-swing/0.32
+		var progress := 1.0-swing/attack_duration
 		var angle := atan2(facing.y*GROUND_Y,facing.x)
-		draw_set_transform(Vector2(0,-45),angle,Vector2(1,0.66))
-		draw_arc(Vector2.ZERO,65,lerpf(-1.3,0.4,progress),lerpf(0.1,1.7,progress),20,Color(1,0.93,0.68,sin(progress*PI)*0.9),5,true)
+		draw_set_transform(Vector2(0,-31),angle,Vector2(1,0.66))
+		if attack_kind=="wind":
+			var charge := clampf(progress/.35,0,1)
+			if progress<.35:
+				draw_arc(Vector2.ZERO,24+charge*12,-1.8,1.8,32,Color(.7,.9,1,charge*.8),2,true)
+			else:
+				draw_arc(Vector2.ZERO,30,-1.8,1.8,24,Color(.6,.95,1,(1.0-progress)*.35),2,true)
+		else:
+			draw_arc(Vector2.ZERO,56,lerpf(-1.3,0.4,progress),lerpf(0.1,1.7,progress),20,Color(1,0.93,0.68,sin(progress*PI)*0.9),4,true)
 		draw_set_transform(Vector2.ZERO)

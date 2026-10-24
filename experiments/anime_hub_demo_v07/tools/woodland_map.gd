@@ -1,6 +1,7 @@
 extends RefCounted
 
-const NAMES := {"town":"Garden Square","trail":"Mosswood Trail","river":"Riverbend Glade","bakery":"The Bluebird Bakery"}
+const Wilds := preload("res://experiments/anime_hub_demo_v07/tools/deep_forest.gd")
+const NAMES := {"town":"Garden Square","trail":"Mosswood Trail","river":"Riverbend Glade","bakery":"The Bluebird Bakery","wilds":"Briarwood Wilds"}
 const SOURCE_SIZE := Vector2(1672,941)
 
 
@@ -15,7 +16,13 @@ static func polygon(coords: Array) -> PackedVector2Array:
 	return result
 
 
+static func world_size(zone: String) -> Vector2i:
+	return Wilds.SIZE if zone=="wilds" else Vector2i(1920,1080)
+
+
 static func floor_for(zone: String) -> PackedVector2Array:
+	if zone=="wilds":
+		return Wilds.floor_polygon()
 	if zone=="trail":
 		# Traced against the actual forest painting, in source-image coordinates.
 		return polygon([[65,425],[270,415],[355,347],[402,275],[560,202],[745,108],[795,124],[690,220],[525,312],[473,407],[580,448],[650,384],[780,362],[1030,351],[1160,389],[1200,432],[1210,343],[1320,228],[1410,195],[1455,226],[1340,330],[1272,425],[1320,505],[1395,605],[1405,680],[1460,740],[1560,835],[1635,938],[1500,938],[1445,850],[1350,780],[1270,740],[1100,780],[850,780],[690,740],[570,690],[450,610],[350,555],[260,515],[65,486]])
@@ -32,10 +39,14 @@ static func exits_for(zone: String) -> Dictionary:
 			"town":{"at":point(150,461),"to":"town","entry":"forest","sign":"Garden Square","label":"West path  →  Garden Square"},
 			"river":{"at":point(1530,872),"to":"river","entry":"trail","sign":"Riverbend","label":"Southeast trail  →  Riverbend Glade"}
 		}
-	return {"trail":{"at":point(145,552),"to":"trail","entry":"river","sign":"Mosswood","label":"West path  →  Mosswood Trail"}}
+	if zone=="wilds":
+		return {"river":{"at":Vector2(250,1900),"to":"river","entry":"wilds","sign":"Riverbend","label":"West trail  →  Riverbend Glade"}}
+	return {"trail":{"at":point(145,552),"to":"trail","entry":"river","sign":"Mosswood","label":"West path  →  Mosswood Trail"},"wilds":{"at":point(1250,95),"to":"wilds","entry":"river","sign":"Briarwood Wilds","label":"Beyond the bridge  →  Briarwood Wilds"}}
 
 
 static func arrival(zone: String, entry: String) -> Vector2:
+	if zone=="wilds":
+		return Wilds.ENTRY
 	if zone=="bakery":
 		return Vector2(960,745)
 	if zone=="town":
@@ -44,7 +55,7 @@ static func arrival(zone: String, entry: String) -> Vector2:
 		return Vector2(1290,936) if entry=="forest" else Vector2(840,905)
 	if zone=="trail":
 		return point(1430,811) if entry=="river" else point(270,469)
-	return point(280,615)
+	return point(1170,125) if entry=="wilds" else point(280,615)
 
 
 static func landmarks(zone: String) -> Dictionary:

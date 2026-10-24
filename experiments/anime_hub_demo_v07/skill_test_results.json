@@ -1,0 +1,6 @@
+{
+  "checks": 44,
+  "failures": [],
+  "passed": 44,
+  "scope": "Drawn four-phase attacks in four real directions, body/equipment visibility and feet, actual Q input buffered while Space stays held, priority over normal swings, clickable skill input, real piercing three-damage projectile at range, direction, walls, lifetime, cooldown UI/recharge, pause in flight, travel cleanup and peaceful/modal guards."
+}

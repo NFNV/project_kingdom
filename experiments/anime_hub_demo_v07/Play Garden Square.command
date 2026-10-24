@@ -17,4 +17,4 @@ if [ -z "$hub_godot_binary" ]; then
     read -r -p "Press Return to close. "
     exit 1
 fi
-exec "$hub_godot_binary" --path "$hub_project_dir" res://experiments/anime_hub_demo_v07/demo.tscn
+exec "$hub_godot_binary" --path "$hub_project_dir" res://experiments/anime_hub_demo_v07/demo.tscn "$@"

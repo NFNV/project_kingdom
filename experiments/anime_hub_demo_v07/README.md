@@ -1,13 +1,14 @@
-# Garden Square & Mosswood — playable exploration demo
+# Garden Square, Mosswood & Briarwood — playable RPG demo
 
 Walk as the cat adventurer through a painted anime town, a woodland trail, and
-a riverside glade, and an enterable bakery. A 1.5× camera follows the cat
+a riverside glade, an enterable bakery, and the large Briarwood combat forest. A 1.5× camera follows the cat
 through every area and stops at the painted scene edges. The three dog wardens are peaceful residents. Talking to Bram
-no longer starts sparring, and attacks/damage are disabled in this version.
+no longer starts sparring. Combat is enabled only in Briarwood Wilds.
 
 ## Play
 
-Double-click [Play Garden Square.command](Play%20Garden%20Square.command), or open
+For the latest combat demo, double-click [Play Briarwood.command](Play%20Briarwood.command).
+For the town start, double-click [Play Garden Square.command](Play%20Garden%20Square.command), or open
 [demo.tscn](demo.tscn) in Godot 4.7 and press **F6**. This updates the same demo
 launcher; the original project's main scene stays unchanged.
 
@@ -20,6 +21,8 @@ launcher; the original project's main scene stays unchanged.
 | WASD / arrows | Walk |
 | Shift | Run |
 | Right click | Walk to a point using obstacle navigation |
+| Space / left click | Sword attack; left click aims the strike |
+| Q | Wind Slash: piercing ranged blade, six-second cooldown |
 | E | Speak, deliver, enter a building, browse the shop, or use an exit |
 | 1 / 2 / 3, or shop buttons | Buy bread / tea / honey while shopping |
 | J | Show / hide the journal |
@@ -43,6 +46,85 @@ and Riverbend footbridge. The town delivery quest remains available:
 Pippa → Elder Mallow → Moss → Pip → red postbox. Delivery progress, forest
 memories, the same cat character, and the clock persist across area transitions.
 There is no disk save; restarting begins a fresh session.
+
+## Briarwood Wilds — the combat forest
+
+From Garden Square, take the **southeast gate → Mosswood Trail → Riverbend
+Glade**. Cross Riverbend's footbridge and continue to the **Briarwood Wilds**
+sign on the far bank. The return path lies on the forest's western edge.
+For a direct combat preview, append `-- --wilds` to the launch command above.
+
+This continuous **4608 × 2592** world has 5.76 times the ground area of an older
+forest scene. 272 layered elm and willow crowns sway independently, solid trunks
+block movement and melee, and foliage fades around the cat. A schematic map
+shows the four clearings, cleared packs, the player and the western exit.
+The existing 1.5× follow camera and the smaller animal scale stay in use.
+
+**Twelve dog bandits**, in four packs of three, notice nearby intruders, pursue
+within their home territory, telegraph attacks with red warning rings, and
+return home when the cat escapes. The cat carries a visible steel sword. During attacks, **sixteen drawn combat
+poses** replace the walking body: four phases (wind-up, strike, follow-through,
+recovery) in four real facing views. Arms, shoulders and the held blade move
+together. The extra equipment overlay is hidden during these poses. Read-only
+component analysis and native alpha polygons isolate the complete figures;
+head-width registration controls size while boots remain grounded. These are
+four authored combat key poses per direction, not a fully rigged skeleton.
+**Space** attacks in the facing direction; **left click** aims a normal strike.
+
+**Q — Wind Slash** is a separate ranged ability. After a short 0.22-second
+wind-up, a bright blue crescent travels up to 520 ground pixels, dealing three
+damage and stronger knockback, and piercing up to three dogs. Trees stop the
+wave. The skill has a six-second cooldown. Press Q **during a normal attack**
+and it queues for up to 0.7 seconds, then takes priority over held Space input.
+The skill card is also a clickable button, with queued/recharge/ready feedback.
+Town UI explains that the skill is available in Briarwood; it cannot hurt
+friendly residents. Pausing freezes both recharge and projectiles; travel
+cancels pending/airborne attacks and preserves cooldown.
+
+Move away from red enemy warnings to dodge. A bandit takes three normal hits
+or one wind slash. The cat has five health and brief invulnerability after
+being hit. Each unique defeat rewards **two coins**. Defeated bandits remain
+defeated across travel and checkpoint recovery; clearing all twelve completes
+the objective. Dogs reuse the existing small warrior animation resources.
+
+On defeat, a short fade returns the cat to the sheltered western entrance with
+full health. Coins, defeated enemies, errands, purchases and the shared clock
+remain intact. Leaving a zone restores health. The town wardens, older forest
+areas and bakery remain peaceful. Progress is in memory until restarting.
+
+The painted [ground asset](assets/forest/briarwood_ground.png) was made with
+**built-in imagegen**; its exact [prompt and source](assets/forest/briarwood_generation.json)
+are saved beside it. A native mirror-repeat shader keeps the painted ground at
+local scenery scale rather than stretching one low-resolution plate over the
+whole map. Existing transparent trees supply the separate canopy layer.
+
+The [sword and skill checks](tools/test_skill.gd) cover the four-direction drawn
+attack poses, actual Q input while Space remains held, input priority, clickable
+skill input, projectile damage/piercing/range, walls, cooldown UI, pause in flight,
+travel cleanup and safe-area guards. The **255 gameplay**, **45 forest combat**
+and **44 sword/skill** checks pass. Native previews: [attack](previews/drawn_sword_attack.png),
+[all sixteen poses](previews/drawn_attack_phases.png), [Q projectile](previews/wind_slash.png).
+
+The new [attack sheet](assets/combat/cat_sword_attack.png) was generated with
+**built-in imagegen**; its [exact prompt/source](assets/combat/generation.json)
+and [registration catalog](assets/combat/catalog.json) are preserved. The PNG is
+unchanged. [cat_combat.gd](tools/cat_combat.gd) clips the original alpha contours
+with native textured polygons instead of assuming that generated grid spacing
+is exact. The earlier native sword is retained for carrying, while attack art
+includes the actual held blade. [preview_combat.gd](tools/preview_combat.gd)
+reproduces the native render checks. Older Crescent Cleave previews are historical.
+
+Native M1 graphical samples, recorded in [wilds_performance.json](wilds_performance.json),
+cover western exploration, an active three-dog pack and a deep-forest night
+encounter at the fixed 1920×1080 canvas. Before the combat-animation/Wind Slash update, these three six-second samples each
+measured about 60 FPS, with no frame above 20 ms. The 45 Briarwood checks and
+255 existing gameplay checks pass. The reproducible capture/profiling
+script is [preview_wilds.gd](tools/preview_wilds.gd); preview captures are
+[day](previews/wilds_day.png), [combat](previews/wilds_combat.png) and
+[night](previews/wilds_night.png). Run [test_wilds.gd](tools/test_wilds.gd) headlessly
+for bridge entry, walking all four clearings, camera bounds, pursuit/leash,
+attack warnings/dodge/damage, Space attacks, rewards, pause, recovery, physical
+retreat/reentry, persistent clears and friendly-town regressions.
 
 ## Enter the bakery
 
