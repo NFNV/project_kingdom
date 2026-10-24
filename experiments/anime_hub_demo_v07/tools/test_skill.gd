@@ -34,7 +34,7 @@ func _run() -> void:
 	game.auto_clock = false
 	game.player.automated = true
 	await ticks(3)
-	check(is_instance_valid(game.player.weapon) and is_instance_valid(game.player.combat_art),"Cat has carried equipment and a separate drawn combat body")
+	check(is_instance_valid(game.player.weapon) and is_instance_valid(game.player.combat_art),"Cat has a sheathed walking state and a separate drawn combat body")
 	check(not game.player.try_skill(),"The skill cannot harm peaceful town residents")
 	game._update_hud()
 	check(game.ui.skill_panel.visible and game.ui.skill_button.disabled and game.ui.skill_label.text.contains("Briarwood"),"Town UI explains where the skill becomes available")
@@ -42,7 +42,7 @@ func _run() -> void:
 	for direction in ["e","se","s","sw","w","nw","n","ne"]:
 		game.player.sprite.set_pose("idle",direction,0)
 		game.player.weapon.sync_pose()
-		check(game.player.weapon.visible and game.player.weapon.z_index==0,"Carried sword stays inside actor depth in "+direction)
+		check(not game.player.weapon.visible and game.player.weapon.z_index==0,"Walking cat keeps the sword sheathed in "+direction)
 	for facing in [Vector2(1,1),Vector2(-1,1),Vector2(1,-1),Vector2(-1,-1)]:
 		var regions: Dictionary = {}
 		for progress in [.05,.4,.65,.9]:
@@ -68,7 +68,7 @@ func _run() -> void:
 	await ticks(10)
 	check(first.health==2,"Normal sword attack still deals one actual damage")
 	await ticks(20)
-	check(not game.player.combat_art.visible and game.player.sprite.visible and game.player.weapon.visible,"Attack recovers to the registered walking/idle character")
+	check(not game.player.combat_art.visible and game.player.sprite.visible and not game.player.weapon.visible,"Attack recovers to the registered walking/idle character")
 	# Reproduce the reported problem: Q pressed while Space is held mid-attack.
 	first.health = 3
 	first.grace = 0

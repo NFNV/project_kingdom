@@ -67,7 +67,13 @@ static func build_navigation(hub: Node2D) -> void:
 		for y in grid.region.size.y:
 			var cell := Vector2i(x,y)
 			var at := grid.get_point_position(cell)
-			grid.set_point_solid(cell,not Rect2(140,140,4328,2312).has_point(at))
+			var safe := Geometry2D.is_point_in_polygon(at,hub.FLOOR)
+			if safe:
+				for index in hub.FLOOR.size():
+					if at.distance_to(Geometry2D.get_closest_point_to_segment(at,hub.FLOOR[index],hub.FLOOR[(index+1)%hub.FLOOR.size()]))<20:
+						safe = false
+						break
+			grid.set_point_solid(cell,not safe)
 	for polygon in hub.blockers:
 		var bounds := Rect2(polygon[0],Vector2.ZERO)
 		for vertex in polygon:

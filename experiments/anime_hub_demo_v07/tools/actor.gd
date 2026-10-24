@@ -236,7 +236,7 @@ func _update_combat_art() -> void:
 	var attacking := swing>0
 	sprite.visible = not attacking
 	combat_art.visible = attacking and active
-	weapon.visible = not attacking and active
+	weapon.visible = false
 	if attacking:
 		combat_art.pose(facing,1.0-swing/attack_duration,attack_kind=="wind")
 		combat_art.modulate = sprite.modulate

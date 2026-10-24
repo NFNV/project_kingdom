@@ -1,0 +1,40 @@
+{
+  "ochre_townhouse.png": {
+    "size": [
+      1362,
+      1155
+    ],
+    "mode": "RGBA",
+    "sha256": "b70d9c3cf0e2a1b7b2cf0ef7c91fe5c9255eaf74fcf189360d57c251149d2ffa"
+  },
+  "limestone.png": {
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGB",
+    "sha256": "d7a2c703d75d9928f90e16ddd470c65f2f6cc2c3ad75f5cdc0b98793b8c25973"
+  },
+  "house_native_region": [
+    211,
+    60,
+    1244,
+    1126
+  ],
+  "plaster_v2.png": {
+    "sha256": "2d62cb81f643753e707e3c87c8d850c9a04944defcb7737857e9b493acf9a660",
+    "usage": "Material or front elevation projected onto native grid-aligned house geometry."
+  },
+  "slate_v2.png": {
+    "sha256": "3cb6f5dae61c17e4dce389aae7fb9ab34831a29f8ae232fbc25f18747b396890",
+    "usage": "Material or front elevation projected onto native grid-aligned house geometry."
+  },
+  "window_v2.png": {
+    "sha256": "6360e5ff3f9d7d2140a5d1a9e8eec9c9e89d27ef210ab93fa1af00b89f904d3c",
+    "usage": "Material or front elevation projected onto native grid-aligned house geometry."
+  },
+  "door_v2.png": {
+    "sha256": "1595fd21a2abc68f5f586530599890b8486ed7876fe94c4c8f605a53ad60b3e1",
+    "usage": "Material or front elevation projected onto native grid-aligned house geometry."
+  }
+}

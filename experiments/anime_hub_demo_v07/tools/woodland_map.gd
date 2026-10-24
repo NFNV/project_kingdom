@@ -1,7 +1,8 @@
 extends RefCounted
 
 const Wilds := preload("res://experiments/anime_hub_demo_v07/tools/deep_forest.gd")
-const NAMES := {"town":"Garden Square","trail":"Mosswood Trail","river":"Riverbend Glade","bakery":"The Bluebird Bakery","wilds":"Briarwood Wilds"}
+const District := preload("res://experiments/anime_hub_demo_v07/tools/northgate_district.gd")
+const NAMES := {"town":"Garden Square","trail":"Mosswood Trail","river":"Riverbend Glade","bakery":"The Bluebird Bakery","wilds":"Briarwood Wilds","district":"Northgate Quarter"}
 const SOURCE_SIZE := Vector2(1672,941)
 
 
@@ -17,10 +18,12 @@ static func polygon(coords: Array) -> PackedVector2Array:
 
 
 static func world_size(zone: String) -> Vector2i:
-	return Wilds.SIZE if zone=="wilds" else Vector2i(1920,1080)
+	return District.SIZE if zone=="district" else (Wilds.SIZE if zone=="wilds" else Vector2i(1920,1080))
 
 
 static func floor_for(zone: String) -> PackedVector2Array:
+	if zone=="district":
+		return District.floor_polygon()
 	if zone=="wilds":
 		return Wilds.floor_polygon()
 	if zone=="trail":
@@ -30,8 +33,10 @@ static func floor_for(zone: String) -> PackedVector2Array:
 
 
 static func exits_for(zone: String) -> Dictionary:
+	if zone=="district":
+		return {"south":{"at":District.RETURN,"to":"town","entry":"north","sign":"Garden Square","label":"Southern avenue  →  Garden Square"}}
 	if zone=="town":
-		return {"bakery":{"at":Vector2(320,580),"to":"bakery","entry":"town","sign":"Bluebird Bakery","label":"Blue awning  →  Enter bakery"},"southeast":{"at":Vector2(1380,966),"to":"trail","entry":"town","sign":"Mosswood","label":"Southeast gate  →  Mosswood Trail"}}
+		return {"north":{"at":Vector2(790,490),"to":"district","entry":"town","sign":"Northgate","label":"North passage  →  Northgate Quarter"},"bakery":{"at":Vector2(320,580),"to":"bakery","entry":"town","sign":"Bluebird Bakery","label":"Blue awning  →  Enter bakery"},"southeast":{"at":Vector2(1380,966),"to":"trail","entry":"town","sign":"Mosswood","label":"Southeast gate  →  Mosswood Trail"}}
 	if zone=="bakery":
 		return {"town":{"at":Vector2(960,817),"to":"town","entry":"bakery","sign":"Garden Square","label":"Front door  →  Garden Square"}}
 	if zone=="trail":
@@ -45,11 +50,15 @@ static func exits_for(zone: String) -> Dictionary:
 
 
 static func arrival(zone: String, entry: String) -> Vector2:
+	if zone=="district":
+		return District.ENTRY
 	if zone=="wilds":
 		return Wilds.ENTRY
 	if zone=="bakery":
 		return Vector2(960,745)
 	if zone=="town":
+		if entry=="north":
+			return Vector2(850,555)
 		if entry=="bakery":
 			return Vector2(390,695)
 		return Vector2(1290,936) if entry=="forest" else Vector2(840,905)

@@ -1,0 +1,16 @@
+{
+  "tool": "built-in imagegen",
+  "prompts": {
+    "window": "Use case: stylized-concept. Asset type: one transparent FRONT ELEVATION window-and-shutters decal for a native geometry-built anime RPG house. Draw ONE charming rectangular cottage window with pale honey carved limestone trim, dark timber mullions, slightly reflective warm blue glass, blue-green wooden louvered shutters open on both sides, a little wooden flowerbox overflowing with ivy, cream daisies and tiny pink blossoms beneath. A few delicate ivy sprigs along the left stone trim. Beautiful detailed hand-painted Japanese animation background style, clean readable warm colors and restrained line work. Completely FLAT straight-on FRONT ELEVATION orthographic view, window sides exactly vertical and sill perfectly horizontal. NO isometric perspective: the game projects this flat elevation onto its own precise wall geometry. All features coplanar; no visible side face, no diagonal perspective, no house, no wall background, no shadows cast beyond the asset, no text, no grid, no multiple windows. One full window inside clear transparent margins, genuine transparent background.",
+    "door": "Use case: stylized-concept. Asset type: one transparent FRONT ELEVATION decorative cottage doorway for a native geometry-built anime RPG house. Draw ONE warm blue-green paneled wooden front door with a brass handle and brass letter slot, framed by a pale honey limestone rounded lintel and upright carved stone jambs, small overhead lantern centered on the lintel, just a few trailing ivy leaves at the corners. Detailed charming hand-painted anime background craftsmanship. Entire doorway, including top frame and bottom threshold, inside generous transparent margins. Exact straight-on flat FRONT ELEVATION orthographic view, all vertical lines perfectly vertical, threshold perfectly horizontal, NO isometric or angled perspective. Game projects this flat elevation onto precise 3D wall geometry. No steps projecting into a ground plane, no house, no wall background, no person, no text, no grid, no second door. Truly transparent background."
+  },
+  "files": [
+    "window_v2.png",
+    "door_v2.png"
+  ],
+  "usage": "Unmodified straight-on facade detail images projected onto the same exact wall planes as native doors and windows.",
+  "sources": [
+    "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-5154f15f-93a3-4aff-b79e-10964baa96fd.png",
+    "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-5465cc19-2722-4905-9844-621de4f6731b.png"
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "adapter": "Apple M1 (Apple7)",
+  "buildings": 52,
+  "engine": "4.7.2-stable (official)",
+  "humans": 4,
+  "internal_canvas": "(1920.0, 1080.0)",
+  "notes": "Native M1 graphical samples at the normal 1.5x follow camera, 1080p internal canvas and 60 FPS cap, six seconds per case after warmup. Actual cat movement, opaque/fading building cutouts, repeated painted sidewalks, fountain, trees, idle NPCs and moving friendly patrols. Overview zoom is only for the last static capture, after performance sampling. This run remained in the background (focused_fraction=0 for every case); its long frames are retained and these numbers do not establish foreground 60 FPS performance.",
+  "patrolling_wardens": 2,
+  "renderer": "forward_plus",
+  "residents": 14,
+  "samples": [
+    {
+      "case": "plaza_day_fountain_and_residents",
+      "draw_calls": 286.0,
+      "focused_fraction": 0.0,
+      "fps": 60.3,
+      "frames_above_20_ms": 0,
+      "frames_above_33_ms": 0,
+      "p95_ms": 16.79,
+      "p99_ms": 18.06,
+      "worst_ms": 18.63
+    },
+    {
+      "case": "park_day_trees_and_neighbours",
+      "draw_calls": 123.0,
+      "focused_fraction": 0.0,
+      "fps": 56.6,
+      "frames_above_20_ms": 2,
+      "frames_above_33_ms": 1,
+      "p95_ms": 17.81,
+      "p99_ms": 19.63,
+      "worst_ms": 409.08
+    },
+    {
+      "case": "night_street_lamps_and_patrols",
+      "draw_calls": 464.0,
+      "focused_fraction": 0.0,
+      "fps": 48.6,
+      "frames_above_20_ms": 18,
+      "frames_above_33_ms": 6,
+      "p95_ms": 22.14,
+      "p99_ms": 48.8,
+      "worst_ms": 1015.16
+    }
+  ],
+  "world_size": "(6400, 3840)"
+}

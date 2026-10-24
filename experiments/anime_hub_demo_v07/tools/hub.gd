@@ -35,6 +35,7 @@ var travel_cooldown := 0.0
 var peaceful_mode := true
 var forest_defeated: Dictionary = {}
 var forest_recoveries := 0
+var district_places: Dictionary = {}
 var world_size := SIZE
 var trail_effects: Node2D
 var catalog: Dictionary
@@ -108,7 +109,7 @@ func _ready() -> void:
 	_update_hud()
 	if DisplayServer.get_name()!="headless":
 		DisplayServer.window_move_to_foreground()
-	_say("Welcome to Garden Square", "WASD to walk, Shift to run. Enter the blue-awning bakery on the left with E, or take the southeast gate into Mosswood. The wardens are friendly.")
+	_say("Welcome to Garden Square", "WASD to walk, Shift to run. Enter the blue-awning bakery on the left with E, or take the southeast gate into Mosswood. The wardens are friendly. The north passage leads to Northgate Quarter.")
 	if "--night" in OS.get_cmdline_user_args():
 		clock = 3.0
 	if "--bakery" in OS.get_cmdline_user_args():
@@ -120,6 +121,9 @@ func _ready() -> void:
 		camera.force_update_scroll()
 	elif "--trail" in OS.get_cmdline_user_args():
 		_load_zone("trail","town")
+	elif "--district" in OS.get_cmdline_user_args():
+		_load_zone("district","town")
+		_say("Welcome to Northgate", "The northern town opens into streets, wide sidewalks, Sunstone Plaza and Linden Park. E to chat; the southern avenue returns to Garden Square.")
 	elif "--wilds" in OS.get_cmdline_user_args():
 		_load_zone("wilds","river")
 		_say("Briarwood Wilds", "Dog bandits hold the forest clearings. Space or left click to strike; Q fires Wind Slash. Step away from red warning circles. The west trail leads back to safety.")
@@ -180,6 +184,8 @@ func _load_zone(destination: String, entry: String) -> void:
 			files.append(ART+"backgrounds/plaza_"+time.to_lower()+".png")
 	elif zone=="bakery":
 		FLOOR = Bakery.floor_polygon()
+	elif zone=="district":
+		FLOOR = Map.District.floor_polygon()
 	elif zone=="wilds":
 		FLOOR = Map.floor_for(zone)
 		files = [ROOT+"assets/forest/briarwood_ground.png"]
@@ -206,6 +212,8 @@ func _load_zone(destination: String, entry: String) -> void:
 		_build_plaza()
 	elif zone=="bakery":
 		_build_bakery()
+	elif zone=="district":
+		Map.District.build(self)
 	elif zone=="wilds":
 		Map.Wilds.build(self)
 	else:
@@ -294,6 +302,10 @@ func _draw_exit_marks(node: Node2D) -> void:
 			arrow = Vector2(-1,0)
 		elif id=="wilds":
 			arrow = Vector2(1,-.65).normalized()
+		elif id=="north":
+			arrow = Vector2(0,-1)
+		elif zone=="district":
+			arrow = Vector2(0,1)
 		node.draw_line(at-arrow*14,at+arrow*16,Color("ffedb6"),3,true)
 		node.draw_line(at+arrow*16,at+arrow.rotated(2.6)*13,Color("ffedb6"),3,true)
 		node.draw_line(at+arrow*16,at+arrow.rotated(-2.6)*13,Color("ffedb6"),3,true)
@@ -566,7 +578,7 @@ func _build_navigation() -> void:
 	navigation.offset = Vector2(16,16)
 	navigation.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_ONLY_IF_NO_OBSTACLES
 	navigation.update()
-	if zone=="wilds":
+	if zone in ["wilds","district"]:
 		Map.Wilds.build_navigation(self)
 		return
 	for x in grid_size.x:
@@ -702,6 +714,12 @@ func interact(id := "") -> void:
 		if id=="shop_vendor":
 			open_shop()
 		return
+	if zone=="district":
+		if id.begins_with("north_place_"):
+			district_places[id] = true
+		_say(interactables[id]["name"],interactables[id]["text"])
+		_update_hud()
+		return
 	if zone!="town":
 		var landmark: Dictionary = interactables[id]
 		discoveries[id] = true
@@ -814,6 +832,8 @@ func _update_lighting() -> void:
 		actor_tint = Color("fff1db").lerp(Color("c7b99e"),clampf(1.0-actor_tint.g,0,1)*.6)
 		if is_instance_valid(bakery_room):
 			bakery_room.queue_redraw()
+	elif zone=="district":
+		pass
 	elif zone=="wilds":
 		backgrounds[0].modulate = Color.WHITE.lerp(actor_tint,.85)
 	else:

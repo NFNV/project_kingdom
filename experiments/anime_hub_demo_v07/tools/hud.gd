@@ -34,6 +34,7 @@ var forest_map: Control
 var skill_panel: Panel
 var skill_label: Label
 var skill_bar: ProgressBar
+var map_title: Label
 var skill_button: Button
 
 
@@ -122,7 +123,7 @@ func _ready() -> void:
 	skill_panel.add_child(skill_bar)
 	skill_panel.hide()
 	forest_panel = panel(Vector2(28,423),Vector2(250,182),null,true)
-	label("BRIARWOOD  /  WEST TRAIL HOME",Vector2(15,13),11,forest_panel,0,Color("ddc791"))
+	map_title = label("BRIARWOOD  /  WEST TRAIL HOME",Vector2(15,13),11,forest_panel,0,Color("ddc791"))
 	forest_map = Control.new()
 	forest_map.position = Vector2(15,43)
 	forest_map.size = Vector2(220,124)
@@ -200,14 +201,15 @@ func label(text: String, at: Vector2, font_size: int, parent: Node, width := 0.0
 
 func refresh() -> void:
 	location_label.text = hub.zone_title()
-	location_subtitle.text = {"town":"Southeast gate  →  Mosswood Trail","trail":"Old elm paths  /  Riverbend to the southeast","river":"Across the bridge  →  Briarwood Wilds","bakery":"Warm bread, meadow tea, and a place to rest","wilds":"Four clearings  /  West trail to Riverbend"}[hub.zone]
+	location_subtitle.text = {"town":"North  →  Northgate  /  Southeast  →  Forest","trail":"Old elm paths  /  Riverbend to the southeast","river":"Across the bridge  →  Briarwood Wilds","bakery":"Warm bread, meadow tea, and a place to rest","wilds":"Four clearings  /  West trail to Riverbend","district":"Sunstone Plaza  /  Linden Park  /  Market Lane"}[hub.zone]
 	combat_panel.visible = hub.zone=="wilds"
 	skill_panel.visible = hub.zone!="bakery"
 	skill_panel.position.y = 310 if hub.zone=="wilds" else 195
 	skill_button.disabled = hub.peaceful_mode or hub.player.skill_cooldown>0 or not hub.player.active
 	skill_bar.value = hub.player.SKILL_COOLDOWN-hub.player.skill_cooldown
 	skill_label.text = "Use this skill in Briarwood Wilds" if hub.peaceful_mode else ("Queued — releases after this swing" if hub.player.skill_buffer>0 else ("Ready — Q or click  /  piercing blade" if hub.player.skill_cooldown<=0 else "Recharging  %.1f s" % hub.player.skill_cooldown))
-	forest_panel.visible = hub.zone=="wilds"
+	forest_panel.visible = hub.zone in ["wilds","district"]
+	map_title.text = "NORTHGATE  /  SOUTH TO GARDEN SQ." if hub.zone=="district" else "BRIARWOOD  /  WEST TRAIL HOME"
 	controls_label.text = "WASD move   Shift run   Space / Click sword   Q wind slash   Right click walk" if hub.zone=="wilds" else "WASD  walk     SHIFT  run     E  talk / use     Right click  walk to point"
 	if hub.zone=="town":
 		objective.text = hub.OBJECTIVES[hub.quest_stage]
@@ -215,6 +217,10 @@ func refresh() -> void:
 	elif hub.zone=="bakery":
 		objective.text = "Meet Clover at the counter. E to browse today's baking."
 		status_label.text = "%d coins  ·  Front door leads back to the square" % hub.coins
+	elif hub.zone=="district":
+		objective.text = "Explore Sunstone Plaza, Linden Park and the old town hall."
+		status_label.text = "%d / 3 places visited  ·  The streets are peaceful" % hub.district_places.size()
+		forest_map.queue_redraw()
 	elif hub.zone=="wilds":
 		objective.text = "Drive the dog bandits from the four forest clearings." if hub.combat_active else "Briarwood is quiet. Explore or take the western trail home."
 		status_label.text = "%d / 12 bandits defeated  ·  %d coins" % [hub.forest_defeated.size(),hub.coins]
@@ -245,6 +251,9 @@ func refresh() -> void:
 
 
 func _draw_forest_map() -> void:
+	if hub.zone=="district":
+		_draw_district_map()
+		return
 	if hub.zone!="wilds":
 		return
 	var ratio := forest_map.size/Vector2(hub.world_size)
@@ -264,6 +273,18 @@ func _draw_forest_map() -> void:
 	var player_at: Vector2 = hub.player.position*ratio
 	forest_map.draw_circle(player_at,5,Color("173c4e"))
 	forest_map.draw_circle(player_at,3,Color("bceaff"))
+
+
+func _draw_district_map() -> void:
+	var ratio := forest_map.size/Vector2(hub.world_size)
+	forest_map.draw_rect(Rect2(Vector2.ZERO,forest_map.size),Color("66845d"))
+	for road in hub.Map.District.ROADS:
+		forest_map.draw_line(hub.Map.District.iso(road,0)*ratio,hub.Map.District.iso(road,13)*ratio,Color("d7d0b2"),2,true)
+		forest_map.draw_line(hub.Map.District.iso(0,road)*ratio,hub.Map.District.iso(13,road)*ratio,Color("d7d0b2"),2,true)
+	for id in ["plaza","park","market","civic"]:
+		forest_map.draw_circle(hub.Map.District.PLACES[id]*ratio,3.5,Color("eed38d"))
+	forest_map.draw_circle(hub.Map.District.RETURN*ratio,4,Color("fff4cd"))
+	forest_map.draw_circle(hub.player.position*ratio,4,Color("8fe2ef"))
 
 
 func _build_merchant() -> void:

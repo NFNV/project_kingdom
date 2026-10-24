@@ -47,6 +47,65 @@ Pippa → Elder Mallow → Moss → Pip → red postbox. Delivery progress, fore
 memories, the same cat character, and the clock persist across area transitions.
 There is no disk save; restarting begins a fresh session.
 
+## Northgate Quarter — northern town district
+
+Take the **north passage** in Garden Square, above the fountain and west of the
+hall, to enter **Northgate Quarter**. Its **southern avenue** returns to the hub.
+You can also double-click [Play Northgate.command](Play%20Northgate.command) or
+append `-- --district` to the normal Godot launch command.
+
+Northgate is one **6400 × 3840** district with a consistent isometric street grid,
+wide limestone sidewalks, grey carriageways, curbs and crosswalks. Its sixteen
+blocks include **48 homes**, **three shopfronts**, an **old town hall**,
+**Sunstone Plaza** with a flowing fountain, and the small **Linden Park** with
+paths, benches, flowers and wind-blown elms. All 52 buildings now use native
+wall/roof geometry on the exact street projection, rather than perspective-mismatched
+cutouts. Eight residential recipes vary footprint, one-to-three-storey height,
+gabled/hipped roof form and pitch, facade/roof colors, shutters, awnings, balconies
+and timber/brick details. Doors select the nearest sidewalk in all four directions,
+with a matching paved path and reachable doorstep; northern lots no longer have
+a front door drawn on the wrong visible wall. Buildings fade when they obscure the cat. The camera keeps
+the existing 1.5× zoom and can follow across the full district.
+
+**Twenty residents** populate the area: fourteen animated animal civilians,
+four taller humans and two friendly wardens with actual walking patrols.
+Approach and press E for conversations. Visiting the plaza, park and old hall
+records three town places separately from forest memories. A district map shows
+the streets and the way back. Fountain, trees, lighting and patrols pause with
+the game. Day/night tint and warm street-lamp pools use the same twenty-minute
+clock as all earlier zones. Errands, purchases, coins and forest progress survive
+round trips. This remains a peaceful area. New houses and shops are exteriors;
+the enterable Bluebird Bakery remains available in Garden Square.
+
+Existing props and characters remain in use. The earlier whole-building cutouts,
+including the ochre townhouse, remain as historical art assets; Northgate no
+longer places them. New [plaster](assets/district/plaster_v2.png) and
+[slate](assets/district/slate_v2.png) textures, plus straight-on
+[window](assets/district/window_v2.png) and [door](assets/district/door_v2.png)
+elevations, were made with built-in imagegen. Their [material prompts](assets/district/architecture_v2.json)
+and [facade prompts](assets/district/facades_v2.json) accompany the unmodified PNGs.
+Native wall planes project the elevation details, keeping all verticals plumb and
+roof/paving directions aligned. Both streets and individual buildings render once
+into native viewport caches, so normal play draws cached surfaces.
+
+[test_district.gd](tools/test_district.gd) physically walks through the hub's north
+exit, visits all six major destinations, interacts with landmarks and a human,
+checks building collision/occlusion and upright transforms, returns to the hub,
+and reenters while checking preserved state and populations.
+[preview_district.gd](tools/preview_district.gd) captures the district and measures
+normal-camera 1080p exploration at the plaza, park and a lit street at night.
+The district checks pass **154/154** alongside **344/344** existing gameplay checks.
+They verify every residential frontage and navigable doorstep as well as the
+actual vertical geometry, variety, full walking route and preserved progress.
+See the native performance report for the latest day/night samples and retained
+long frames; captures use the normal 1.5× follow camera and 1920×1080 canvas.
+The latest run remained unfocused, so its samples do not establish foreground
+60 FPS performance.
+Results are saved to [district_test_results.json](district_test_results.json) and
+[district_performance.json](district_performance.json). Preview: [whole district](previews/district_overview.png),
+[plaza](previews/district_plaza.png), [park](previews/district_park.png),
+[Market Lane](previews/district_market.png), [night](previews/district_night.png).
+
 ## Briarwood Wilds — the combat forest
 
 From Garden Square, take the **southeast gate → Mosswood Trail → Riverbend
@@ -62,7 +121,8 @@ The existing 1.5× follow camera and the smaller animal scale stay in use.
 
 **Twelve dog bandits**, in four packs of three, notice nearby intruders, pursue
 within their home territory, telegraph attacks with red warning rings, and
-return home when the cat escapes. The cat carries a visible steel sword. During attacks, **sixteen drawn combat
+return home when the cat escapes. The cat keeps its sword sheathed while idle, walking, running and shopping.
+Only attack/skill poses show the blade in its paw. During attacks, **sixteen drawn combat
 poses** replace the walking body: four phases (wind-up, strike, follow-through,
 recovery) in four real facing views. Arms, shoulders and the held blade move
 together. The extra equipment overlay is hidden during these poses. Read-only
@@ -110,7 +170,7 @@ The new [attack sheet](assets/combat/cat_sword_attack.png) was generated with
 and [registration catalog](assets/combat/catalog.json) are preserved. The PNG is
 unchanged. [cat_combat.gd](tools/cat_combat.gd) clips the original alpha contours
 with native textured polygons instead of assuming that generated grid spacing
-is exact. The earlier native sword is retained for carrying, while attack art
+is exact. The earlier native sword overlay is disabled during normal play; attack art
 includes the actual held blade. [preview_combat.gd](tools/preview_combat.gd)
 reproduces the native render checks. Older Crescent Cleave previews are historical.
 

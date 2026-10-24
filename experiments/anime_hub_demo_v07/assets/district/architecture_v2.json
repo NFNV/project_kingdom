@@ -1,0 +1,16 @@
+{
+  "tool": "built-in imagegen",
+  "prompts": {
+    "walls": "Use case: stylized-concept. Asset type: seamless repeatable wall material texture for geometry-built isometric anime RPG houses. A square flat orthographic close material swatch of pale ivory lime plaster over old limestone, subtle fine hand-painted brush texture, a few understated tiny irregular mineral speckles, soft warm diffuse neutral light. Very subtle sparse stone joints only near some edges, mostly plaster, neutral near-white/cream color so the game can tint it into many pastel facade colors. Entire image only the surface material; no building, no perspective, no corners, no sky, no objects, no decorative plants, no distinct cast shadows, no vignette, no text or borders. Seamless edges. Detailed painterly Japanese animation background style, not pixel art or photorealism.",
+    "roof": "Use case: stylized-concept. Asset type: seamless roof material swatch for precisely projected geometry-built anime RPG houses. Square flat top-down close-up material texture of neat small overlapping slate roof shingles arranged in orderly horizontal rows, muted neutral blue-grey slate, delicate hand-painted stone texture, restrained irregular edge highlights and thin dark joints, diffuse soft neutral lighting. Neutral grey-blue palette so game tinting can create slate blue, moss green, terracotta and plum roof variants. The image is ONLY the repeated flat surface, no whole roof, no building, no 3D perspective, no ridge, no silhouette, no background, no sky, no objects, no text, no border, no vignette. Seamless tiling edges. Charming detailed anime background painting style."
+  },
+  "files": [
+    "plaster_v2.png",
+    "slate_v2.png"
+  ],
+  "sources": [
+    "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-b1d7343a-44d9-4a1a-86f5-50d7f5760ad2.png",
+    "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-761a2f8b-006e-40e2-8f67-5bf0b66626ab.png"
+  ],
+  "usage": "Unmodified material textures. Geometry, facades, roofs, doors and collision use the exact town grid; static native render caches preserve normal play performance."
+}

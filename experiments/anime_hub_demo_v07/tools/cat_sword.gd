@@ -1,6 +1,6 @@
 extends Node2D
 
-# Carrying rig only; drawn combat poses contain the actual held sword. Coordinates
+# Legacy rig stays hidden: walking art already has a sheathed sword. Coordinates
 # are in ground/world pixels so changing a pose never changes blade proportions.
 const GRIPS := {
 	"e":Vector2(16,-28),"se":Vector2(15,-27),"s":Vector2(-12,-27),
@@ -17,7 +17,7 @@ func sync_pose() -> void:
 	show_behind_parent = facing in ["nw","n","ne"]
 
 	modulate = actor.sprite.modulate
-	visible = actor.active
+	visible = false
 	queue_redraw()
 
 
