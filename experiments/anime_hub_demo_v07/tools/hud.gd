@@ -36,6 +36,9 @@ var skill_label: Label
 var skill_bar: ProgressBar
 var map_title: Label
 var skill_button: Button
+var audio_sliders: Dictionary = {}
+var audio_values: Dictionary = {}
+var audio_mute: CheckBox
 
 
 func _ready() -> void:
@@ -56,7 +59,7 @@ func _ready() -> void:
 	var controls := panel(Vector2(28,1012),Vector2(746,44),null,true)
 	controls_label = label("WASD  walk     SHIFT  run     E  talk / use     Right click  walk to point",Vector2(16,11),15,controls,0,Color("f0e4c8"))
 	var actions := panel(Vector2(1515,1012),Vector2(377,44),null,true)
-	label("J  journal     T  time     Esc  pause     F11  full screen",Vector2(14,12),13,actions,0,Color("f0e4c8"))
+	label("J journal   T time   M mute   Esc pause   F11 screen",Vector2(14,12),13,actions,0,Color("f0e4c8"))
 	route_label = label("",Vector2(1140,972),17,self,720,Color("fff2ca"),true)
 	route_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	route_label.add_theme_color_override("font_shadow_color",Color("18372e"))
@@ -138,10 +141,11 @@ func _ready() -> void:
 	shade.color = Color(.035,.07,.06,.68)
 	shade.size = Vector2(1920,1080)
 	pause_overlay.add_child(shade)
-	var menu := panel(Vector2(650,330),Vector2(620,370),pause_overlay)
+	var menu := panel(Vector2(650,235),Vector2(620,610),pause_overlay)
 	label("Rest a while",Vector2(42,36),37,menu,0,Color("2e4239"),true)
-	label("Esc   Return to your walk\nR      Begin a new day\nJ       Show or hide your journal\nF11   Full screen",Vector2(44,114),22,menu,520,Color("52604d"))
-	label("Day and night pass slowly: 20 minutes per full cycle.",Vector2(44,312),16,menu,530,Color("8b7654"))
+	label("Esc   Return to your walk\nR      Begin a new day\nJ       Show or hide your journal\nF11   Full screen",Vector2(44,105),21,menu,520,Color("52604d"))
+	_build_audio_menu(menu)
+	label("Day and night pass slowly: 20 minutes per full cycle.",Vector2(44,563),16,menu,530,Color("8b7654"))
 	pause_overlay.hide()
 	_build_merchant()
 	fade = ColorRect.new()
@@ -150,6 +154,40 @@ func _ready() -> void:
 	fade.modulate.a = 0
 	fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(fade)
+	hub.audio.settings_changed.connect(refresh_audio)
+	refresh_audio()
+
+func _build_audio_menu(menu: Control) -> void:
+	label("SOUND",Vector2(44,280),14,menu,0,Color("887043"))
+	var row := 0
+	for key in ["master","music","ambience","effects"]:
+		var y := 318+row*39
+		label(key.capitalize(),Vector2(44,y),18,menu,0,Color("33433a"))
+		var slider := HSlider.new()
+		slider.position = Vector2(185,y+2)
+		slider.size = Vector2(300,24)
+		slider.min_value = 0
+		slider.max_value = 1
+		slider.step = .01
+		slider.value = hub.audio.levels[key]
+		slider.value_changed.connect(func(value: float): hub.audio.set_volume(key,value))
+		menu.add_child(slider)
+		audio_sliders[key] = slider
+		audio_values[key] = label("",Vector2(504,y),17,menu,0,Color("756a52"))
+		row += 1
+	audio_mute = CheckBox.new()
+	audio_mute.position = Vector2(40,499)
+	audio_mute.text = "Mute all   (M)"
+	audio_mute.add_theme_font_size_override("font_size",18)
+	audio_mute.add_theme_color_override("font_color",Color("33433a"))
+	audio_mute.toggled.connect(func(value: bool): hub.audio.set_muted(value))
+	menu.add_child(audio_mute)
+
+func refresh_audio() -> void:
+	for key in audio_sliders:
+		audio_sliders[key].set_value_no_signal(hub.audio.levels[key])
+		audio_values[key].text = "%d%%" % roundi(hub.audio.levels[key]*100)
+	audio_mute.set_pressed_no_signal(hub.audio.muted)
 
 
 func panel(at: Vector2, dimensions: Vector2, parent: Node = null, dark := false) -> Panel:

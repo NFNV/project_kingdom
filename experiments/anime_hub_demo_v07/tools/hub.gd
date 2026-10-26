@@ -12,6 +12,7 @@ const Bakery := preload("res://experiments/anime_hub_demo_v07/tools/bakery_room.
 const FountainFX := preload("res://experiments/anime_hub_demo_v07/tools/fountain_fx.gd")
 const Hud := preload("res://experiments/anime_hub_demo_v07/tools/hud.gd")
 const Style := preload("res://experiments/anime_hub_demo_v07/tools/art_style.gd")
+const Soundscape := preload("res://experiments/anime_hub_demo_v07/tools/soundscape.gd")
 const CYCLE_SECONDS := 1200.0
 const SIZE := Vector2i(1920,1080)
 const TIMES := ["Dawn","Noon","Dusk","Night"]
@@ -54,6 +55,7 @@ var blockers: Array[PackedVector2Array] = []
 var navigation := AStarGrid2D.new()
 var backgrounds: Array[Sprite2D] = []
 var actor_tint := Color.WHITE
+var audio: Node2D
 var ui
 var objective: Label
 var time_label: Label
@@ -105,6 +107,9 @@ func _ready() -> void:
 		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
 	Engine.physics_ticks_per_second = 60
 	get_tree().physics_interpolation = true
+	audio = Soundscape.new()
+	audio.hub = self
+	add_child(audio)
 	_install_input()
 	catalog = JSON.parse_string(FileAccess.get_file_as_string(ART+"catalog.json"))["assets"]
 	human_catalog = JSON.parse_string(FileAccess.get_file_as_string(HUMAN_ART+"catalog.json"))["assets"]
@@ -140,7 +145,7 @@ func _ready() -> void:
 
 
 func _install_input() -> void:
-	var bindings := {"left":[KEY_A,KEY_LEFT],"right":[KEY_D,KEY_RIGHT],"up":[KEY_W,KEY_UP],"down":[KEY_S,KEY_DOWN],"run":[KEY_SHIFT],"attack":[KEY_SPACE],"skill":[KEY_Q],"interact":[KEY_E],"time":[KEY_T],"pause":[KEY_ESCAPE],"restart":[KEY_R],"fullscreen":[KEY_F11],"journal":[KEY_J],"debug":[KEY_F3]}
+	var bindings := {"left":[KEY_A,KEY_LEFT],"right":[KEY_D,KEY_RIGHT],"up":[KEY_W,KEY_UP],"down":[KEY_S,KEY_DOWN],"run":[KEY_SHIFT],"attack":[KEY_SPACE],"skill":[KEY_Q],"interact":[KEY_E],"time":[KEY_T],"pause":[KEY_ESCAPE],"restart":[KEY_R],"fullscreen":[KEY_F11],"journal":[KEY_J],"debug":[KEY_F3],"mute":[KEY_M]}
 	for action in bindings:
 		var name := "hub_"+str(action)
 		if not InputMap.has_action(name):
@@ -278,6 +283,8 @@ func _load_zone(destination: String, entry: String) -> void:
 	_update_lighting()
 	_update_hud()
 	get_window().title = "Project Kingdom — "+zone_title()
+	audio.bind_player(player)
+	audio.enter_zone(zone)
 
 
 func _build_forest() -> void:
@@ -346,6 +353,8 @@ func _draw_forest_air() -> void:
 func request_travel(exit_id: String) -> void:
 	if paused or shopping or transitioning or not exits.has(exit_id):
 		return
+	if exit_id=="bakery" or zone=="bakery":
+		audio.play_event("door",player.position,-5)
 	transitioning = true
 	var target: Dictionary = exits[exit_id]
 	_travel.call_deferred(target["to"],target["entry"])
@@ -553,6 +562,7 @@ func open_shop() -> void:
 func close_shop() -> void:
 	shopping = false
 	ui.merchant.hide()
+	audio.play_event("ui_open",player.position,-12,.80)
 
 
 func buy(index: int) -> bool:
@@ -560,10 +570,12 @@ func buy(index: int) -> bool:
 		return false
 	var product: Dictionary = GOODS[index]
 	if coins<int(product["price"]):
+		audio.play_event("ui_error",player.position,-10)
 		ui.refresh_shop("A little short of coins for that one. Try something smaller.")
 		return false
 	coins -= int(product["price"])
 	inventory[product["id"]] += 1
+	audio.play_event("ui_confirm",player.position,-8)
 	ui.refresh_shop("%s tucked into your satchel. Thank you!" % product["name"])
 	_update_hud()
 	return true
@@ -706,6 +718,7 @@ func interact(id := "") -> void:
 		id = nearest
 	if id.is_empty():
 		return
+	audio.play_event("ui_open",player.position,-12)
 	if interactables[id].has("anchor") and interactables[id]["anchor"].has_method("greet"):
 		interactables[id]["anchor"].greet()
 	var lines := {
@@ -775,10 +788,12 @@ func actor_yielded(actor_node) -> void:
 		return
 	forest_defeated[actor_node.resident_id] = true
 	coins += 2
+	audio.play_event("coin",actor_node.position,-12)
 	var fade: Tween = actor_node.create_tween()
 	fade.tween_property(actor_node.sprite,"modulate:a",0.0,.35)
 	combat_active = dogs.any(func(dog): return dog.active)
 	if not combat_active:
+		audio.play_event("victory",player.position,-5)
 		_say("The forest is quiet", "All twelve bandits have fled. The clearings are safe to explore. Your coin rewards and progress will remain when you return.")
 	_update_hud()
 
@@ -906,6 +921,7 @@ func _update_prompt() -> void:
 
 func set_paused(value: bool) -> void:
 	paused = value
+	audio.set_paused(value)
 	pause_overlay.visible = value
 	for actor in [player]+dogs:
 		if is_instance_valid(actor):
@@ -913,6 +929,10 @@ func set_paused(value: bool) -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("hub_mute") and not event.is_echo():
+		audio.set_muted(not audio.muted)
+		get_viewport().set_input_as_handled()
+		return
 	# Skill input must not disappear into a GUI control or an in-progress slash.
 	if event.is_action_pressed("hub_skill") and not event.is_echo():
 		if player.try_skill():

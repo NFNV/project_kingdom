@@ -79,6 +79,8 @@ func _physics_process(delta: float) -> void:
 	velocity = Vector2(intent.x,intent.y*GROUND_Y)*speed+knockback
 	move_and_slide()
 	moved_distance = ground_vector(position-before).length()
+	if intent.length()>.05 and state in ["patrol","return","chase"]:
+		hub.audio.footsteps(self,moved_distance)
 	if state=="patrol":
 		patrol_distance += moved_distance
 	if swing>0:
@@ -105,6 +107,7 @@ func _enemy_intent(delta: float) -> Vector2:
 	var distance := offset.length()
 	if not alerted and distance<330 and ground_vector(hub.player.position-home).length()<600 and hub.clear_line(position,hub.player.position):
 		alerted = true
+		hub.audio.play_event("bandit_alert",position,-15)
 		route.clear()
 		path_timer = 0
 	if not alerted:
@@ -157,6 +160,7 @@ func try_attack(aim := Vector2.ZERO) -> bool:
 	swing_hits.clear()
 	attacks_started += 1
 	last_attack = attack_kind
+	hub.audio.play_event("club" if variant=="mauler" else "sword",position,-6)
 	state = "attack"
 	return true
 

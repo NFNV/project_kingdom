@@ -28,10 +28,47 @@ current demo in Garden Square, including the latest animation changes.
 | 1 / 2 / 3, or shop buttons | Buy bread / tea / honey while shopping |
 | J | Show / hide the journal |
 | T | Preview the next lighting phase with a short transition |
+| M | Mute / unmute all sound |
 | Esc | Close the shop, or pause / resume |
 | R | Restart the demo and reset progress |
 | F11 | Toggle full screen |
 | F3 | Show / hide FPS and rendering diagnostics |
+
+## Sound and performance
+
+Four original instrumental themes accompany the town, woodland, night and
+battles. Music crossfades when the setting changes, and nearby hostile bandits
+trigger the battle theme. Birds, breeze and crickets follow the shared clock;
+fountains, the river and the bakery oven have positional sound.
+
+Footsteps follow actual distance travelled over stone, wood, grass and earth.
+Sword swings, impacts, enemy attacks, Wind Slash, damage, doors, purchases and
+rewards have separate cues. A fixed pool of twelve positional effects players
+and distance culling bound playback work. Finished PCM clips load once; music
+and effects are not synthesized during play.
+
+Press **Esc** for Master, Music, Ambience and Effects sliders plus a mute
+checkbox, or **M** to mute immediately. Volume preferences survive restarting.
+Pause freezes music and ambience and stops transient effects, so old attacks
+do not replay on resume. See the [audio source notes](assets/audio/README.md),
+[asset audit](assets/audio/qa_report.json), and
+[settings screenshot](previews/audio_settings.png).
+
+The audio regression adds **39 passing checks**, bringing the demo suite to
+**604/604**. It exercises real movement, attacks, purchases, music transitions,
+pause, volume widgets and non-silent PCM from the actual mixer.
+[Results](audio_test_results.json).
+
+The [native audio performance run](audio_performance.json) used CoreAudio on
+Apple M1 / Godot 4.7.2, the normal 1.5× camera and a **1920×1080 internal
+canvas** displayed in the initial 1280×720 window. All five four-second samples
+were **100% foreground focused**, with movement, populated scenes and combat
+in Briarwood: **59.8–60 FPS**. Town, bakery and Northgate had no frames over
+20 ms; Briarwood retained a 20.8 ms frame by day and a **59.76 ms hitch at
+night**. This is a short steady-state test on this machine, excluding scene
+loading; occasional hitches remain. No movie capture or encoding ran alongside
+the benchmark. Run `tools/profile_audio.gd` graphically to repeat it; the report
+rejects samples with less than 95% measured foreground focus.
 
 ## Shared painted art direction
 
@@ -82,7 +119,8 @@ Three resting places can be recorded with E: the old elm, wildflower meadow,
 and Riverbend footbridge. The town delivery quest remains available:
 Pippa → Elder Mallow → Moss → Pip → red postbox. Delivery progress, forest
 memories, the same cat character, and the clock persist across area transitions.
-There is no disk save; restarting begins a fresh session.
+Game progress has no disk save; restarting begins a fresh session. Audio
+preferences are saved separately.
 
 ## Northgate Quarter — northern town district
 
@@ -396,8 +434,8 @@ available alongside their conversations.
 
 The new art remains a prototype: some silhouettes and changes between directions
 can still benefit from animation-artist cleanup.
-There is one enterable interior. Audio and disk saves are not included; combat
-is available in Briarwood only.
+There is one enterable interior. Game progress is not saved to disk; combat
+is available in Briarwood only. Sound and saved volume preferences are included.
 
 New paintings were created with **built-in imagegen**. Source files and exact
 prompts: [forest prompt set](assets/forest/generation_prompts.json).

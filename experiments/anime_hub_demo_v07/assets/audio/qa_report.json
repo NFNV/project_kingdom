@@ -1,0 +1,668 @@
+{
+  "clips": 44,
+  "playback_clips": 43,
+  "total_bytes": 37705868,
+  "failures": [],
+  "assets": {
+    "music_town": {
+      "seconds": 48.0,
+      "peak": 0.52721,
+      "rms": 0.14,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "music_woodland": {
+      "seconds": 53.3333,
+      "peak": 0.63115,
+      "rms": 0.14,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "music_night": {
+      "seconds": 52.3636,
+      "peak": 0.77999,
+      "rms": 0.09895,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "music_battle": {
+      "seconds": 48.0,
+      "peak": 0.64547,
+      "rms": 0.14,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "step_stone_0": {
+      "seconds": 0.22,
+      "peak": 0.60802,
+      "rms": 0.06389,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "step_stone_1": {
+      "seconds": 0.22,
+      "peak": 0.61046,
+      "rms": 0.06338,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "step_stone_2": {
+      "seconds": 0.22,
+      "peak": 0.55843,
+      "rms": 0.06998,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "step_stone_3": {
+      "seconds": 0.22,
+      "peak": 0.77999,
+      "rms": 0.07109,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "step_wood_0": {
+      "seconds": 0.22,
+      "peak": 0.73891,
+      "rms": 0.09067,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "step_wood_1": {
+      "seconds": 0.22,
+      "peak": 0.77999,
+      "rms": 0.09054,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "step_wood_2": {
+      "seconds": 0.22,
+      "peak": 0.73952,
+      "rms": 0.09996,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "step_wood_3": {
+      "seconds": 0.22,
+      "peak": 0.6418,
+      "rms": 0.08572,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "step_grass_0": {
+      "seconds": 0.22,
+      "peak": 0.71456,
+      "rms": 0.08246,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "step_grass_1": {
+      "seconds": 0.22,
+      "peak": 0.77999,
+      "rms": 0.07573,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "step_grass_2": {
+      "seconds": 0.22,
+      "peak": 0.75484,
+      "rms": 0.09016,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "step_grass_3": {
+      "seconds": 0.22,
+      "peak": 0.77999,
+      "rms": 0.08925,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "step_earth_0": {
+      "seconds": 0.22,
+      "peak": 0.69402,
+      "rms": 0.08716,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "step_earth_1": {
+      "seconds": 0.22,
+      "peak": 0.53908,
+      "rms": 0.08558,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "step_earth_2": {
+      "seconds": 0.22,
+      "peak": 0.77999,
+      "rms": 0.08832,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "step_earth_3": {
+      "seconds": 0.22,
+      "peak": 0.60421,
+      "rms": 0.07492,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "sword_0": {
+      "seconds": 0.3,
+      "peak": 0.77999,
+      "rms": 0.12424,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "hit_0": {
+      "seconds": 0.24,
+      "peak": 0.68392,
+      "rms": 0.05338,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "sword_1": {
+      "seconds": 0.3,
+      "peak": 0.77999,
+      "rms": 0.13129,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "hit_1": {
+      "seconds": 0.24,
+      "peak": 0.54085,
+      "rms": 0.0603,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "sword_2": {
+      "seconds": 0.3,
+      "peak": 0.77999,
+      "rms": 0.13766,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "hit_2": {
+      "seconds": 0.24,
+      "peak": 0.77602,
+      "rms": 0.0646,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "club": {
+      "seconds": 0.45,
+      "peak": 0.77999,
+      "rms": 0.12238,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "wind_charge": {
+      "seconds": 0.28,
+      "peak": 0.72939,
+      "rms": 0.12492,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "wind_release": {
+      "seconds": 0.65,
+      "peak": 0.77999,
+      "rms": 0.09475,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "hurt_player": {
+      "seconds": 0.3,
+      "peak": 0.70833,
+      "rms": 0.10288,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "defeat": {
+      "seconds": 0.45,
+      "peak": 0.61834,
+      "rms": 0.12,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "coin": {
+      "seconds": 1.23,
+      "peak": 0.69042,
+      "rms": 0.11996,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "victory": {
+      "seconds": 1.62,
+      "peak": 0.60442,
+      "rms": 0.11998,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "ui_open": {
+      "seconds": 1.23,
+      "peak": 0.77999,
+      "rms": 0.10983,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "ui_confirm": {
+      "seconds": 1.25,
+      "peak": 0.77999,
+      "rms": 0.11828,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "ui_error": {
+      "seconds": 1.28,
+      "peak": 0.74935,
+      "rms": 0.11997,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "bandit_alert": {
+      "seconds": 1.25,
+      "peak": 0.7196,
+      "rms": 0.11998,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "door": {
+      "seconds": 0.7,
+      "peak": 0.74316,
+      "rms": 0.05843,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "birds_breeze": {
+      "seconds": 12.0,
+      "peak": 0.53529,
+      "rms": 0.09998,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "night_air": {
+      "seconds": 12.0,
+      "peak": 0.39525,
+      "rms": 0.07498,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "fountain": {
+      "seconds": 12.0,
+      "peak": 0.63903,
+      "rms": 0.12997,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "river": {
+      "seconds": 12.0,
+      "peak": 0.68352,
+      "rms": 0.12997,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "oven": {
+      "seconds": 12.0,
+      "peak": 0.4676,
+      "rms": 0.08998,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    },
+    "soundtrack_preview": {
+      "seconds": 30.95,
+      "peak": 0.77999,
+      "rms": 0.13295,
+      "checks": {
+        "format": true,
+        "frames": true,
+        "hash": true,
+        "unclipped": true,
+        "peak_matches": true,
+        "rms_matches": true,
+        "non_silent_channels": true,
+        "silent_endpoints": true
+      }
+    }
+  }
+}

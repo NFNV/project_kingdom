@@ -46,6 +46,7 @@ var skill_launched := false
 var skill_casts := 0
 var light_buffer := 0.0
 var buffered_aim := Vector2.ZERO
+var swing_audio_played := false
 
 
 func _ready() -> void:
@@ -127,6 +128,8 @@ func _physics_process(delta: float) -> void:
 	velocity = Vector2(intent.x,intent.y*GROUND_Y)*speed+knockback
 	move_and_slide()
 	moved_distance = ground_vector(position-before).length()
+	if intent.length()>.05 and swing<=0 and windup<=0:
+		hub.audio.footsteps(self,moved_distance,controlled and Input.is_action_pressed("hub_run"))
 	if windup>0:
 		windup -= delta
 		if windup<=0:
@@ -134,6 +137,9 @@ func _physics_process(delta: float) -> void:
 	if swing>0:
 		swing = maxf(0,swing-delta)
 		var attack_elapsed := attack_duration-swing
+		if controlled and attack_kind=="light" and attack_elapsed>=.17 and not swing_audio_played:
+			swing_audio_played = true
+			hub.audio.play_event("sword",position,-5)
 		if attack_kind=="wind" and attack_elapsed>=Timing.WIND_RELEASE and not skill_launched:
 			_launch_wind_slash()
 		elif attack_kind=="light" and ((controlled and attack_elapsed>=Timing.LIGHT_CONTACT and attack_elapsed<=Timing.LIGHT_END_CONTACT) or (not controlled and attack_elapsed>=.10)):
@@ -216,6 +222,7 @@ func try_attack(aim := Vector2.ZERO) -> bool:
 	swing = attack_duration
 	cooldown = .64 if controlled else 1.25
 	swing_hits.clear()
+	swing_audio_played = false
 	return true
 
 
@@ -235,6 +242,7 @@ func try_skill() -> bool:
 	skill_launched = false
 	skill_buffer = 0
 	skill_cooldown = SKILL_COOLDOWN
+	hub.audio.play_event("wind_charge",position,-6)
 	swing_hits.clear()
 	route.clear()
 	return true
@@ -243,6 +251,7 @@ func try_skill() -> bool:
 func _launch_wind_slash() -> void:
 	skill_launched = true
 	skill_casts += 1
+	hub.audio.play_event("wind_release",position,-3)
 	var wave := WindSlash.new()
 	wave.hub = hub
 	wave.heading = facing.normalized()
@@ -286,9 +295,11 @@ func receive_hit(from: Vector2, damage := 1, force := 170.0) -> bool:
 	grace = 0.75 if controlled else 0.28
 	flash = 1.0
 	knockback = Vector2(from.x,from.y*GROUND_Y)*force
+	hub.audio.play_event("hurt_player" if controlled else "hit",position,-2)
 	if enemy:
 		alerted = true
 	if health<=0:
+		hub.audio.play_event("defeat",position,-8)
 		active = false
 		enemy = false
 		velocity = Vector2.ZERO
