@@ -1,0 +1,33 @@
+{
+  "adapter": "Apple M1 (Apple7)",
+  "camera_zoom": 1.5,
+  "canvas": "(1920.0, 1080.0)",
+  "engine": "4.7.2-stable (official)",
+  "notes": "Live graphical measurements, 1080p internal canvas, normal 1.5x camera, actual player movement and combat AI for twelve mixed bandits in the full layered forest. Six seconds per phase after warmup; no movie mode. Normal macOS launch uses the 60 FPS engine cap with Metal VSync disabled after observed focus-change waits. Long intervals, CPU timing, focus state and navigation costs are retained rather than discarded.",
+  "population": 12,
+  "samples": [
+    {
+      "draw_calls": 246.0,
+      "focused_fraction": 0.0,
+      "fps": 60.0,
+      "frames_above_20_ms": 0,
+      "p95_ms": 17.13,
+      "peak_navigation_ms": 0.336,
+      "phase": 1.0,
+      "spikes": [],
+      "worst_ms": 18.77
+    },
+    {
+      "draw_calls": 310.0,
+      "focused_fraction": 1.0,
+      "fps": 60.0,
+      "frames_above_20_ms": 0,
+      "p95_ms": 17.98,
+      "peak_navigation_ms": 0.971,
+      "phase": 3.0,
+      "spikes": [],
+      "worst_ms": 18.95
+    }
+  ],
+  "vsync_mode": 0
+}

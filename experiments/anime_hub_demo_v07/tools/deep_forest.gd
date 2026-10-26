@@ -45,10 +45,12 @@ static func build(hub: Node2D) -> void:
 			if hub.forest_defeated.has(id):
 				continue
 			var at: Vector2 = CAMPS[pack]+[Vector2(-70,15),Vector2(65,20),Vector2(0,-60)][member]
-			var dog = hub._actor(false,at)
+			var dog = hub._actor(false,at,"mauler" if member==2 else "raider")
 			dog.resident_id = id
 			dog.enemy = true
 			dog.home = at
+			dog.patrol = PackedVector2Array([at,at+Vector2(65,30),at+Vector2(-45,38)])
+			dog.patrol_wait = .5+member*.65+pack*.17
 			dog.maximum_health = 3
 			dog.health = 3
 			dog.path_timer = (pack*3+member)*.037

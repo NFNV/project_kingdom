@@ -81,7 +81,7 @@ func _run() -> void:
 	check(dog.alerted and dog.position.distance_to(dog_start)>20,"A nearby bandit notices and physically chases the cat")
 	await place(game.Map.Wilds.ENTRY)
 	await ticks(250)
-	check(not dog.alerted and dog.position.distance_to(dog.home)<35,"A bandit abandons a distant chase and returns to its own clearing")
+	check(not dog.alerted and dog.position.distance_to(dog.home)<135,"A bandit abandons a distant chase and resumes its bounded camp patrol")
 	# Reset the duel onto the clearing, then step away during its visible windup.
 	dog.position = dog.home
 	dog.reset_physics_interpolation()

@@ -1,0 +1,25 @@
+{
+  "tool": "built-in imagegen",
+  "assets": {
+    "raider_v1.png": {
+      "size": [
+        1774,
+        887
+      ],
+      "rgba_transparency": true,
+      "registered_drawings": 32,
+      "original_hash_verified": true,
+      "sha256": "2533ebe5f2cc39aa5a3e27affe11f3ad264b69b6407819a4c377070c74172e41"
+    },
+    "mauler_v1.png": {
+      "size": [
+        1774,
+        887
+      ],
+      "rgba_transparency": true,
+      "registered_drawings": 32,
+      "original_hash_verified": true,
+      "sha256": "4a8264e1a8cad83751644c7512fdad744e127d2667fdbd69f2e230a18338fb06"
+    }
+  }
+}

@@ -156,9 +156,46 @@ block movement and melee, and foliage fades around the cat. A schematic map
 shows the four clearings, cleared packs, the player and the western exit.
 The existing 1.5× follow camera and the smaller animal scale stay in use.
 
-**Twelve dog bandits**, in four packs of three, notice nearby intruders, pursue
-within their home territory, telegraph attacks with red warning rings, and
-return home when the cat escapes. The cat keeps its sword sheathed while idle, walking, running and shopping.
+**Twelve dog bandits** now have their own artwork and behavior: four camps each
+contain two burgundy-scarf **sword raiders** and one ochre-scarf **club mauler**.
+They walk short local patrols, notice nearby intruders, pursue within their
+territory, and return to camp before resuming patrol when the cat escapes.
+The friendly blue town wardens keep their existing art and peaceful behavior.
+
+| Enemy attack | Warning | Escape |
+|---|---|---|
+| Raider slash | 0.55 seconds; red forward sector | Step back or behind |
+| Raider lunge | 0.72 seconds; red straight lane | Sidestep; trunks stop the dash |
+| Mauler sweep | 1.0 second; amber wide sector | Leave its reach or move behind |
+
+Attack aim locks during the warning. Damage is confined to the visible active
+stage, once per swing; recovery is safe. Lunge damage stays within its lane and
+uses real collision movement. A sword hit cancels anticipation, briefly staggers
+the bandit, displays its drawn recoil pose, flashes the body, pushes it away and
+shows a short impact burst/damage number. Defeated bandits recoil and fade.
+All still take three normal hits or one Wind Slash, and give two coins each.
+
+The two [enemy sheets](assets/bandits/generation.json) contain **64 original
+drawings**: eight poses in four views per role, including three drawn walk poses,
+wind-up, contact, recovery and hurt. They were made with **built-in imagegen**;
+the exact prompts and original paths are saved beside the PNGs. Read-only
+[registration](tools/register_bandits.py) and native alpha polygons isolate
+complete figures, preserve grounded boots and limit accidental size changes.
+See the [native combat preview](previews/bandit_combat.mp4),
+[all 64 native poses](previews/bandit_pose_review.png), and
+[enemy checks](tools/test_bandits.gd). These remain prototype key-pose animations.
+The two sheet textures, contours, pose meshes and triangle indices are cached
+and shared; all views are prepared during zone loading. Use
+`preview_bandits.gd -- --profile` for live full-forest measurements at the normal
+camera, recorded in [bandit_performance.json](bandit_performance.json).
+On macOS, normal launch uses the 60 FPS engine cap with Metal VSync disabled
+after profiling found long focus-change waits with both pacing mechanisms.
+The report retains long intervals and focus state; it is not a guarantee of
+locked 60 FPS under every desktop condition.
+The MP4 was recorded at a fixed 60 FPS for inspection; its encoding speed is
+not a live gameplay benchmark.
+
+The cat keeps its sword sheathed while idle, walking, running and shopping.
 Only attack/skill poses show the blade in its paw. During attacks, **32 drawn combat
 poses** replace the walking body: eight timed stages in four real facing views,
 including drawing the blade, anticipation, early slash, contact, follow-through,
@@ -188,7 +225,7 @@ Move away from red enemy warnings to dodge. A bandit takes three normal hits
 or one wind slash. The cat has five health and brief invulnerability after
 being hit. Each unique defeat rewards **two coins**. Defeated bandits remain
 defeated across travel and checkpoint recovery; clearing all twelve completes
-the objective. Dogs reuse the existing small warrior animation resources.
+the objective. Bandit bodies use their own cached sheets and native silhouettes.
 
 On defeat, a short fade returns the cat to the sheltered western entrance with
 full health. Coins, defeated enemies, errands, purchases and the shared clock
@@ -208,7 +245,10 @@ travel cleanup and safe-area guards. The **255 gameplay**, **45 forest combat**
 and **44 sword/skill** checks pass. The **35 animation checks** additionally test
 phase continuity, pivots, all eight stages, actual rendered head landmarks and
 grounded boots, current-direction attacks, recovery hit safety, queued input and
-travel cleanup. With the 154 district checks, **533/533 checks pass**.
+travel cleanup. With the 154 district checks and 32 enemy checks,
+**565/565 checks pass**. The enemy checks cover actual patrols, three attacks,
+locked warnings, dodges, collision during lunges, recovery safety, stagger,
+pause, retreat, rewards, persistent roles and friendly-town isolation.
 Native previews: [attack](previews/drawn_sword_attack.png),
 [all 32 poses](previews/polished_attack_phases.png), [Q projectile](previews/wind_slash.png).
 

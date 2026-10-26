@@ -3,6 +3,7 @@ extends Node2D
 const ART := "res://experiments/anime_hub_assets_v06/"
 const ROOT := "res://experiments/anime_hub_demo_v07/"
 const Actor := preload("res://experiments/anime_hub_demo_v07/tools/actor.gd")
+const Bandit := preload("res://experiments/anime_hub_demo_v07/tools/bandit.gd")
 const Map := preload("res://experiments/anime_hub_demo_v07/tools/woodland_map.gd")
 const Resident := preload("res://experiments/anime_hub_demo_v07/tools/resident_motion.gd")
 const Human := preload("res://experiments/anime_hub_demo_v07/tools/human_resident.gd")
@@ -98,6 +99,10 @@ func _ready() -> void:
 	get_window().content_scale_aspect = Window.CONTENT_SCALE_ASPECT_KEEP
 	get_window().size = Vector2i(1280,720)
 	Engine.max_fps = 60
+	if OS.get_name()=="macOS" and DisplayServer.get_name()!="headless":
+		# The engine cap provides pacing. Metal VSync showed long waits during
+		# focus changes on the development Mac; keep gameplay responsive there.
+		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
 	Engine.physics_ticks_per_second = 60
 	get_tree().physics_interpolation = true
 	_install_input()
@@ -127,7 +132,7 @@ func _ready() -> void:
 		_say("Welcome to Northgate", "The northern town opens into streets, wide sidewalks, Sunstone Plaza and Linden Park. E to chat; the southern avenue returns to Garden Square.")
 	elif "--wilds" in OS.get_cmdline_user_args():
 		_load_zone("wilds","river")
-		_say("Briarwood Wilds", "Dog bandits hold the forest clearings. Space or left click to strike; Q fires Wind Slash. Step away from red warning circles. The west trail leads back to safety.")
+		_say("Briarwood Wilds", "Sword raiders slash and lunge; club maulers sweep wide. Sidestep red lanes or move behind amber warnings. Space / click to strike; Q fires Wind Slash. The west trail leads to safety.")
 	elif "--river" in OS.get_cmdline_user_args():
 		_load_zone("river","trail")
 	if "--capture" in OS.get_cmdline_user_args():
@@ -379,9 +384,11 @@ func _piece(id: String, at: Vector2, height: float) -> Node2D:
 	return anchor
 
 
-func _actor(controlled: bool, at: Vector2):
+func _actor(controlled: bool, at: Vector2, bandit_role := ""):
 	var actor := CharacterBody2D.new()
-	actor.set_script(Actor)
+	actor.set_script(Bandit if not bandit_role.is_empty() else Actor)
+	if not bandit_role.is_empty():
+		actor.variant = bandit_role
 	actor.hub = self
 	actor.controlled = controlled
 	actor.position = at

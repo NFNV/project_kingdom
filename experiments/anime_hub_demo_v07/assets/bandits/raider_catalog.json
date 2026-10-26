@@ -1,0 +1,413 @@
+{
+  "asset": "raider_v1.png",
+  "size": [
+    1774,
+    887
+  ],
+  "sha256": "2533ebe5f2cc39aa5a3e27affe11f3ad264b69b6407819a4c377070c74172e41",
+  "directions": {
+    "se": [
+      {
+        "region": [
+          24,
+          14,
+          193,
+          201
+        ],
+        "head_x": 120.0,
+        "head_y": 62.5,
+        "head_width": 107,
+        "foot_y": 215
+      },
+      {
+        "region": [
+          248,
+          14,
+          193,
+          201
+        ],
+        "head_x": 345.0,
+        "head_y": 63.5,
+        "head_width": 109,
+        "foot_y": 215
+      },
+      {
+        "region": [
+          469,
+          13,
+          191,
+          201
+        ],
+        "head_x": 556.0,
+        "head_y": 61.5,
+        "head_width": 111,
+        "foot_y": 214
+      },
+      {
+        "region": [
+          689,
+          13,
+          190,
+          202
+        ],
+        "head_x": 781.0,
+        "head_y": 61.5,
+        "head_width": 111,
+        "foot_y": 215
+      },
+      {
+        "region": [
+          902,
+          7,
+          182,
+          208
+        ],
+        "head_x": 1012.0,
+        "head_y": 66.5,
+        "head_width": 109,
+        "foot_y": 215
+      },
+      {
+        "region": [
+          1124,
+          23,
+          248,
+          193
+        ],
+        "head_x": 1257.0,
+        "head_y": 74.0,
+        "head_width": 109,
+        "foot_y": 216
+      },
+      {
+        "region": [
+          1369,
+          15,
+          189,
+          201
+        ],
+        "head_x": 1455.0,
+        "head_y": 63.5,
+        "head_width": 109,
+        "foot_y": 216
+      },
+      {
+        "region": [
+          1587,
+          17,
+          174,
+          200
+        ],
+        "head_x": 1653.5,
+        "head_y": 67.0,
+        "head_width": 116,
+        "foot_y": 217
+      }
+    ],
+    "sw": [
+      {
+        "region": [
+          21,
+          233,
+          189,
+          204
+        ],
+        "head_x": 121.5,
+        "head_y": 282.0,
+        "head_width": 108,
+        "foot_y": 437
+      },
+      {
+        "region": [
+          237,
+          233,
+          197,
+          204
+        ],
+        "head_x": 330.5,
+        "head_y": 282.0,
+        "head_width": 108,
+        "foot_y": 437
+      },
+      {
+        "region": [
+          458,
+          233,
+          191,
+          204
+        ],
+        "head_x": 553.0,
+        "head_y": 282.5,
+        "head_width": 109,
+        "foot_y": 437
+      },
+      {
+        "region": [
+          670,
+          232,
+          197,
+          205
+        ],
+        "head_x": 772.5,
+        "head_y": 281.5,
+        "head_width": 108,
+        "foot_y": 437
+      },
+      {
+        "region": [
+          915,
+          224,
+          176,
+          214
+        ],
+        "head_x": 984.0,
+        "head_y": 281.0,
+        "head_width": 111,
+        "foot_y": 438
+      },
+      {
+        "region": [
+          1097,
+          250,
+          255,
+          188
+        ],
+        "head_x": 1241.5,
+        "head_y": 305.0,
+        "head_width": 110,
+        "foot_y": 438
+      },
+      {
+        "region": [
+          1366,
+          232,
+          189,
+          204
+        ],
+        "head_x": 1467.5,
+        "head_y": 281.5,
+        "head_width": 108,
+        "foot_y": 436
+      },
+      {
+        "region": [
+          1579,
+          235,
+          178,
+          202
+        ],
+        "head_x": 1687.5,
+        "head_y": 286.0,
+        "head_width": 108,
+        "foot_y": 437
+      }
+    ],
+    "ne": [
+      {
+        "region": [
+          31,
+          454,
+          199,
+          199
+        ],
+        "head_x": 146.5,
+        "head_y": 497.5,
+        "head_width": 100,
+        "foot_y": 653
+      },
+      {
+        "region": [
+          260,
+          457,
+          192,
+          197
+        ],
+        "head_x": 364.5,
+        "head_y": 499.5,
+        "head_width": 106,
+        "foot_y": 654
+      },
+      {
+        "region": [
+          477,
+          456,
+          194,
+          199
+        ],
+        "head_x": 576.5,
+        "head_y": 498.5,
+        "head_width": 110,
+        "foot_y": 655
+      },
+      {
+        "region": [
+          696,
+          455,
+          188,
+          200
+        ],
+        "head_x": 794.0,
+        "head_y": 498.0,
+        "head_width": 109,
+        "foot_y": 655
+      },
+      {
+        "region": [
+          919,
+          454,
+          167,
+          202
+        ],
+        "head_x": 1033.5,
+        "head_y": 502.0,
+        "head_width": 100,
+        "foot_y": 656
+      },
+      {
+        "region": [
+          1132,
+          466,
+          263,
+          191
+        ],
+        "head_x": 1259.5,
+        "head_y": 506.0,
+        "head_width": 108,
+        "foot_y": 657
+      },
+      {
+        "region": [
+          1394,
+          457,
+          193,
+          202
+        ],
+        "head_x": 1487.0,
+        "head_y": 499.5,
+        "head_width": 107,
+        "foot_y": 659
+      },
+      {
+        "region": [
+          1614,
+          456,
+          141,
+          201
+        ],
+        "head_x": 1682.5,
+        "head_y": 496.5,
+        "head_width": 112,
+        "foot_y": 657
+      }
+    ],
+    "nw": [
+      {
+        "region": [
+          18,
+          673,
+          198,
+          199
+        ],
+        "head_x": 110.0,
+        "head_y": 714.5,
+        "head_width": 107,
+        "foot_y": 872
+      },
+      {
+        "region": [
+          239,
+          673,
+          199,
+          198
+        ],
+        "head_x": 327.5,
+        "head_y": 715.5,
+        "head_width": 110,
+        "foot_y": 871
+      },
+      {
+        "region": [
+          457,
+          673,
+          191,
+          198
+        ],
+        "head_x": 545.0,
+        "head_y": 715.5,
+        "head_width": 109,
+        "foot_y": 871
+      },
+      {
+        "region": [
+          673,
+          672,
+          201,
+          199
+        ],
+        "head_x": 767.0,
+        "head_y": 713.0,
+        "head_width": 107,
+        "foot_y": 871
+      },
+      {
+        "region": [
+          929,
+          667,
+          166,
+          206
+        ],
+        "head_x": 983.0,
+        "head_y": 717.5,
+        "head_width": 107,
+        "foot_y": 873
+      },
+      {
+        "region": [
+          1123,
+          683,
+          236,
+          188
+        ],
+        "head_x": 1230.5,
+        "head_y": 722.5,
+        "head_width": 110,
+        "foot_y": 871
+      },
+      {
+        "region": [
+          1371,
+          674,
+          193,
+          198
+        ],
+        "head_x": 1456.0,
+        "head_y": 716.5,
+        "head_width": 109,
+        "foot_y": 872
+      },
+      {
+        "region": [
+          1618,
+          673,
+          137,
+          197
+        ],
+        "head_x": 1691.0,
+        "head_y": 716.5,
+        "head_width": 111,
+        "foot_y": 870
+      }
+    ]
+  },
+  "poses": [
+    "idle",
+    "walk_left",
+    "walk_pass",
+    "walk_right",
+    "windup",
+    "strike",
+    "recover",
+    "hurt"
+  ],
+  "notes": "32 separate original drawings. Native alpha contours isolate figures and prevent neighboring swords from leaking across generated grid cells. Head-width registration and grounded boots control scale; no source pixels are rewritten."
+}
