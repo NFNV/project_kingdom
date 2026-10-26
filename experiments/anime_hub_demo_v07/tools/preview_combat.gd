@@ -26,7 +26,7 @@ func _run() -> void:
 	game.camera.force_update_scroll()
 	await create_timer(1).timeout
 	game.player.try_attack()
-	await create_timer(.18).timeout
+	await create_timer(.25).timeout
 	await save("drawn_sword_attack")
 	await create_timer(.7).timeout
 	var key := InputEventKey.new()
@@ -37,7 +37,9 @@ func _run() -> void:
 	await save("wind_slash")
 	key.pressed = false
 	Input.parse_input_event(key)
-	# Native art QA sheet: four real directions × four actual attack phases.
+	# Native art QA sheet: four real directions × eight actual attack stages.
+	var motion_metadata: Dictionary = game.player.sprite.metadata
+	var display_height: float = game.player.sprite.display_height
 	game.queue_free()
 	await process_frame
 	await process_frame
@@ -49,21 +51,22 @@ func _run() -> void:
 	background.color = Color("e1e8d5")
 	stage.add_child(background)
 	var title := Label.new()
-	title.text = "SWORD ATTACK  /  WIND-UP · STRIKE · FOLLOW-THROUGH · RECOVERY"
+	title.text = "DRAW · ANTICIPATE · EARLY SLASH · CONTACT · FOLLOW · SETTLE · RECOVER · SHEATHE"
 	title.position = Vector2(90,25)
 	title.add_theme_font_size_override("font_size",28)
 	title.modulate = Color("294d3e")
 	stage.add_child(title)
 	for row in 4:
-		for col in 4:
+		for col in 8:
 			var body := Polygon2D.new()
 			body.set_script(load(ROOT+"tools/cat_combat.gd"))
 			stage.add_child(body)
 			var facing: Vector2 = [Vector2(1,1),Vector2(-1,1),Vector2(1,-1),Vector2(-1,-1)][row]
-			body.pose(facing,[.05,.4,.65,.9][col],false)
-			body.position = Vector2(270+col*460,275+row*252)
-			body.scale *= 2.8
+			body.configure_reference(motion_metadata,display_height)
+			body.pose(facing,[.067,.208,.325,.417,.517,.617,.733,.9][col],false)
+			body.position = Vector2(135+col*235,275+row*252)
+			body.scale *= 2.25
 	await create_timer(.2).timeout
-	await save("drawn_attack_phases")
-	print("Captured drawn body attack, actual Q projectile, and all sixteen registered combat poses.")
+	await save("polished_attack_phases")
+	print("Captured drawn body attack, actual Q projectile, and all thirty-two registered combat poses.")
 	quit()

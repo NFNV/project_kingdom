@@ -17,6 +17,8 @@
         "foot_x": 182.0,
         "foot_y": 330,
         "head_width": 135,
+        "head_center_y": 124.0,
+        "head_bottom_y": 185,
         "display_scale": 0.233333
       },
       {
@@ -29,6 +31,8 @@
         "foot_x": 454.5,
         "foot_y": 331,
         "head_width": 136,
+        "head_center_y": 120.0,
+        "head_bottom_y": 179,
         "display_scale": 0.231618
       },
       {
@@ -41,6 +45,8 @@
         "foot_x": 726.0,
         "foot_y": 329,
         "head_width": 139,
+        "head_center_y": 121.5,
+        "head_bottom_y": 182,
         "display_scale": 0.226619
       },
       {
@@ -53,6 +59,8 @@
         "foot_x": 986.5,
         "foot_y": 327,
         "head_width": 134,
+        "head_center_y": 119.5,
+        "head_bottom_y": 179,
         "display_scale": 0.235075
       }
     ],
@@ -67,6 +75,8 @@
         "foot_x": 162.0,
         "foot_y": 642,
         "head_width": 135,
+        "head_center_y": 433.5,
+        "head_bottom_y": 497,
         "display_scale": 0.233333
       },
       {
@@ -79,6 +89,8 @@
         "foot_x": 425.0,
         "foot_y": 649,
         "head_width": 137,
+        "head_center_y": 438.0,
+        "head_bottom_y": 501,
         "display_scale": 0.229927
       },
       {
@@ -91,6 +103,8 @@
         "foot_x": 713.5,
         "foot_y": 648,
         "head_width": 142,
+        "head_center_y": 438.0,
+        "head_bottom_y": 502,
         "display_scale": 0.221831
       },
       {
@@ -103,6 +117,8 @@
         "foot_x": 1010.0,
         "foot_y": 641,
         "head_width": 133,
+        "head_center_y": 434.0,
+        "head_bottom_y": 495,
         "display_scale": 0.236842
       }
     ],
@@ -117,6 +133,8 @@
         "foot_x": 169.5,
         "foot_y": 977,
         "head_width": 128,
+        "head_center_y": 763.5,
+        "head_bottom_y": 821,
         "display_scale": 0.246094
       },
       {
@@ -129,6 +147,8 @@
         "foot_x": 443.5,
         "foot_y": 977,
         "head_width": 126,
+        "head_center_y": 755.0,
+        "head_bottom_y": 811,
         "display_scale": 0.25
       },
       {
@@ -141,6 +161,8 @@
         "foot_x": 735.0,
         "foot_y": 972,
         "head_width": 133,
+        "head_center_y": 756.0,
+        "head_bottom_y": 816,
         "display_scale": 0.236842
       },
       {
@@ -153,6 +175,8 @@
         "foot_x": 988.0,
         "foot_y": 971,
         "head_width": 131,
+        "head_center_y": 755.0,
+        "head_bottom_y": 815,
         "display_scale": 0.240458
       }
     ],
@@ -167,6 +191,8 @@
         "foot_x": 133.0,
         "foot_y": 1308,
         "head_width": 129,
+        "head_center_y": 1108.5,
+        "head_bottom_y": 1163,
         "display_scale": 0.244186
       },
       {
@@ -179,6 +205,8 @@
         "foot_x": 459.0,
         "foot_y": 1303,
         "head_width": 129,
+        "head_center_y": 1079.0,
+        "head_bottom_y": 1133,
         "display_scale": 0.244186
       },
       {
@@ -191,6 +219,8 @@
         "foot_x": 740.0,
         "foot_y": 1299,
         "head_width": 135,
+        "head_center_y": 1086.0,
+        "head_bottom_y": 1145,
         "display_scale": 0.233333
       },
       {
@@ -203,9 +233,11 @@
         "foot_x": 1001.0,
         "foot_y": 1306,
         "head_width": 133,
+        "head_center_y": 1080.0,
+        "head_bottom_y": 1139,
         "display_scale": 0.236842
       }
     ]
   },
-  "notes": "Read-only connected-component analysis, not an assumed equal grid. Native alpha polygons isolate each complete figure so overlapping bounding boxes cannot introduce neighboring sword tips or clipped ears. Original generated PNG is unchanged."
+  "notes": "Read-only component and anatomical head registration. Sixteen original drawings are sampled with native alpha polygons; transparent margins and original pixels remain unchanged."
 }

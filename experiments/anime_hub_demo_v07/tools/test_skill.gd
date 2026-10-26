@@ -67,7 +67,7 @@ func _run() -> void:
 	check(first.health==3,"Normal sword attack has anticipation before its hit")
 	await ticks(10)
 	check(first.health==2,"Normal sword attack still deals one actual damage")
-	await ticks(20)
+	await ticks(25)
 	check(not game.player.combat_art.visible and game.player.sprite.visible and not game.player.weapon.visible,"Attack recovers to the registered walking/idle character")
 	# Reproduce the reported problem: Q pressed while Space is held mid-attack.
 	first.health = 3
@@ -90,7 +90,7 @@ func _run() -> void:
 	game._update_hud()
 	check(game.ui.skill_label.text.contains("Queued"),"The interface acknowledges the queued skill")
 	var coins: int = game.coins
-	await ticks(35)
+	await ticks(40)
 	Input.action_release("hub_attack")
 	game.player.automated = true
 	check(game.player.attack_kind=="wind" and game.player.skill_cooldown>0,"Queued Q takes priority over continued Space attacks")
@@ -116,7 +116,7 @@ func _run() -> void:
 	check(game.player.skill_cooldown==0 and not game.ui.skill_button.disabled,"The skill becomes usable again after recharge")
 	# The clickable button is a second complete input path.
 	game.ui.skill_button.pressed.emit()
-	await ticks(16)
+	await ticks(19)
 	check(game.player.skill_casts==2 and waves().size()==1,"Clicking the skill button launches the same actual projectile")
 	game.set_paused(true)
 	var wave: Node2D = waves()[0]
@@ -148,7 +148,7 @@ func _run() -> void:
 	game.player.swing = 0
 	game.player.position = center
 	game.player.try_skill()
-	await ticks(16)
+	await ticks(19)
 	check(waves().size()==1,"A fresh cast is visible before travel")
 	cooldown = game.player.skill_cooldown
 	game._load_zone("river","wilds")

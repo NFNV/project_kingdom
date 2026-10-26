@@ -1,5 +1,16 @@
 # Project Kingdom
 
+The current playable version is the painted anime demo with Garden Square,
+Northgate Quarter, the bakery and the connected forests. **Run Project (F5)**
+starts this version in Garden Square. See the [current demo guide](experiments/anime_hub_demo_v07/README.md)
+for controls, combat and direct zone launchers.
+
+To use **Run Current Scene** instead, open
+`experiments/anime_hub_demo_v07/demo.tscn` first. That button runs whichever
+scene is open, including an older prototype.
+
+## Original prototype (historical)
+
 A small Godot action RPG prototype set on the border between the Dog and Cat
 Kingdoms. The current debug slice uses a generated cat warrior as the player
 and generated dog warriors as enemies, alongside Tiny Swords environment art.
@@ -21,12 +32,12 @@ Kingdom banner.
    `assets/local_characters/dog_warrior.png`. These are separate local assets;
    they are not included in the Tiny Swords download. See
    [character art and prompts](docs/character-art.md) for provenance and setup.
-5. Import `project.godot` in Godot and press **F6** with the game scene open, or
-   **F5** to run the configured main scene.
+5. Open `scenes/game.tscn` in Godot and use **Run Current Scene (F6)** to run
+   this original prototype explicitly. **Run Project (F5)** starts the current anime demo.
 
 The source checkout deliberately omits the artwork. Both the environment pack
 and the two local animal atlases are required before import, play, or the
-integration checks. F5 starts the cat-player / dog-enemy debug scenario.
+integration checks for this historical slice.
 
 On this Mac, the engine is currently at
 `/Users/n/Downloads/Godot.app/Contents/MacOS/Godot`. From the project directory:

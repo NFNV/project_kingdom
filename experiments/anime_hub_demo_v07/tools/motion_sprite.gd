@@ -18,12 +18,15 @@ var distance_accumulated := 0.0
 var gesture_count := 0
 var body_origin := Vector2.ZERO
 var registered := false
+var heading_angle := PI/4.0
+const TURN_SPEED := 24.0
 
 
 func configure(id: String, height: float, phase_offset := 0.0) -> void:
 	actor_id = id
 	display_height = height
 	idle_clock = phase_offset
+	heading_angle = PI/4.0
 	metadata = JSON.parse_string(FileAccess.get_file_as_string(ROOT+"catalog.json"))[id]
 	sprite_frames = load(ROOT+id+"_frames.tres")
 	centered = false
@@ -49,11 +52,16 @@ func direction_for(vector: Vector2) -> String:
 
 func tick(delta: float, travelled: float, vector: Vector2, running := false) -> void:
 	idle_clock += delta
+	var visual_heading := vector
+	if eight_directions and vector.length_squared()>.01:
+		# Pivot through the existing drawn views while movement stays responsive.
+		heading_angle = rotate_toward(heading_angle,vector.angle(),TURN_SPEED*delta)
+		visual_heading = Vector2.from_angle(heading_angle)
 	if travelled>.025:
-		var heading := direction_for(vector)
+		var heading := direction_for(visual_heading)
 		var gait := "run" if running and eight_directions else "walk"
 		var cycle_length := (164.0 if gait=="run" else (118.0 if actor_id=="cat" else 100.0))*display_height/108.0
-		if state=="idle" or state=="gesture":
+		if state=="gesture":
 			phase = 0.0
 		phase = fposmod(phase+travelled/cycle_length,1.0)
 		distance_accumulated += travelled
@@ -61,7 +69,7 @@ func tick(delta: float, travelled: float, vector: Vector2, running := false) -> 
 		set_pose(gait,heading,int(phase*8)%8,delta)
 	else:
 		if vector.length_squared()>.01:
-			facing_direction = direction_for(vector)
+			facing_direction = direction_for(visual_heading)
 		if gesture_clock>=0 and sprite_frames.has_animation("gesture_se"):
 			gesture_clock += delta
 			if gesture_clock<1.15:

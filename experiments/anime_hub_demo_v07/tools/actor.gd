@@ -8,6 +8,7 @@ const Sword := preload("res://experiments/anime_hub_demo_v07/tools/cat_sword.gd"
 const SKILL_COOLDOWN := 6.0
 const WindSlash := preload("res://experiments/anime_hub_demo_v07/tools/wind_slash.gd")
 const CombatArt := preload("res://experiments/anime_hub_demo_v07/tools/cat_combat.gd")
+const Timing := preload("res://experiments/anime_hub_demo_v07/tools/combat_timing.gd")
 var hub: Node2D
 var controlled := false
 var enemy := false
@@ -43,6 +44,8 @@ var combat_art: Polygon2D
 var skill_buffer := 0.0
 var skill_launched := false
 var skill_casts := 0
+var light_buffer := 0.0
+var buffered_aim := Vector2.ZERO
 
 
 func _ready() -> void:
@@ -63,6 +66,7 @@ func _ready() -> void:
 		weapon.sync_pose()
 		combat_art = CombatArt.new()
 		add_child(combat_art)
+		combat_art.configure_reference(sprite.metadata,sprite.display_height)
 		combat_art.hide()
 	physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_ON
 	queue_redraw()
@@ -84,11 +88,9 @@ func _physics_process(delta: float) -> void:
 	grace = maxf(0,grace-delta)
 	cooldown = maxf(0,cooldown-delta)
 	skill_cooldown = maxf(0,skill_cooldown-delta)
+	light_buffer = maxf(0,light_buffer-delta)
 	if skill_buffer>0:
 		skill_buffer = maxf(0,skill_buffer-delta)
-		if cooldown<=0 and swing<=0:
-			skill_buffer = 0
-			try_skill()
 	flash = maxf(0,flash-delta*4)
 	knockback = knockback.move_toward(Vector2.ZERO,1000*delta)
 	if controlled:
@@ -98,8 +100,18 @@ func _physics_process(delta: float) -> void:
 				route.clear()
 			elif not route.is_empty():
 				intent = follow_route()
-			if Input.is_action_pressed("hub_attack") and skill_buffer<=0:
-				try_attack()
+		if intent.length()>.05 and swing<=0:
+			facing = intent.normalized()
+		if skill_buffer>0 and cooldown<=0 and swing<=0:
+			skill_buffer = 0
+			try_skill()
+		if light_buffer>0 and skill_buffer<=0 and swing<=0 and cooldown<=0:
+			var aim := buffered_aim
+			light_buffer = 0
+			try_attack(aim)
+		if not automated and Input.is_action_pressed("hub_attack") and skill_buffer<=0:
+			try_attack()
+
 	else:
 		intent = _enemy_intent(delta)
 	if intent.length()>0.05 and windup<=0 and swing<=0:
@@ -122,9 +134,9 @@ func _physics_process(delta: float) -> void:
 	if swing>0:
 		swing = maxf(0,swing-delta)
 		var attack_elapsed := attack_duration-swing
-		if attack_kind=="wind" and attack_elapsed>=.22 and not skill_launched:
+		if attack_kind=="wind" and attack_elapsed>=Timing.WIND_RELEASE and not skill_launched:
 			_launch_wind_slash()
-		elif attack_kind=="light" and attack_elapsed>=(.14 if controlled else .10):
+		elif attack_kind=="light" and ((controlled and attack_elapsed>=Timing.LIGHT_CONTACT and attack_elapsed<=Timing.LIGHT_END_CONTACT) or (not controlled and attack_elapsed>=.10)):
 			resolve_hits()
 	_update_animation(delta,moved_distance)
 	var tint: Color = hub.actor_tint
@@ -187,16 +199,22 @@ func _enemy_intent(delta: float) -> Vector2:
 func try_attack(aim := Vector2.ZERO) -> bool:
 	if hub.peaceful_mode or hub.transitioning or hub.shopping:
 		return false
-	if not active or hub.paused or cooldown>0 or swing>0:
+	if not active or hub.paused:
+		return false
+	if cooldown>0 or swing>0:
+		if controlled and aim.length()>.1 and attack_duration-swing>=(.49 if attack_kind=="wind" else .30) and skill_buffer<=0:
+			light_buffer = .40
+			buffered_aim = aim
+			return true
 		return false
 	if not controlled and not enemy:
 		return false
 	if aim.length()>0.1:
 		facing = ground_vector(aim).normalized()
 	attack_kind = "light"
-	attack_duration = .46 if controlled else .32
+	attack_duration = Timing.LIGHT_DURATION if controlled else .32
 	swing = attack_duration
-	cooldown = .50 if controlled else 1.25
+	cooldown = .64 if controlled else 1.25
 	swing_hits.clear()
 	return true
 
@@ -210,9 +228,10 @@ func try_skill() -> bool:
 		skill_buffer = .70
 		return true
 	attack_kind = "wind"
-	attack_duration = .65
+	attack_duration = Timing.WIND_DURATION
 	swing = attack_duration
-	cooldown = .72
+	cooldown = .78
+	light_buffer = 0
 	skill_launched = false
 	skill_buffer = 0
 	skill_cooldown = SKILL_COOLDOWN
@@ -328,15 +347,14 @@ func _draw() -> void:
 		for i in maximum_health:
 			draw_circle(Vector2((i-(maximum_health-1)*0.5)*10,-sprite.display_height-12),3,Color("eea07f") if i<health else Color("473e38"))
 	if swing>0:
-		var progress := 1.0-swing/attack_duration
+		var elapsed := attack_duration-swing
 		var angle := atan2(facing.y*GROUND_Y,facing.x)
 		draw_set_transform(Vector2(0,-31),angle,Vector2(1,0.66))
 		if attack_kind=="wind":
-			var charge := clampf(progress/.35,0,1)
-			if progress<.35:
+			if elapsed>=.08 and elapsed<Timing.WIND_RELEASE:
+				var charge := clampf((elapsed-.08)/(Timing.WIND_RELEASE-.08),0,1)
 				draw_arc(Vector2.ZERO,24+charge*12,-1.8,1.8,32,Color(.7,.9,1,charge*.8),2,true)
-			else:
-				draw_arc(Vector2.ZERO,30,-1.8,1.8,24,Color(.6,.95,1,(1.0-progress)*.35),2,true)
-		else:
-			draw_arc(Vector2.ZERO,56,lerpf(-1.3,0.4,progress),lerpf(0.1,1.7,progress),20,Color(1,0.93,0.68,sin(progress*PI)*0.9),4,true)
+		elif not controlled or (elapsed>=Timing.LIGHT_CONTACT and elapsed<=Timing.LIGHT_END_CONTACT):
+			var progress := clampf((elapsed-Timing.LIGHT_CONTACT)/(Timing.LIGHT_END_CONTACT-Timing.LIGHT_CONTACT),0,1) if controlled else elapsed/attack_duration
+			draw_arc(Vector2.ZERO,56,lerpf(-1.3,.4,progress),lerpf(.1,1.7,progress),20,Color(1,.93,.68,sin(progress*PI)*.9),4,true)
 		draw_set_transform(Vector2.ZERO)

@@ -232,8 +232,10 @@ func _load_zone(destination: String, entry: String) -> void:
 	player.cooldown = 0
 	player.swing = 0
 	player.attack_kind = "light"
-	player.attack_duration = .46
+	player.attack_duration = Actor.Timing.LIGHT_DURATION
 	player.skill_buffer = 0
+	player.light_buffer = 0
+	player.buffered_aim = Vector2.ZERO
 	player.skill_launched = false
 	player.windup = 0
 	player.knockback = Vector2.ZERO

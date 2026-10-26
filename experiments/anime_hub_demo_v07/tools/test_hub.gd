@@ -117,9 +117,10 @@ func _check_motion() -> void:
 		var correct_sheet := true
 		for tick in 40:
 			await physics_frame
-			south_poses[motion.frame] = true
-			var texture: AtlasTexture = motion.sprite_frames.get_frame_texture(motion.animation,motion.frame)
-			correct_sheet = correct_sheet and texture.atlas.resource_path.ends_with("cat_s_v2.png") and not motion.flip_h
+			if motion.facing_direction=="s":
+				south_poses[motion.frame] = true
+				var texture: AtlasTexture = motion.sprite_frames.get_frame_texture(motion.animation,motion.frame)
+				correct_sheet = correct_sheet and texture.atlas.resource_path.ends_with("cat_s_v2.png") and not motion.flip_h
 		_check(motion.animation==("run_s" if running else "walk_s") and south_poses.size()==8,"Downward "+("running" if running else "walking")+" plays a complete eight-pose south cycle")
 		_check(correct_sheet,"Downward motion consistently uses the repaired front drawings without runtime mirroring")
 		Input.action_release("hub_down")

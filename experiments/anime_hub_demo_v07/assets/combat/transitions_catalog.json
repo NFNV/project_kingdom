@@ -1,0 +1,243 @@
+{
+  "asset": "cat_transitions_v2.png",
+  "sha256": "378098681559cfe0903903c5f8bf42e419d50c5aa8a72c9c083948f7979bb832",
+  "size": [
+    1122,
+    1402
+  ],
+  "directions": {
+    "se": [
+      {
+        "region": [
+          33,
+          34,
+          215,
+          300
+        ],
+        "foot_x": 172.0,
+        "foot_y": 334,
+        "head_width": 149,
+        "head_center_y": 99.0,
+        "head_bottom_y": 164,
+        "display_scale": 0.211409
+      },
+      {
+        "region": [
+          315,
+          53,
+          267,
+          285
+        ],
+        "foot_x": 451.0,
+        "foot_y": 338,
+        "head_width": 141,
+        "head_center_y": 114.5,
+        "head_bottom_y": 175,
+        "display_scale": 0.223404
+      },
+      {
+        "region": [
+          590,
+          58,
+          291,
+          279
+        ],
+        "foot_x": 721.0,
+        "foot_y": 337,
+        "head_width": 141,
+        "head_center_y": 120.5,
+        "head_bottom_y": 182,
+        "display_scale": 0.223404
+      },
+      {
+        "region": [
+          870,
+          50,
+          220,
+          286
+        ],
+        "foot_x": 988.0,
+        "foot_y": 336,
+        "head_width": 143,
+        "head_center_y": 114.5,
+        "head_bottom_y": 178,
+        "display_scale": 0.22028
+      }
+    ],
+    "sw": [
+      {
+        "region": [
+          42,
+          366,
+          215,
+          298
+        ],
+        "foot_x": 130.0,
+        "foot_y": 664,
+        "head_width": 141,
+        "head_center_y": 433.5,
+        "head_bottom_y": 500,
+        "display_scale": 0.223404
+      },
+      {
+        "region": [
+          288,
+          370,
+          289,
+          291
+        ],
+        "foot_x": 427.5,
+        "foot_y": 661,
+        "head_width": 146,
+        "head_center_y": 438.5,
+        "head_bottom_y": 506,
+        "display_scale": 0.215753
+      },
+      {
+        "region": [
+          562,
+          369,
+          305,
+          294
+        ],
+        "foot_x": 718.5,
+        "foot_y": 663,
+        "head_width": 148,
+        "head_center_y": 438.0,
+        "head_bottom_y": 506,
+        "display_scale": 0.212838
+      },
+      {
+        "region": [
+          906,
+          376,
+          212,
+          292
+        ],
+        "foot_x": 1009.0,
+        "foot_y": 668,
+        "head_width": 143,
+        "head_center_y": 444.5,
+        "head_bottom_y": 512,
+        "display_scale": 0.22028
+      }
+    ],
+    "ne": [
+      {
+        "region": [
+          31,
+          696,
+          220,
+          290
+        ],
+        "foot_x": 160.5,
+        "foot_y": 986,
+        "head_width": 138,
+        "head_center_y": 753.5,
+        "head_bottom_y": 810,
+        "display_scale": 0.228261
+      },
+      {
+        "region": [
+          306,
+          701,
+          289,
+          286
+        ],
+        "foot_x": 447.5,
+        "foot_y": 987,
+        "head_width": 136,
+        "head_center_y": 761.5,
+        "head_bottom_y": 821,
+        "display_scale": 0.231618
+      },
+      {
+        "region": [
+          593,
+          700,
+          289,
+          283
+        ],
+        "foot_x": 729.0,
+        "foot_y": 983,
+        "head_width": 135,
+        "head_center_y": 764.0,
+        "head_bottom_y": 826,
+        "display_scale": 0.233333
+      },
+      {
+        "region": [
+          871,
+          691,
+          218,
+          297
+        ],
+        "foot_x": 984.5,
+        "foot_y": 988,
+        "head_width": 142,
+        "head_center_y": 753.0,
+        "head_bottom_y": 814,
+        "display_scale": 0.221831
+      }
+    ],
+    "nw": [
+      {
+        "region": [
+          41,
+          1025,
+          236,
+          286
+        ],
+        "foot_x": 174.0,
+        "foot_y": 1311,
+        "head_width": 135,
+        "head_center_y": 1083.5,
+        "head_bottom_y": 1141,
+        "display_scale": 0.233333
+      },
+      {
+        "region": [
+          293,
+          1026,
+          291,
+          278
+        ],
+        "foot_x": 451.5,
+        "foot_y": 1304,
+        "head_width": 138,
+        "head_center_y": 1081.0,
+        "head_bottom_y": 1135,
+        "display_scale": 0.228261
+      },
+      {
+        "region": [
+          599,
+          1033,
+          255,
+          283
+        ],
+        "foot_x": 727.5,
+        "foot_y": 1316,
+        "head_width": 140,
+        "head_center_y": 1091.5,
+        "head_bottom_y": 1149,
+        "display_scale": 0.225
+      },
+      {
+        "region": [
+          922,
+          1025,
+          194,
+          291
+        ],
+        "foot_x": 1011.0,
+        "foot_y": 1316,
+        "head_width": 135,
+        "head_center_y": 1086.0,
+        "head_bottom_y": 1146,
+        "display_scale": 0.233333
+      }
+    ]
+  },
+  "notes": "Read-only component and anatomical head registration. Sixteen original drawings are sampled with native alpha polygons; transparent margins and original pixels remain unchanged."
+}

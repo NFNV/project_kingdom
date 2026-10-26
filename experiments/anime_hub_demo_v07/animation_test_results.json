@@ -1,0 +1,6 @@
+{
+  "checks": 35,
+  "failures": [],
+  "passed": 35,
+  "scope": "Foot-phase continuity, drawn turn progression and no wall treadmill; actual UV-to-rendered-head mapping and planted boots across every combat sample; eight authored phases, draw/sheathing, same-tick attack facing, contact-only hits, no recovery hits, buffered clicks, skill priority and zone resets."
+}

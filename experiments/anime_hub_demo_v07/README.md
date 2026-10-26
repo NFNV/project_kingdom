@@ -9,8 +9,9 @@ no longer starts sparring. Combat is enabled only in Briarwood Wilds.
 
 For the latest combat demo, double-click [Play Briarwood.command](Play%20Briarwood.command).
 For the town start, double-click [Play Garden Square.command](Play%20Garden%20Square.command), or open
-[demo.tscn](demo.tscn) in Godot 4.7 and press **F6**. This updates the same demo
-launcher; the original project's main scene stays unchanged.
+[demo.tscn](demo.tscn) in Godot 4.7 and use **Run Current Scene (F6)**.
+The project's main scene now points here too: **Run Project (F5)** starts this
+current demo in Garden Square, including the latest animation changes.
 
 ```sh
 /Users/n/Downloads/Godot.app/Contents/MacOS/Godot --path /Users/n/Documents/project-kingdom res://experiments/anime_hub_demo_v07/demo.tscn
@@ -122,16 +123,22 @@ The existing 1.5× follow camera and the smaller animal scale stay in use.
 **Twelve dog bandits**, in four packs of three, notice nearby intruders, pursue
 within their home territory, telegraph attacks with red warning rings, and
 return home when the cat escapes. The cat keeps its sword sheathed while idle, walking, running and shopping.
-Only attack/skill poses show the blade in its paw. During attacks, **sixteen drawn combat
-poses** replace the walking body: four phases (wind-up, strike, follow-through,
-recovery) in four real facing views. Arms, shoulders and the held blade move
-together. The extra equipment overlay is hidden during these poses. Read-only
-component analysis and native alpha polygons isolate the complete figures;
-head-width registration controls size while boots remain grounded. These are
-four authored combat key poses per direction, not a fully rigged skeleton.
+Only attack/skill poses show the blade in its paw. During attacks, **32 drawn combat
+poses** replace the walking body: eight timed stages in four real facing views,
+including drawing the blade, anticipation, early slash, contact, follow-through,
+settling, recovery and sheathing. Arms, shoulders and the held blade move together.
+Read-only component analysis and native alpha polygons isolate the complete figures.
+The head and boots retain their artwork proportions; a three-band body rig eases
+the stance between the walking reference, a shallow attack crouch and recovery.
+These remain authored key poses in four directions, with room for artist cleanup.
 **Space** attacks in the facing direction; **left click** aims a normal strike.
+Movement updates facing before a new attack, and facing stays locked through the
+swing. An aimed click during recovery queues the next strike. Q takes priority.
+Normal attacks last 0.60 seconds, with damage only between 0.22 and 0.34 seconds;
+recovery poses cannot deal late damage. Art and gameplay share
+[combat_timing.gd](tools/combat_timing.gd).
 
-**Q — Wind Slash** is a separate ranged ability. After a short 0.22-second
+**Q — Wind Slash** is a separate ranged ability. After a short 0.28-second
 wind-up, a bright blue crescent travels up to 520 ground pixels, dealing three
 damage and stronger knockback, and piercing up to three dogs. Trees stop the
 wave. The skill has a six-second cooldown. Press Q **during a normal attack**
@@ -162,8 +169,12 @@ The [sword and skill checks](tools/test_skill.gd) cover the four-direction drawn
 attack poses, actual Q input while Space remains held, input priority, clickable
 skill input, projectile damage/piercing/range, walls, cooldown UI, pause in flight,
 travel cleanup and safe-area guards. The **255 gameplay**, **45 forest combat**
-and **44 sword/skill** checks pass. Native previews: [attack](previews/drawn_sword_attack.png),
-[all sixteen poses](previews/drawn_attack_phases.png), [Q projectile](previews/wind_slash.png).
+and **44 sword/skill** checks pass. The **35 animation checks** additionally test
+phase continuity, pivots, all eight stages, actual rendered head landmarks and
+grounded boots, current-direction attacks, recovery hit safety, queued input and
+travel cleanup. With the 154 district checks, **533/533 checks pass**.
+Native previews: [attack](previews/drawn_sword_attack.png),
+[all 32 poses](previews/polished_attack_phases.png), [Q projectile](previews/wind_slash.png).
 
 The new [attack sheet](assets/combat/cat_sword_attack.png) was generated with
 **built-in imagegen**; its [exact prompt/source](assets/combat/generation.json)
@@ -173,6 +184,18 @@ with native textured polygons instead of assuming that generated grid spacing
 is exact. The earlier native sword overlay is disabled during normal play; attack art
 includes the actual held blade. [preview_combat.gd](tools/preview_combat.gd)
 reproduces the native render checks. Older Crescent Cleave previews are historical.
+
+The matching [transition sheet](assets/combat/cat_transitions_v2.png) adds 16
+draw, intermediate slash and sheath drawings, made with **built-in imagegen**.
+Its [exact prompt and source](assets/combat/transitions_generation.json) and
+[registration catalog](assets/combat/transitions_catalog.json) are saved. Both
+source PNGs remain unchanged. [register_combat_transitions.py](tools/register_combat_transitions.py)
+only reads alpha components and anatomical landmarks; the native renderer handles
+clipping and body registration. [preview_animation_polish.gd](tools/preview_animation_polish.gd)
+records walking, downward movement, running, pivots, attacks and Q at a temporary
+2.5× review zoom. See the [nine-second native motion review](previews/animation_polish.mp4).
+Normal play keeps the 1.5× follow camera. The review was recorded at a fixed
+60 FPS for inspection; movie encoding speed is not a live performance benchmark.
 
 Native M1 graphical samples, recorded in [wilds_performance.json](wilds_performance.json),
 cover western exploration, an active three-dog pack and a deep-forest night
@@ -247,7 +270,9 @@ The cat now has **eight facing directions**, each with **eight walk poses, eight
 separate run poses, and four idle/blink poses**. Its sword stays sheathed during
 peaceful exploration. Gait phase follows distance actually travelled, so collision
 or releasing movement stops the stepping. Direction hysteresis prevents tiny
-steering changes from repeatedly flipping the character.
+steering changes from repeatedly flipping the character. Large turns now pivot
+through the existing drawn views instead of snapping directly across them, while
+movement remains responsive. Brief stops preserve the foot phase for the next step.
 The player now uses per-pose anatomical alignment and size correction rather than
 anchoring each drawing to its lowest boot. That removes accidental body jumps as
 a foot lifts, keeps the head size steady, and leaves a small authored gait bob.
@@ -295,7 +320,8 @@ available alongside their conversations.
 
 The new art remains a prototype: some silhouettes and changes between directions
 can still benefit from animation-artist cleanup.
-There is one enterable interior. Audio, combat, and disk saves are not included.
+There is one enterable interior. Audio and disk saves are not included; combat
+is available in Briarwood only.
 
 New paintings were created with **built-in imagegen**. Source files and exact
 prompts: [forest prompt set](assets/forest/generation_prompts.json).
