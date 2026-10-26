@@ -1,12 +1,17 @@
 extends Node2D
 
 const City := preload("res://experiments/anime_hub_demo_v07/tools/northgate_layout.gd")
+const Style := preload("res://experiments/anime_hub_demo_v07/tools/art_style.gd")
 var paving: Texture2D
+var street: Texture2D
+var grass: Texture2D
 var outskirts: Texture2D
 var render_only := false
 
 func _ready() -> void:
-	paving = load("res://experiments/anime_hub_demo_v07/assets/district/limestone.png")
+	paving = Style.texture_for("paving")
+	street = Style.texture_for("street")
+	grass = Style.texture_for("grass")
 	outskirts = load("res://experiments/anime_hub_demo_v07/assets/forest/briarwood_ground.png")
 	texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 	if render_only:
@@ -34,15 +39,15 @@ func _finish_cache(cache: SubViewport) -> void:
 	plate.texture = cache.get_texture()
 	add_child(plate)
 
-func patch(u0: float, v0: float, u1: float, v1: float, color: Color, stone := false) -> void:
+func patch(u0: float, v0: float, u1: float, v1: float, color: Color, stone := false, material: Texture2D = null) -> void:
 	var uv := PackedVector2Array([Vector2(u0,v0),Vector2(u1,v0),Vector2(u1,v1),Vector2(u0,v1)])
-	draw_colored_polygon(City.quad(u0,v0,u1,v1),color,uv,paving if stone else null)
+	draw_colored_polygon(City.quad(u0,v0,u1,v1),color,uv,material if material!=null else (paving if stone else null))
 
 func _draw() -> void:
 	if not render_only:
 		return
 	draw_colored_polygon(PackedVector2Array([Vector2.ZERO,Vector2(6400,0),Vector2(6400,3840),Vector2(0,3840)]),Color("c2d3b7"),PackedVector2Array([Vector2.ZERO,Vector2(4,0),Vector2(4,3),Vector2(0,3)]),outskirts)
-	patch(0,0,13,13,Color("9fb875"))
+	patch(0,0,13,13,Color("d7dfbe"),false,grass)
 	# Soft variation and tiny garden flowers are deterministic, cached geometry.
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 9182
@@ -55,8 +60,8 @@ func _draw() -> void:
 		patch(road-.68,0,road+.68,13,Color("fff1d3"),true)
 		patch(0,road-.68,13,road+.68,Color("fff1d3"),true)
 	for road in City.ROADS:
-		patch(road-.31,0,road+.31,13,Color("777f7b"))
-		patch(0,road-.31,13,road+.31,Color("777f7b"))
+		patch(road-.31,0,road+.31,13,Color("b6c5cf"),false,street)
+		patch(0,road-.31,13,road+.31,Color("b6c5cf"),false,street)
 	for i in 3500:
 		var u := rng.randf_range(.05,12.95)
 		var v := rng.randf_range(.05,12.95)
@@ -65,7 +70,7 @@ func _draw() -> void:
 			on_road = on_road or absf(u-road)<.30 or absf(v-road)<.30
 		if on_road:
 			var at := City.iso(u,v)
-			draw_line(at,at+Vector2(1.4,.4),Color(.85,.83,.74,.14),1,true)
+			draw_line(at,at+Vector2(2.0,.6),Color(.85,.89,.87,.12),1,true)
 	# Curbs stop before intersections rather than running across the crossings.
 	for road in City.ROADS:
 		for segment in 4:
@@ -74,10 +79,6 @@ func _draw() -> void:
 			for side in [-.32,.32]:
 				draw_line(City.iso(road+side,a),City.iso(road+side,b),Color("d8ceb3"),5,true)
 				draw_line(City.iso(a,road+side),City.iso(b,road+side),Color("d8ceb3"),5,true)
-		for i in 30:
-			var t := .15+i*.43
-			draw_line(City.iso(road,t),City.iso(road,t+.12),Color(.96,.91,.73,.55),2,true)
-			draw_line(City.iso(t,road),City.iso(t+.12,road),Color(.96,.91,.73,.55),2,true)
 	# Crosswalk stones, sidewalks and plazas share one fixed ground projection.
 	for road in City.ROADS:
 		for cross in City.ROADS:
@@ -101,8 +102,8 @@ func _draw() -> void:
 		draw_set_transform(City.iso(5,5)+Vector2(0,8),0,Vector2(1,.5))
 		draw_arc(Vector2.ZERO,radius,0,TAU,64,Color(.63,.52,.34,.65),2,true)
 	draw_set_transform(Vector2.ZERO)
-	patch(7.17,4.17,8.83,5.83,Color("608d51"))
-	patch(7.27,4.27,8.73,5.73,Color("85aa62"))
+	patch(7.17,4.17,8.83,5.83,Color("a2b493"),false,grass)
+	patch(7.27,4.27,8.73,5.73,Color("e0e4c9"),false,grass)
 	for i in 1000:
 		var u := rng.randf_range(7.28,8.72)
 		var v := rng.randf_range(4.28,5.72)

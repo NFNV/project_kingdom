@@ -25,6 +25,7 @@ static func bounds(points: PackedVector2Array) -> Rect2:
 	return rect
 
 func _ready() -> void:
+	material = preload("res://experiments/anime_hub_demo_v07/tools/art_style.gd").character_material()
 	layers.append(self)
 	for kind in ["attack","transition"]:
 		var file := "catalog.json" if kind=="attack" else "transitions_catalog.json"
@@ -106,6 +107,7 @@ func pose(facing: Vector2, progress: float, power: bool) -> void:
 		active_parts = _parts_for(kind,direction,index,active_data)
 		while layers.size()<active_parts.size():
 			var layer := Polygon2D.new()
+			layer.use_parent_material = true
 			add_child(layer)
 			layers.append(layer)
 		for i in layers.size():

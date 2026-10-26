@@ -1,0 +1,11 @@
+{
+  "tool": "built-in imagegen",
+  "assets": [
+    {
+      "asset": "town_materials_v1.png",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-5686c8f7-b492-45fd-b435-c770468dc1f9.png",
+      "prompt": "Use case: stylized-concept.\nAsset type: production game material atlas, exactly 3 equal columns by 2 equal rows, six edge-to-edge square material panels. Wide 3:2 image. No gutters, frames, labels, objects or perspective.\nInput image 1: style and color reference only, an existing charming painted anime town. Match its brushwork and warm limestone/teal/slate palette, simplified hand-painted Japanese fantasy film background art rather than photographic textures.\nRead order left to right, top to bottom:\n1. Warm ivory lime plaster: broad soft gouache brush strokes, a few understated irregular pale stone patches, cream with gentle buttery variations, restrained contrast, seamless edges.\n2. Blue slate roof tiles: front-on flat orthographic rows of small overlapping rectangular slate shingles, desaturated blue-grey with soft painted edge highlights, no perspective, consistent tile scale, seamless edges.\n3. Pale honey limestone paving: top-down flat orthographic rectangular squared paving blocks in a staggered pattern, varied cream/ochre/buff/soft grey, fine warm joints, no perspective, no grass, seamless edges.\n4. Honey oak floorboards: top-down orthographic straight narrow wooden planks in staggered lengths, gentle drawn grain and tiny knots, warm muted tan, no glossy photography, seamless edges.\n5. Cool blue-grey town cobblestones: top-down orthographic small rounded rectangular setts in staggered rows, subtle blue green and lavender shaded strokes, low contrast, no big cracks, no moss, seamless edges. This is a walkable street material.\n6. Muted terracotta brick: flat front orthographic small warm rose-ochre bricks and ivory mortar, subtle broad brush texture, seamless edges.\nAll six use the SAME calm hand-painted anime background rendering, soft tactile gouache, directional hints of pale upper-left light but NO cast shadows or gradient across entire panels. Material detail must remain legible at modest game sprite scale. Exact grid. Do not draw a house or a scene. No text, no logo, no watermark.",
+      "reference": "previews/town_day.png"
+    }
+  ]
+}

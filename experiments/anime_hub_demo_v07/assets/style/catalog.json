@@ -1,0 +1,58 @@
+{
+  "assets": {
+    "town_details_v1.png": {
+      "size": [
+        1312,
+        1199
+      ],
+      "mode": "RGBA",
+      "sha256": "4933998d269e1b6be6a0002ccf556598288f3a57bab24528eebcdcdb9c479a07",
+      "original_pixels_unchanged": true
+    },
+    "town_materials_v1.png": {
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "sha256": "250f575ab27a0d394353410203bdd416a77c162098829c16f187cd7624077c69",
+      "original_pixels_unchanged": true
+    },
+    "park_grass_v1.png": {
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "sha256": "f0eac066b8b76a4e2efe57dc7991930ad7ab23c3265046dc4de03e6c4ee3cf33",
+      "original_pixels_unchanged": true
+    }
+  },
+  "detail_regions": {
+    "casement": [
+      118,
+      12,
+      515,
+      540
+    ],
+    "arched_window": [
+      763,
+      67,
+      425,
+      439
+    ],
+    "teal_door": [
+      162,
+      548,
+      425,
+      620
+    ],
+    "oak_door": [
+      765,
+      562,
+      438,
+      606
+    ]
+  },
+  "notes": "Four complete alpha components registered at alpha >140 with four pixels of edge padding; original pixels remain unchanged. Generated rows are not divided at the geometric midpoint."
+}

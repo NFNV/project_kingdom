@@ -23,6 +23,7 @@ const TURN_SPEED := 24.0
 
 
 func configure(id: String, height: float, phase_offset := 0.0) -> void:
+	material = preload("res://experiments/anime_hub_demo_v07/tools/art_style.gd").character_material()
 	actor_id = id
 	display_height = height
 	idle_clock = phase_offset

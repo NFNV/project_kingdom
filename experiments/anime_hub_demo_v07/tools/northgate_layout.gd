@@ -3,8 +3,9 @@ extends RefCounted
 const ORIGIN := Vector2(3200,160)
 const ROADS := [.5,3.5,6.5,9.5,12.5]
 const TYPES := ["garden_cottage","gable_townhouse","brick_rowhouse","bay_house","mansard_house","timber_house","hip_roof_villa","terraced_house"]
-const FACADES := [Color("f1dfbf"),Color("dec8b4"),Color("c3d8cc"),Color("e5c8bf"),Color("c9d9df"),Color("eadab4"),Color("d7d6bb"),Color("ddd0d9")]
-const ROOFS := [Color("7192ae"),Color("bb7853"),Color("638c7e"),Color("8b7691"),Color("8795a4"),Color("a68b67"),Color("687f9b"),Color("a96b59")]
+const Style := preload("res://experiments/anime_hub_demo_v07/tools/art_style.gd")
+const FACADES := Style.FACADES
+const ROOFS := Style.ROOFS
 
 static func iso(u: float, v: float) -> Vector2:
 	return ORIGIN+Vector2((u-v)*240,(u+v)*120)

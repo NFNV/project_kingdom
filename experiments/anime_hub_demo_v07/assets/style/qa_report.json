@@ -1,0 +1,100 @@
+{
+  "assets": {
+    "town_details_v1.png": {
+      "size": [
+        1312,
+        1199
+      ],
+      "hash_verified": true
+    },
+    "town_materials_v1.png": {
+      "size": [
+        1536,
+        1024
+      ],
+      "hash_verified": true
+    },
+    "park_grass_v1.png": {
+      "size": [
+        1254,
+        1254
+      ],
+      "hash_verified": true
+    }
+  },
+  "details": {
+    "casement": {
+      "source_region": [
+        118,
+        12,
+        515,
+        540
+      ],
+      "alpha_bounds_in_region": [
+        0,
+        1,
+        515,
+        540
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    "arched_window": {
+      "source_region": [
+        763,
+        67,
+        425,
+        439
+      ],
+      "alpha_bounds_in_region": [
+        0,
+        0,
+        425,
+        439
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    "teal_door": {
+      "source_region": [
+        162,
+        548,
+        425,
+        620
+      ],
+      "alpha_bounds_in_region": [
+        0,
+        0,
+        425,
+        620
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    "oak_door": {
+      "source_region": [
+        765,
+        562,
+        438,
+        606
+      ],
+      "alpha_bounds_in_region": [
+        1,
+        0,
+        437,
+        606
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    }
+  },
+  "validation": "Original source hashes match; four complete architectural components registered with edge padding; six 512x512 materials. Native captures verify street projection, roof pattern, facade details, interior and day/night compositing. Matching painted park grass is also byte-identical to its generated source."
+}

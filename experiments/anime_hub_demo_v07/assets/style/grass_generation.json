@@ -1,0 +1,7 @@
+{
+  "tool": "built-in imagegen",
+  "asset": "park_grass_v1.png",
+  "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-ce763240-207a-4c86-aae3-06ffaabdc400.png",
+  "prompt": "Use case: stylized-concept. Asset type: one seamless square top-down grass material texture for a charming hand-painted anime town park. Reference image is the existing game town; match its foliage colors and broad painted brushwork, not the UI or buildings. Fill the entire image with an even meadow surface: soft sage and fresh moss greens, tiny grouped blade strokes, clover-sized leaf clusters and just a few unobtrusive pale yellow flecks. Rich layered gouache background painting with readable softly shaded brush shapes and gentle low-contrast color variation. Flat orthographic top-down surface, no horizon, no perspective, no lighting gradient, no objects, no trees, no stones, no dirt paths, no flowers that dominate the tile. Seamless matching edges. No photographic detail, no pixel art, no text, no borders, no watermark. The texture must stay calm and low contrast underneath animated characters and furniture.",
+  "reference": "previews/town_day.png"
+}

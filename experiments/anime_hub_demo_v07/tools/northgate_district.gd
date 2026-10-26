@@ -25,6 +25,7 @@ static func houses() -> Array[Dictionary]:
 
 static func building(hub: Node2D, data: Dictionary) -> void:
 	var anchor := House.new()
+	anchor.hub = hub
 	anchor.data = data
 	anchor.position = iso(data.u+data.half_u,data.v+data.half_v)
 	anchor.set_meta("house_data",data)

@@ -1,0 +1,37 @@
+{
+  "adapter": "Apple M1 (Apple7)",
+  "camera_zoom": 1.5,
+  "canvas": "(1920.0, 1080.0)",
+  "engine": "4.7.2-stable (official)",
+  "notes": "Live graphical frame intervals at the normal 1.5x follow camera, 1920x1080 internal viewport and 60 FPS cap. Five seconds per case after warmup. House and ground paint are cached once, shared material/character textures are cached, original movement/navigation/animation stay active. Movie mode must not be used for performance measurements.",
+  "renderer": "forward_plus",
+  "samples": [
+    {
+      "case": "northgate_painted_plaza",
+      "draw_calls": 288.0,
+      "focused_fraction": 0.0,
+      "fps": 59.9,
+      "frames_above_20_ms": 1,
+      "p95_ms": 18.09,
+      "worst_ms": 59.65
+    },
+    {
+      "case": "northgate_night_street",
+      "draw_calls": 475.0,
+      "focused_fraction": 0.0,
+      "fps": 60.0,
+      "frames_above_20_ms": 3,
+      "p95_ms": 18.26,
+      "worst_ms": 24.27
+    },
+    {
+      "case": "painted_bakery_and_vendor",
+      "draw_calls": 174.0,
+      "focused_fraction": 0.0,
+      "fps": 60.0,
+      "frames_above_20_ms": 0,
+      "p95_ms": 18.38,
+      "worst_ms": 18.78
+    }
+  ]
+}

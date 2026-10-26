@@ -20,6 +20,7 @@ func _ready() -> void:
 	height = float(data.recommended_height_at_1080p)*DISPLAY_SCALE
 	idle_clock = float(absi(hash(resident_id))%100)*.11
 	sprite = AnimatedSprite2D.new()
+	sprite.material = preload("res://experiments/anime_hub_demo_v07/tools/art_style.gd").character_material()
 	sprite.sprite_frames = load(ART+data.native_frames)
 	sprite.centered = false
 	sprite.offset = Vector2(-512,-984)

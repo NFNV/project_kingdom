@@ -33,6 +33,42 @@ current demo in Garden Square, including the latest animation changes.
 | F11 | Toggle full screen |
 | F3 | Show / hide FPS and rendering diagnostics |
 
+## Shared painted art direction
+
+Northgate now matches Garden Square more closely: painted lime plaster, slate
+shingles, terracotta/blue/sage roof variants, warm limestone paving and cooler
+cobbled streets, with painted grass and clover in Linden Park. Plain placeholder windows and doors have been replaced with
+painted casements, arches and timber/teal doors. Striped awnings, cornice shade
+and corner stones dress the existing straight house geometry. Some windows glow
+warmly at night through a small separate mesh, while buildings still fade when
+they cover the player.
+
+The bakery shares the same plaster and oak, with teal wainscoting, painted
+window frames, soft window light and furniture contact shade. Human and animal
+characters use one subtle pigment response before the existing day/night tint.
+Their source art, proportions, movement and combat remain intact.
+
+Two original atlases were generated with **built-in imagegen**:
+[six materials](assets/style/town_materials_v1.png) and
+[four facade details](assets/style/town_details_v1.png), plus matching
+[park grass](assets/style/park_grass_v1.png). Exact prompts and sources:
+[materials](assets/style/generation.json), [details](assets/style/details_generation.json),
+[grass](assets/style/grass_generation.json), or the combined
+[prompt set with saved asset paths](assets/style/prompt_set.json).
+The [style guide](assets/style/STYLE_GUIDE.md), [region catalog](assets/style/catalog.json)
+and [asset QA](assets/style/qa_report.json) document the shared art direction.
+Native screenshots: [Northgate](previews/style_market.png),
+[bakery](previews/style_bakery_day.png), [night](previews/style_market_night.png),
+[Garden Square](previews/style_garden_square.png).
+
+The atlas textures and character material are shared; buildings and street paint
+remain cached once per zone. The 1.5× camera, 1080p internal viewport, building
+footprints, all four door frontages and navigation paths stay in use.
+Run [preview_art_style.gd](tools/preview_art_style.gd) with `-- --profile` for
+live graphical measurements and native captures; see
+[art_style_performance.json](art_style_performance.json). Movie mode is for
+capture only and must not be used to measure live performance.
+
 ## Go for a walk
 
 The **southeast gate**, on the lower-right paving of Garden Square, is marked
