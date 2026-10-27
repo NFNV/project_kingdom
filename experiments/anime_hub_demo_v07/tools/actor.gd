@@ -17,8 +17,18 @@ var sprite: AnimatedSprite2D
 var facing := Vector2(1,1).normalized()
 var intent := Vector2.ZERO
 var route := PackedVector2Array()
-var health := 5
-var maximum_health := 5
+var _health := 5
+var _maximum_health := 5
+var health: int:
+	get: return hub.state.health if controlled and is_instance_valid(hub) and is_instance_valid(hub.state) else _health
+	set(value):
+		if controlled and is_instance_valid(hub) and is_instance_valid(hub.state):
+			hub.state.health = value
+		else:
+			_health = value
+var maximum_health: int:
+	get: return hub.state.maximum_health if controlled and is_instance_valid(hub) and is_instance_valid(hub.state) else _maximum_health
+	set(value): _maximum_health = value
 var grace := 0.0
 var cooldown := 0.0
 var swing := 0.0

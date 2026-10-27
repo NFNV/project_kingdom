@@ -27,12 +27,62 @@ current demo in Garden Square, including the latest animation changes.
 | E | Speak, deliver, enter a building, browse the shop, or use an exit |
 | 1 / 2 / 3, or shop buttons | Buy bread / tea / honey while shopping |
 | J | Show / hide the journal |
+| I | Open / close the satchel: food, equipment and forest quest |
+| H | Eat one loaf to restore two hearts |
+| F5 / F9 | Save journey / continue saved journey |
 | T | Preview the next lighting phase with a short transition |
 | M | Mute / unmute all sound |
 | Esc | Close the shop, or pause / resume |
 | R | Restart the demo and reset progress |
 | F11 | Toggle full screen |
 | F3 | Show / hide FPS and rendering diagnostics |
+
+## A complete forest quest
+
+Speak to **Bram**, the friendly dog warden by the fountain, with **E** to accept
+**Badges from Briarwood**. Take the southeast gate through Mosswood, continue
+to Riverbend, cross the bridge and enter Briarwood. Defeat three bandits with
+Space / click or Q, then approach their glowing pouches and press E to collect
+the badges. Return along the same connected route and speak to Bram again.
+He takes three badges and gives **10 coins and a warden's charm**, once only.
+The existing five-step town delivery errand remains available alongside this
+quest. Wardens and civilians remain peaceful.
+
+Press **I** to open the satchel. Food, badge quantities, the equipped starting
+sword, the charm and quest instructions are shown together. Equip the charm
+for **one extra maximum heart**; unequipping clamps health to the new maximum.
+Visit Clover inside the Bluebird Bakery to buy useful provisions: bread heals
+two hearts, tea heals two hearts and refreshes Wind Slash, and honey heals
+three hearts. Use the satchel buttons or **H** for bread. Full-health use keeps
+food unless tea can refresh a cooling-down skill. Opening the satchel pauses
+the world. Crossing between zones preserves health; defeat recovery still
+returns the cat to the sheltered forest entrance with full health.
+
+**F5 saves; F9 loads.** Mouse buttons in the Esc menu do the same. Saves contain
+both quests, inventory, equipment, money, discoveries, unique bandit defeats,
+uncollected drops, clock, location, health, facing and skill recharge. Save
+before quitting: this first integration uses **manual saves**, with one local
+slot and its previous validated backup. R starts a fresh in-memory journey
+without deleting the disk save; use F9 to continue it. The optional command-line
+argument `-- --continue` loads the slot on launch. Audio preferences remain
+separate.
+
+This integration uses **GLoot 3.0.2** and **Questify 1.6.0**, pinned with their
+MIT licenses and archive hashes. Questify runs on game events with polling off.
+The separate [integration notes](INTEGRATION.md) describe state ownership,
+stable IDs, the versioned save schema and verification. Native UI previews:
+[satchel and equipped charm](previews/journey_satchel.png),
+[save/load menu](previews/journey_save_menu.png),
+[badge pickup in Briarwood](previews/journey_badge_pickup.png).
+
+**720/720 checks pass**: the existing 604, ten isolated addon checks, 99 journey
+checks and seven separate-process reload checks. All five native performance
+samples were 100% foreground focused and averaged **59.8–60 FPS** at the
+1920×1080 internal canvas on Apple M1, with an active quest, inventory and
+audio. One night sample retained a **52.75 ms hitch**; this is not a claim of a
+locked 60 FPS. See [journey results](journey_test_results.json),
+[restart results](journey_relaunch_results.json), and
+[foreground performance](journey_performance.json).
 
 ## Sound and performance
 
@@ -119,8 +169,8 @@ Three resting places can be recorded with E: the old elm, wildflower meadow,
 and Riverbend footbridge. The town delivery quest remains available:
 Pippa → Elder Mallow → Moss → Pip → red postbox. Delivery progress, forest
 memories, the same cat character, and the clock persist across area transitions.
-Game progress has no disk save; restarting begins a fresh session. Audio
-preferences are saved separately.
+Game progress can be saved with F5 and restored with F9 or the Esc menu.
+Audio preferences are saved separately.
 
 ## Northgate Quarter — northern town district
 
@@ -434,8 +484,10 @@ available alongside their conversations.
 
 The new art remains a prototype: some silhouettes and changes between directions
 can still benefit from animation-artist cleanup.
-There is one enterable interior. Game progress is not saved to disk; combat
-is available in Briarwood only. Sound and saved volume preferences are included.
+There is one enterable interior. Combat is available in Briarwood only.
+Manual save/load, inventory, useful food, one equipment reward, sound and saved
+volume preferences are included. Additional interiors and a dialogue addon
+remain future work.
 
 New paintings were created with **built-in imagegen**. Source files and exact
 prompts: [forest prompt set](assets/forest/generation_prompts.json).

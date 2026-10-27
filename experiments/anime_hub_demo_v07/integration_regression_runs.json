@@ -1,0 +1,30 @@
+[
+  {
+    "test": "test_hub",
+    "exit_code": 0
+  },
+  {
+    "test": "test_district",
+    "exit_code": 0
+  },
+  {
+    "test": "test_wilds",
+    "exit_code": 0
+  },
+  {
+    "test": "test_skill",
+    "exit_code": 0
+  },
+  {
+    "test": "test_bandits",
+    "exit_code": 0
+  },
+  {
+    "test": "test_animation_polish",
+    "exit_code": 0
+  },
+  {
+    "test": "test_audio",
+    "exit_code": 0
+  }
+]

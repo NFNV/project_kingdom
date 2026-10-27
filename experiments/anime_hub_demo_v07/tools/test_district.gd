@@ -44,7 +44,7 @@ func _run() -> void:
 	game.discoveries.old_elm = true
 	game.clock = 1.25
 	game.coins = 19
-	game.inventory.tea = 2
+	game.state.add_item("tea",2)
 	game.forest_defeated.test_previous_defeat = true
 	var identity: int = game.player.get_instance_id()
 	check(game.exits.has("north") and game.exits.north.to=="district","Garden Square's northern passage connects to Northgate")

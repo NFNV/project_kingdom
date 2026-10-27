@@ -39,6 +39,18 @@ var skill_button: Button
 var audio_sliders: Dictionary = {}
 var audio_values: Dictionary = {}
 var audio_mute: CheckBox
+var satchel: Control
+var satchel_health: Label
+var satchel_quest: Label
+var satchel_rows: Dictionary = {}
+var food_buttons: Dictionary = {}
+var charm_button: Button
+var charm_description: Label
+var save_button: Button
+var load_button: Button
+var notice: Panel
+var notice_text: Label
+var notice_left := 0.0
 
 
 func _ready() -> void:
@@ -52,14 +64,14 @@ func _ready() -> void:
 	clock_dial.scale = Vector2(.72,.72)
 	clock_dial.serif = serif
 	add_child(clock_dial)
-	journal_panel = panel(Vector2(1498,28),Vector2(394,162))
+	journal_panel = panel(Vector2(1498,28),Vector2(394,196))
 	label("THE TRAVELLER'S JOURNAL",Vector2(20,13),12,journal_panel,0,Color("887043"))
 	objective = label("",Vector2(20,41),20,journal_panel,350,Color("2e4239"),true)
-	status_label = label("",Vector2(20,128),13,journal_panel,354,Color("7e7054"))
+	status_label = label("",Vector2(20,164),13,journal_panel,354,Color("7e7054"))
 	var controls := panel(Vector2(28,1012),Vector2(746,44),null,true)
 	controls_label = label("WASD  walk     SHIFT  run     E  talk / use     Right click  walk to point",Vector2(16,11),15,controls,0,Color("f0e4c8"))
 	var actions := panel(Vector2(1515,1012),Vector2(377,44),null,true)
-	label("J journal   T time   M mute   Esc pause   F11 screen",Vector2(14,12),13,actions,0,Color("f0e4c8"))
+	label("I satchel   H bread   M mute   Esc menu   F11 screen",Vector2(14,12),13,actions,0,Color("f0e4c8"))
 	route_label = label("",Vector2(1140,972),17,self,720,Color("fff2ca"),true)
 	route_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	route_label.add_theme_color_override("font_shadow_color",Color("18372e"))
@@ -141,13 +153,23 @@ func _ready() -> void:
 	shade.color = Color(.035,.07,.06,.68)
 	shade.size = Vector2(1920,1080)
 	pause_overlay.add_child(shade)
-	var menu := panel(Vector2(650,235),Vector2(620,610),pause_overlay)
+	var menu := panel(Vector2(650,180),Vector2(620,720),pause_overlay)
 	label("Rest a while",Vector2(42,36),37,menu,0,Color("2e4239"),true)
 	label("Esc   Return to your walk\nR      Begin a new day\nJ       Show or hide your journal\nF11   Full screen",Vector2(44,105),21,menu,520,Color("52604d"))
+	label("F5 save  ·  F9 continue  ·  I satchel  ·  H bread",Vector2(44,236),16,menu,530,Color("756a52"))
+	save_button = action_button("Save journey",Vector2(44,270),Vector2(248,48),menu)
+	save_button.pressed.connect(func(): hub.save_game())
+	load_button = action_button("Continue saved journey",Vector2(306,270),Vector2(270,48),menu)
+	load_button.pressed.connect(func(): hub.load_game())
 	_build_audio_menu(menu)
-	label("Day and night pass slowly: 20 minutes per full cycle.",Vector2(44,563),16,menu,530,Color("8b7654"))
+	label("Save before leaving. R starts fresh; your disk save stays.\nDay and night pass slowly: 20 minutes per full cycle.",Vector2(44,649),15,menu,530,Color("8b7654"))
 	pause_overlay.hide()
 	_build_merchant()
+	_build_satchel()
+	notice = panel(Vector2(510,744),Vector2(900,55),null,true)
+	notice_text = label("",Vector2(18,16),18,notice,864,Color("fff0cd"))
+	notice_text.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	notice.hide()
 	fade = ColorRect.new()
 	fade.size = Vector2(1920,1080)
 	fade.color = Color("10241d")
@@ -156,12 +178,13 @@ func _ready() -> void:
 	add_child(fade)
 	hub.audio.settings_changed.connect(refresh_audio)
 	refresh_audio()
+	refresh_save_controls()
 
 func _build_audio_menu(menu: Control) -> void:
-	label("SOUND",Vector2(44,280),14,menu,0,Color("887043"))
+	label("SOUND",Vector2(44,344),14,menu,0,Color("887043"))
 	var row := 0
 	for key in ["master","music","ambience","effects"]:
-		var y := 318+row*39
+		var y := 380+row*39
 		label(key.capitalize(),Vector2(44,y),18,menu,0,Color("33433a"))
 		var slider := HSlider.new()
 		slider.position = Vector2(185,y+2)
@@ -176,7 +199,7 @@ func _build_audio_menu(menu: Control) -> void:
 		audio_values[key] = label("",Vector2(504,y),17,menu,0,Color("756a52"))
 		row += 1
 	audio_mute = CheckBox.new()
-	audio_mute.position = Vector2(40,499)
+	audio_mute.position = Vector2(40,571)
 	audio_mute.text = "Mute all   (M)"
 	audio_mute.add_theme_font_size_override("font_size",18)
 	audio_mute.add_theme_color_override("font_color",Color("33433a"))
@@ -271,6 +294,9 @@ func refresh() -> void:
 		if hub.discoveries.size()==3:
 			objective.text = "Every resting place discovered. Follow the trail home whenever you like."
 		status_label.text = "%d / 3 forest memories  ·  E at a resting place" % hub.discoveries.size()
+	if hub.state.accepted and not hub.state.rewarded:
+		objective.text = hub.state.quest_text()
+		status_label.text = "%d coins  ·  I satchel  ·  H healing bread" % hub.coins
 	debug_label.visible = debug_visible
 	debug_label.text = "%d FPS  ·  1920 × 1080  ·  %s  ·  F3 debug" % [Engine.get_frames_per_second(),hub.zone]
 	var suffix := ""
@@ -286,6 +312,106 @@ func refresh() -> void:
 				offset = dog.position-hub.player.position
 		var direction := ("north" if offset.y<0 else "south")+("east" if offset.x>0 else "west")
 		route_label.text = "Nearest bandits: %s  /  %d m" % [direction,ceili(closest/32.0)]
+	refresh_save_controls()
+
+
+func _process(delta: float) -> void:
+	notice_left = maxf(0,notice_left-delta)
+	if is_instance_valid(notice):
+		notice.visible = notice_left>0
+
+
+func show_notice(message: String) -> void:
+	notice.position.y = 930 if hub.paused else 744
+	notice_text.text = message
+	notice_left = 4.0
+	notice.show()
+
+
+func refresh_save_controls() -> void:
+	if is_instance_valid(load_button):
+		load_button.disabled = not FileAccess.file_exists(hub.save_path) and not FileAccess.file_exists(hub.save_path+".bak")
+		save_button.disabled = hub.transitioning or not hub.player.active
+
+
+func action_button(text: String, at: Vector2, dimensions: Vector2, parent: Control) -> Button:
+	var button := Button.new()
+	button.text = text
+	button.position = at
+	button.size = dimensions
+	button.focus_mode = Control.FOCUS_NONE
+	button.add_theme_font_size_override("font_size",17)
+	for state in ["normal","hover","pressed","disabled"]:
+		var style := StyleBoxFlat.new()
+		style.bg_color = Color("47755c") if state=="hover" else (Color("8a8e7b") if state=="disabled" else Color("335a48"))
+		style.border_color = Color("b89b62")
+		style.set_border_width_all(1)
+		style.set_corner_radius_all(6)
+		button.add_theme_stylebox_override(state,style)
+	button.add_theme_color_override("font_color",Color("fff1cf"))
+	parent.add_child(button)
+	return button
+
+
+func _build_satchel() -> void:
+	satchel = Control.new()
+	satchel.size = Vector2(1920,1080)
+	add_child(satchel)
+	var shade := ColorRect.new()
+	shade.size = satchel.size
+	shade.color = Color(.035,.07,.05,.7)
+	satchel.add_child(shade)
+	var sheet := panel(Vector2(400,175),Vector2(1120,730),satchel)
+	label("THE TRAVELLER'S SATCHEL",Vector2(38,24),13,sheet,0,Color("967344"))
+	label("Provisions & keepsakes",Vector2(38,52),34,sheet,0,Color("304c3d"),true)
+	satchel_health = label("",Vector2(40,105),18,sheet,550,Color("746146"))
+	var row := 0
+	for id in ["bread","tea","honey","bandit_badge"]:
+		var top := 157+row*106
+		var tile := panel(Vector2(32,top),Vector2(590,94),sheet)
+		var icon := TextureRect.new()
+		icon.texture = load(hub.ROOT+"assets/items/"+id+".svg")
+		icon.position = Vector2(13,17)
+		icon.size = Vector2(54,54)
+		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		tile.add_child(icon)
+		satchel_rows[id] = label("",Vector2(82,11),21,tile,340,Color("314b3d"),true)
+		var description: String = hub.state.definitions[id].description
+		label(description,Vector2(82,43),14,tile,310,Color("80745b"))
+		if id!="bandit_badge":
+			var button := action_button("Use",Vector2(438,23),Vector2(130,46),tile)
+			button.pressed.connect(func(): hub.use_item(id))
+			food_buttons[id] = button
+		row += 1
+	label("EQUIPMENT",Vector2(665,157),13,sheet,0,Color("967344"))
+	label("Traveller's sword  ·  Equipped",Vector2(665,190),22,sheet,405,Color("314b3d"),true)
+	label("Space to strike  /  Q for Wind Slash",Vector2(665,226),16,sheet,405,Color("80745b"))
+	charm_description = label("",Vector2(665,269),18,sheet,405,Color("314b3d"))
+	charm_button = action_button("Equip charm",Vector2(665,323),Vector2(395,43),sheet)
+	charm_button.pressed.connect(func(): hub.toggle_charm())
+	label("BADGES FROM BRIARWOOD",Vector2(665,405),13,sheet,0,Color("967344"))
+	satchel_quest = label("",Vector2(665,437),21,sheet,395,Color("314b3d"),true)
+	label("Reward: 10 coins + a warden's charm\nRoute: Mosswood → Riverbend → Briarwood",Vector2(665,553),15,sheet,405,Color("80745b"))
+	label("H eats bread while exploring. Food is kept when already rested.",Vector2(40,610),16,sheet,1000,Color("80745b"))
+	var close := action_button("Return to your journey   /   I or Esc",Vector2(350,660),Vector2(420,44),sheet)
+	close.pressed.connect(func(): hub.toggle_backpack())
+	satchel.hide()
+
+
+func refresh_satchel() -> void:
+	if not is_instance_valid(satchel):
+		return
+	satchel_health.text = "%d coins    ·    %d / %d hearts" % [hub.coins,hub.player.health,hub.player.maximum_health]
+	for id in satchel_rows:
+		satchel_rows[id].text = "%s   × %d" % [hub.state.definitions[id].name,hub.state.count(id)]
+	for id in food_buttons:
+		var useful: bool = hub.player.health<hub.player.maximum_health or (id=="tea" and hub.player.skill_cooldown>0)
+		food_buttons[id].disabled = hub.state.count(id)<=0 or not useful or hub.player.swing>0
+	var equipped: bool = hub.state.charm.get_item()!=null
+	charm_description.text = "Warden's charm  ·  +1 maximum heart\n"+("Equipped" if equipped else "In your satchel" if hub.state.count("warden_charm")>0 else "Earned by helping Bram")
+	charm_button.text = "Unequip charm" if equipped else "Equip charm"
+	charm_button.disabled = not equipped and hub.state.count("warden_charm")==0
+	satchel_quest.text = hub.state.quest_text()
 
 
 func _draw_forest_map() -> void:

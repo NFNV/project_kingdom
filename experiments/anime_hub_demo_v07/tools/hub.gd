@@ -13,6 +13,13 @@ const FountainFX := preload("res://experiments/anime_hub_demo_v07/tools/fountain
 const Hud := preload("res://experiments/anime_hub_demo_v07/tools/hud.gd")
 const Style := preload("res://experiments/anime_hub_demo_v07/tools/art_style.gd")
 const Soundscape := preload("res://experiments/anime_hub_demo_v07/tools/soundscape.gd")
+const GameState := preload("res://experiments/anime_hub_demo_v07/tools/game_state.gd")
+const SaveStore := preload("res://experiments/anime_hub_demo_v07/tools/save_store.gd")
+const Loot := preload("res://experiments/anime_hub_demo_v07/tools/loot_drop.gd")
+var state: Node
+var saves := SaveStore.new()
+var save_path := SaveStore.DEFAULT_PATH
+var backpack_open := false
 const CYCLE_SECONDS := 1200.0
 const SIZE := Vector2i(1920,1080)
 const TIMES := ["Dawn","Noon","Dusk","Night"]
@@ -32,13 +39,18 @@ var zone := "town"
 var zone_root: Node2D
 var exits: Dictionary = {}
 var near_exit := ""
-var discoveries: Dictionary = {}
+var discoveries: Dictionary:
+	get: return state.discoveries
 var transitioning := false
 var travel_cooldown := 0.0
 var peaceful_mode := true
-var forest_defeated: Dictionary = {}
-var forest_recoveries := 0
-var district_places: Dictionary = {}
+var forest_defeated: Dictionary:
+	get: return state.forest_defeated
+var forest_recoveries: int:
+	get: return state.forest_recoveries
+	set(value): state.forest_recoveries = value
+var district_places: Dictionary:
+	get: return state.district_places
 var world_size := SIZE
 var trail_effects: Node2D
 var catalog: Dictionary
@@ -71,9 +83,13 @@ var pause_overlay: Control
 var paused := false
 var combat_active := false
 var challenge_won := false
-var quest_stage := 0
+var quest_stage: int:
+	get: return state.delivery_stage
+	set(value): state.delivery_stage = value
 var nearest := ""
-var clock := 1.0
+var clock: float:
+	get: return state.clock
+	set(value): state.clock = value
 var clock_target := -1.0
 var auto_clock := true
 var dialogue_left := 0.0
@@ -85,12 +101,15 @@ var victory_count := 0
 var camera: Camera2D
 var bakery_room: Node2D
 var shopping := false
-var coins := 12
-var inventory: Dictionary = {"bread":0,"tea":0,"honey":0}
+var coins: int:
+	get: return state.coins
+	set(value): state.coins = value
+var inventory: Dictionary:
+	get: return state.item_counts()
 const GOODS := [
-	{"id":"bread","name":"Warm sourdough","description":"A crisp crust, a soft heart.","price":2},
-	{"id":"tea","name":"Meadow tea","description":"Chamomile and a little lavender.","price":3},
-	{"id":"honey","name":"Valley honey","description":"Wildflowers from Mosswood.","price":4}
+	{"id":"bread","name":"Warm sourdough","description":"Restore 2 hearts. H to eat a loaf on the trail.","price":2},
+	{"id":"tea","name":"Meadow tea","description":"Restore 2 hearts and refresh Wind Slash.","price":3},
+	{"id":"honey","name":"Valley honey","description":"Restore 3 hearts. Wildflowers from Mosswood.","price":4}
 ]
 
 
@@ -107,6 +126,9 @@ func _ready() -> void:
 		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
 	Engine.physics_ticks_per_second = 60
 	get_tree().physics_interpolation = true
+	state = GameState.new()
+	state.name = "Journey"
+	add_child(state)
 	audio = Soundscape.new()
 	audio.hub = self
 	add_child(audio)
@@ -120,7 +142,7 @@ func _ready() -> void:
 	_update_hud()
 	if DisplayServer.get_name()!="headless":
 		DisplayServer.window_move_to_foreground()
-	_say("Welcome to Garden Square", "WASD to walk, Shift to run. Enter the blue-awning bakery on the left with E, or take the southeast gate into Mosswood. The wardens are friendly. The north passage leads to Northgate Quarter.")
+	_say("Welcome to Garden Square", "Speak to Bram by the fountain for a forest quest. I opens your satchel; H eats bread. F5 saves your journey, F9 continues a saved one. The southeast gate leads to Mosswood.")
 	if "--night" in OS.get_cmdline_user_args():
 		clock = 3.0
 	if "--bakery" in OS.get_cmdline_user_args():
@@ -142,10 +164,12 @@ func _ready() -> void:
 		_load_zone("river","trail")
 	if "--capture" in OS.get_cmdline_user_args():
 		_capture.call_deferred()
+	if "--continue" in OS.get_cmdline_user_args():
+		load_game.call_deferred()
 
 
 func _install_input() -> void:
-	var bindings := {"left":[KEY_A,KEY_LEFT],"right":[KEY_D,KEY_RIGHT],"up":[KEY_W,KEY_UP],"down":[KEY_S,KEY_DOWN],"run":[KEY_SHIFT],"attack":[KEY_SPACE],"skill":[KEY_Q],"interact":[KEY_E],"time":[KEY_T],"pause":[KEY_ESCAPE],"restart":[KEY_R],"fullscreen":[KEY_F11],"journal":[KEY_J],"debug":[KEY_F3],"mute":[KEY_M]}
+	var bindings := {"left":[KEY_A,KEY_LEFT],"right":[KEY_D,KEY_RIGHT],"up":[KEY_W,KEY_UP],"down":[KEY_S,KEY_DOWN],"run":[KEY_SHIFT],"attack":[KEY_SPACE],"skill":[KEY_Q],"interact":[KEY_E],"time":[KEY_T],"pause":[KEY_ESCAPE],"restart":[KEY_R],"fullscreen":[KEY_F11],"journal":[KEY_J],"debug":[KEY_F3],"mute":[KEY_M],"bag":[KEY_I],"food":[KEY_H],"save":[KEY_F5],"load":[KEY_F9]}
 	for action in bindings:
 		var name := "hub_"+str(action)
 		if not InputMap.has_action(name):
@@ -227,6 +251,8 @@ func _load_zone(destination: String, entry: String) -> void:
 		Map.District.build(self)
 	elif zone=="wilds":
 		Map.Wilds.build(self)
+		for id in state.pending_loot:
+			_add_loot(id)
 	else:
 		_build_forest()
 	exits = Map.exits_for(zone)
@@ -237,7 +263,6 @@ func _load_zone(destination: String, entry: String) -> void:
 		world.add_child(player)
 		player.position = Map.arrival(zone,entry)
 	player.active = true
-	player.health = player.maximum_health
 	player.collision_layer = 2
 	player.grace = 1.5 if zone=="wilds" else 0.0
 	player.cooldown = 0
@@ -573,11 +598,139 @@ func buy(index: int) -> bool:
 		audio.play_event("ui_error",player.position,-10)
 		ui.refresh_shop("A little short of coins for that one. Try something smaller.")
 		return false
+	if not state.add_item(product.id):
+		ui.refresh_shop("Your satchel already holds plenty of that item.")
+		return false
 	coins -= int(product["price"])
-	inventory[product["id"]] += 1
 	audio.play_event("ui_confirm",player.position,-8)
 	ui.refresh_shop("%s tucked into your satchel. Thank you!" % product["name"])
 	_update_hud()
+	return true
+
+
+func _add_loot(id: String) -> void:
+	var key := "loot:"+id
+	if interactables.has(key):
+		return
+	var coords: Array = state.pending_loot[id].position
+	var at := Vector2(coords[0],coords[1])
+	var drop := Loot.new()
+	drop.hub = self
+	drop.position = at
+	world.add_child(drop)
+	interactables[key] = {"name":"Collect bandit badge","at":at,"height":18.0,"anchor":drop}
+
+
+func collect_loot(id: String) -> bool:
+	var key := "loot:"+id
+	if paused or transitioning or zone!="wilds" or not player.active or not interactables.has(key):
+		return false
+	if Actor.ground_vector(interactables[key].at-player.position).length()>150 or not clear_line(player.position,interactables[key].at):
+		return false
+	if not state.collect_loot(id):
+		return false
+	interactables[key].anchor.queue_free()
+	interactables.erase(key)
+	nearest = ""
+	audio.play_event("coin",player.position,-9)
+	ui.show_notice("Bandit badge collected  ·  %d in your satchel" % state.count("bandit_badge"))
+	_update_hud()
+	return true
+
+
+func toggle_backpack() -> void:
+	if transitioning or shopping or not player.active:
+		return
+	backpack_open = not backpack_open
+	set_paused(backpack_open)
+	if backpack_open:
+		player.stop_motion()
+		pause_overlay.hide()
+	ui.satchel.visible = backpack_open
+	ui.refresh_satchel()
+
+
+func use_item(id: String) -> bool:
+	if transitioning or shopping or (paused and not backpack_open) or not player.active or player.swing>0 or not state.definitions.has(id) or state.count(id)<=0:
+		return false
+	var item: Dictionary = state.definitions[id]
+	if item.get("kind")!="food":
+		return false
+	var refresh: bool = bool(item.get("refresh_skill",false)) and player.skill_cooldown>0
+	if player.health>=player.maximum_health and not refresh:
+		ui.show_notice("You are already rested. Save that for the trail.")
+		return false
+	if not state.remove_item(id):
+		return false
+	player.health = mini(player.maximum_health,player.health+int(item.heal))
+	if refresh:
+		player.skill_cooldown = 0
+	ui.show_notice("%s  ·  %d / %d hearts" % [item.name,player.health,player.maximum_health])
+	audio.play_event("ui_confirm",player.position,-8)
+	ui.refresh_satchel()
+	_update_hud()
+	return true
+
+
+func toggle_charm() -> void:
+	if not backpack_open:
+		return
+	if state.charm.get_item()!=null:
+		state.unequip_charm()
+	else:
+		state.equip_charm()
+	ui.refresh_satchel()
+	_update_hud()
+
+
+func make_save_document() -> Dictionary:
+	return {"format":"project_kingdom","version":SaveStore.VERSION,"state":state.snapshot(),
+		"player":{"zone":zone,"position":[player.position.x,player.position.y],"health":player.health,
+		"facing":[player.facing.x,player.facing.y],"skill_cooldown":player.skill_cooldown}}
+
+
+func save_game() -> bool:
+	if transitioning or not player.active or player.swing>0 or player.windup>0:
+		ui.show_notice("Finish your action before saving.")
+		return false
+	var result := saves.write_document(make_save_document(),save_path)
+	ui.show_notice("Journey saved  ·  F9 to continue" if result else saves.last_error)
+	ui.refresh_save_controls()
+	return result
+
+
+func load_game() -> bool:
+	if transitioning:
+		return false
+	var document := saves.load_document(save_path)
+	if document.is_empty():
+		ui.show_notice(saves.last_error)
+		return false
+	backpack_open = false
+	ui.satchel.hide()
+	set_paused(false)
+	state.restore(document.state,int(document.player.health))
+	_load_zone(document.player.zone,"start")
+	var coords: Array = document.player.position
+	var at := Vector2(coords[0],coords[1])
+	if not is_walkable(at,14):
+		# An NPC may now occupy the saved spot, or geometry may have changed.
+		var cell := _nav_cell(at)
+		at = navigation.get_point_position(cell) if cell.x>=0 else Map.arrival(zone,"start")
+	player.position = at
+	player.facing = Vector2(document.player.facing[0],document.player.facing[1]).normalized()
+	player.sprite.tick(0,0,player.facing)
+	player.skill_cooldown = float(document.player.skill_cooldown)
+	player.grace = .75
+	player.reset_physics_interpolation()
+	camera.reset_smoothing()
+	camera.force_update_scroll()
+	clock_target = -1
+	dialogue_left = 0
+	talk_panel.hide()
+	_update_lighting()
+	_update_hud()
+	ui.show_notice("Journey restored from the backup save." if saves.used_backup else "Welcome back  ·  Your journey has been restored.")
 	return true
 
 
@@ -718,6 +871,9 @@ func interact(id := "") -> void:
 		id = nearest
 	if id.is_empty():
 		return
+	if id.begins_with("loot:"):
+		collect_loot(id.trim_prefix("loot:"))
+		return
 	audio.play_event("ui_open",player.position,-12)
 	if interactables[id].has("anchor") and interactables[id]["anchor"].has_method("greet"):
 		interactables[id]["anchor"].greet()
@@ -750,6 +906,17 @@ func interact(id := "") -> void:
 		_update_hud()
 		return
 	if id in ["warden","guard_west","guard_east"]:
+		if id=="warden":
+			if not state.accepted:
+				state.accept_quest()
+				_say("Bram · Town warden","A few bandits are troubling Briarwood. Recover three of their badges and bring them to me: ten coins and a warden's charm are yours. Take the southeast gate, cross Riverbend, then follow the path beyond the bridge.")
+			elif state.claim_reward():
+				audio.play_event("victory",player.position,-5)
+				_say("Bram · Town warden","Three badges, just as promised! Here are ten coins and a warden's charm. Open your satchel with I and equip it for an extra heart. Clover sells healing food inside the blue-awning bakery.")
+			else:
+				_say("Bram · Town warden",state.quest_text())
+			_update_hud()
+			return
 		_say(interactables[id]["name"],"Safe travels, friend. The southeast gate leads into Mosswood. Follow the path to the river, and take your time — we'll look after the square.")
 		return
 	var text: String = lines.get(id,"")
@@ -784,10 +951,9 @@ func actor_yielded(actor_node) -> void:
 		transitioning = true
 		_recover_in_forest.call_deferred()
 		return
-	if forest_defeated.has(actor_node.resident_id):
+	if not state.record_defeat(actor_node.resident_id,actor_node.position):
 		return
-	forest_defeated[actor_node.resident_id] = true
-	coins += 2
+	_add_loot(actor_node.resident_id)
 	audio.play_event("coin",actor_node.position,-12)
 	var fade: Tween = actor_node.create_tween()
 	fade.tween_property(actor_node.sprite,"modulate:a",0.0,.35)
@@ -803,6 +969,7 @@ func _recover_in_forest() -> void:
 	fade.tween_property(ui.fade,"modulate:a",1.0,.3)
 	await fade.finished
 	forest_recoveries += 1
+	state.health = state.maximum_health
 	_load_zone("wilds","river")
 	await get_tree().physics_frame
 	_say("A moment to catch your breath", "You return to the sheltered western trail with full health. Defeated bandits stay defeated, and your coins are safe. Try drawing one pack away from the others.")
@@ -906,14 +1073,15 @@ func _update_hud() -> void:
 
 
 func _update_prompt() -> void:
-	prompt.visible = (not nearest.is_empty() or not near_exit.is_empty()) and (not combat_active or near_exit!="") and not shopping and not transitioning
+	prompt.visible = (not nearest.is_empty() or not near_exit.is_empty()) and (not combat_active or near_exit!="" or nearest.begins_with("loot:")) and not shopping and not transitioning and not paused
 	if prompt.visible:
 		var offset_y := -165.0 if dialogue_left>0 else 25.0
 		prompt.position = (get_canvas_transform()*player.global_position+Vector2(-140,offset_y)).clamp(Vector2(15,170),Vector2(1620,940))
 		prompt_text.text = "E   "+("Enter bakery" if near_exit=="bakery" else ("Go to "+exits[near_exit].get("sign","the next path") if near_exit!="" else interactables[nearest]["name"]))
-	quest_marker.visible = zone=="town" and quest_stage<5 and not transitioning
+	quest_marker.visible = zone=="town" and (quest_stage<5 or state.can_claim() or not state.accepted) and not transitioning
 	if quest_marker.visible:
-		var target: Dictionary = interactables[QUEST_TARGETS[quest_stage]]
+		var target_id: String = "warden" if state.can_claim() or quest_stage>=5 else QUEST_TARGETS[quest_stage]
+		var target: Dictionary = interactables[target_id]
 		var point: Vector2 = get_canvas_transform()*(target["at"]+Vector2(0,-target["height"]-24))
 		quest_marker.position = point+Vector2(-14,-18+sin(elapsed*2.3)*5)
 		quest_marker.visible = Rect2(20,190,1880,760).has_point(point)
@@ -929,6 +1097,24 @@ func set_paused(value: bool) -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if event.is_echo():
+		return
+	if event.is_action_pressed("hub_save"):
+		save_game()
+		get_viewport().set_input_as_handled()
+		return
+	if event.is_action_pressed("hub_load"):
+		load_game()
+		get_viewport().set_input_as_handled()
+		return
+	if event.is_action_pressed("hub_bag") or (backpack_open and event.is_action_pressed("hub_pause")):
+		toggle_backpack()
+		get_viewport().set_input_as_handled()
+		return
+	if event.is_action_pressed("hub_food"):
+		use_item("bread")
+		get_viewport().set_input_as_handled()
+		return
 	if event.is_action_pressed("hub_mute") and not event.is_echo():
 		audio.set_muted(not audio.muted)
 		get_viewport().set_input_as_handled()

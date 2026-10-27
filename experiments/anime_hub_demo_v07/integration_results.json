@@ -1,0 +1,65 @@
+{
+  "baseline_commit": "f721f5f",
+  "branch": "codex/gameplay-foundation",
+  "checks": 720,
+  "passed": 720,
+  "failures": [],
+  "suites": {
+    "test_results": {
+      "checks": 255,
+      "passed": 255,
+      "report": "test_results.json"
+    },
+    "district_test_results": {
+      "checks": 154,
+      "passed": 154,
+      "report": "district_test_results.json"
+    },
+    "wilds_test_results": {
+      "checks": 45,
+      "passed": 45,
+      "report": "wilds_test_results.json"
+    },
+    "skill_test_results": {
+      "checks": 44,
+      "passed": 44,
+      "report": "skill_test_results.json"
+    },
+    "bandit_test_results": {
+      "checks": 32,
+      "passed": 32,
+      "report": "bandit_test_results.json"
+    },
+    "animation_test_results": {
+      "checks": 35,
+      "passed": 35,
+      "report": "animation_test_results.json"
+    },
+    "audio_test_results": {
+      "checks": 39,
+      "passed": 39,
+      "report": "audio_test_results.json"
+    },
+    "addon_test_results": {
+      "checks": 10,
+      "passed": 10,
+      "report": "addon_test_results.json"
+    },
+    "journey_test_results": {
+      "checks": 99,
+      "passed": 99,
+      "report": "journey_test_results.json"
+    },
+    "journey_relaunch_results": {
+      "checks": 7,
+      "passed": 7,
+      "report": "journey_relaunch_results.json"
+    }
+  },
+  "performance_report": "journey_performance.json",
+  "native_ui_previews": [
+    "previews/journey_satchel.png",
+    "previews/journey_save_menu.png",
+    "previews/journey_badge_pickup.png"
+  ]
+}

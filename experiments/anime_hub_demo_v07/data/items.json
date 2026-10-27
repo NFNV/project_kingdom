@@ -1,0 +1,42 @@
+{
+  "bread": {
+    "name": "Warm sourdough",
+    "description": "Restore 2 hearts. H to eat a loaf on the trail.",
+    "heal": 2,
+    "max_stack_size": 99,
+    "kind": "food"
+  },
+  "tea": {
+    "name": "Meadow tea",
+    "description": "Restore 2 hearts and refresh Wind Slash.",
+    "heal": 2,
+    "refresh_skill": true,
+    "max_stack_size": 99,
+    "kind": "food"
+  },
+  "honey": {
+    "name": "Valley honey",
+    "description": "Restore 3 hearts. A little sweetness for the road.",
+    "heal": 3,
+    "max_stack_size": 99,
+    "kind": "food"
+  },
+  "bandit_badge": {
+    "name": "Bandit badge",
+    "description": "Recovered from a defeated bandit. Bring three to Bram.",
+    "max_stack_size": 99,
+    "kind": "quest"
+  },
+  "travel_sword": {
+    "name": "Traveller\u2019s sword",
+    "description": "Your trusty blade. Space to strike; Q for Wind Slash.",
+    "max_stack_size": 1,
+    "kind": "weapon"
+  },
+  "warden_charm": {
+    "name": "Warden\u2019s charm",
+    "description": "Equip to gain one extra maximum heart. A gift from Bram.",
+    "max_stack_size": 1,
+    "kind": "charm"
+  }
+}
