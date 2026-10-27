@@ -8,6 +8,7 @@ const ATTACKS := {
 	"sweep":{"warning":1.0,"duration":.72,"contact":.12,"end":.30,"reach":132.0,"cosine":-.15,"cooldown":1.90}
 }
 var variant := "raider"
+var captain := false
 var state := "patrol"
 var stagger := 0.0
 var returning := false
@@ -28,6 +29,11 @@ func _ready() -> void:
 	patrol_wait = .5
 
 func profile() -> Dictionary:
+	if captain:
+		var data: Dictionary = ATTACKS[attack_kind].duplicate()
+		data.warning += .25
+		data.cooldown += .4
+		return data
 	return ATTACKS[attack_kind]
 
 func _physics_process(delta: float) -> void:
@@ -179,7 +185,7 @@ func resolve_hits() -> void:
 	var target = hub.player
 	if target.active and target not in swing_hits and attack_contains(target.position) and hub.clear_line(position,target.position):
 		swing_hits.append(target)
-		target.receive_hit(facing,1,230.0 if variant=="mauler" else 155.0)
+		target.receive_hit(facing,2 if captain else 1,230.0 if variant=="mauler" else 155.0)
 
 func receive_hit(from: Vector2, damage := 1, force := 170.0) -> bool:
 	var accepted := super.receive_hit(from,damage,force)
@@ -244,6 +250,9 @@ func _draw() -> void:
 			draw_arc(Vector2.ZERO,profile().reach,angle-spread,angle+spread,40,Color(tint,.85),2.5,true)
 		draw_arc(Vector2.ZERO,22,-PI/2,-PI/2+TAU*strength,32,Color(tint,.95),3,true)
 	draw_set_transform(Vector2.ZERO)
+	if captain:
+		draw_string_outline(ThemeDB.fallback_font,Vector2(-61,-sprite.display_height-35),"ROOK · CAPTAIN",HORIZONTAL_ALIGNMENT_LEFT,-1,14,3,Color("293b33"))
+		draw_string(ThemeDB.fallback_font,Vector2(-61,-sprite.display_height-35),"ROOK · CAPTAIN",HORIZONTAL_ALIGNMENT_LEFT,-1,14,Color("ffe3a5"))
 	for i in maximum_health:
 		draw_circle(Vector2((i-(maximum_health-1)*.5)*10,-sprite.display_height-12),3.0,Color("f3bd8a") if i<health else Color("4c4541"))
 	if windup>0:

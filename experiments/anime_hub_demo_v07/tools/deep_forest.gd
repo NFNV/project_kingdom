@@ -53,6 +53,11 @@ static func build(hub: Node2D) -> void:
 			dog.patrol_wait = .5+member*.65+pack*.17
 			dog.maximum_health = 3
 			dog.health = 3
+			if id==hub.GameState.CAPTAIN_ID:
+				dog.captain = true
+				dog.maximum_health = 8
+				dog.health = 8
+				dog.sprite.display_height *= 1.09
 			dog.path_timer = (pack*3+member)*.037
 			hub.dogs.append(dog)
 	hub.combat_active = not hub.dogs.is_empty()

@@ -1,0 +1,226 @@
+{
+  "mode": "built-in imagegen",
+  "png_count": 16,
+  "slot_silhouettes": 7,
+  "item_definitions_with_valid_icons": 16,
+  "failures": [],
+  "assets": [
+    {
+      "id": "adventurer",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "alpha_range": [
+        0,
+        254
+      ],
+      "sha256": "c11add0b9470dbdbfbd090de7d2eec2ebf0743d2b245b4fb4bb50eaeb0a6f5c7",
+      "byte_identical_to_generated_source": true
+    },
+    {
+      "id": "leather_cap",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "sha256": "d2a7a26b62d579fde0be94a3d9f6db7efdf6474387f8849f06c77fe08d3f72f0",
+      "byte_identical_to_generated_source": true
+    },
+    {
+      "id": "traveller_tunic",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "sha256": "cf16df78969081e8ada999ba2f14fc76f717a406cc97e17689727fe810ac5524",
+      "byte_identical_to_generated_source": true
+    },
+    {
+      "id": "field_trousers",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "sha256": "817805800aa98a10e2c411438a1ff10f2628790a2d4aac57639c75e51f4d5ad9",
+      "byte_identical_to_generated_source": true
+    },
+    {
+      "id": "riding_gloves",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "sha256": "143b1e015b9c7788175e876c61229a7d769228825e4be033bbd24a581d8fbb2a",
+      "byte_identical_to_generated_source": true
+    },
+    {
+      "id": "trail_boots",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "sha256": "b966b4c5f1849d270ac2bb7a0d8ee631bc29c4418564f6bc6b0d0a4aeab0a13d",
+      "byte_identical_to_generated_source": true
+    },
+    {
+      "id": "travel_sword",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "sha256": "65be46e116d8e8fde5457e53bda0e3f59dd9bad74918d004324f92164246cac3",
+      "byte_identical_to_generated_source": true
+    },
+    {
+      "id": "warden_charm",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "sha256": "a750da86b707e426d914b49d61de776b38dc752ba2e14083a80061cd34264bea",
+      "byte_identical_to_generated_source": true
+    },
+    {
+      "id": "swift_charm",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "sha256": "6a41d8bc3b79a5ae7fa9b996e49a32b39b8149a20a33045a1a43737714cca668",
+      "byte_identical_to_generated_source": true
+    },
+    {
+      "id": "tempered_sword",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "sha256": "b30e6d317b286a52673f57d523b8fa69117f176d211c252973d066f06830390c",
+      "byte_identical_to_generated_source": true
+    },
+    {
+      "id": "reinforced_vest",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "sha256": "fb1e6b35f526b26035119bd80c1229c587099e5d6dfe095e6fde870958eb2d2e",
+      "byte_identical_to_generated_source": true
+    },
+    {
+      "id": "hunter_boots",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "sha256": "f02a9273cc46c571a6c082e66884d5539f82d59fc511b3278957fb6b83289403",
+      "byte_identical_to_generated_source": true
+    },
+    {
+      "id": "smith_tools",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "sha256": "0b91aea775d87db4b47b58c9034389cb624bf772f0ded2f5615048f3342ef0a9",
+      "byte_identical_to_generated_source": true
+    },
+    {
+      "id": "forge_hearth",
+      "dimensions": [
+        1402,
+        1122
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "sha256": "6a19ede2f9f7cbbacbc475b532fc0fe3682aad96037fc7731b15e024779ad6d4",
+      "byte_identical_to_generated_source": true
+    },
+    {
+      "id": "forge_anvil",
+      "dimensions": [
+        1374,
+        1145
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "sha256": "9b765e97b4dc63c25469c3ea85ee927ed1d3b3033f452d2c4445a2341dc3d13b",
+      "byte_identical_to_generated_source": true
+    },
+    {
+      "id": "forge_counter",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        254
+      ],
+      "sha256": "5c46a45384a40c025163e33fc87abe3f214dbec6e82d7dc24a6c6d3cccbc3617",
+      "byte_identical_to_generated_source": true
+    }
+  ],
+  "visual_review": [
+    "paper-doll inventory",
+    "item comparison",
+    "quest journal",
+    "forge interior",
+    "forge shop",
+    "title menu"
+  ],
+  "notes": "Read-only alpha, hash and XML inspection. Original generated PNGs are preserved; Godot creates cached mipmapped runtime textures."
+}

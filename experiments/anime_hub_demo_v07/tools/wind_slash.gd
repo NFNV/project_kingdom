@@ -3,6 +3,7 @@ extends Node2D
 var hub: Node2D
 var heading := Vector2.RIGHT
 var travelled := 0.0
+var damage := 3
 var hit_ids: Dictionary = {}
 const SPEED := 760.0
 const REACH := 520.0
@@ -33,7 +34,7 @@ func _physics_process(delta: float) -> void:
 		var nearest := Geometry2D.get_closest_point_to_segment(relative,Vector2.ZERO,end)
 		if relative.distance_to(nearest)<=30 and hub.clear_line(position,dog.position):
 			hit_ids[dog.get_instance_id()] = true
-			dog.receive_hit(heading,3,310.0)
+			dog.receive_hit(heading,damage,310.0)
 	position = next
 	travelled += step
 	if travelled>=REACH or not obstruction.is_empty() or hit_ids.size()>=3:

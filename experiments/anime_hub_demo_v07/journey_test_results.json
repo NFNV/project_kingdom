@@ -1,0 +1,8 @@
+{
+  "checks": 99,
+  "engine": "4.7.2-stable (official)",
+  "failures": [],
+  "passed": 99,
+  "save_slot": "/tmp/kingdom-journey-test.json",
+  "scope": "Connected travel, real E/Q/I/H/F5/F9 input, actual projectile defeats and pickups, GLoot food/equipment/shop, Questify objectives and unique hand-in, full save/load, corruption and schema rejection."
+}

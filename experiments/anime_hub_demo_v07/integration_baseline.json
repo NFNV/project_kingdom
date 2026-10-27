@@ -1,0 +1,51 @@
+{
+  "commit": "f721f5f",
+  "branch": "codex/gameplay-foundation",
+  "reports": {
+    "test_results": {
+      "checks": 255,
+      "failures": [],
+      "passed": 255,
+      "scope": "Four taller human NPCs: physical approach, E conversations, greetings, collision, actual four-direction facing, fixed feet during breathing, pause, shared night tint, peaceful quest/economy preservation and recreation after zone visits. Navigation recovers from disconnected padded grid pockets beside solid NPCs and props. Actual downward walk/run exercises every south pose on the repaired sheet without mirroring. Rendered body-landmark stability and consistent head size across every player pose, eased stance transitions, caller sprite placement and vendor facing through idle/greetings. Eight-direction walk/run/idle, drawn civilian gestures, actual friendly patrols, conversation tracking, pause and blocked-motion animation regression. Movement/collision, delivery quest, peaceful warden regression, twenty-minute clock, camera tracking/projection/limits, spilling fountain, furnished bakery entry/return, counter collision, vendor purchases and modal input, physical southeast exit, both forest areas, bridge, complete return journey and persistent progress."
+    },
+    "district_test_results": {
+      "checks": 154,
+      "failures": [],
+      "passed": 154,
+      "scope": "All residential door paths and four frontage directions; eight native architectural recipes with plumb walls; physical northern entry and southern return/reentry, large-map camera/navigation, all six district destinations, 52 uniformly scaled buildings and solid footprints, resident conversations and moving peaceful wardens, separate town exploration progress, day/night and occlusion, pause and preserved original gameplay state/populations."
+    },
+    "wilds_test_results": {
+      "checks": 45,
+      "failures": [],
+      "passed": 45,
+      "scope": "Physical bridge entry, large-map navigation and camera, all four clearings, local hostile packs, telegraphed attacks and movement dodge, actual Space melee damage, unique coin rewards, pause, checkpoint recovery, physical retreat and reentry, persistent clears and friendly town regression."
+    },
+    "skill_test_results": {
+      "checks": 44,
+      "failures": [],
+      "passed": 44,
+      "scope": "Drawn four-phase attacks in four real directions, body/equipment visibility and feet, actual Q input buffered while Space stays held, priority over normal swings, clickable skill input, real piercing three-damage projectile at range, direction, walls, lifetime, cooldown UI/recharge, pause in flight, travel cleanup and peaceful/modal guards."
+    },
+    "bandit_test_results": {
+      "checks": 32,
+      "failures": [],
+      "passed": 32,
+      "scope": "Actual local patrols and mixed population, distinct artwork, locked telegraphs, physical slash/lunge/sweep damage and dodges, warning bounds, collision during a dash, recovery hit safety, interruption/hurt invulnerability, pause, leash, unique defeat rewards, persistent roles and friendly-town isolation."
+    },
+    "animation_test_results": {
+      "checks": 35,
+      "failures": [],
+      "passed": 35,
+      "scope": "Foot-phase continuity, drawn turn progression and no wall treadmill; actual UV-to-rendered-head mapping and planted boots across every combat sample; eight authored phases, draw/sheathing, same-tick attack facing, contact-only hits, no recovery hits, buffered clicks, skill priority and zone resets."
+    },
+    "audio_test_results": {
+      "audio_driver": "CoreAudio",
+      "checks": 39,
+      "failures": [],
+      "mix_energy": 251.407436144761,
+      "mixed_pcm_frames": 19456,
+      "passed": 39,
+      "scope": "Actual source loading and playback, listener, positional loops, real movement footfalls, no idle/wall steps, purchase cues, zone/clock/battle score selection and crossfade, contact/skill event timing, bounded voices, distance culling, pause/resume, real volume widgets/mute, travel cleanup and actual PCM mixer output."
+    }
+  }
+}

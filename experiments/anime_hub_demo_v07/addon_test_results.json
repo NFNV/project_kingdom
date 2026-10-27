@@ -1,0 +1,8 @@
+{
+  "checks": 10,
+  "engine": "4.7.2-stable (official)",
+  "failures": [],
+  "gloot": "3.0.2",
+  "passed": 10,
+  "questify": "1.6.0"
+}

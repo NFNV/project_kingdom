@@ -48,7 +48,7 @@ static func doorstep(house: Dictionary) -> Vector2:
 
 static func civic_and_shops() -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
-	for spec in [["community_hall",2.0,2.0,.65,4],["bakery",4.5,7.8,.32,3],["bookshop",5.5,7.8,.32,5],["grocer_shop",5.2,8.5,.32,7]]:
+	for spec in [["community_hall",2.0,2.0,.65,4],["bakery",4.5,7.8,.32,3],["forge",5.5,7.8,.32,5],["grocer_shop",5.2,8.5,.32,7]]:
 		var house: Dictionary = houses()[0].duplicate(true)
 		house.u = spec[1]
 		house.v = spec[2]

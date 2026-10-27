@@ -1,5 +1,8 @@
 extends CanvasLayer
 
+const InventoryView := preload("res://experiments/anime_hub_demo_v07/tools/inventory_view.gd")
+const JournalView := preload("res://experiments/anime_hub_demo_v07/tools/quest_journal.gd")
+const ForgeShop := preload("res://experiments/anime_hub_demo_v07/tools/forge_shop.gd")
 const Clock := preload("res://experiments/anime_hub_demo_v07/tools/celestial_clock.gd")
 var hub: Node2D
 var serif := SystemFont.new()
@@ -39,6 +42,20 @@ var skill_button: Button
 var audio_sliders: Dictionary = {}
 var audio_values: Dictionary = {}
 var audio_mute: CheckBox
+var satchel: Control
+var journal_view: Control
+var forge_view: Control
+var satchel_health: Label
+var satchel_quest: Label
+var satchel_rows: Dictionary = {}
+var food_buttons: Dictionary = {}
+var charm_button: Button
+var charm_description: Label
+var save_button: Button
+var load_button: Button
+var notice: Panel
+var notice_text: Label
+var notice_left := 0.0
 
 
 func _ready() -> void:
@@ -52,14 +69,14 @@ func _ready() -> void:
 	clock_dial.scale = Vector2(.72,.72)
 	clock_dial.serif = serif
 	add_child(clock_dial)
-	journal_panel = panel(Vector2(1498,28),Vector2(394,162))
+	journal_panel = panel(Vector2(1498,28),Vector2(394,196))
 	label("THE TRAVELLER'S JOURNAL",Vector2(20,13),12,journal_panel,0,Color("887043"))
 	objective = label("",Vector2(20,41),20,journal_panel,350,Color("2e4239"),true)
-	status_label = label("",Vector2(20,128),13,journal_panel,354,Color("7e7054"))
+	status_label = label("",Vector2(20,164),13,journal_panel,354,Color("7e7054"))
 	var controls := panel(Vector2(28,1012),Vector2(746,44),null,true)
 	controls_label = label("WASD  walk     SHIFT  run     E  talk / use     Right click  walk to point",Vector2(16,11),15,controls,0,Color("f0e4c8"))
 	var actions := panel(Vector2(1515,1012),Vector2(377,44),null,true)
-	label("J journal   T time   M mute   Esc pause   F11 screen",Vector2(14,12),13,actions,0,Color("f0e4c8"))
+	label("I satchel   H bread   M mute   Esc menu   F11 screen",Vector2(14,12),13,actions,0,Color("f0e4c8"))
 	route_label = label("",Vector2(1140,972),17,self,720,Color("fff2ca"),true)
 	route_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	route_label.add_theme_color_override("font_shadow_color",Color("18372e"))
@@ -141,13 +158,31 @@ func _ready() -> void:
 	shade.color = Color(.035,.07,.06,.68)
 	shade.size = Vector2(1920,1080)
 	pause_overlay.add_child(shade)
-	var menu := panel(Vector2(650,235),Vector2(620,610),pause_overlay)
+	var menu := panel(Vector2(650,155),Vector2(620,760),pause_overlay)
 	label("Rest a while",Vector2(42,36),37,menu,0,Color("2e4239"),true)
-	label("Esc   Return to your walk\nR      Begin a new day\nJ       Show or hide your journal\nF11   Full screen",Vector2(44,105),21,menu,520,Color("52604d"))
+	label("Esc   Return to your walk\nR      Return to the title\nJ       Open your quest journal\nF11   Full screen",Vector2(44,105),21,menu,520,Color("52604d"))
+	label("F5 save  ·  F9 continue  ·  I satchel  ·  H bread",Vector2(44,236),16,menu,530,Color("756a52"))
+	save_button = action_button("Save journey",Vector2(44,270),Vector2(248,48),menu)
+	save_button.pressed.connect(func(): hub.save_game())
+	load_button = action_button("Continue saved journey",Vector2(306,270),Vector2(270,48),menu)
+	load_button.pressed.connect(func(): hub.load_game())
 	_build_audio_menu(menu)
-	label("Day and night pass slowly: 20 minutes per full cycle.",Vector2(44,563),16,menu,530,Color("8b7654"))
+	var title_button := action_button("Save and return to title",Vector2(44,623),Vector2(532,40),menu)
+	title_button.pressed.connect(func(): hub.return_to_title())
+	label("Autosaves at safe travel and quest milestones. F5 saves now.\nDay and night pass slowly: 20 minutes per full cycle.",Vector2(44,690),15,menu,530,Color("8b7654"))
 	pause_overlay.hide()
 	_build_merchant()
+	_build_satchel()
+	journal_view = JournalView.new()
+	journal_view.hub = hub
+	add_child(journal_view)
+	forge_view = ForgeShop.new()
+	forge_view.hub = hub
+	add_child(forge_view)
+	notice = panel(Vector2(510,744),Vector2(900,55),null,true)
+	notice_text = label("",Vector2(18,16),18,notice,864,Color("fff0cd"))
+	notice_text.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	notice.hide()
 	fade = ColorRect.new()
 	fade.size = Vector2(1920,1080)
 	fade.color = Color("10241d")
@@ -156,12 +191,13 @@ func _ready() -> void:
 	add_child(fade)
 	hub.audio.settings_changed.connect(refresh_audio)
 	refresh_audio()
+	refresh_save_controls()
 
 func _build_audio_menu(menu: Control) -> void:
-	label("SOUND",Vector2(44,280),14,menu,0,Color("887043"))
+	label("SOUND",Vector2(44,344),14,menu,0,Color("887043"))
 	var row := 0
 	for key in ["master","music","ambience","effects"]:
-		var y := 318+row*39
+		var y := 380+row*39
 		label(key.capitalize(),Vector2(44,y),18,menu,0,Color("33433a"))
 		var slider := HSlider.new()
 		slider.position = Vector2(185,y+2)
@@ -176,7 +212,7 @@ func _build_audio_menu(menu: Control) -> void:
 		audio_values[key] = label("",Vector2(504,y),17,menu,0,Color("756a52"))
 		row += 1
 	audio_mute = CheckBox.new()
-	audio_mute.position = Vector2(40,499)
+	audio_mute.position = Vector2(40,571)
 	audio_mute.text = "Mute all   (M)"
 	audio_mute.add_theme_font_size_override("font_size",18)
 	audio_mute.add_theme_color_override("font_color",Color("33433a"))
@@ -239,22 +275,25 @@ func label(text: String, at: Vector2, font_size: int, parent: Node, width := 0.0
 
 func refresh() -> void:
 	location_label.text = hub.zone_title()
-	location_subtitle.text = {"town":"North  →  Northgate  /  Southeast  →  Forest","trail":"Old elm paths  /  Riverbend to the southeast","river":"Across the bridge  →  Briarwood Wilds","bakery":"Warm bread, meadow tea, and a place to rest","wilds":"Four clearings  /  West trail to Riverbend","district":"Sunstone Plaza  /  Linden Park  /  Market Lane"}[hub.zone]
+	location_subtitle.text = {"town":"North  →  Northgate  /  Southeast  →  Forest","trail":"Old elm paths  /  Riverbend to the southeast","river":"Across the bridge  →  Briarwood Wilds","bakery":"Warm bread, meadow tea, and a place to rest","wilds":"Four clearings  /  West trail to Riverbend","district":"Sunstone Plaza  /  Market Lane  →  Emberforge","forge":"Tomas the smith  /  Gear, stories and warm embers"}[hub.zone]
 	combat_panel.visible = hub.zone=="wilds"
-	skill_panel.visible = hub.zone!="bakery"
+	skill_panel.visible = hub.zone not in ["bakery","forge"]
 	skill_panel.position.y = 310 if hub.zone=="wilds" else 195
-	skill_button.disabled = hub.peaceful_mode or hub.player.skill_cooldown>0 or not hub.player.active
-	skill_bar.value = hub.player.SKILL_COOLDOWN-hub.player.skill_cooldown
+	skill_button.disabled = hub.peaceful_mode or hub.player.skill_cooldown>0 or not hub.player.active or int(hub.state.stats().attack)<=0
+	skill_bar.max_value = float(hub.state.stats().recharge)
+	skill_bar.value = skill_bar.max_value-hub.player.skill_cooldown
 	skill_label.text = "Use this skill in Briarwood Wilds" if hub.peaceful_mode else ("Queued — releases after this swing" if hub.player.skill_buffer>0 else ("Ready — Q or click  /  piercing blade" if hub.player.skill_cooldown<=0 else "Recharging  %.1f s" % hub.player.skill_cooldown))
+	if int(hub.state.stats().attack)<=0:
+		skill_label.text = "Equip a weapon in your inventory"
 	forest_panel.visible = hub.zone in ["wilds","district"]
 	map_title.text = "NORTHGATE  /  SOUTH TO GARDEN SQ." if hub.zone=="district" else "BRIARWOOD  /  WEST TRAIL HOME"
 	controls_label.text = "WASD move   Shift run   Space / Click sword   Q wind slash   Right click walk" if hub.zone=="wilds" else "WASD  walk     SHIFT  run     E  talk / use     Right click  walk to point"
 	if hub.zone=="town":
 		objective.text = hub.OBJECTIVES[hub.quest_stage]
 		status_label.text = "%d / 5 deliveries  ·  The wardens are friendly" % mini(hub.quest_stage,5)
-	elif hub.zone=="bakery":
-		objective.text = "Meet Clover at the counter. E to browse today's baking."
-		status_label.text = "%d coins  ·  Front door leads back to the square" % hub.coins
+	elif hub.zone in ["bakery","forge"]:
+		objective.text = "Meet Tomas at the counter. E to browse equipment and hear his request." if hub.zone=="forge" else "Meet Clover at the counter. E to browse today's baking."
+		status_label.text = "%d coins  ·  Front door leads back to %s" % [hub.coins,"Northgate" if hub.zone=="forge" else "the square"]
 	elif hub.zone=="district":
 		objective.text = "Explore Sunstone Plaza, Linden Park and the old town hall."
 		status_label.text = "%d / 3 places visited  ·  The streets are peaceful" % hub.district_places.size()
@@ -271,6 +310,15 @@ func refresh() -> void:
 		if hub.discoveries.size()==3:
 			objective.text = "Every resting place discovered. Follow the trail home whenever you like."
 		status_label.text = "%d / 3 forest memories  ·  E at a resting place" % hub.discoveries.size()
+	if hub.state.tracked_quest=="briarwood_patrol":
+		objective.text = hub.state.quest_text()
+		status_label.text = "%d coins  ·  I satchel  ·  H healing bread" % hub.coins
+	elif hub.state.tracked_quest=="emberforge_tools":
+		objective.text = hub.state.smith_text()
+		status_label.text = "%d coins  ·  J journal  ·  I equipment" % hub.coins
+	elif hub.state.tracked_quest=="morning_rounds":
+		objective.text = hub.OBJECTIVES[hub.quest_stage]
+		status_label.text = "%d / 5 deliveries  ·  J journal" % mini(hub.quest_stage,5)
 	debug_label.visible = debug_visible
 	debug_label.text = "%d FPS  ·  1920 × 1080  ·  %s  ·  F3 debug" % [Engine.get_frames_per_second(),hub.zone]
 	var suffix := ""
@@ -286,6 +334,55 @@ func refresh() -> void:
 				offset = dog.position-hub.player.position
 		var direction := ("north" if offset.y<0 else "south")+("east" if offset.x>0 else "west")
 		route_label.text = "Nearest bandits: %s  /  %d m" % [direction,ceili(closest/32.0)]
+	refresh_save_controls()
+
+
+func _process(delta: float) -> void:
+	notice_left = maxf(0,notice_left-delta)
+	if is_instance_valid(notice):
+		notice.visible = notice_left>0
+
+
+func show_notice(message: String) -> void:
+	notice.position.y = 54 if hub.paused or hub.shopping else 744
+	notice_text.text = message
+	notice_left = 4.0
+	notice.show()
+
+
+func refresh_save_controls() -> void:
+	if is_instance_valid(load_button):
+		load_button.disabled = not hub.saves.has_journey(hub.save_path)
+		save_button.disabled = hub.transitioning or not hub.player.active
+
+
+func action_button(text: String, at: Vector2, dimensions: Vector2, parent: Control) -> Button:
+	var button := Button.new()
+	button.text = text
+	button.position = at
+	button.size = dimensions
+	button.focus_mode = Control.FOCUS_NONE
+	button.add_theme_font_size_override("font_size",17)
+	for state in ["normal","hover","pressed","disabled"]:
+		var style := StyleBoxFlat.new()
+		style.bg_color = Color("47755c") if state=="hover" else (Color("8a8e7b") if state=="disabled" else Color("335a48"))
+		style.border_color = Color("b89b62")
+		style.set_border_width_all(1)
+		style.set_corner_radius_all(6)
+		button.add_theme_stylebox_override(state,style)
+	button.add_theme_color_override("font_color",Color("fff1cf"))
+	parent.add_child(button)
+	return button
+
+
+func _build_satchel() -> void:
+	satchel = InventoryView.new()
+	satchel.hub = hub
+	add_child(satchel)
+
+func refresh_satchel() -> void:
+	if is_instance_valid(satchel):
+		satchel.refresh()
 
 
 func _draw_forest_map() -> void:

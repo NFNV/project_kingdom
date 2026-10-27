@@ -1,0 +1,254 @@
+{
+  "tool": "built-in image_gen",
+  "transparent_background": true,
+  "prompts": {
+    "adventurer": "Use case: stylized-concept. Asset type: transparent RPG equipment-screen character portrait. Create one full-body charming anthropomorphic orange tabby cat adventurer, matching a hand-painted anime countryside RPG. Front view with a slight three-quarter turn, ears up, friendly amber eyes, cream muzzle, red neck scarf, loose ivory linen shirt, olive-green trousers, brown leather fingerless gloves and ankle boots, a modest belt and sheathed travelling sword. Short animal proportions, large head, expressive but composed. Neutral standing pose with feet apart and arms slightly away from the torso so equipment slots can surround the figure in an RPG inventory. Entire figure including ears and boots fits comfortably with generous transparent margins. Delicate ink lines, warm watercolor and softly painted cel shading, refined illustrated storybook game art, gentle warm light. No scenery, no floor, no text, no letters, no frame, no interface. Real transparent alpha background. This is an isolated character illustration, not a UI mockup.",
+    "leather_cap": "Use case: stylized-concept. Asset type: one production RPG inventory item icon with true transparent alpha. Subject: One soft brown leather adventurer helmet, with a reinforced brow, small brass studs and open ear gaps for a cat; no head or mannequin. Style: exquisite hand-painted anime fantasy RPG inventory illustration, delicate warm ink edges, watercolor texture and softly shaded painted surfaces, charming countryside adventure, muted ivory, sage, brass and russet palette, high material readability at thumbnail size. Composition: a single isolated item centered in a square image, fills about 72 percent of the canvas, generous clean transparent padding, slight three-quarter view. Consistent soft upper-left light. No scenery, no card, no frame, no UI, no text, no labels, no numbers, no watermark, no checkerboard drawn into the image. Transparent background.",
+    "traveller_tunic": "Use case: stylized-concept. Asset type: one production RPG inventory item icon with true transparent alpha. Subject: One ivory linen traveller's shirt with rolled cuffs and a simple brown leather vest or chest harness; no body or mannequin. Style: exquisite hand-painted anime fantasy RPG inventory illustration, delicate warm ink edges, watercolor texture and softly shaded painted surfaces, charming countryside adventure, muted ivory, sage, brass and russet palette, high material readability at thumbnail size. Composition: a single isolated item centered in a square image, fills about 72 percent of the canvas, generous clean transparent padding, slight three-quarter view. Consistent soft upper-left light. No scenery, no card, no frame, no UI, no text, no labels, no numbers, no watermark, no checkerboard drawn into the image. Transparent background.",
+    "field_trousers": "Use case: stylized-concept. Asset type: one production RPG inventory item icon with true transparent alpha. Subject: One pair of olive-green fantasy adventurer trousers with a leather belt, gently baggy legs and fitted ankles; no body or mannequin. Style: exquisite hand-painted anime fantasy RPG inventory illustration, delicate warm ink edges, watercolor texture and softly shaded painted surfaces, charming countryside adventure, muted ivory, sage, brass and russet palette, high material readability at thumbnail size. Composition: a single isolated item centered in a square image, fills about 72 percent of the canvas, generous clean transparent padding, slight three-quarter view. Consistent soft upper-left light. No scenery, no card, no frame, no UI, no text, no labels, no numbers, no watermark, no checkerboard drawn into the image. Transparent background.",
+    "riding_gloves": "Use case: stylized-concept. Asset type: one production RPG inventory item icon with true transparent alpha. Subject: One matched pair of warm brown fingerless leather adventurer gloves, brass buckles, presented together as a single inventory item; no hands. Style: exquisite hand-painted anime fantasy RPG inventory illustration, delicate warm ink edges, watercolor texture and softly shaded painted surfaces, charming countryside adventure, muted ivory, sage, brass and russet palette, high material readability at thumbnail size. Composition: a single isolated item centered in a square image, fills about 72 percent of the canvas, generous clean transparent padding, slight three-quarter view. Consistent soft upper-left light. No scenery, no card, no frame, no UI, no text, no labels, no numbers, no watermark, no checkerboard drawn into the image. Transparent background.",
+    "trail_boots": "Use case: stylized-concept. Asset type: one production RPG inventory item icon with true transparent alpha. Subject: One matched pair of sturdy brown leather ankle boots with turned cuffs, presented together as one inventory item; no feet. Style: exquisite hand-painted anime fantasy RPG inventory illustration, delicate warm ink edges, watercolor texture and softly shaded painted surfaces, charming countryside adventure, muted ivory, sage, brass and russet palette, high material readability at thumbnail size. Composition: a single isolated item centered in a square image, fills about 72 percent of the canvas, generous clean transparent padding, slight three-quarter view. Consistent soft upper-left light. No scenery, no card, no frame, no UI, no text, no labels, no numbers, no watermark, no checkerboard drawn into the image. Transparent background.",
+    "travel_sword": "Use case: stylized-concept. Asset type: one production RPG inventory item icon with true transparent alpha. Subject: One modest elegant steel travelling sword, narrow short blade, simple warm brass crossguard and brown leather hilt, diagonally oriented; no hand, no sheath. Style: exquisite hand-painted anime fantasy RPG inventory illustration, delicate warm ink edges, watercolor texture and softly shaded painted surfaces, charming countryside adventure, muted ivory, sage, brass and russet palette, high material readability at thumbnail size. Composition: a single isolated item centered in a square image, fills about 72 percent of the canvas, generous clean transparent padding, slight three-quarter view. Consistent soft upper-left light. No scenery, no card, no frame, no UI, no text, no labels, no numbers, no watermark, no checkerboard drawn into the image. Transparent background.",
+    "warden_charm": "Use case: stylized-concept. Asset type: one production RPG inventory item icon with true transparent alpha. Subject: One round brass town-warden medallion on a short dark green cord, engraved with a small stylized oak leaf, warm golden glow; no letters. Style: exquisite hand-painted anime fantasy RPG inventory illustration, delicate warm ink edges, watercolor texture and softly shaded painted surfaces, charming countryside adventure, muted ivory, sage, brass and russet palette, high material readability at thumbnail size. Composition: a single isolated item centered in a square image, fills about 72 percent of the canvas, generous clean transparent padding, slight three-quarter view. Consistent soft upper-left light. No scenery, no card, no frame, no UI, no text, no labels, no numbers, no watermark, no checkerboard drawn into the image. Transparent background.",
+    "swift_charm": "Use case: stylized-concept. Asset type: one production RPG inventory item icon with true transparent alpha. Subject: One polished pale turquoise wind crystal pendant wrapped in silver wire on a blue cord, with a delicate swirling feather motif; no letters. Style: exquisite hand-painted anime fantasy RPG inventory illustration, delicate warm ink edges, watercolor texture and softly shaded painted surfaces, charming countryside adventure, muted ivory, sage, brass and russet palette, high material readability at thumbnail size. Composition: a single isolated item centered in a square image, fills about 72 percent of the canvas, generous clean transparent padding, slight three-quarter view. Consistent soft upper-left light. No scenery, no card, no frame, no UI, no text, no labels, no numbers, no watermark, no checkerboard drawn into the image. Transparent background.",
+    "tempered_sword": "Use case: stylized-concept. Asset type: one production RPG inventory item icon with true transparent alpha. Subject: One refined tempered steel adventurer sword with a bright cool blue blade, ornate but modest brass crossguard, teal grip and a tiny amber jewel in the pommel, diagonally oriented; no hand or sheath. Style: exquisite hand-painted anime fantasy RPG inventory illustration, delicate warm ink edges, watercolor texture and softly shaded painted surfaces, charming countryside adventure, muted ivory, sage, brass and russet palette, high material readability at thumbnail size. Composition: a single isolated item centered in a square image, fills about 72 percent of the canvas, generous clean transparent padding, slight three-quarter view. Consistent soft upper-left light. No scenery, no card, no frame, no UI, no text, no labels, no numbers, no watermark, no checkerboard drawn into the image. Transparent background.",
+    "reinforced_vest": "Use case: stylized-concept. Asset type: one production RPG inventory item icon with true transparent alpha. Subject: One reinforced dark teal leather chest vest with brass clasps and leather shoulder pads, sturdy fitted torso silhouette, ivory lining; no body or mannequin. Style: exquisite hand-painted anime fantasy RPG inventory illustration, delicate warm ink edges, watercolor texture and softly shaded painted surfaces, charming countryside adventure, muted ivory, sage, brass and russet palette, high material readability at thumbnail size. Composition: a single isolated item centered in a square image, fills about 72 percent of the canvas, generous clean transparent padding, slight three-quarter view. Consistent soft upper-left light. No scenery, no card, no frame, no UI, no text, no labels, no numbers, no watermark, no checkerboard drawn into the image. Transparent background.",
+    "hunter_boots": "Use case: stylized-concept. Asset type: one production RPG inventory item icon with true transparent alpha. Subject: One matched pair of forest-green and russet leather hunter boots, elegant ankle straps and gold buckles, presented together as one inventory item; no feet. Style: exquisite hand-painted anime fantasy RPG inventory illustration, delicate warm ink edges, watercolor texture and softly shaded painted surfaces, charming countryside adventure, muted ivory, sage, brass and russet palette, high material readability at thumbnail size. Composition: a single isolated item centered in a square image, fills about 72 percent of the canvas, generous clean transparent padding, slight three-quarter view. Consistent soft upper-left light. No scenery, no card, no frame, no UI, no text, no labels, no numbers, no watermark, no checkerboard drawn into the image. Transparent background.",
+    "smith_tools": "Use case: stylized-concept. Asset type: one production RPG inventory item icon with true transparent alpha. Subject: A small bundle of a blacksmith's hammer and steel tongs tied together with a red leather strap, readable as one RPG quest item. Style: exquisite hand-painted anime fantasy RPG inventory illustration, delicate warm ink edges, watercolor texture and softly shaded painted surfaces, charming countryside adventure, muted ivory, sage, brass and russet palette, high material readability at thumbnail size. Composition: a single isolated item centered in a square image, fills about 72 percent of the canvas, generous clean transparent padding, slight three-quarter view. Consistent soft upper-left light. No scenery, no card, no frame, no UI, no text, no labels, no numbers, no watermark, no checkerboard drawn into the image. Transparent background.",
+    "forge_hearth": "Use case: stylized-concept. Asset type: a single transparent isometric game furnishing cutout. A compact village blacksmith's brick forge and tall chimney hood, rough warm limestone and russet brick, iron trim, a clearly visible dark arched firebox on its front face with only a few glowing coals, no active flames. Small tools rest on a side shelf. A squat, charming handcrafted countryside workshop prop. Style: refined hand-painted anime countryside RPG prop, delicate warm ink contours, painterly watercolor textures, soft cel shading, subtle material wear, muted sage, russet, warm cream, brass and steel. Projection: strict orthographic 2:1 isometric, ground axes slope exactly approximately 26.6 degrees left and right, all vertical edges plumb, no perspective convergence, front two sides visible. Camera looks down from above. Lighting from upper left. Center the entire prop in the image with clean transparent padding and a foot anchor at bottom center. No floor tile, no scenery, no backdrop, no text, no labels, no people, no frame, no hard cast shadow extending beyond the feet. Genuine transparent alpha background.",
+    "forge_anvil": "Use case: stylized-concept. Asset type: a single transparent isometric game furnishing cutout. A beautifully painted steel blacksmith's anvil on a thick carved oak stump, a little brass detail and iron reinforcing bands, one small hammer resting on top. The anvil is broad and weighty, worn steel highlights, textured wood. Style: refined hand-painted anime countryside RPG prop, delicate warm ink contours, painterly watercolor textures, soft cel shading, subtle material wear, muted sage, russet, warm cream, brass and steel. Projection: strict orthographic 2:1 isometric, ground axes slope exactly approximately 26.6 degrees left and right, all vertical edges plumb, no perspective convergence, front two sides visible. Camera looks down from above. Lighting from upper left. Center the entire prop in the image with clean transparent padding and a foot anchor at bottom center. No floor tile, no scenery, no backdrop, no text, no labels, no people, no frame, no hard cast shadow extending beyond the feet. Genuine transparent alpha background.",
+    "forge_counter": "Use case: stylized-concept. Asset type: a single transparent isometric game furnishing cutout. A long low blacksmith's shop counter, three widths long for one depth, sturdy hand-carved oak planks, teal-painted drawer fronts, brass drawer pulls, a leather work mat on top, a single elegant short sword laid across it and a few folded pieces of leather. No chairs, no people. Style: refined hand-painted anime countryside RPG prop, delicate warm ink contours, painterly watercolor textures, soft cel shading, subtle material wear, muted sage, russet, warm cream, brass and steel. Projection: strict orthographic 2:1 isometric, ground axes slope exactly approximately 26.6 degrees left and right, all vertical edges plumb, no perspective convergence, front two sides visible. Camera looks down from above. Lighting from upper left. Center the entire prop in the image with clean transparent padding and a foot anchor at bottom center. No floor tile, no scenery, no backdrop, no text, no labels, no people, no frame, no hard cast shadow extending beyond the feet. Genuine transparent alpha background."
+  },
+  "assets": {
+    "adventurer": {
+      "file": "adventurer.png",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-22792f2c-5b99-4aa5-9bae-403dc3f558dd.png",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "alpha_range": [
+        0,
+        254
+      ],
+      "sha256": "c11add0b9470dbdbfbd090de7d2eec2ebf0743d2b245b4fb4bb50eaeb0a6f5c7"
+    },
+    "leather_cap": {
+      "file": "leather_cap.png",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-a60d941b-b40a-411d-ac03-907901d6c3e5.png",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "sha256": "d2a7a26b62d579fde0be94a3d9f6db7efdf6474387f8849f06c77fe08d3f72f0"
+    },
+    "traveller_tunic": {
+      "file": "traveller_tunic.png",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-655280d5-cbe0-41ae-83fa-290c7aeedc32.png",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "sha256": "cf16df78969081e8ada999ba2f14fc76f717a406cc97e17689727fe810ac5524"
+    },
+    "field_trousers": {
+      "file": "field_trousers.png",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-ec5bb892-4ea6-45f3-a27a-1d9307163b0c.png",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "sha256": "817805800aa98a10e2c411438a1ff10f2628790a2d4aac57639c75e51f4d5ad9"
+    },
+    "riding_gloves": {
+      "file": "riding_gloves.png",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-da9f3a6c-1835-48e3-bd83-53ade2400fc6.png",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "sha256": "143b1e015b9c7788175e876c61229a7d769228825e4be033bbd24a581d8fbb2a"
+    },
+    "trail_boots": {
+      "file": "trail_boots.png",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-5267ec4d-6467-4a60-9238-2c2230ce1aca.png",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "sha256": "b966b4c5f1849d270ac2bb7a0d8ee631bc29c4418564f6bc6b0d0a4aeab0a13d"
+    },
+    "travel_sword": {
+      "file": "travel_sword.png",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-cf2c8fc7-c5ae-49f1-98a0-c7a2e988c5cc.png",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "sha256": "65be46e116d8e8fde5457e53bda0e3f59dd9bad74918d004324f92164246cac3"
+    },
+    "warden_charm": {
+      "file": "warden_charm.png",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-94dc1d20-4285-43b6-ab32-107f8dc8a03f.png",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "sha256": "a750da86b707e426d914b49d61de776b38dc752ba2e14083a80061cd34264bea"
+    },
+    "swift_charm": {
+      "file": "swift_charm.png",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-4f209d4b-5b65-47ee-a376-5c440c31cafd.png",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "sha256": "6a41d8bc3b79a5ae7fa9b996e49a32b39b8149a20a33045a1a43737714cca668"
+    },
+    "tempered_sword": {
+      "file": "tempered_sword.png",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-ee08772b-78cc-43f6-943b-e0a1349589f1.png",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "sha256": "b30e6d317b286a52673f57d523b8fa69117f176d211c252973d066f06830390c"
+    },
+    "reinforced_vest": {
+      "file": "reinforced_vest.png",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-0fecc53b-37a3-4015-861e-eef5950c2843.png",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "sha256": "fb1e6b35f526b26035119bd80c1229c587099e5d6dfe095e6fde870958eb2d2e"
+    },
+    "hunter_boots": {
+      "file": "hunter_boots.png",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-5bf733c9-f03f-4b14-8d83-14f80bcd38dc.png",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "sha256": "f02a9273cc46c571a6c082e66884d5539f82d59fc511b3278957fb6b83289403"
+    },
+    "smith_tools": {
+      "file": "smith_tools.png",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-80220f73-5bf1-49f8-b901-8888f06d2128.png",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "sha256": "0b91aea775d87db4b47b58c9034389cb624bf772f0ded2f5615048f3342ef0a9"
+    },
+    "forge_hearth": {
+      "file": "forge_hearth.png",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-77fdb5b9-ac6e-4172-bda9-3a548ce585d1.png",
+      "dimensions": [
+        1402,
+        1122
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "opaque_bounds": [
+        367,
+        6,
+        1073,
+        1108
+      ],
+      "sha256": "6a19ede2f9f7cbbacbc475b532fc0fe3682aad96037fc7731b15e024779ad6d4",
+      "effect_anchor": [
+        808.0,
+        775.0
+      ]
+    },
+    "forge_anvil": {
+      "file": "forge_anvil.png",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-a37af3e5-6b7e-4e3a-bb27-597145bb5772.png",
+      "dimensions": [
+        1374,
+        1145
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "opaque_bounds": [
+        267,
+        32,
+        1096,
+        1105
+      ],
+      "sha256": "9b765e97b4dc63c25469c3ea85ee927ed1d3b3033f452d2c4445a2341dc3d13b"
+    },
+    "forge_counter": {
+      "file": "forge_counter.png",
+      "source": "/Users/n/.codex/generated_images/01a15b88-5339-7bf0-acd6-b2674f826f88/exec-b267da2a-f179-428a-b71c-260d51f8e49f.png",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        254
+      ],
+      "opaque_bounds": [
+        30,
+        10,
+        1481,
+        1018
+      ],
+      "sha256": "5c46a45384a40c025163e33fc87abe3f214dbec6e82d7dc24a6c6d3cccbc3617"
+    }
+  }
+}

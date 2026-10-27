@@ -1,0 +1,26 @@
+{
+  "gloot": {
+    "version": "3.0.2",
+    "upstream": "https://github.com/peter-kish/gloot",
+    "license": "MIT",
+    "archive_sha256": "89247ae777dec33c6485011031179232c283492b8c7779fb4fb8495aa68a0264",
+    "local_modifications": [],
+    "verified_source_files": 102,
+    "audit_excludes": [
+      "*.import (Godot regenerates texture import metadata)"
+    ],
+    "license_sha256": "1488679eaef8077a9c1895137f5db6a32d96c6682bb820e696980364e99b6312"
+  },
+  "questify": {
+    "version": "1.6.0",
+    "upstream": "https://github.com/TheWalruzz/godot-questify",
+    "license": "MIT",
+    "archive_sha256": "4e188339ad918d88b374e2ea9032518b2c15f363ec11dede426fc7c4a55e733a",
+    "local_modifications": [],
+    "verified_source_files": 86,
+    "audit_excludes": [
+      "*.import (Godot regenerates texture import metadata)"
+    ],
+    "license_sha256": "7572b129683867eb5a0fc051914fd1abb740554fdc1f44acfef4d89ca46ab469"
+  }
+}
