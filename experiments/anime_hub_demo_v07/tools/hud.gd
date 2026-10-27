@@ -1,5 +1,8 @@
 extends CanvasLayer
 
+const InventoryView := preload("res://experiments/anime_hub_demo_v07/tools/inventory_view.gd")
+const JournalView := preload("res://experiments/anime_hub_demo_v07/tools/quest_journal.gd")
+const ForgeShop := preload("res://experiments/anime_hub_demo_v07/tools/forge_shop.gd")
 const Clock := preload("res://experiments/anime_hub_demo_v07/tools/celestial_clock.gd")
 var hub: Node2D
 var serif := SystemFont.new()
@@ -40,6 +43,8 @@ var audio_sliders: Dictionary = {}
 var audio_values: Dictionary = {}
 var audio_mute: CheckBox
 var satchel: Control
+var journal_view: Control
+var forge_view: Control
 var satchel_health: Label
 var satchel_quest: Label
 var satchel_rows: Dictionary = {}
@@ -153,19 +158,27 @@ func _ready() -> void:
 	shade.color = Color(.035,.07,.06,.68)
 	shade.size = Vector2(1920,1080)
 	pause_overlay.add_child(shade)
-	var menu := panel(Vector2(650,180),Vector2(620,720),pause_overlay)
+	var menu := panel(Vector2(650,155),Vector2(620,760),pause_overlay)
 	label("Rest a while",Vector2(42,36),37,menu,0,Color("2e4239"),true)
-	label("Esc   Return to your walk\nR      Begin a new day\nJ       Show or hide your journal\nF11   Full screen",Vector2(44,105),21,menu,520,Color("52604d"))
+	label("Esc   Return to your walk\nR      Return to the title\nJ       Open your quest journal\nF11   Full screen",Vector2(44,105),21,menu,520,Color("52604d"))
 	label("F5 save  ·  F9 continue  ·  I satchel  ·  H bread",Vector2(44,236),16,menu,530,Color("756a52"))
 	save_button = action_button("Save journey",Vector2(44,270),Vector2(248,48),menu)
 	save_button.pressed.connect(func(): hub.save_game())
 	load_button = action_button("Continue saved journey",Vector2(306,270),Vector2(270,48),menu)
 	load_button.pressed.connect(func(): hub.load_game())
 	_build_audio_menu(menu)
-	label("Save before leaving. R starts fresh; your disk save stays.\nDay and night pass slowly: 20 minutes per full cycle.",Vector2(44,649),15,menu,530,Color("8b7654"))
+	var title_button := action_button("Save and return to title",Vector2(44,623),Vector2(532,40),menu)
+	title_button.pressed.connect(func(): hub.return_to_title())
+	label("Autosaves at safe travel and quest milestones. F5 saves now.\nDay and night pass slowly: 20 minutes per full cycle.",Vector2(44,690),15,menu,530,Color("8b7654"))
 	pause_overlay.hide()
 	_build_merchant()
 	_build_satchel()
+	journal_view = JournalView.new()
+	journal_view.hub = hub
+	add_child(journal_view)
+	forge_view = ForgeShop.new()
+	forge_view.hub = hub
+	add_child(forge_view)
 	notice = panel(Vector2(510,744),Vector2(900,55),null,true)
 	notice_text = label("",Vector2(18,16),18,notice,864,Color("fff0cd"))
 	notice_text.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -262,22 +275,25 @@ func label(text: String, at: Vector2, font_size: int, parent: Node, width := 0.0
 
 func refresh() -> void:
 	location_label.text = hub.zone_title()
-	location_subtitle.text = {"town":"North  →  Northgate  /  Southeast  →  Forest","trail":"Old elm paths  /  Riverbend to the southeast","river":"Across the bridge  →  Briarwood Wilds","bakery":"Warm bread, meadow tea, and a place to rest","wilds":"Four clearings  /  West trail to Riverbend","district":"Sunstone Plaza  /  Linden Park  /  Market Lane"}[hub.zone]
+	location_subtitle.text = {"town":"North  →  Northgate  /  Southeast  →  Forest","trail":"Old elm paths  /  Riverbend to the southeast","river":"Across the bridge  →  Briarwood Wilds","bakery":"Warm bread, meadow tea, and a place to rest","wilds":"Four clearings  /  West trail to Riverbend","district":"Sunstone Plaza  /  Market Lane  →  Emberforge","forge":"Tomas the smith  /  Gear, stories and warm embers"}[hub.zone]
 	combat_panel.visible = hub.zone=="wilds"
-	skill_panel.visible = hub.zone!="bakery"
+	skill_panel.visible = hub.zone not in ["bakery","forge"]
 	skill_panel.position.y = 310 if hub.zone=="wilds" else 195
-	skill_button.disabled = hub.peaceful_mode or hub.player.skill_cooldown>0 or not hub.player.active
-	skill_bar.value = hub.player.SKILL_COOLDOWN-hub.player.skill_cooldown
+	skill_button.disabled = hub.peaceful_mode or hub.player.skill_cooldown>0 or not hub.player.active or int(hub.state.stats().attack)<=0
+	skill_bar.max_value = float(hub.state.stats().recharge)
+	skill_bar.value = skill_bar.max_value-hub.player.skill_cooldown
 	skill_label.text = "Use this skill in Briarwood Wilds" if hub.peaceful_mode else ("Queued — releases after this swing" if hub.player.skill_buffer>0 else ("Ready — Q or click  /  piercing blade" if hub.player.skill_cooldown<=0 else "Recharging  %.1f s" % hub.player.skill_cooldown))
+	if int(hub.state.stats().attack)<=0:
+		skill_label.text = "Equip a weapon in your inventory"
 	forest_panel.visible = hub.zone in ["wilds","district"]
 	map_title.text = "NORTHGATE  /  SOUTH TO GARDEN SQ." if hub.zone=="district" else "BRIARWOOD  /  WEST TRAIL HOME"
 	controls_label.text = "WASD move   Shift run   Space / Click sword   Q wind slash   Right click walk" if hub.zone=="wilds" else "WASD  walk     SHIFT  run     E  talk / use     Right click  walk to point"
 	if hub.zone=="town":
 		objective.text = hub.OBJECTIVES[hub.quest_stage]
 		status_label.text = "%d / 5 deliveries  ·  The wardens are friendly" % mini(hub.quest_stage,5)
-	elif hub.zone=="bakery":
-		objective.text = "Meet Clover at the counter. E to browse today's baking."
-		status_label.text = "%d coins  ·  Front door leads back to the square" % hub.coins
+	elif hub.zone in ["bakery","forge"]:
+		objective.text = "Meet Tomas at the counter. E to browse equipment and hear his request." if hub.zone=="forge" else "Meet Clover at the counter. E to browse today's baking."
+		status_label.text = "%d coins  ·  Front door leads back to %s" % [hub.coins,"Northgate" if hub.zone=="forge" else "the square"]
 	elif hub.zone=="district":
 		objective.text = "Explore Sunstone Plaza, Linden Park and the old town hall."
 		status_label.text = "%d / 3 places visited  ·  The streets are peaceful" % hub.district_places.size()
@@ -294,9 +310,15 @@ func refresh() -> void:
 		if hub.discoveries.size()==3:
 			objective.text = "Every resting place discovered. Follow the trail home whenever you like."
 		status_label.text = "%d / 3 forest memories  ·  E at a resting place" % hub.discoveries.size()
-	if hub.state.accepted and not hub.state.rewarded:
+	if hub.state.tracked_quest=="briarwood_patrol":
 		objective.text = hub.state.quest_text()
 		status_label.text = "%d coins  ·  I satchel  ·  H healing bread" % hub.coins
+	elif hub.state.tracked_quest=="emberforge_tools":
+		objective.text = hub.state.smith_text()
+		status_label.text = "%d coins  ·  J journal  ·  I equipment" % hub.coins
+	elif hub.state.tracked_quest=="morning_rounds":
+		objective.text = hub.OBJECTIVES[hub.quest_stage]
+		status_label.text = "%d / 5 deliveries  ·  J journal" % mini(hub.quest_stage,5)
 	debug_label.visible = debug_visible
 	debug_label.text = "%d FPS  ·  1920 × 1080  ·  %s  ·  F3 debug" % [Engine.get_frames_per_second(),hub.zone]
 	var suffix := ""
@@ -322,7 +344,7 @@ func _process(delta: float) -> void:
 
 
 func show_notice(message: String) -> void:
-	notice.position.y = 930 if hub.paused else 744
+	notice.position.y = 54 if hub.paused or hub.shopping else 744
 	notice_text.text = message
 	notice_left = 4.0
 	notice.show()
@@ -330,7 +352,7 @@ func show_notice(message: String) -> void:
 
 func refresh_save_controls() -> void:
 	if is_instance_valid(load_button):
-		load_button.disabled = not FileAccess.file_exists(hub.save_path) and not FileAccess.file_exists(hub.save_path+".bak")
+		load_button.disabled = not hub.saves.has_journey(hub.save_path)
 		save_button.disabled = hub.transitioning or not hub.player.active
 
 
@@ -354,64 +376,13 @@ func action_button(text: String, at: Vector2, dimensions: Vector2, parent: Contr
 
 
 func _build_satchel() -> void:
-	satchel = Control.new()
-	satchel.size = Vector2(1920,1080)
+	satchel = InventoryView.new()
+	satchel.hub = hub
 	add_child(satchel)
-	var shade := ColorRect.new()
-	shade.size = satchel.size
-	shade.color = Color(.035,.07,.05,.7)
-	satchel.add_child(shade)
-	var sheet := panel(Vector2(400,175),Vector2(1120,730),satchel)
-	label("THE TRAVELLER'S SATCHEL",Vector2(38,24),13,sheet,0,Color("967344"))
-	label("Provisions & keepsakes",Vector2(38,52),34,sheet,0,Color("304c3d"),true)
-	satchel_health = label("",Vector2(40,105),18,sheet,550,Color("746146"))
-	var row := 0
-	for id in ["bread","tea","honey","bandit_badge"]:
-		var top := 157+row*106
-		var tile := panel(Vector2(32,top),Vector2(590,94),sheet)
-		var icon := TextureRect.new()
-		icon.texture = load(hub.ROOT+"assets/items/"+id+".svg")
-		icon.position = Vector2(13,17)
-		icon.size = Vector2(54,54)
-		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		tile.add_child(icon)
-		satchel_rows[id] = label("",Vector2(82,11),21,tile,340,Color("314b3d"),true)
-		var description: String = hub.state.definitions[id].description
-		label(description,Vector2(82,43),14,tile,310,Color("80745b"))
-		if id!="bandit_badge":
-			var button := action_button("Use",Vector2(438,23),Vector2(130,46),tile)
-			button.pressed.connect(func(): hub.use_item(id))
-			food_buttons[id] = button
-		row += 1
-	label("EQUIPMENT",Vector2(665,157),13,sheet,0,Color("967344"))
-	label("Traveller's sword  ·  Equipped",Vector2(665,190),22,sheet,405,Color("314b3d"),true)
-	label("Space to strike  /  Q for Wind Slash",Vector2(665,226),16,sheet,405,Color("80745b"))
-	charm_description = label("",Vector2(665,269),18,sheet,405,Color("314b3d"))
-	charm_button = action_button("Equip charm",Vector2(665,323),Vector2(395,43),sheet)
-	charm_button.pressed.connect(func(): hub.toggle_charm())
-	label("BADGES FROM BRIARWOOD",Vector2(665,405),13,sheet,0,Color("967344"))
-	satchel_quest = label("",Vector2(665,437),21,sheet,395,Color("314b3d"),true)
-	label("Reward: 10 coins + a warden's charm\nRoute: Mosswood → Riverbend → Briarwood",Vector2(665,553),15,sheet,405,Color("80745b"))
-	label("H eats bread while exploring. Food is kept when already rested.",Vector2(40,610),16,sheet,1000,Color("80745b"))
-	var close := action_button("Return to your journey   /   I or Esc",Vector2(350,660),Vector2(420,44),sheet)
-	close.pressed.connect(func(): hub.toggle_backpack())
-	satchel.hide()
-
 
 func refresh_satchel() -> void:
-	if not is_instance_valid(satchel):
-		return
-	satchel_health.text = "%d coins    ·    %d / %d hearts" % [hub.coins,hub.player.health,hub.player.maximum_health]
-	for id in satchel_rows:
-		satchel_rows[id].text = "%s   × %d" % [hub.state.definitions[id].name,hub.state.count(id)]
-	for id in food_buttons:
-		var useful: bool = hub.player.health<hub.player.maximum_health or (id=="tea" and hub.player.skill_cooldown>0)
-		food_buttons[id].disabled = hub.state.count(id)<=0 or not useful or hub.player.swing>0
-	var equipped: bool = hub.state.charm.get_item()!=null
-	charm_description.text = "Warden's charm  ·  +1 maximum heart\n"+("Equipped" if equipped else "In your satchel" if hub.state.count("warden_charm")>0 else "Earned by helping Bram")
-	charm_button.text = "Unequip charm" if equipped else "Equip charm"
-	charm_button.disabled = not equipped and hub.state.count("warden_charm")==0
-	satchel_quest.text = hub.state.quest_text()
+	if is_instance_valid(satchel):
+		satchel.refresh()
 
 
 func _draw_forest_map() -> void:

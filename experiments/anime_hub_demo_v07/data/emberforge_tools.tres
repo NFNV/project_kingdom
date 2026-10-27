@@ -1,0 +1,110 @@
+[gd_resource type="Resource" script_class="QuestResource" load_steps=25 format=3]
+
+[ext_resource type="Script" path="res://addons/questify/scripts/model/quest_resource.gd" id="1"]
+[ext_resource type="Script" path="res://addons/questify/scripts/model/quest_node.gd" id="2"]
+[ext_resource type="Script" path="res://addons/questify/scripts/model/quest_edge.gd" id="3"]
+[ext_resource type="Script" path="res://addons/questify/scripts/model/quest_start.gd" id="4"]
+[ext_resource type="Script" path="res://addons/questify/scripts/model/quest_objective.gd" id="5"]
+[ext_resource type="Script" path="res://addons/questify/scripts/model/quest_condition.gd" id="6"]
+[ext_resource type="Script" path="res://addons/questify/scripts/model/quest_end.gd" id="7"]
+
+[sub_resource type="Resource" id="start"]
+script = ExtResource("4")
+id = "emberforge.start"
+name = "The stolen tools"
+description = "Recover Tomas’s tools from Rook and return to Emberforge in Northgate."
+graph_editor_position = Vector2(0, 0)
+
+[sub_resource type="Resource" id="defeat"]
+script = ExtResource("5")
+id = "emberforge.defeat"
+description = "Defeat Rook in the southeast Briarwood clearing."
+graph_editor_position = Vector2(520, 0)
+
+[sub_resource type="Resource" id="condition_defeat"]
+script = ExtResource("6")
+id = "emberforge.condition.defeat"
+type = "forge"
+key = "captain"
+graph_editor_position = Vector2(520, 400)
+metadata/value = true
+
+[sub_resource type="Resource" id="collect"]
+script = ExtResource("5")
+id = "emberforge.collect"
+description = "Recover Tomas’s stolen hammer and tongs."
+graph_editor_position = Vector2(1040, 0)
+
+[sub_resource type="Resource" id="condition_collect"]
+script = ExtResource("6")
+id = "emberforge.condition.collect"
+type = "forge"
+key = "tools"
+graph_editor_position = Vector2(1040, 400)
+metadata/value = true
+
+[sub_resource type="Resource" id="return"]
+script = ExtResource("5")
+id = "emberforge.return"
+description = "Return the tools to Tomas at Emberforge."
+graph_editor_position = Vector2(1560, 0)
+
+[sub_resource type="Resource" id="condition_return"]
+script = ExtResource("6")
+id = "emberforge.condition.return"
+type = "forge"
+key = "rewarded"
+graph_editor_position = Vector2(1560, 400)
+metadata/value = true
+
+[sub_resource type="Resource" id="end"]
+script = ExtResource("7")
+id = "emberforge.end"
+graph_editor_position = Vector2(2080, 0)
+
+[sub_resource type="Resource" id="edge_0"]
+script = ExtResource("3")
+from = SubResource("start")
+to = SubResource("defeat")
+edge_type = 0
+
+[sub_resource type="Resource" id="edge_1"]
+script = ExtResource("3")
+from = SubResource("defeat")
+to = SubResource("collect")
+edge_type = 0
+
+[sub_resource type="Resource" id="edge_2"]
+script = ExtResource("3")
+from = SubResource("collect")
+to = SubResource("return")
+edge_type = 0
+
+[sub_resource type="Resource" id="edge_3"]
+script = ExtResource("3")
+from = SubResource("return")
+to = SubResource("end")
+edge_type = 0
+
+[sub_resource type="Resource" id="edge_condition_defeat"]
+script = ExtResource("3")
+from = SubResource("condition_defeat")
+to = SubResource("defeat")
+edge_type = 1
+
+[sub_resource type="Resource" id="edge_condition_collect"]
+script = ExtResource("3")
+from = SubResource("condition_collect")
+to = SubResource("collect")
+edge_type = 1
+
+[sub_resource type="Resource" id="edge_condition_return"]
+script = ExtResource("3")
+from = SubResource("condition_return")
+to = SubResource("return")
+edge_type = 1
+
+[resource]
+script = ExtResource("1")
+nodes = Array[ExtResource("2")]([SubResource("start"), SubResource("defeat"), SubResource("collect"), SubResource("return"), SubResource("end"), SubResource("condition_defeat"), SubResource("condition_collect"), SubResource("condition_return")])
+edges = Array[ExtResource("3")]([SubResource("edge_0"), SubResource("edge_1"), SubResource("edge_2"), SubResource("edge_3"), SubResource("edge_condition_defeat"), SubResource("edge_condition_collect"), SubResource("edge_condition_return")])

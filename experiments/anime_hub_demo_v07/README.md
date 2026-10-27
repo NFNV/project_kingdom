@@ -1,20 +1,20 @@
 # Garden Square, Mosswood & Briarwood — playable RPG demo
 
 Walk as the cat adventurer through a painted anime town, a woodland trail, and
-a riverside glade, an enterable bakery, and the large Briarwood combat forest. A 1.5× camera follows the cat
+a riverside glade, enterable bakery and blacksmith, and the large Briarwood combat forest. A 1.5× camera follows the cat
 through every area and stops at the painted scene edges. The three dog wardens are peaceful residents. Talking to Bram
 no longer starts sparring. Combat is enabled only in Briarwood Wilds.
 
 ## Play
 
 For the latest combat demo, double-click [Play Briarwood.command](Play%20Briarwood.command).
-For the town start, double-click [Play Garden Square.command](Play%20Garden%20Square.command), or open
+For the title menu, double-click [Play Garden Square.command](Play%20Garden%20Square.command), or open
 [demo.tscn](demo.tscn) in Godot 4.7 and use **Run Current Scene (F6)**.
-The project's main scene now points here too: **Run Project (F5)** starts this
-current demo in Garden Square, including the latest animation changes.
+The project's main scene is [title.tscn](title.tscn): **Run Project (F5)** opens
+New Journey / Continue. F6 still runs the currently edited scene, which may be an older demo.
 
 ```sh
-/Users/n/Downloads/Godot.app/Contents/MacOS/Godot --path /Users/n/Documents/project-kingdom res://experiments/anime_hub_demo_v07/demo.tscn
+/Users/n/Downloads/Godot.app/Contents/MacOS/Godot --path /Users/n/Documents/project-kingdom res://experiments/anime_hub_demo_v07/title.tscn
 ```
 
 | Input | Action |
@@ -23,17 +23,17 @@ current demo in Garden Square, including the latest animation changes.
 | Shift | Run |
 | Right click | Walk to a point using obstacle navigation |
 | Space / left click | Sword attack; left click aims the strike |
-| Q | Wind Slash: piercing ranged blade, six-second cooldown |
+| Q | Wind Slash: piercing ranged blade; 6s recharge, 4.5s with Windfeather charm |
 | E | Speak, deliver, enter a building, browse the shop, or use an exit |
 | 1 / 2 / 3, or shop buttons | Buy bread / tea / honey while shopping |
-| J | Show / hide the journal |
-| I | Open / close the satchel: food, equipment and forest quest |
+| J | Open / close the full quest journal and select a tracked quest |
+| I | Open / close the illustrated equipment screen and backpack |
 | H | Eat one loaf to restore two hearts |
 | F5 / F9 | Save journey / continue saved journey |
 | T | Preview the next lighting phase with a short transition |
 | M | Mute / unmute all sound |
 | Esc | Close the shop, or pause / resume |
-| R | Restart the demo and reset progress |
+| R | Save and return to the title menu |
 | F11 | Toggle full screen |
 | F3 | Show / hide FPS and rendering diagnostics |
 
@@ -48,41 +48,69 @@ He takes three badges and gives **10 coins and a warden's charm**, once only.
 The existing five-step town delivery errand remains available alongside this
 quest. Wardens and civilians remain peaceful.
 
-Press **I** to open the satchel. Food, badge quantities, the equipped starting
-sword, the charm and quest instructions are shown together. Equip the charm
-for **one extra maximum heart**; unequipping clamps health to the new maximum.
-Visit Clover inside the Bluebird Bakery to buy useful provisions: bread heals
-two hearts, tea heals two hearts and refreshes Wind Slash, and honey heals
-three hearts. Use the satchel buttons or **H** for bread. Full-health use keeps
-food unless tea can refresh a cooling-down skill. Opening the satchel pauses
-the world. Crossing between zones preserves health; defeat recovery still
-returns the cat to the sheltered forest entrance with full health.
+Press **I** for the paper-doll inventory: your cat stands between seven
+illustrated slots for helmet, chest, pants, gloves, boots, weapon and charm.
+Click an item to inspect it and compare stats, double-click to equip it, or drag
+it to the matching slot. Drag equipped gear back to the backpack to remove it.
+Food, Gear and Quest filters help find items in the 24-cell bag. The equipment
+screen pauses the world. Equipment changes affect health, damage, movement and
+skill recharge; the character illustration currently remains a fixed base outfit.
 
-**F5 saves; F9 loads.** Mouse buttons in the Esc menu do the same. Saves contain
-both quests, inventory, equipment, money, discoveries, unique bandit defeats,
-uncollected drops, clock, location, health, facing and skill recharge. Save
-before quitting: this first integration uses **manual saves**, with one local
-slot and its previous validated backup. R starts a fresh in-memory journey
-without deleting the disk save; use F9 to continue it. The optional command-line
-argument `-- --continue` loads the slot on launch. Audio preferences remain
-separate.
+Visit Clover inside Bluebird Bakery for bread (two hearts), tea (two hearts and
+Wind Slash refresh) and honey (three hearts). Full-health use keeps food unless
+tea can refresh a cooling-down skill. H eats bread without opening the inventory.
+Crossing zones preserves health; defeat recovery returns the cat to the sheltered
+forest entrance with full health.
+
+## Emberforge and the next quest
+
+Take Garden Square's **northern exit** into Northgate. Find **Emberforge Workshop
+on Market Lane**, approach its doorstep and press **E** to enter. Speak to Tomas
+behind the counter to accept **The stolen tools** and browse four equipment
+upgrades. Nico, his apprentice, remains outside in Garden Square.
+
+Rook waits in **Briarwood's southeast clearing**. He has eight hearts and a
+slower, clearly signalled two-heart sweep. Defeat him, collect his pouch with E,
+and return the tools to Tomas for **12 coins and the Embersteel sword**. The
+sword deals two damage per normal hit and raises Wind Slash from three to four.
+The tools also drop if Rook was defeated before accepting the quest. Quest
+rewards and unique equipment cannot be collected twice.
+
+The shop sells a Scout cap (+1 maximum heart, 8 coins), Emberguard vest (+2
+hearts, 12 coins), Pathfinder boots (+10% movement, 10 coins), and Windfeather
+charm (4.5s Wind Slash recharge, 12 coins). Choose between the faster recharge
+and Bram's +1-heart charm. **J** opens all three quests, with objectives, routes,
+rewards and a Track button that also changes the on-screen guide.
+
+**F5 saves; F9 continues the newest validated manual save or autosave.** Safe
+travel, quest milestones, purchases, food and equipment changes queue an
+autosave. Nearby alerted enemies delay it. Esc also offers save/load and
+**Save and return to title**; R returns to that title. New Journey asks before
+starting a new autosave and preserves the last manual save. Both slots retain
+validated backups. Valid older saves migrate in memory to the seven equipment
+slots; reading an old save does not rewrite it. Audio preferences remain separate.
+The optional `-- --continue` argument resumes from the title automatically.
+
+Current sources, save details and limits: [Equipment chapter](EQUIPMENT.md).
+Native previews: [paper-doll inventory](previews/equipment_paper_doll.png),
+[journal](previews/equipment_quest_journal.png),
+[workshop](previews/emberforge_interior.png),
+[shop](previews/emberforge_shop.png), [title](previews/equipment_title.png).
+
+**847/847 checks pass**, including 127 equipment/chapter checks. Seven native
+four-second samples were 100% foreground focused and averaged **60 FPS** at
+1920×1080 internally in the initial 1280×720 window on Apple M1 / Metal /
+CoreAudio. Forest samples retained six frames above 20ms, worst **21.11ms**;
+first inventory open took **25.08ms**. This is a short test on this machine,
+not a guarantee of uninterrupted 60 FPS. See [combined checks](equipment_results.json)
+and [foreground performance](equipment_performance.json).
 
 This integration uses **GLoot 3.0.2** and **Questify 1.6.0**, pinned with their
 MIT licenses and archive hashes. Questify runs on game events with polling off.
-The separate [integration notes](INTEGRATION.md) describe state ownership,
-stable IDs, the versioned save schema and verification. Native UI previews:
-[satchel and equipped charm](previews/journey_satchel.png),
-[save/load menu](previews/journey_save_menu.png),
-[badge pickup in Briarwood](previews/journey_badge_pickup.png).
-
-**720/720 checks pass**: the existing 604, ten isolated addon checks, 99 journey
-checks and seven separate-process reload checks. All five native performance
-samples were 100% foreground focused and averaged **59.8–60 FPS** at the
-1920×1080 internal canvas on Apple M1, with an active quest, inventory and
-audio. One night sample retained a **52.75 ms hitch**; this is not a claim of a
-locked 60 FPS. See [journey results](journey_test_results.json),
-[restart results](journey_relaunch_results.json), and
-[foreground performance](journey_performance.json).
+The original [integration notes](INTEGRATION.md) describe state ownership and
+stable IDs; [EQUIPMENT.md](EQUIPMENT.md) documents the current equipment and
+autosave extension. The prior 720-check
+integration reports remain available as historical evidence.
 
 ## Sound and performance
 
@@ -105,7 +133,7 @@ do not replay on resume. See the [audio source notes](assets/audio/README.md),
 [settings screenshot](previews/audio_settings.png).
 
 The audio regression adds **39 passing checks**, bringing the demo suite to
-**604/604**. It exercises real movement, attacks, purchases, music transitions,
+**604/604 at that stage**. It exercises real movement, attacks, purchases, music transitions,
 pause, volume widgets and non-silent PCM from the actual mixer.
 [Results](audio_test_results.json).
 
@@ -462,7 +490,7 @@ press **E** to speak to each one:
 | Rhea · Wayfarer | Southern paving, west of the Mosswood gate |
 | Captain Alden · Town Warden | Town-hall side, northeast of the fountain |
 | Iris · Herbalist | Southwest paving near the bench |
-| Tomas · Blacksmith | West side of the fountain |
+| Nico · Smith’s apprentice | West side of the fountain; Tomas is inside Emberforge |
 
 They use the [human asset pack](../anime_hub_assets_v08_humans/README.md) at
 109–117 world pixels tall versus the cat's 73. Humans are reduced 35% and
@@ -484,10 +512,10 @@ available alongside their conversations.
 
 The new art remains a prototype: some silhouettes and changes between directions
 can still benefit from animation-artist cleanup.
-There is one enterable interior. Combat is available in Briarwood only.
-Manual save/load, inventory, useful food, one equipment reward, sound and saved
-volume preferences are included. Additional interiors and a dialogue addon
-remain future work.
+There are two enterable interiors: Bluebird Bakery and Emberforge Workshop.
+Combat remains available in Briarwood only. Equipment, three quests, useful food,
+manual saves, safe autosaves, sound and saved volume preferences are included.
+Further buildings and a branching dialogue addon remain future work.
 
 New paintings were created with **built-in imagegen**. Source files and exact
 prompts: [forest prompt set](assets/forest/generation_prompts.json).

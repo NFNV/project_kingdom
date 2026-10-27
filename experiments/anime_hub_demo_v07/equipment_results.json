@@ -1,0 +1,74 @@
+{
+  "baseline_commit": "ab28c19",
+  "checks": 847,
+  "passed": 847,
+  "failures": [],
+  "suites": {
+    "test_results": {
+      "checks": 255,
+      "passed": 255,
+      "report": "test_results.json"
+    },
+    "district_test_results": {
+      "checks": 154,
+      "passed": 154,
+      "report": "district_test_results.json"
+    },
+    "wilds_test_results": {
+      "checks": 45,
+      "passed": 45,
+      "report": "wilds_test_results.json"
+    },
+    "skill_test_results": {
+      "checks": 44,
+      "passed": 44,
+      "report": "skill_test_results.json"
+    },
+    "bandit_test_results": {
+      "checks": 32,
+      "passed": 32,
+      "report": "bandit_test_results.json"
+    },
+    "animation_test_results": {
+      "checks": 35,
+      "passed": 35,
+      "report": "animation_test_results.json"
+    },
+    "audio_test_results": {
+      "checks": 39,
+      "passed": 39,
+      "report": "audio_test_results.json"
+    },
+    "addon_test_results": {
+      "checks": 10,
+      "passed": 10,
+      "report": "addon_test_results.json"
+    },
+    "journey_test_results": {
+      "checks": 99,
+      "passed": 99,
+      "report": "journey_test_results.json"
+    },
+    "journey_relaunch_results": {
+      "checks": 7,
+      "passed": 7,
+      "report": "journey_relaunch_results.json"
+    },
+    "equipment_test_results": {
+      "checks": 127,
+      "passed": 127,
+      "report": "equipment_test_results.json"
+    }
+  },
+  "focused_command_line_continue": "passed in separate headless process",
+  "performance_report": "equipment_performance.json",
+  "asset_qa": "assets/equipment/qa_report.json",
+  "native_ui_previews": [
+    "previews/equipment_paper_doll.png",
+    "previews/equipment_charm_comparison.png",
+    "previews/equipment_quest_journal.png",
+    "previews/emberforge_interior.png",
+    "previews/emberforge_shop.png",
+    "previews/equipment_title.png"
+  ]
+}

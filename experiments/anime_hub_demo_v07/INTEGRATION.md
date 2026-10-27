@@ -1,5 +1,9 @@
 # Quest, inventory and save integration
 
+Historical foundation notes for schema 1 and the original satchel. The current
+seven-slot inventory, second forest quest, schema 2 migration, autosaves and title
+flow are documented in [EQUIPMENT.md](EQUIPMENT.md).
+
 Baseline: clean commit `f721f5f`, branch `codex/gameplay-foundation`.
 `integration_baseline.json` preserves the prior 604-check reports; the hub's
 255 checks also ran before integration. No existing local edits were present.

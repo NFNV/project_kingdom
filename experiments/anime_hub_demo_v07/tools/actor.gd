@@ -130,6 +130,8 @@ func _physics_process(delta: float) -> void:
 	var speed := 215.0 if controlled else 118.0
 	if controlled and Input.is_action_pressed("hub_run"):
 		speed = 325.0
+	if controlled:
+		speed *= float(hub.state.stats().speed)
 	if swing>0 or windup>0:
 		speed *= 0.0 if controlled else 0.2
 	if not controlled and hub.peaceful_mode:
@@ -213,6 +215,8 @@ func _enemy_intent(delta: float) -> Vector2:
 
 
 func try_attack(aim := Vector2.ZERO) -> bool:
+	if controlled and int(hub.state.stats().attack)<=0:
+		return false
 	if hub.peaceful_mode or hub.transitioning or hub.shopping:
 		return false
 	if not active or hub.paused:
@@ -237,6 +241,8 @@ func try_attack(aim := Vector2.ZERO) -> bool:
 
 
 func try_skill() -> bool:
+	if controlled and int(hub.state.stats().attack)<=0:
+		return false
 	if not controlled or not active or hub.peaceful_mode or hub.paused or hub.transitioning or hub.shopping:
 		return false
 	if skill_cooldown>0:
@@ -251,7 +257,7 @@ func try_skill() -> bool:
 	light_buffer = 0
 	skill_launched = false
 	skill_buffer = 0
-	skill_cooldown = SKILL_COOLDOWN
+	skill_cooldown = float(hub.state.stats().recharge)
 	hub.audio.play_event("wind_charge",position,-6)
 	swing_hits.clear()
 	route.clear()
@@ -264,6 +270,7 @@ func _launch_wind_slash() -> void:
 	hub.audio.play_event("wind_release",position,-3)
 	var wave := WindSlash.new()
 	wave.hub = hub
+	wave.damage = int(hub.state.stats().wind)
 	wave.heading = facing.normalized()
 	wave.position = position+Vector2(facing.x,facing.y*GROUND_Y)*22
 	hub.world.add_child(wave)
@@ -293,7 +300,7 @@ func resolve_hits() -> void:
 		if not hub.clear_line(position,target.position):
 			continue
 		swing_hits.append(target)
-		target.receive_hit(facing)
+		target.receive_hit(facing,int(hub.state.stats().attack) if controlled else 1)
 
 
 func receive_hit(from: Vector2, damage := 1, force := 170.0) -> bool:

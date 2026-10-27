@@ -28,15 +28,109 @@
     "kind": "quest"
   },
   "travel_sword": {
-    "name": "Traveller\u2019s sword",
+    "name": "Traveller’s sword",
     "description": "Your trusty blade. Space to strike; Q for Wind Slash.",
     "max_stack_size": 1,
-    "kind": "weapon"
+    "kind": "gear",
+    "slot": "weapon",
+    "icon": "travel_sword",
+    "attack": 1
   },
   "warden_charm": {
-    "name": "Warden\u2019s charm",
+    "name": "Warden’s charm",
     "description": "Equip to gain one extra maximum heart. A gift from Bram.",
     "max_stack_size": 1,
-    "kind": "charm"
+    "kind": "gear",
+    "slot": "charm",
+    "icon": "warden_charm",
+    "hearts": 1
+  },
+  "traveller_tunic": {
+    "name": "Traveller's tunic",
+    "description": "Soft linen and a leather harness. A familiar companion on the road.",
+    "slot": "chest",
+    "icon": "traveller_tunic",
+    "max_stack_size": 1,
+    "kind": "gear"
+  },
+  "field_trousers": {
+    "name": "Field trousers",
+    "description": "Olive wool, roomy pockets and patched knees.",
+    "slot": "legs",
+    "icon": "field_trousers",
+    "max_stack_size": 1,
+    "kind": "gear"
+  },
+  "riding_gloves": {
+    "name": "Riding gloves",
+    "description": "Supple fingerless gloves with a sure grip.",
+    "slot": "gloves",
+    "icon": "riding_gloves",
+    "max_stack_size": 1,
+    "kind": "gear"
+  },
+  "trail_boots": {
+    "name": "Trail boots",
+    "description": "Well-worn leather boots for long woodland walks.",
+    "slot": "boots",
+    "icon": "trail_boots",
+    "max_stack_size": 1,
+    "kind": "gear"
+  },
+  "leather_cap": {
+    "name": "Scout leather cap",
+    "description": "A sturdy brow and room for your ears. Adds one maximum heart.",
+    "slot": "head",
+    "icon": "leather_cap",
+    "hearts": 1,
+    "price": 8,
+    "max_stack_size": 1,
+    "kind": "gear"
+  },
+  "reinforced_vest": {
+    "name": "Emberguard vest",
+    "description": "Tomas stitched tough leather over a soft lining. Adds two maximum hearts.",
+    "slot": "chest",
+    "icon": "reinforced_vest",
+    "hearts": 2,
+    "price": 12,
+    "max_stack_size": 1,
+    "kind": "gear"
+  },
+  "hunter_boots": {
+    "name": "Pathfinder boots",
+    "description": "Light, springy soles. Walk and run ten percent faster.",
+    "slot": "boots",
+    "icon": "hunter_boots",
+    "speed": 0.1,
+    "price": 10,
+    "max_stack_size": 1,
+    "kind": "gear"
+  },
+  "tempered_sword": {
+    "name": "Embersteel sword",
+    "description": "A fine tempered blade, forged in gratitude. Sword strikes deal two damage.",
+    "slot": "weapon",
+    "icon": "tempered_sword",
+    "attack": 2,
+    "max_stack_size": 1,
+    "kind": "gear"
+  },
+  "swift_charm": {
+    "name": "Windfeather charm",
+    "description": "A breeze caught in turquoise. Wind Slash recharges in 4.5 seconds.",
+    "slot": "charm",
+    "icon": "swift_charm",
+    "haste": 1.5,
+    "price": 12,
+    "max_stack_size": 1,
+    "kind": "gear"
+  },
+  "smith_tools": {
+    "name": "Tomas's stolen tools",
+    "description": "A hammer and tongs recovered from Rook. Return them to Tomas at Emberforge in Northgate.",
+    "kind": "quest",
+    "icon": "smith_tools",
+    "max_stack_size": 1
   }
 }

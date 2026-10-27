@@ -23,6 +23,12 @@ static func floor_polygon() -> PackedVector2Array:
 static func houses() -> Array[Dictionary]:
 	return Layout.houses()
 
+static func forge_door() -> Vector2:
+	for house in Layout.civic_and_shops():
+		if house.style=="forge":
+			return Layout.doorstep(house)
+	return PLACES.market
+
 static func building(hub: Node2D, data: Dictionary) -> void:
 	var anchor := House.new()
 	anchor.hub = hub

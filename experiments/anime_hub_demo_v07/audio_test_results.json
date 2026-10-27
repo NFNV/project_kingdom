@@ -1,9 +1,9 @@
 {
-  "audio_driver": "CoreAudio",
+  "audio_driver": "Dummy",
   "checks": 39,
   "failures": [],
-  "mix_energy": 251.407436144761,
-  "mixed_pcm_frames": 19456,
+  "mix_energy": 213.620501693235,
+  "mixed_pcm_frames": 12288,
   "passed": 39,
   "scope": "Actual source loading and playback, listener, positional loops, real movement footfalls, no idle/wall steps, purchase cues, zone/clock/battle score selection and crossfade, contact/skill event timing, bounded voices, distance culling, pause/resume, real volume widgets/mute, travel cleanup and actual PCM mixer output."
 }

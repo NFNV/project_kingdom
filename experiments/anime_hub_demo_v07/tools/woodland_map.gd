@@ -2,7 +2,7 @@ extends RefCounted
 
 const Wilds := preload("res://experiments/anime_hub_demo_v07/tools/deep_forest.gd")
 const District := preload("res://experiments/anime_hub_demo_v07/tools/northgate_district.gd")
-const NAMES := {"town":"Garden Square","trail":"Mosswood Trail","river":"Riverbend Glade","bakery":"The Bluebird Bakery","wilds":"Briarwood Wilds","district":"Northgate Quarter"}
+const NAMES := {"town":"Garden Square","trail":"Mosswood Trail","river":"Riverbend Glade","bakery":"The Bluebird Bakery","wilds":"Briarwood Wilds","district":"Northgate Quarter","forge":"Emberforge Workshop"}
 const SOURCE_SIZE := Vector2(1672,941)
 
 
@@ -34,7 +34,9 @@ static func floor_for(zone: String) -> PackedVector2Array:
 
 static func exits_for(zone: String) -> Dictionary:
 	if zone=="district":
-		return {"south":{"at":District.RETURN,"to":"town","entry":"north","sign":"Garden Square","label":"Southern avenue  →  Garden Square"}}
+		return {"south":{"at":District.RETURN,"to":"town","entry":"north","sign":"Garden Square","label":"Southern avenue  →  Garden Square"},"forge":{"at":District.forge_door(),"to":"forge","entry":"district","sign":"Emberforge","label":"Enter Emberforge Workshop","automatic":false}}
+	if zone=="forge":
+		return {"district":{"at":Vector2(960,817),"to":"district","entry":"forge","sign":"Northgate","label":"Front door  →  Northgate Market Lane"}}
 	if zone=="town":
 		return {"north":{"at":Vector2(790,490),"to":"district","entry":"town","sign":"Northgate","label":"North passage  →  Northgate Quarter"},"bakery":{"at":Vector2(320,580),"to":"bakery","entry":"town","sign":"Bluebird Bakery","label":"Blue awning  →  Enter bakery"},"southeast":{"at":Vector2(1380,966),"to":"trail","entry":"town","sign":"Mosswood","label":"Southeast gate  →  Mosswood Trail"}}
 	if zone=="bakery":
@@ -51,10 +53,10 @@ static func exits_for(zone: String) -> Dictionary:
 
 static func arrival(zone: String, entry: String) -> Vector2:
 	if zone=="district":
-		return District.ENTRY
+		return District.forge_door()+Vector2(36,18) if entry=="forge" else District.ENTRY
 	if zone=="wilds":
 		return Wilds.ENTRY
-	if zone=="bakery":
+	if zone in ["bakery","forge"]:
 		return Vector2(960,745)
 	if zone=="town":
 		if entry=="north":

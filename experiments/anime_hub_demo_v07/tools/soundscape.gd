@@ -147,9 +147,9 @@ func enter_zone(zone: String) -> void:
 		props[0].max_distance = 620
 		props[0].volume_db = -10
 		props[0].play()
-	elif zone=="bakery":
+	elif zone in ["bakery","forge"]:
 		props[0].stream = streams.oven
-		props[0].position = Vector2(1331,427)
+		props[0].position = Vector2(1381,468) if zone=="forge" else Vector2(1331,427)
 		props[0].max_distance = 530
 		props[0].volume_db = -9
 		props[0].play()
@@ -163,7 +163,7 @@ func enter_zone(zone: String) -> void:
 
 func _select_music() -> void:
 	var night: bool = hub.clock>=2.65 or hub.clock<.35
-	var desired := "music_night" if night else ("music_town" if active_zone in ["town","district","bakery"] else "music_woodland")
+	var desired := "music_night" if night else ("music_town" if active_zone in ["town","district","bakery","forge"] else "music_woodland")
 	if active_zone=="wilds" and hub.combat_active and battle_hold>0:
 		desired = "music_battle"
 	request_music(desired)
@@ -209,7 +209,7 @@ func _process(delta: float) -> void:
 			music_positions[music_ids[i]] = music[i].get_playback_position()
 			music[i].stop()
 	var night := smoothstep(2.35,3.0,hub.clock) if hub.clock>=1 else 1.0-smoothstep(0,.6,hub.clock)
-	var indoors := active_zone=="bakery"
+	var indoors := active_zone in ["bakery","forge"]
 	beds[0].volume_db = move_toward(beds[0].volume_db,-48.0 if indoors else lerpf(-13,-34,night),delta*18)
 	beds[1].volume_db = move_toward(beds[1].volume_db,-55.0 if indoors else lerpf(-45,-12,night),delta*18)
 
@@ -243,6 +243,8 @@ func _exit_tree() -> void:
 func surface_at(point: Vector2) -> String:
 	if active_zone=="bakery":
 		return "wood"
+	if active_zone=="forge":
+		return "stone"
 	if active_zone=="district":
 		var delta: Vector2 = point-hub.Map.District.ORIGIN
 		var uv := Vector2((delta.x/240+delta.y/120)*.5,(delta.y/120-delta.x/240)*.5)

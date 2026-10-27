@@ -34,7 +34,7 @@ func run() -> void:
 	game.state.add_item("honey")
 	game.player.health = 4
 	game.toggle_backpack()
-	game.ui.charm_button.pressed.emit()
+	game.ui.satchel.primary_button.pressed.emit()
 	await create_timer(.4).timeout
 	await capture("journey_satchel")
 	game.toggle_backpack()

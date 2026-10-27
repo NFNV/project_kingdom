@@ -152,7 +152,7 @@ func _run() -> void:
 	for remaining in game.dogs:
 		remaining.set_physics_process(false)
 		remaining.grace = 0
-		for hit in 3:
+		for hit in remaining.maximum_health:
 			remaining.grace = 0
 			remaining.receive_hit(Vector2.LEFT)
 	check(game.forest_defeated.size()==12 and not game.combat_active,"Defeating all twelve clears the forest objective")

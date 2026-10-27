@@ -1,27 +1,27 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://bu2e3psauo7le"]
 
-[ext_resource type="Script" path="res://scripts/actors/actor.gd" id="1"]
-[ext_resource type="Script" path="res://scripts/combat/health.gd" id="2"]
-[ext_resource type="Script" path="res://scripts/combat/melee_attack.gd" id="3"]
+[ext_resource type="Script" uid="uid://c777g16j8757l" path="res://scripts/actors/actor.gd" id="1"]
+[ext_resource type="Script" uid="uid://vhoq5grje035" path="res://scripts/combat/health.gd" id="2"]
+[ext_resource type="Script" uid="uid://c08c05c8e6jjr" path="res://scripts/combat/melee_attack.gd" id="3"]
 
 [sub_resource type="CircleShape2D" id="BodyShape"]
 radius = 15.0
 
-[node name="Actor" type="CharacterBody2D"]
-motion_mode = 1
+[node name="Actor" type="CharacterBody2D" unique_id=2018566589]
 collision_layer = 2
 collision_mask = 3
+motion_mode = 1
 script = ExtResource("1")
 
-[node name="BodyShape" type="CollisionShape2D" parent="."]
+[node name="BodyShape" type="CollisionShape2D" parent="." unique_id=1613576852]
 position = Vector2(0, -12)
 shape = SubResource("BodyShape")
 
-[node name="Visual" type="AnimatedSprite2D" parent="."]
+[node name="Visual" type="AnimatedSprite2D" parent="." unique_id=91272823]
 position = Vector2(0, -40)
 
-[node name="Health" type="Node" parent="."]
+[node name="Health" type="Node" parent="." unique_id=1182787057]
 script = ExtResource("2")
 
-[node name="Melee" type="Node2D" parent="."]
+[node name="Melee" type="Node2D" parent="." unique_id=800500788]
 script = ExtResource("3")
