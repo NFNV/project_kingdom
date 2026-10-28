@@ -1,0 +1,241 @@
+{
+  "sources": [
+    "build_parts.py",
+    "build_direction_parts.py",
+    "build_hero_outfit.py",
+    "build_hero_reference.py"
+  ],
+  "type": "native SVG cutout layers plus original protagonist head textures",
+  "directions": [
+    "N",
+    "NE",
+    "E",
+    "SE",
+    "S",
+    "SW",
+    "W",
+    "NW"
+  ],
+  "mirrored_body_views": {
+    "NW": "NE",
+    "W": "E",
+    "SW": "SE"
+  },
+  "original_head_sources_unchanged": true,
+  "head_reference": "hero_reference.json",
+  "design_canvas": [
+    256,
+    256
+  ],
+  "ground_anchor": [
+    128,
+    225
+  ],
+  "assets": [
+    {
+      "file": "backpack.svg",
+      "sha256": "19b3821149688b59eb724f3fa7d400a6c7b8a07713fa915384b25eb65ef43e93"
+    },
+    {
+      "file": "cat_arm.svg",
+      "sha256": "3ce2019bbe6c00712195b3875c21f6c97f04c3fcdc2e5a2bd4dc85c2b003fc1d"
+    },
+    {
+      "file": "cat_boot.svg",
+      "sha256": "d4c3fb4232ebf3a12615ca9d67a82a6c48672d92c3228da0495cab678f871dde"
+    },
+    {
+      "file": "cat_head.svg",
+      "sha256": "e3f036d1f60fa57d29772b925c7603c077f3ca8186b5d66e49f74f5cb4c478a9"
+    },
+    {
+      "file": "cat_tail.svg",
+      "sha256": "79728229e5a4a4f390d9576ac2db472a6a0575e73db73b23bfdcb3ffb338a6b0"
+    },
+    {
+      "file": "cat_torso.svg",
+      "sha256": "f6bd6715c75da548512c7a03f47d565546e5f1533282cd7055cc604d40d732fb"
+    },
+    {
+      "file": "e_arm.svg",
+      "sha256": "4194ef096f25e3fd8a9eb74daf9df75d71f08a46b850036dc6d0016c05ee34bb"
+    },
+    {
+      "file": "e_body.svg",
+      "sha256": "74285fffa5baefa8c7cb7963a79c3e81e66ca61f4525ab86523b2e52b20f0746"
+    },
+    {
+      "file": "e_boot.svg",
+      "sha256": "3bbe1eda27cd7dcca8569bc02c4c0938e24c3ced7f31e22b819f0b3fce09af1b"
+    },
+    {
+      "file": "e_face.svg",
+      "sha256": "de5a23edc12bb1e5c212eef3b1e1757be21b4a7511bed1f63a2a0b34f69a7dfb"
+    },
+    {
+      "file": "e_fore.svg",
+      "sha256": "16ebb214f322d70ee56b296bead0c620ba8976bcc94ee71e891976b3344b6551"
+    },
+    {
+      "file": "e_head.svg",
+      "sha256": "4eba7ef3d348dab3e9b895208767a8d46abc0993c103714c30a86d09d93714a1"
+    },
+    {
+      "file": "e_hero_vest.svg",
+      "sha256": "a6ef131cc32c9effe521290470c3cb08891680e86a1c1c0a5884080186f15ca7"
+    },
+    {
+      "file": "e_pack.svg",
+      "sha256": "26ab702e7e37fd0737cbfd430380c475b5d89ee058c0c696a2c1cee04aeec2cb"
+    },
+    {
+      "file": "e_torso.svg",
+      "sha256": "797ad8addd26e7ad05748178a54491ba2e4ba1c196eb74fbd3816a1f46791607"
+    },
+    {
+      "file": "fore_leg.svg",
+      "sha256": "d930a650cfb334cd295c67dfea437d25d51bf0f2c6cb3184d43b29eb34e3fc28"
+    },
+    {
+      "file": "frog_body.svg",
+      "sha256": "da258517a54f0de66e10591f4d6cc36e809d83afc8972e0bd22e2a0cee67546b"
+    },
+    {
+      "file": "frog_eye.svg",
+      "sha256": "eb0836012740c32f4bcee47bcf96bad3891e7495cea4a7499d2cfec4a41bf9e6"
+    },
+    {
+      "file": "hind_foot.svg",
+      "sha256": "2bffe5d52c908b8fcf70bdd964919ff4797f3f0459f28495e269966343639ed3"
+    },
+    {
+      "file": "hind_leg.svg",
+      "sha256": "197b2e13938d46c77e5c16b648b6216be5a9facecd3e483cf1ef69b5b47e162f"
+    },
+    {
+      "file": "n_hero_vest.svg",
+      "sha256": "1018863e7f8f9cb9092f46475f8f6fab173013a608a6389ed693cff510e5ea59"
+    },
+    {
+      "file": "ne_arm.svg",
+      "sha256": "422cf290d1e5028976b2454be1d35b190c7410c16ffa11445a8296b0234f75c5"
+    },
+    {
+      "file": "ne_body.svg",
+      "sha256": "c7b865d503ab9a63349a4710207e7dff386e4e16b09a9cadb83cdfd8900e59ec"
+    },
+    {
+      "file": "ne_boot.svg",
+      "sha256": "3bbe1eda27cd7dcca8569bc02c4c0938e24c3ced7f31e22b819f0b3fce09af1b"
+    },
+    {
+      "file": "ne_face.svg",
+      "sha256": "efd88c9880c29980c3db15d6cdb7323d19c5bcc7635ebdbe63cc6280633d6e00"
+    },
+    {
+      "file": "ne_fore.svg",
+      "sha256": "16ebb214f322d70ee56b296bead0c620ba8976bcc94ee71e891976b3344b6551"
+    },
+    {
+      "file": "ne_head.svg",
+      "sha256": "9f77ac656af86d64e5c7fb3aca41c82f52dcdd3422d901748687fe3bb28d9957"
+    },
+    {
+      "file": "ne_hero_vest.svg",
+      "sha256": "068d801e1fec7d2f38e6ac60c51e267bd41f41eb646c11a44877d9a795e76412"
+    },
+    {
+      "file": "ne_pack.svg",
+      "sha256": "6f22e591999ddfed398c42b5bf64116ac72aaa34fdfd9cbc53d6a344a48a3848"
+    },
+    {
+      "file": "ne_torso.svg",
+      "sha256": "5f8b3079c554e9d7af3fe59a62ca676eca795f2108e41d0987a7f1767c6fb32f"
+    },
+    {
+      "file": "s_arm.svg",
+      "sha256": "3ce2019bbe6c00712195b3875c21f6c97f04c3fcdc2e5a2bd4dc85c2b003fc1d"
+    },
+    {
+      "file": "s_body.svg",
+      "sha256": "9e3cd7cd378ac0bf604854bf0014c09fb28ccdbc7c91b921b7b85e85197acce1"
+    },
+    {
+      "file": "s_boot.svg",
+      "sha256": "d4c3fb4232ebf3a12615ca9d67a82a6c48672d92c3228da0495cab678f871dde"
+    },
+    {
+      "file": "s_face.svg",
+      "sha256": "d92e58af1eed4911648164331d463c655a4ab41c0428e663352b30f74d71896a"
+    },
+    {
+      "file": "s_fore.svg",
+      "sha256": "b275bd79afbe282256393a1c449667f0637f44e420e91afed006d7d267ec9f3c"
+    },
+    {
+      "file": "s_head.svg",
+      "sha256": "eb11b2bf4c2859242256c8cfabffd738cdd97b49372492ef9bc0568af3457bed"
+    },
+    {
+      "file": "s_hero_vest.svg",
+      "sha256": "ffc8b16ac6f11a1518304c41d6278d9002cf70aafb5d97dd02cb05cf3985ddc3"
+    },
+    {
+      "file": "s_pack.svg",
+      "sha256": "56577290ee3c7887116715534bdf8f38c4c3777b4a7a23a5cc731227a1281cb1"
+    },
+    {
+      "file": "s_torso.svg",
+      "sha256": "d825730c5a0299bdd7202bc1b57361295b85ef964448d13f3c45a92024c631d1"
+    },
+    {
+      "file": "saddle.svg",
+      "sha256": "083c4533861aaf9d67e6dc2b3de10feaa7ec22f88ad646ba50e4c1fbbe6324b8"
+    },
+    {
+      "file": "scarf.svg",
+      "sha256": "39f8b95a38e6b468b85dee0ef925b6cd8f1aba1b93cb5e1e37bf11ee5a952369"
+    },
+    {
+      "file": "scarf_tail.svg",
+      "sha256": "e4fdb62888285fb453e9dab29962f1ae291f6ea9f9b11c72c7f6e17fb5195c5f"
+    },
+    {
+      "file": "se_arm.svg",
+      "sha256": "422cf290d1e5028976b2454be1d35b190c7410c16ffa11445a8296b0234f75c5"
+    },
+    {
+      "file": "se_body.svg",
+      "sha256": "30758793943dae542463f42c9ea8b18130b4c3c9447fda975f4250986140e1e8"
+    },
+    {
+      "file": "se_boot.svg",
+      "sha256": "3bbe1eda27cd7dcca8569bc02c4c0938e24c3ced7f31e22b819f0b3fce09af1b"
+    },
+    {
+      "file": "se_face.svg",
+      "sha256": "b749f2c95f7f941d0f7be073f9293496d90eb2fd78ae98b666df6e1d6ea29dd8"
+    },
+    {
+      "file": "se_fore.svg",
+      "sha256": "16ebb214f322d70ee56b296bead0c620ba8976bcc94ee71e891976b3344b6551"
+    },
+    {
+      "file": "se_head.svg",
+      "sha256": "429806966e7e01ab1585d41db345ce37355533dc50c6eff49ed29e26ed8a9350"
+    },
+    {
+      "file": "se_hero_vest.svg",
+      "sha256": "5d497e8b7138c9cd1267f5785f1daf6a2d5cf290e82d02f34c6322436f08daf6"
+    },
+    {
+      "file": "se_pack.svg",
+      "sha256": "cc3ee3ce4b9102f37385287f23c2b1131ce617327b11abfa886305937281e0f0"
+    },
+    {
+      "file": "se_torso.svg",
+      "sha256": "7af103817100a79fb03f29e90584ac2fc8a1ba319475be1d590ecba0f66be5b5"
+    }
+  ],
+  "anatomy_revision": "Rounded muzzle, bent forelimbs, planted forehands and dedicated front-view layering"
+}

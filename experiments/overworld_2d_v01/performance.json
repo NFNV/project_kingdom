@@ -1,0 +1,59 @@
+{
+  "adapter": "Apple M1 (Apple7)",
+  "engine": "4.7.2-stable (official)",
+  "notes": "Native 1920x1080, Apple M1 Metal, 60 FPS cap, four-second intervals after warmup and a bounded focus gate. None of these three samples maintained 95% window focus. They are diagnostic measurements and do not verify foreground 1080p60. Source includes painted texture mipmaps, spatial collision grid, flat-mode distance thinning, reduced city outline cost and hidden world rendering behind the regional map. Captures occur after measurements. Previous broader runs are retained separately.",
+  "samples": [
+    {
+      "camera_yaw": 0.0,
+      "directions_seen": [
+        "N"
+      ],
+      "draw_calls": 617.0,
+      "focused_fraction": 0.32,
+      "fps": 56.1,
+      "frames_above_20_ms": 24,
+      "p95_ms": 21.55,
+      "render_size": "(1920.0, 1080.0)",
+      "stage": "mosswood",
+      "travel_distance": 0.0,
+      "valid_foreground_sample": false,
+      "visible_props": 55,
+      "worst_ms": 127.61
+    },
+    {
+      "camera_yaw": 0.0,
+      "directions_seen": [
+        "N"
+      ],
+      "draw_calls": 222.0,
+      "focused_fraction": 0.0184331797235023,
+      "fps": 54.2,
+      "frames_above_20_ms": 40,
+      "p95_ms": 24.59,
+      "render_size": "(1920.0, 1080.0)",
+      "stage": "meadow_flat",
+      "travel_distance": 35.23,
+      "valid_foreground_sample": false,
+      "visible_props": 220,
+      "worst_ms": 57.49
+    },
+    {
+      "camera_yaw": 0.0,
+      "directions_seen": [
+        "N"
+      ],
+      "draw_calls": 118.0,
+      "focused_fraction": 0.0,
+      "fps": 60.0,
+      "frames_above_20_ms": 0,
+      "p95_ms": 17.38,
+      "render_size": "(1920.0, 1080.0)",
+      "stage": "regional_map",
+      "travel_distance": 0.0,
+      "valid_foreground_sample": false,
+      "visible_props": 228,
+      "worst_ms": 17.68
+    }
+  ],
+  "scope": "Post-polish three-stage native smoke: stationary compact city, flat-mode travel, opaque region map."
+}

@@ -1,0 +1,94 @@
+{
+  "source": "Existing playable protagonist SpriteFrames + body registration",
+  "mode": "Godot runtime head extraction; source images unchanged",
+  "directions": {
+    "n": {
+      "source": "res://experiments/anime_hub_demo_v07/assets/motion/cat_n.png",
+      "crop": [
+        104,
+        1111,
+        122,
+        103
+      ],
+      "sha256": "aefa58e0d39ffdd91b1149153453a5b8440a541a6ad37c1ef03481c896582fad",
+      "idle_frame": "F156"
+    },
+    "ne": {
+      "source": "res://experiments/anime_hub_demo_v07/assets/motion/cat_ne.png",
+      "crop": [
+        87,
+        1105,
+        135,
+        118
+      ],
+      "sha256": "35ac72354cb6e8a215f7ca64902282912e95ef04cfec606f6542c21683ff52e4",
+      "idle_frame": "F56"
+    },
+    "e": {
+      "source": "res://experiments/anime_hub_demo_v07/assets/motion/cat_e.png",
+      "crop": [
+        102,
+        1101,
+        123,
+        109
+      ],
+      "sha256": "d5eb7980d1b2750a991e41ff05cac37cdb38d613456583e412194070188ea3c7",
+      "idle_frame": "F96"
+    },
+    "se": {
+      "source": "res://experiments/anime_hub_demo_v07/assets/motion/cat_se.png",
+      "crop": [
+        86,
+        1102,
+        140,
+        114
+      ],
+      "sha256": "49b88156826556c7f9cf5c19a8c2cf54293746b3bfe92d311abdaa82c4e92d36",
+      "idle_frame": "F16"
+    },
+    "s": {
+      "source": "res://experiments/anime_hub_demo_v07/assets/motion/cat_s_v2.png",
+      "crop": [
+        79,
+        1107,
+        163,
+        123
+      ],
+      "sha256": "5e3f5081d31e5906228f38408ded11907bb5fa4c0428db0cf516dca35b5471a2",
+      "idle_frame": "F136"
+    },
+    "sw": {
+      "source": "res://experiments/anime_hub_demo_v07/assets/motion/cat_sw.png",
+      "crop": [
+        84,
+        1133,
+        146,
+        114
+      ],
+      "sha256": "ecaa3e5778c473263b2607106f5fb368f782ca277ca5e350b6f80071151046f8",
+      "idle_frame": "F36"
+    },
+    "w": {
+      "source": "res://experiments/anime_hub_demo_v07/assets/motion/cat_w.png",
+      "crop": [
+        73,
+        1087,
+        125,
+        116
+      ],
+      "sha256": "bd599e6f89cec536db13ca2ca1db3b7cb28cb96add68259b6398796cedb7b294",
+      "idle_frame": "F116"
+    },
+    "nw": {
+      "source": "res://experiments/anime_hub_demo_v07/assets/motion/cat_nw.png",
+      "crop": [
+        70,
+        1115,
+        120,
+        115
+      ],
+      "sha256": "18e7cc21074cd6ae17b1eeb6f8e4d0d83b255138e36720131bfd7144a2638f99",
+      "idle_frame": "F76"
+    }
+  }
+}

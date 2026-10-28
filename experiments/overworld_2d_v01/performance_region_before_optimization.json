@@ -1,0 +1,242 @@
+{
+  "adapter": "Apple M1 (Apple7)",
+  "engine": "4.7.2-stable (official)",
+  "notes": "Native 1920x1080 render, 60 FPS cap, four-second foreground samples after warmup and continuous focus gate. Real movement, eight-direction protagonist mount, compact walled city, six painted scenery textures, branch roads, lake, sea and regional map; camera_orbit adds a full 5.2-second 2D orbit; hop_study also draws the live enlarged rider. Captures occur after measurement, no concurrent test or game processes. No 3D nodes, saved-game I/O or existing gameplay changes. Short steady-state test excludes loading.",
+  "samples": [
+    {
+      "camera_yaw": 0.0,
+      "directions_seen": [
+        "N"
+      ],
+      "draw_calls": 588.0,
+      "focused_fraction": 0.0,
+      "fps": 57.7,
+      "frames_above_20_ms": 6,
+      "p95_ms": 19.58,
+      "render_size": "(1920.0, 1080.0)",
+      "stage": "meadow_curved",
+      "travel_distance": 35.23,
+      "valid_foreground_sample": false,
+      "visible_props": 41,
+      "worst_ms": 20.55
+    },
+    {
+      "camera_yaw": 0.0,
+      "directions_seen": [
+        "N"
+      ],
+      "draw_calls": 443.0,
+      "focused_fraction": 1.0,
+      "fps": 44.9,
+      "frames_above_20_ms": 105,
+      "p95_ms": 29.08,
+      "render_size": "(1920.0, 1080.0)",
+      "stage": "meadow_flat",
+      "travel_distance": 35.38,
+      "valid_foreground_sample": true,
+      "visible_props": 608,
+      "worst_ms": 29.63
+    },
+    {
+      "camera_yaw": 0.0,
+      "directions_seen": [
+        "N"
+      ],
+      "draw_calls": 91.0,
+      "focused_fraction": 1.0,
+      "fps": 60.0,
+      "frames_above_20_ms": 0,
+      "p95_ms": 17.49,
+      "render_size": "(1920.0, 1080.0)",
+      "stage": "crossing",
+      "travel_distance": 35.38,
+      "valid_foreground_sample": true,
+      "visible_props": 38,
+      "worst_ms": 17.67
+    },
+    {
+      "camera_yaw": 0.0,
+      "directions_seen": [
+        "N"
+      ],
+      "draw_calls": 94.0,
+      "focused_fraction": 1.0,
+      "fps": 59.9,
+      "frames_above_20_ms": 1,
+      "p95_ms": 17.47,
+      "render_size": "(1920.0, 1080.0)",
+      "stage": "forest",
+      "travel_distance": 35.23,
+      "valid_foreground_sample": true,
+      "visible_props": 53,
+      "worst_ms": 39.04
+    },
+    {
+      "camera_yaw": 0.0,
+      "directions_seen": [
+        "N"
+      ],
+      "draw_calls": 525.0,
+      "focused_fraction": 1.0,
+      "fps": 57.1,
+      "frames_above_20_ms": 0,
+      "p95_ms": 19.29,
+      "render_size": "(1920.0, 1080.0)",
+      "stage": "hop_study",
+      "travel_distance": 35.38,
+      "valid_foreground_sample": true,
+      "visible_props": 41,
+      "worst_ms": 19.95
+    },
+    {
+      "camera_yaw": 0.0,
+      "directions_seen": [
+        "N",
+        "NE",
+        "E",
+        "SE",
+        "S",
+        "SW",
+        "W",
+        "NW"
+      ],
+      "draw_calls": 1298.0,
+      "focused_fraction": 1.0,
+      "fps": 56.4,
+      "frames_above_20_ms": 2,
+      "p95_ms": 19.15,
+      "render_size": "(1920.0, 1080.0)",
+      "stage": "turning",
+      "travel_distance": 0.72,
+      "valid_foreground_sample": true,
+      "visible_props": 56,
+      "worst_ms": 21.1
+    },
+    {
+      "camera_yaw": 0.0,
+      "directions_seen": [
+        "NW"
+      ],
+      "draw_calls": 1295.0,
+      "focused_fraction": 1.0,
+      "fps": 52.4,
+      "frames_above_20_ms": 2,
+      "p95_ms": 19.25,
+      "render_size": "(1920.0, 1080.0)",
+      "stage": "mosswood",
+      "travel_distance": 0.0,
+      "valid_foreground_sample": true,
+      "visible_props": 55,
+      "worst_ms": 20.72
+    },
+    {
+      "camera_yaw": 2.11264802615376,
+      "directions_seen": [
+        "SW",
+        "S",
+        "SE",
+        "E",
+        "NE",
+        "N",
+        "NW",
+        "W"
+      ],
+      "draw_calls": 247.0,
+      "focused_fraction": 1.0,
+      "fps": 57.1,
+      "frames_above_20_ms": 1,
+      "p95_ms": 19.3,
+      "render_size": "(1920.0, 1080.0)",
+      "stage": "camera_orbit",
+      "travel_distance": 0.0,
+      "valid_foreground_sample": true,
+      "visible_props": 32,
+      "worst_ms": 29.04
+    },
+    {
+      "camera_yaw": 0.0,
+      "directions_seen": [
+        "NW"
+      ],
+      "draw_calls": 86.0,
+      "focused_fraction": 0.0,
+      "fps": 59.7,
+      "frames_above_20_ms": 1,
+      "p95_ms": 17.77,
+      "render_size": "(1920.0, 1080.0)",
+      "stage": "windsong_ridge",
+      "travel_distance": 0.0,
+      "valid_foreground_sample": false,
+      "visible_props": 35,
+      "worst_ms": 35.45
+    },
+    {
+      "camera_yaw": 0.0,
+      "directions_seen": [
+        "NW"
+      ],
+      "draw_calls": 92.0,
+      "focused_fraction": 0.0,
+      "fps": 60.0,
+      "frames_above_20_ms": 0,
+      "p95_ms": 17.32,
+      "render_size": "(1920.0, 1080.0)",
+      "stage": "willowmere_lake",
+      "travel_distance": 0.0,
+      "valid_foreground_sample": false,
+      "visible_props": 27,
+      "worst_ms": 17.96
+    },
+    {
+      "camera_yaw": 0.0,
+      "directions_seen": [
+        "NW"
+      ],
+      "draw_calls": 94.0,
+      "focused_fraction": 0.887966804979253,
+      "fps": 60.0,
+      "frames_above_20_ms": 3,
+      "p95_ms": 17.37,
+      "render_size": "(1920.0, 1080.0)",
+      "stage": "ivykeep_ruins",
+      "travel_distance": 0.0,
+      "valid_foreground_sample": false,
+      "visible_props": 47,
+      "worst_ms": 32.31
+    },
+    {
+      "camera_yaw": 1.0,
+      "directions_seen": [
+        "W"
+      ],
+      "draw_calls": 105.0,
+      "focused_fraction": 1.0,
+      "fps": 60.0,
+      "frames_above_20_ms": 2,
+      "p95_ms": 17.16,
+      "render_size": "(1920.0, 1080.0)",
+      "stage": "palestone_coast",
+      "travel_distance": 0.0,
+      "valid_foreground_sample": true,
+      "visible_props": 40,
+      "worst_ms": 25.54
+    },
+    {
+      "camera_yaw": 0.0,
+      "directions_seen": [
+        "W"
+      ],
+      "draw_calls": 1359.0,
+      "focused_fraction": 0.0,
+      "fps": 44.1,
+      "frames_above_20_ms": 168,
+      "p95_ms": 29.85,
+      "render_size": "(1920.0, 1080.0)",
+      "stage": "regional_map",
+      "travel_distance": 0.0,
+      "valid_foreground_sample": false,
+      "visible_props": 55,
+      "worst_ms": 48.48
+    }
+  ]
+}
