@@ -275,7 +275,7 @@ func label(text: String, at: Vector2, font_size: int, parent: Node, width := 0.0
 
 func refresh() -> void:
 	location_label.text = hub.zone_title()
-	location_subtitle.text = {"town":"North  →  Northgate  /  Southeast  →  Forest","trail":"Old elm paths  /  Riverbend to the southeast","river":"Across the bridge  →  Briarwood Wilds","bakery":"Warm bread, meadow tea, and a place to rest","wilds":"Four clearings  /  West trail to Riverbend","district":"Sunstone Plaza  /  Market Lane  →  Emberforge","forge":"Tomas the smith  /  Gear, stories and warm embers"}[hub.zone]
+	location_subtitle.text = {"town":"SW → Greenshire · N → Northgate · SE → Forest","trail":"Old elm paths  /  Riverbend to the southeast","river":"Across the bridge  →  Briarwood Wilds","bakery":"Warm bread, meadow tea, and a place to rest","wilds":"Four clearings  /  West trail to Riverbend","district":"Sunstone Plaza  /  Market Lane  →  Emberforge","forge":"Tomas the smith  /  Gear, stories and warm embers"}[hub.zone]
 	combat_panel.visible = hub.zone=="wilds"
 	skill_panel.visible = hub.zone not in ["bakery","forge"]
 	skill_panel.position.y = 310 if hub.zone=="wilds" else 195

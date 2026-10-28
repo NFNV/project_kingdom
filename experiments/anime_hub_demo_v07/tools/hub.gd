@@ -17,6 +17,8 @@ const GameState := preload("res://experiments/anime_hub_demo_v07/tools/game_stat
 const SaveStore := preload("res://experiments/anime_hub_demo_v07/tools/save_store.gd")
 const Loot := preload("res://experiments/anime_hub_demo_v07/tools/loot_drop.gd")
 const Forge := preload("res://experiments/anime_hub_demo_v07/tools/forge_room.gd")
+const OverworldTravel := preload("res://experiments/anime_hub_demo_v07/tools/overworld_travel.gd")
+var overworld_travel: Node
 var state: Node
 var saves := SaveStore.new()
 var save_path := SaveStore.DEFAULT_PATH
@@ -148,7 +150,7 @@ func _ready() -> void:
 	_update_hud()
 	if DisplayServer.get_name()!="headless":
 		DisplayServer.window_move_to_foreground()
-	_say("Welcome to Garden Square", "Speak to Bram by the fountain for a forest quest. I opens your satchel; H eats bread. F5 saves your journey, F9 continues a saved one. The southeast gate leads to Mosswood.")
+	_say("Welcome to Garden Square", "Speak to Bram by the fountain for a forest quest. I opens your satchel; H eats bread. F5 saves your journey, F9 continues a saved one. The southeast gate leads to Mosswood; the southwest road opens the Greenshire overworld.")
 	if "--night" in OS.get_cmdline_user_args():
 		clock = 3.0
 	if "--bakery" in OS.get_cmdline_user_args():
@@ -358,6 +360,8 @@ func _draw_exit_marks(node: Node2D) -> void:
 			arrow = Vector2(-1,0)
 		elif id=="wilds":
 			arrow = Vector2(1,-.65).normalized()
+		elif id=="southwest":
+			arrow = Vector2(-1,.65).normalized()
 		elif id=="north":
 			arrow = Vector2(0,-1)
 		elif zone=="district":
@@ -400,6 +404,13 @@ func request_travel(exit_id: String) -> void:
 		audio.play_event("door",player.position,-5)
 	transitioning = true
 	var target: Dictionary = exits[exit_id]
+	if target.to=="overworld":
+		if not is_instance_valid(overworld_travel):
+			overworld_travel = OverworldTravel.new()
+			overworld_travel.hub = self
+			add_child(overworld_travel)
+		overworld_travel.begin.call_deferred()
+		return
 	_travel.call_deferred(target["to"],target["entry"])
 
 

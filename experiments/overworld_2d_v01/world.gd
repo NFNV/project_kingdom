@@ -1,4 +1,9 @@
 extends Node2D
+signal return_requested
+signal save_requested
+var linked_journey := false
+var transitioning := false
+var gate_cooldown := .25
 # All geometry is CanvasItem drawing. Logical positions are 2D map coordinates.
 const City := preload("res://experiments/overworld_2d_v01/city.gd")
 const Rider := preload("res://experiments/overworld_2d_v01/mounted_rider.gd")
@@ -207,9 +212,10 @@ func move_player(direction: Vector2, delta: float, running := false) -> void:
 		bound_hint = 3
 
 func _physics_process(delta: float) -> void:
-	if paused or region_map:
+	if paused or region_map or transitioning:
 		return
 	clock += delta
+	gate_cooldown = maxf(0,gate_cooldown-delta)
 	notice_left = maxf(0,notice_left-delta)
 	bound_hint = maxf(0,bound_hint-delta)
 	var direction := intent
@@ -227,6 +233,30 @@ func _physics_process(delta: float) -> void:
 		if minf(player.distance_to(marker.p),player.distance_to(marker.get("location",marker.p)))<19:
 			near_landmark = marker.name
 			break
+	if linked_journey and gate_cooldown<=0 and player.distance_to(City.GATE)<1.4:
+		request_town_entry()
+
+func enter_from_town() -> void:
+	player = City.GATE-Vector2(0,8)
+	velocity = Vector2.ZERO
+	facing = Vector2(0,-1)
+	mounted_rider.reset()
+	mounted_rider.set_direction(view_vector(facing))
+	gate_cooldown = .25
+	update_camera()
+	update_visible()
+	get_window().title = "Project Kingdom — The Greenshire"
+	notice = "Garden Square is behind you. Walk into Mosswood's south gate or press F nearby to return. F5 saves."
+	notice_left = 9
+
+func can_enter_town() -> bool:
+	return linked_journey and not paused and not region_map and not transitioning and gate_cooldown<=0 and player.distance_to(City.GATE)<6
+
+func request_town_entry() -> void:
+	if not can_enter_town(): return
+	transitioning = true
+	velocity = Vector2.ZERO
+	return_requested.emit()
 
 func _process(_delta: float) -> void:
 	terrain.visible = not region_map
@@ -343,11 +373,11 @@ func panel_style(color: Color) -> StyleBoxFlat:
 
 func draw_hud() -> void:
 	panel(Rect2(28,28,484,103),Color("203e36"))
-	text(Vector2(50,61),"MOSSWOOD  /  THE GREENSHIRE",16,Color("d1c38d"))
+	text(Vector2(50,61),"PROJECT KINGDOM  /  THE GREENSHIRE" if linked_journey else "MOSSWOOD  /  THE GREENSHIRE",16,Color("d1c38d"))
 	text(Vector2(50,98),"A little world to explore",29)
 	if near_landmark!="":
 		panel(Rect2(670,178,580,55))
-		text(Vector2(699,213),near_landmark+"  ·  F",21)
+		text(Vector2(699,213),near_landmark+("  ·  F Enter Garden Square" if can_enter_town() else "  ·  F Inspect"),21)
 	panel(Rect2(28,971,1864,81))
 	text(Vector2(50,1003),"WASD / arrows  Roam     Q / E  Rotate camera     Home  North view     Shift  Faster hops     C  Curve     Esc  Pause",20)
 	text(Vector2(50,1032),"1–8 Landmarks   M Region map   F Inspect   G Grid   [ / ] Bend   Tab Minimap   R Reset   F3 Stats   F4 Rider   F11 Screen",18,Color("c3c9a8"))
@@ -455,7 +485,7 @@ func visit(index: int) -> void:
 	notice_left = 6
 
 func _unhandled_key_input(event: InputEvent) -> void:
-	if not event is InputEventKey or not event.pressed or event.echo:
+	if transitioning or not event is InputEventKey or not event.pressed or event.echo:
 		return
 	match event.physical_keycode:
 		KEY_C: curved = not curved
@@ -484,7 +514,15 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		KEY_HOME:
 			camera_yaw = 0
 			rotate_camera(0,0)
+		KEY_F5:
+			if linked_journey:
+				save_requested.emit()
+				get_viewport().set_input_as_handled()
 		KEY_F:
+			if can_enter_town():
+				request_town_entry()
+				get_viewport().set_input_as_handled()
+				return
 			notice = "Explore the northern roads. M shows the connected region and its landmarks."
 			for marker in Map.landmarks():
 				if marker.name==near_landmark: notice = marker.description

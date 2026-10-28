@@ -37,6 +37,20 @@ New Journey / Continue. F6 still runs the currently edited scene, which may be a
 | F11 | Toggle full screen |
 | F3 | Show / hide FPS and rendering diagnostics |
 
+## The Greenshire overworld
+
+Garden Square’s **southwest exit**, labelled **The Greenshire**, leads to the
+chibi overworld. Walk through the marker or approach and press **E**. The cat
+mounts the frog outside miniature Mosswood. Walk into the city’s south gate, or
+press **F** nearby, to return inside Garden Square’s southwest entrance.
+Inventory, equipment, money, quests, health and clock stay in the same journey.
+
+In the overworld, **WASD** roams, **Q/E** rotates the camera, **M** opens the region
+map and **F5** saves a town-side checkpoint. Continue resumes at this safe point
+inside Garden Square; exact overworld coordinates are not saved yet. Travel
+also autosaves this checkpoint when autosaving is enabled. The southeast forest
+and north district connections retain their existing destinations.
+
 ## A complete forest quest
 
 Speak to **Bram**, the friendly dog warden by the fountain, with **E** to accept

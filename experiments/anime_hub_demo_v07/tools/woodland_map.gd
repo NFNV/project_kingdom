@@ -38,7 +38,7 @@ static func exits_for(zone: String) -> Dictionary:
 	if zone=="forge":
 		return {"district":{"at":Vector2(960,817),"to":"district","entry":"forge","sign":"Northgate","label":"Front door  →  Northgate Market Lane"}}
 	if zone=="town":
-		return {"north":{"at":Vector2(790,490),"to":"district","entry":"town","sign":"Northgate","label":"North passage  →  Northgate Quarter"},"bakery":{"at":Vector2(320,580),"to":"bakery","entry":"town","sign":"Bluebird Bakery","label":"Blue awning  →  Enter bakery"},"southeast":{"at":Vector2(1380,966),"to":"trail","entry":"town","sign":"Mosswood","label":"Southeast gate  →  Mosswood Trail"}}
+		return {"southwest":{"at":Vector2(490,1010),"to":"overworld","entry":"town","sign":"The Greenshire","label":"Southwest road  →  The Greenshire overworld"},"north":{"at":Vector2(790,490),"to":"district","entry":"town","sign":"Northgate","label":"North passage  →  Northgate Quarter"},"bakery":{"at":Vector2(320,580),"to":"bakery","entry":"town","sign":"Bluebird Bakery","label":"Blue awning  →  Enter bakery"},"southeast":{"at":Vector2(1380,966),"to":"trail","entry":"town","sign":"Mosswood","label":"Southeast gate  →  Mosswood Trail"}}
 	if zone=="bakery":
 		return {"town":{"at":Vector2(960,817),"to":"town","entry":"bakery","sign":"Garden Square","label":"Front door  →  Garden Square"}}
 	if zone=="trail":
@@ -59,6 +59,8 @@ static func arrival(zone: String, entry: String) -> Vector2:
 	if zone in ["bakery","forge"]:
 		return Vector2(960,745)
 	if zone=="town":
+		if entry=="overworld":
+			return Vector2(580,980)
 		if entry=="north":
 			return Vector2(850,555)
 		if entry=="bakery":
