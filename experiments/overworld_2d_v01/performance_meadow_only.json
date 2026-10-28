@@ -1,0 +1,24 @@
+{
+  "adapter": "Apple M1 (Apple7)",
+  "engine": "4.7.2-stable (official)",
+  "notes": "Native 1920x1080 render, 60 FPS cap, four-second foreground samples after warmup and continuous focus gate. Real movement, eight-direction protagonist mount, animated 2D scenery and the main city; camera_orbit adds a full 5.2-second 2D orbit; hop_study also draws the live enlarged rider. Captures occur after measurement, no concurrent test or game processes. No 3D nodes, saved-game I/O or existing gameplay changes. Short steady-state test excludes loading.",
+  "samples": [
+    {
+      "camera_yaw": 0.0,
+      "directions_seen": [
+        "N"
+      ],
+      "draw_calls": 589.0,
+      "focused_fraction": 1.0,
+      "fps": 60.0,
+      "frames_above_20_ms": 0,
+      "p95_ms": 16.95,
+      "render_size": "(1920.0, 1080.0)",
+      "stage": "meadow_curved",
+      "travel_distance": 35.38,
+      "valid_foreground_sample": true,
+      "visible_props": 24,
+      "worst_ms": 18.08
+    }
+  ]
+}

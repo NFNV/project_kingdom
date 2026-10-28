@@ -1,0 +1,78 @@
+{
+  "mode": "Built-in imagegen",
+  "created": "2026-10-28",
+  "assets": [
+    {
+      "id": "windmill",
+      "prompt": "Use case: stylized-concept. Asset type: transparent 2D overworld game scenery cutout for Project Kingdom. Subject: One charming miniature countryside windmill landmark: a round cream stone tower with a squat blue slate cap, four elegant wooden sails, tiny teal door, a small attached cottage with blue roof, a few flowers and grass tufts around its base. Compact whole structure visible. Style: charming hand-painted anime fantasy JRPG landscape art, soft watercolor texture with refined warm outlines, simplified chibi overworld proportions, cream stone, slate blue, moss green, soft warm daylight from upper left. Camera: consistent elevated three-quarter view, around 20 degrees down, front and a little right side visible, near orthographic with straight verticals. It is a small landmark to read clearly at 100\u2013250 pixels, not a realistic architectural closeup. Composition: single isolated complete asset centered, generous clean transparent padding, foot anchor near bottom center. Genuine transparent alpha, no scenery/background, no sky, no large floor, no frame, no UI, no text, no letters, no watermark, no checkerboard drawn in. Keep any contact shadow very subtle and close to feet.",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-b7beed6d-2dc5-4218-afba-a92940ec89a2.png",
+      "size": [
+        1351,
+        1164
+      ],
+      "alpha_bbox": [
+        229,
+        22,
+        1201,
+        1116
+      ],
+      "sha256": "6e1c191e8e6f500dedbb5186642dbac68585a00fd7685893c844f39ff981e6c9",
+      "transparent_fraction": 0.606,
+      "workspace": "art/region/windmill.png"
+    },
+    {
+      "id": "ruins",
+      "prompt": "Use case: stylized-concept. Asset type: transparent 2D overworld game scenery cutout for Project Kingdom. Subject: One compact ancient woodland ruin landmark: a broken warm limestone archway, a short remnant of a round watchtower and two low ruined walls, worn carved stones, moss, ivy and small white flowers. Clear readable silhouette with inviting passage through the arch. Style: charming hand-painted anime fantasy JRPG landscape art, soft watercolor texture with refined warm outlines, simplified chibi overworld proportions, cream stone, slate blue, moss green, soft warm daylight from upper left. Camera: consistent elevated three-quarter view, around 20 degrees down, front and a little right side visible, near orthographic with straight verticals. It is a small landmark to read clearly at 100\u2013250 pixels, not a realistic architectural closeup. Composition: single isolated complete asset centered, generous clean transparent padding, foot anchor near bottom center. Genuine transparent alpha, no scenery/background, no sky, no large floor, no frame, no UI, no text, no letters, no watermark, no checkerboard drawn in. Keep any contact shadow very subtle and close to feet.",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-ebf9a8ed-f0b9-479f-838f-3a02ad955e6d.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "alpha_bbox": [
+        127,
+        46,
+        1445,
+        939
+      ],
+      "sha256": "1e46c6e030db115c8c199c3204d9e1b2448ab73372881b40663f0e362decc693",
+      "transparent_fraction": 0.521,
+      "workspace": "art/region/ruins.png"
+    },
+    {
+      "id": "pine_grove",
+      "prompt": "Use case: stylized-concept. Asset type: transparent 2D overworld game scenery cutout for Project Kingdom. Subject: One small cluster of three distinct lush evergreen fir trees, rounded painterly tiers of needles, a few brown trunks visible, moss and a tiny fern at the shared foot. Clear isolated silhouette, tallest tree central, no floor tile. Style: charming hand-painted anime fantasy JRPG landscape art, soft watercolor texture with refined warm outlines, simplified chibi overworld proportions, cream stone, slate blue, moss green, soft warm daylight from upper left. Camera: consistent elevated three-quarter view, around 20 degrees down, front and a little right side visible, near orthographic with straight verticals. It is a small landmark to read clearly at 100\u2013250 pixels, not a realistic architectural closeup. Composition: single isolated complete asset centered, generous clean transparent padding, foot anchor near bottom center. Genuine transparent alpha, no scenery/background, no sky, no large floor, no frame, no UI, no text, no letters, no watermark, no checkerboard drawn in. Keep any contact shadow very subtle and close to feet.",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-3f070661-c9c9-4977-a9b8-ef5c86524940.png",
+      "size": [
+        1223,
+        1286
+      ],
+      "alpha_bbox": [
+        141,
+        57,
+        1092,
+        1214
+      ],
+      "sha256": "f2750157e08880a711cb122ff032cf41ec4ce8c050f7105cebdeb90706f6dbd4",
+      "transparent_fraction": 0.591,
+      "workspace": "art/region/pine_grove.png"
+    },
+    {
+      "id": "coastal_rocks",
+      "prompt": "Use case: stylized-concept. Asset type: transparent 2D overworld game scenery cutout for Project Kingdom. Subject: One compact cluster of rounded pale limestone coastal rocks, layered and weathered, a small patch of grass and a few yellow wildflowers in cracks. Low broad silhouette, two or three soft crags with visible top surfaces, no water and no cliff wall backdrop. Style: charming hand-painted anime fantasy JRPG landscape art, soft watercolor texture with refined warm outlines, simplified chibi overworld proportions, cream stone, slate blue, moss green, soft warm daylight from upper left. Camera: consistent elevated three-quarter view, around 20 degrees down, front and a little right side visible, near orthographic with straight verticals. It is a small landmark to read clearly at 100\u2013250 pixels, not a realistic architectural closeup. Composition: single isolated complete asset centered, generous clean transparent padding, foot anchor near bottom center. Genuine transparent alpha, no scenery/background, no sky, no large floor, no frame, no UI, no text, no letters, no watermark, no checkerboard drawn in. Keep any contact shadow very subtle and close to feet.",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-40a5e641-b5ab-4784-be35-00b53907df44.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "alpha_bbox": [
+        44,
+        164,
+        1494,
+        901
+      ],
+      "sha256": "aaab385f9c8bac74c01dcd3ae72b1f4c0e48a63ca96d5962583eb50fbe3e2b41",
+      "transparent_fraction": 0.559,
+      "workspace": "art/region/coastal_rocks.png"
+    }
+  ]
+}
