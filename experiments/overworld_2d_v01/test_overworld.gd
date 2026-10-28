@@ -218,23 +218,23 @@ func run() -> void:
 	await key(KEY_E,true)
 	await ticks(30)
 	await key(KEY_E,false)
-	check(world.camera_yaw>.5,"Holding E rotates the camera clockwise")
+	check(is_zero_approx(world.camera_yaw),"Holding E leaves the north-facing camera fixed")
 	var before_camera_move: Vector2 = world.player
 	var forward: Vector2 = world.camera_forward()
 	await key(KEY_W,true)
 	await ticks(30)
 	await key(KEY_W,false)
 	await ticks(15)
-	check((world.player-before_camera_move).normalized().dot(forward)>.98,"W moves toward the rotated camera's horizon")
-	check(world.mounted_rider.direction_name()=="N","Mounted view is camera-relative after rotating and walking")
+	check((world.player-before_camera_move).normalized().dot(forward)>.98,"W moves toward the fixed camera's north horizon")
+	check(world.mounted_rider.direction_name()=="N","Walking north retains the correct mounted rear view")
 	var yaw_before: float = world.camera_yaw
 	await key(KEY_Q,true)
 	await ticks(20)
 	await key(KEY_Q,false)
-	check(world.camera_yaw<yaw_before-.3,"Holding Q rotates the camera counterclockwise")
+	check(world.camera_yaw==yaw_before,"Holding Q leaves the camera fixed")
 	await key(KEY_HOME,true)
 	await key(KEY_HOME,false)
-	check(is_zero_approx(world.camera_yaw),"Home restores the north-facing camera")
+	check(is_zero_approx(world.camera_yaw),"Home cannot change the fixed north-facing view")
 	world.paused = true
 	await key(KEY_E,true)
 	await ticks(10)
@@ -242,7 +242,7 @@ func run() -> void:
 	check(is_zero_approx(world.camera_yaw),"Paused game blocks held camera rotation")
 	world.paused = false
 	world.automated = true
-	var rotated_error := 0.0
+	var fixed_error := 0.0
 	var anchor_error := 0.0
 	for yaw in [0.0,.7,PI/2,PI,-1.2,2.7]:
 		world.camera_yaw = yaw
@@ -252,21 +252,21 @@ func run() -> void:
 			for depth in [22.0,35.0,50.0]:
 				for x in [-15.0,0.0,15.0]:
 					var point: Vector2 = world.camera_ground+world.world_vector(Vector2(x,depth))
-					rotated_error = maxf(rotated_error,world.inverse_ground(world.project(point)).distance_to(point))
+					fixed_error = maxf(fixed_error,world.inverse_ground(world.project(point)).distance_to(point))
 			anchor_error = maxf(anchor_error,world.project(world.player).distance_to(Vector2(960,world.HORIZON+world.FOCAL*world.CAMERA_HEIGHT/28)))
 		world.update_visible()
 		var depth_sorted := true
 		for i in range(1,world.visible_props.size()):
 			depth_sorted = depth_sorted and world.view_point(world.visible_props[i-1].p).y>=world.view_point(world.visible_props[i].p).y
-		check(depth_sorted,"Scenery sorts by rotated view depth at yaw %.2f" % yaw)
-	check(rotated_error<.01,"Ground/shader projection round-trip agrees at six camera headings")
-	check(anchor_error<.01,"Camera orbit keeps rider's ground anchor fixed")
+		check(depth_sorted and is_zero_approx(world.camera_yaw),"Camera rejects yaw %.2f and preserves scenery depth order" % yaw)
+	check(fixed_error<.01,"Ground/shader inverse agrees after six attempted camera headings")
+	check(anchor_error<.01,"Locked tracking camera keeps the rider ground anchor fixed")
 	world.facing = Vector2(0,1)
 	world.camera_yaw = PI/2
 	var phase_before: float = world.mounted_rider.phase
 	world.rotate_camera(0,0)
-	check(world.mounted_rider.direction_name()=="W","Stationary rider facing updates when camera looks east")
-	check(world.mounted_rider.phase==phase_before,"Camera orbit does not restart the hop")
+	check(is_zero_approx(world.camera_yaw) and world.mounted_rider.direction_name()=="N","Legacy orbit caller cannot rotate the camera or change the stationary rider view")
+	check(world.mounted_rider.phase==phase_before,"Fixed camera refresh does not restart the hop")
 	world.camera_yaw = 0
 	world.rotate_camera(0,0)
 	world.curved = true
@@ -292,7 +292,7 @@ func run() -> void:
 		var point: Vector2 = world.camera_ground+world.world_vector(Vector2(12,45))
 		var up: Vector2 = (world.City.project(world,point,5)-world.City.project(world,point)).normalized()
 		city_normal_error = maxf(city_normal_error,absf(up.dot(Vector2.RIGHT.rotated(world.surface_rotation(point)))))
-	check(city_normal_error<.001,"City walls follow the same curved surface normal at all camera headings")
+	check(city_normal_error<.001,"City layout remains aligned to the curved surface under attempted camera changes")
 	world.camera_yaw = 0
 	world.update_camera()
 	var hero_reference: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(world.Rider.ART+"hero_reference.json"))
@@ -366,7 +366,7 @@ func run() -> void:
 	await key(KEY_8,false)
 	check(not world.region_map and world.player.distance_to(Map.COAST)<1,"Destination shortcut works from the regional map")
 	world.automated = true
-	var report := {"checks":checks,"passed":checks-failures.size(),"failures":failures,"max_projection_roundtrip_error":worst,"scope":"Actual keyboard roaming, curvature controls, pause, camera alignment, inverse projection, sprite depth ordering, scenery collisions, river barrier, physical bridge crossing and continuous meadow-to-forest road travel, eight-direction mount layers and actual keyboard selection, facing retention, direction hysteresis, phase-preserving turns, crouch/push-off/flight/landing, smooth loop, idle settle, sprint cadence and frozen pause pose. Camera-relative keyboard steering, orbit/recenter/pause, six-heading inverse projection and depth sorting, original protagonist identity, main-city landmarks and physical footprints. Expanded regional routes, physical windmill journey, miniature city framing, lake and sea barriers, spatial grid/brute-force agreement and regional-map controls. No 3D nodes and no game save I/O."}
+	var report := {"checks":checks,"passed":checks-failures.size(),"failures":failures,"max_projection_roundtrip_error":worst,"scope":"Actual keyboard roaming, curvature controls, pause, camera alignment, inverse projection, sprite depth ordering, scenery collisions, river barrier, physical bridge crossing and continuous meadow-to-forest road travel, eight-direction mount layers and actual keyboard selection, facing retention, direction hysteresis, phase-preserving turns, crouch/push-off/flight/landing, smooth loop, idle settle, sprint cadence and frozen pause pose. Fixed north-facing keyboard steering, Q/E lock, ignored legacy orbit calls, six attempted heading changes with inverse projection and depth sorting, original protagonist identity, main-city landmarks and physical footprints. Expanded regional routes, physical windmill journey, miniature city framing, lake and sea barriers, spatial grid/brute-force agreement and regional-map controls. No 3D nodes and no game save I/O."}
 	FileAccess.open(ROOT+"test_results.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  ")+"\n")
 	print("OVERWORLD CHECKS ",checks-failures.size(),"/",checks)
 	quit(0 if failures.is_empty() else 1)

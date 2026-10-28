@@ -3,11 +3,14 @@
 The overworld now treats Mosswood as a compact whole-city destination. Building
 positions and footprints use 38% of the previous horizontal scale, with a readable
 clock-hall skyline, market awnings, fountain, gardens, enclosing walls and a south
-gate. The approach shows the whole town with countryside around it. City walls
-and roofs still rotate through height-aware 2D drawing when Q/E orbit the camera.
+gate. The approach shows the whole town with countryside around it. A single
+hand-painted city illustration now replaces the geometric drawing. Its gateway
+is anchored at the existing town entrance; collision and travel remain in place.
+The redundant terrain plaza circle is removed. A soft foundation shadow and small
+grass tufts blend the painting into the road verge without covering the gateway.
 
 The navigable region is 480 × 560 map units, 3.64 times the previous area. Its
-1,494 scenery objects include painted elms, waterside willows, fir groves, limestone
+1,593 scenery objects include painted elms, waterside willows, fir groves, limestone
 outcrops, a windmill and an ivy-covered ruin. The north road crosses Riverbend's
 bridge and branches into a loop through Windsong Ridge and Ivykeep, or east to
 Willowmere Lake and Palestone Coast. Trees are kept off road corridors. Lake,
@@ -21,7 +24,7 @@ these are development shortcuts, not unlocked fast travel.
 
 ## Artwork
 
-Four original transparent cutouts were generated with the built-in imagegen tool:
+The initial four original transparent cutouts were generated with the built-in imagegen tool:
 
 - `art/region/windmill.png`
 - `art/region/ruins.png`
@@ -33,18 +36,28 @@ paths, sizes, SHA-256 hashes and alpha inspection results. Original PNGs are
 preserved byte for byte. The game crops transparent margins, reduces textures to
 at most 768 pixels high and creates mipmaps in its startup cache; it never rewrites
 the source artwork. Elm and willow art is reused from the existing
-`anime_hub_assets_v06/scenery` collection. Small bushes, the horizon and the city
-are still simplified native drawings. The city is a scale and layout prototype;
-its architecture is not final painted production art.
+`anime_hub_assets_v06/scenery` collection. Small bushes remain native drawings.
+The painted day and night panoramas
+replace the old sky drawing. Two new landmark cutouts add a watermill and
+lighthouse, and reused stalls, flowers, benches and lamps provide village dressing.
+New source paths and prompts are in `art/region/expansion_generation.json`.
+The city and three matching, smaller house illustrations are recorded in
+[architecture generation manifest](art/architecture/generation.json). Their source
+PNGs are preserved; the runtime limits house and city screen sizes.
 
-Painted scenery is camera-facing artwork. Its foot follows the curved ground and
-its size and draw order follow the camera, but it does not expose new painted
-sides during an orbit. The city uses rotating geometry. Additional scenery view
-sets would be needed for equally complete all-angle artwork.
+Painted scenery and the city each have one authored view. The camera now stays
+north-facing and tracks the player; camera rotation is disabled. Feet follow the
+curved ground, and size and draw order follow the tracking camera.
+Seventeen painted sources now use individual trunk/foundation contact pixels;
+see [ground contacts](art/ground_contacts.json). Original PNGs are unchanged.
+Wide footprints are hidden before their rear corners extend over the dome's
+horizon, with a short fade near the conservative cutoff.
 
 ## Review
 
-[Whole city](previews/miniature_mosswood.png),
+[Painted city](previews/fixed_city_day.png),
+[city at night](previews/fixed_city_night.png),
+[matching houses](previews/illustrated_hamlet.png),
 [windmill](previews/windsong_ridge.png),
 [lake](previews/willowmere_lake.png),
 [ruins](previews/ivykeep_ruins.png),

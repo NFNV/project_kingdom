@@ -56,6 +56,10 @@ func begin() -> void:
 	get_viewport().canvas_transform = Transform2D.IDENTITY
 	overworld = OVERWORLD.instantiate()
 	overworld.linked_journey = true
+	overworld.day_phase = hub.clock
+	overworld.auto_clock = hub.auto_clock
+	overworld.clock_target = hub.clock_target
+	overworld.journey_clock_changed.connect(sync_journey_clock)
 	overworld.return_requested.connect(return_to_town,CONNECT_DEFERRED)
 	overworld.save_requested.connect(save_from_overworld)
 	get_tree().root.add_child(overworld)
@@ -64,6 +68,10 @@ func begin() -> void:
 	overworld.transitioning = true
 	await fade_to(0)
 	overworld.transitioning = false
+
+func sync_journey_clock(phase: float) -> void:
+	hub.clock = phase
+	if is_instance_valid(overworld): hub.clock_target = overworld.clock_target
 
 func save_checkpoint(automatic := false) -> bool:
 	var document: Dictionary = hub.make_save_document()

@@ -43,7 +43,10 @@ Garden Square’s **southwest exit**, labelled **The Greenshire**, leads to the
 chibi overworld. Walk through the marker or approach and press **E**. The cat
 mounts the frog outside miniature Mosswood. Walk into the city’s south gate, or
 press **F** nearby, to return inside Garden Square’s southwest entrance.
-Inventory, equipment, money, quests, health and clock stay in the same journey.
+Inventory, equipment, money, quests and health stay in the same journey.
+The shared twenty-minute day/night clock advances while roaming and returns to
+town at the new time, with starry skies and lit lamps visible in the overworld.
+Press **T** there to preview the next phase.
 
 In the overworld, **WASD** roams, **Q/E** rotates the camera, **M** opens the region
 map and **F5** saves a town-side checkpoint. Continue resumes at this safe point

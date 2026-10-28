@@ -1,0 +1,72 @@
+{
+  "mode": "Built-in imagegen",
+  "created": "2026-10-28",
+  "assets": [
+    {
+      "id": "watermill_v1",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-06420f9d-ca90-494e-9f99-2cbb92e751fd.png",
+      "workspace": "art/region/watermill_v1.png",
+      "prompt": "Use case: stylized-concept. Asset type: transparent overworld game scenery cutout. Image 1 is a style reference only: preserve its cream limestone, blue slate, moss green, hand-painted anime miniature craftsmanship. New subject: A single compact countryside watermill: cream limestone cottage, mossy blue slate roof, a broad oak water wheel on the visible right side, tiny teal door, two windows, ivy, white flowers, and a small close-fitting stone foundation. No river or water background. Entire complete structure. Camera: elevated three-quarter near-orthographic view, around 20 degrees down, front and a little of right side visible; straight verticals, no leaning or crooked walls. Warm upper-left daylight. Simplify into readable masses at 120\u2013250 pixels. Single isolated complete asset centered with transparent padding; real transparent alpha, no sky, landscape, large floor tile, frame, letters or watermark. Keep shadows subtle and tightly at the foot. Do not copy the windmill or its sails.",
+      "transparent": true,
+      "size": [
+        1351,
+        1164
+      ],
+      "sha256": "cb34908922247fd79ce14692eb9a36d12e51b40387b828867a8bc941601c6386",
+      "mode": "RGBA",
+      "transparent_fraction": 0.4757,
+      "alpha_bbox": [
+        55,
+        59,
+        1301,
+        1120
+      ]
+    },
+    {
+      "id": "lighthouse_v1",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-7d2e0a44-5cea-4761-b2cf-78faf6295a99.png",
+      "workspace": "art/region/lighthouse_v1.png",
+      "prompt": "Use case: stylized-concept. Asset type: transparent overworld game scenery cutout. Image 1 is a style reference only: preserve its cream limestone, blue slate, moss green, hand-painted anime miniature craftsmanship. New subject: A single small coastal lighthouse landmark: squat ivory stone tower with a dark teal lantern room and a blue slate cap, small attached keeper's cottage, climbing ivy and a few coastal wildflowers at the foot. A compact complete miniature, charming rather than realistic, straight vertical architecture. Camera: elevated three-quarter near-orthographic view, around 20 degrees down, front and a little of right side visible; straight verticals, no leaning or crooked walls. Warm upper-left daylight. Simplify into readable masses at 120\u2013250 pixels. Single isolated complete asset centered with transparent padding; real transparent alpha, no sky, landscape, large floor tile, frame, letters or watermark. Keep shadows subtle and tightly at the foot. Do not copy the windmill or its sails.",
+      "transparent": true,
+      "size": [
+        1351,
+        1164
+      ],
+      "sha256": "0d9ea0f35a08abaaefb7f7fa0525067d229ab32bbe3f0f3d30c8218adddef9cf",
+      "mode": "RGBA",
+      "transparent_fraction": 0.6278,
+      "alpha_bbox": [
+        195,
+        32,
+        1207,
+        1144
+      ]
+    },
+    {
+      "id": "sky_day_v1",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-0bf3809d-789f-47cf-9007-204cb2dfbab7.png",
+      "workspace": "art/sky/sky_day_v1.png",
+      "prompt": "Use case: stylized-concept. Asset type: opaque sky panorama texture for a 2D chibi JRPG overworld, wide landscape framing. Subject: A wide panorama of a luminous blue summer sky, softly painted ivory cumulus clouds, pale turquoise and peach haze toward the bottom. Hand-painted countryside anime background art, broad gentle gouache strokes and subtle paper texture, serene and airy. Sky only, no land, mountains, buildings, sun or moon. Keep central and upper areas open enough for a separately rendered sun. Cloud clusters mostly at edges and in the lower half. Composition: seamless-feeling horizontal panorama; match the colors and general brightness at left and right edges for a repeating background; fill every pixel with sky. No hard borders, no UI, no letters, no watermark. The game will layer celestial objects and atmospheric effects over this image. Beautiful hand-painted animated-film background, no pixel art.",
+      "transparent": false,
+      "size": [
+        2048,
+        768
+      ],
+      "sha256": "93b068e1d27c6c6948ef2a154e233023875dcfdff0644d91c8f9b9b1bf046d33",
+      "mode": "RGB"
+    },
+    {
+      "id": "sky_night_v1",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-338d02ed-d617-460d-a543-4afec56c2148.png",
+      "workspace": "art/sky/sky_night_v1.png",
+      "prompt": "Use case: stylized-concept. Asset type: opaque sky panorama texture for a 2D chibi JRPG overworld, wide landscape framing. Subject: A wide panorama of a breathtaking peaceful night sky with hundreds of tiny warm-white stars, delicate scattered constellations, a very subtle milky starlit band, softly brushed wisps of indigo and blue-lavender clouds, deep midnight blue overhead and a gentler blue-green glow near the bottom. Ghibli-inspired hand-painted fantasy countryside sky, luminous yet restrained, dreamy gouache and watercolor, not a space photograph. Sky only, no land, mountains, buildings, moon, sun or text. Stars should be tiny and elegant, not large sparkles. Composition: seamless-feeling horizontal panorama; match the colors and general brightness at left and right edges for a repeating background; fill every pixel with sky. No hard borders, no UI, no letters, no watermark. The game will layer celestial objects and atmospheric effects over this image. Beautiful hand-painted animated-film background, no pixel art.",
+      "transparent": false,
+      "size": [
+        2048,
+        768
+      ],
+      "sha256": "4365714d315d44c38730be67fafa7af9a0686562c7a216731f17b7970cf55c8b",
+      "mode": "RGB"
+    }
+  ]
+}

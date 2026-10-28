@@ -1,0 +1,6 @@
+{
+  "checks": 8,
+  "failures": [],
+  "passed": 8,
+  "scope": "Native GPU dawn/dusk/pre-dawn/pre-dusk celestial brightness and absent-body ghost checks, with rendered city, watermill and hamlet ground-contact previews."
+}

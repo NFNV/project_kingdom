@@ -1,0 +1,6 @@
+{
+  "checks": 58,
+  "failures": [],
+  "passed": 58,
+  "scope": "Painted scenery placement and colliders, day/night resources and lighting, painted sun and moon staying fully visible and clear of HUD through all phases, celestial dial, exact twenty-minute cycle, gradual real T input and midnight wrap, pause/map freeze, actual southwest travel sharing the main RPG clock, checkpoint time persistence and return with other journey state intact."
+}

@@ -1,10 +1,28 @@
 extends Node2D
 signal return_requested
 signal save_requested
+signal journey_clock_changed(phase: float)
 var linked_journey := false
 var transitioning := false
 var gate_cooldown := .25
 # All geometry is CanvasItem drawing. Logical positions are 2D map coordinates.
+const Atmosphere := preload("res://experiments/overworld_2d_v01/atmosphere.gd")
+const Dressing := preload("res://experiments/overworld_2d_v01/region_dressing.gd")
+const ClockDial := preload("res://experiments/anime_hub_demo_v07/tools/celestial_clock.gd")
+const CYCLE_SECONDS := Atmosphere.CYCLE_SECONDS
+var day_phase := 1.0
+var auto_clock := true
+var clock_target := -1.0
+var lighting: Dictionary = Atmosphere.sample(1.0)
+var light_tint := Color.WHITE
+var night_weight := 0.0
+var lamp_weight := 0.0
+var sky_material: ShaderMaterial
+var celestial_layer: Node2D
+var moon_texture: Texture2D
+var sun_texture: Texture2D
+var clock_dial: Control
+var dressed_props: Array[Dictionary] = []
 const City := preload("res://experiments/overworld_2d_v01/city.gd")
 const Rider := preload("res://experiments/overworld_2d_v01/mounted_rider.gd")
 const Map := preload("res://experiments/overworld_2d_v01/layout.gd")
@@ -43,6 +61,9 @@ var notice_left := 6.0
 var props: Array[Dictionary] = []
 var visible_props: Array[Dictionary] = []
 var textures: Dictionary = {}
+var texture_cache: Dictionary = {}
+var ground_contacts: Dictionary = {}
+var texture_feet: Dictionary = {}
 var terrain: ColorRect
 var scenery: Node2D
 var hud: Node2D
@@ -58,14 +79,25 @@ func _ready() -> void:
 	get_window().title = "Project Kingdom — 2D overworld laboratory"
 	Engine.max_fps = 60
 	font = ThemeDB.fallback_font
+	ground_contacts = JSON.parse_string(FileAccess.get_file_as_string(ROOT+"art/ground_contacts.json")).assets
 	mounted_rider = Rider.new()
-	for i in 3:
-		var sky := TextureRect.new()
-		sky.texture = load(ROOT+"art/sky.svg")
-		sky.size = Vector2(1920,1080)
-		sky.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		add_child(sky)
-		sky_tiles.append(sky)
+	moon_texture = cache_texture(ROOT+"art/sky/moon_full_v1.png")
+	sun_texture = cache_texture(ROOT+"art/sky/sun_painted_v1.png")
+	var sky := TextureRect.new()
+	sky.texture = load(ROOT+"art/sky/sky_day_v1.png")
+	sky.size = Vector2(1920,1080)
+	sky.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	sky_material = ShaderMaterial.new()
+	sky_material.shader = load(ROOT+"sky.gdshader")
+	sky_material.set_shader_parameter("focal",FOCAL)
+	sky_material.set_shader_parameter("day_sky",sky.texture)
+	sky_material.set_shader_parameter("night_sky",load(ROOT+"art/sky/sky_night_v1.png"))
+	sky.material = sky_material
+	add_child(sky)
+	sky_tiles.append(sky)
+	celestial_layer = Node2D.new()
+	celestial_layer.draw.connect(func(): Atmosphere.draw_celestials(self,celestial_layer))
+	add_child(celestial_layer)
 	terrain = ColorRect.new()
 	terrain.size = Vector2(1920,1080)
 	terrain.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -77,13 +109,9 @@ func _ready() -> void:
 		textures[id] = load(ROOT+"art/"+id+".svg")
 	# Cache modest gameplay textures with mipmaps; keep original PNGs untouched.
 	for pair in [["oak","res://experiments/anime_hub_assets_v06/scenery/elm_tree.png"],["willow","res://experiments/anime_hub_assets_v06/scenery/willow_tree.png"],["pine",ROOT+"art/region/pine_grove.png"],["rock",ROOT+"art/region/coastal_rocks.png"],["windmill",ROOT+"art/region/windmill.png"],["ruins",ROOT+"art/region/ruins.png"]]:
-		var source: Texture2D = load(pair[1])
-		var image := source.get_image()
-		image = image.get_region(image.get_used_rect())
-		if image.get_height()>768:
-			image.resize(roundi(image.get_width()*768.0/image.get_height()),768,Image.INTERPOLATE_LANCZOS)
-		image.generate_mipmaps()
-		textures[pair[0]] = ImageTexture.create_from_image(image)
+		textures[pair[0]] = cache_texture(pair[1])
+	for id in Dressing.CATALOG:
+		textures[id] = cache_texture(Dressing.CATALOG[id])
 	region_segments = Map.branch_segments()
 	build_region()
 	scenery = Node2D.new()
@@ -92,10 +120,49 @@ func _ready() -> void:
 	hud = Node2D.new()
 	hud.draw.connect(draw_hud)
 	add_child(hud)
+	clock_dial = ClockDial.new()
+	clock_dial.position = Vector2(859,7)
+	clock_dial.scale = Vector2(.72,.72)
+	add_child(clock_dial)
+	update_lighting()
 	update_shader()
 	update_visible()
 	if "--city" in OS.get_cmdline_user_args():
 		visit(3)
+
+func cache_texture(path: String) -> Texture2D:
+	if texture_cache.has(path): return texture_cache[path]
+	var source: Texture2D = load(path)
+	var image := source.get_image()
+	var crop := image.get_used_rect()
+	image = image.get_region(crop)
+	if image.get_height()>768:
+		image.resize(roundi(image.get_width()*768.0/image.get_height()),768,Image.INTERPOLATE_LANCZOS)
+	image.generate_mipmaps()
+	var texture := ImageTexture.create_from_image(image)
+	texture_cache[path] = texture
+	if ground_contacts.has(path):
+		var point: Array = ground_contacts[path].contact_pixel
+		texture_feet[texture.get_instance_id()] = (Vector2(point[0],point[1])-Vector2(crop.position))/Vector2(crop.size)
+	return texture
+
+func update_lighting() -> void:
+	lighting = Atmosphere.sample(day_phase)
+	light_tint = lighting.tint
+	night_weight = lighting.night
+	lamp_weight = lighting.lamps
+	mounted_rider.light_tint = light_tint.lerp(Color("d0caab"),night_weight*.16)
+	clock_dial.set_phase(day_phase)
+
+func advance_day(delta: float) -> void:
+	if clock_target>=0:
+		day_phase = move_toward(day_phase,clock_target,delta*.5)
+		if is_equal_approx(day_phase,clock_target):
+			day_phase = fposmod(day_phase,4)
+			clock_target = -1
+	elif auto_clock:
+		day_phase = fposmod(day_phase+delta*4.0/CYCLE_SECONDS,4)
+	if linked_journey: journey_clock_changed.emit(day_phase)
 
 func bend() -> float:
 	return curvature if curved else 0.0
@@ -116,10 +183,12 @@ func world_vector(vector: Vector2) -> Vector2:
 	return camera_right()*vector.x+camera_forward()*vector.y
 
 func update_camera() -> void:
+	# The current scenery has one authored angle. Keep that composition fixed.
+	camera_yaw = 0.0
 	camera_ground = player-camera_forward()*CAMERA_LEAD
 
-func rotate_camera(axis: float, delta: float) -> void:
-	camera_yaw = wrapf(camera_yaw+axis*delta*1.25,-PI,PI)
+func rotate_camera(_axis: float, _delta: float) -> void:
+	# Retained for existing preview callers; camera orbit is disabled.
 	update_camera()
 	mounted_rider.set_direction(view_vector(facing))
 
@@ -143,6 +212,7 @@ func inverse_ground(screen: Vector2) -> Vector2:
 func build_region() -> void:
 	props.clear()
 	prop_grid.clear()
+	dressed_props = Dressing.props()
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 27102026
 	var landmarks := Map.landmarks()
@@ -154,6 +224,7 @@ func build_region() -> void:
 			continue
 		if p.distance_to(Map.WINDMILL)<18 or p.distance_to(Map.RUINS)<16:
 			continue
+		if dressed_props.any(func(item: Dictionary): return p.distance_squared_to(item.p)<pow(item.radius+4.5,2)): continue
 		var kind := "pine" if p.y>155 and p.x<65 else "oak"
 		if absf(p.y-Map.river_z(p.x))<24 or absf(Map.lake_distance(p)-1)<.35:
 			kind = "willow"
@@ -167,6 +238,7 @@ func build_region() -> void:
 	for i in 12:
 		var p := Vector2(Map.coast_x(285+i*12)-9,285+i*12)
 		props.append({"p":p,"kind":"rock","height":2.6,"radius":1.0,"tint":Color.WHITE,"phase":0.0})
+	props.append_array(dressed_props)
 	props.append_array(City.props())
 	for item in props:
 		item["lod"] = posmod(hash(item.p),4)
@@ -215,14 +287,12 @@ func _physics_process(delta: float) -> void:
 	if paused or region_map or transitioning:
 		return
 	clock += delta
+	advance_day(delta)
 	gate_cooldown = maxf(0,gate_cooldown-delta)
 	notice_left = maxf(0,notice_left-delta)
 	bound_hint = maxf(0,bound_hint-delta)
 	var direction := intent
-	var rotation := camera_spin
-	if not automated:
-		rotation = float(Input.is_physical_key_pressed(KEY_E))-float(Input.is_physical_key_pressed(KEY_Q))
-	rotate_camera(rotation,delta)
+	update_camera()
 	if not automated:
 		direction = Vector2(float(Input.is_physical_key_pressed(KEY_D) or Input.is_physical_key_pressed(KEY_RIGHT))-float(Input.is_physical_key_pressed(KEY_A) or Input.is_physical_key_pressed(KEY_LEFT)),float(Input.is_physical_key_pressed(KEY_W) or Input.is_physical_key_pressed(KEY_UP))-float(Input.is_physical_key_pressed(KEY_S) or Input.is_physical_key_pressed(KEY_DOWN)))
 		direction = world_vector(direction)
@@ -262,19 +332,28 @@ func _process(_delta: float) -> void:
 	terrain.visible = not region_map
 	scenery.visible = not region_map
 	for sky in sky_tiles: sky.visible = not region_map
+	celestial_layer.visible = not region_map
+	clock_dial.visible = not region_map
 	if region_map:
 		hud.queue_redraw()
 		return
-	var pan := fposmod(camera_yaw/TAU*1920,1920)
-	for i in sky_tiles.size():
-		sky_tiles[i].position.x = (i-1)*1920-pan
+	update_lighting()
+	celestial_layer.queue_redraw()
 	update_shader()
 	update_visible()
 	scenery.queue_redraw()
 	hud.queue_redraw()
 
 func update_shader() -> void:
+	sky_material.set_shader_parameter("camera_yaw",camera_yaw)
+	sky_material.set_shader_parameter("world_time",clock)
+	sky_material.set_shader_parameter("night",night_weight)
+	sky_material.set_shader_parameter("twilight",lighting.twilight)
+	sky_material.set_shader_parameter("sky_tint",lighting.sky_tint)
 	var material := terrain.material as ShaderMaterial
+	material.set_shader_parameter("terrain_tint",light_tint)
+	material.set_shader_parameter("haze_color",lighting.haze)
+	material.set_shader_parameter("night_weight",night_weight)
 	var values := {"city_center":Map.TOWN,"camera_ground":camera_ground,"camera_right":camera_right(),"camera_forward":camera_forward(),"focal":FOCAL,"camera_height":CAMERA_HEIGHT,"horizon":HORIZON,"bend":bend(),"camera_lead":CAMERA_LEAD,"world_time":clock,"grid":grid,"river_z":Map.RIVER_Z,"river_wave":Map.RIVER_WAVE,"river_rate":Map.RIVER_RATE,"river_half":Map.RIVER_HALF,"bridge_x":Map.BRIDGE_X,"bridge_half":Map.BRIDGE_HALF}
 	for key in values:
 		material.set_shader_parameter(key,values[key])
@@ -299,21 +378,45 @@ func surface_rotation(p: Vector2) -> float:
 	# outward from the dome, rather than using the screen's fixed vertical.
 	return atan(2.0*bend()*view_point(p).x)
 
+func sprite_height(item: Dictionary, depth: float) -> float:
+	var size: float = FOCAL*item.height/depth
+	var texture: Texture2D = textures.get(item.kind)
+	size = minf(size,item.get("max_height",INF))
+	if texture!=null:
+		size = minf(size,item.get("max_width",INF)*texture.get_height()/texture.get_width())
+	return size
+
+func foot_uv(item: Dictionary) -> Vector2:
+	var texture: Texture2D = textures[item.kind]
+	return texture_feet.get(texture.get_instance_id(),item.get("anchor_uv",Vector2(.5,.95 if item.kind=="bush" else .98)))
+
+func ground_clearance(item: Dictionary) -> float:
+	# A wide foundation must stay in front of the dome's tangent, not just its
+	# center point; otherwise its outer edge hangs over the sky near the rim.
+	var broad: bool = item.kind in Dressing.HOUSE_KINDS or item.kind in ["city_illustration","windmill","watermill","lighthouse","ruins","rock","pine"]
+	# The painted floor is seen from above. Its rear corners cover considerably
+	# more ground depth than a vertical billboard's center-point collider.
+	return maxf(.8,item.height*1.6) if broad else .8
+
+func include_visible(item: Dictionary, limit: float) -> void:
+	if item.get("city_geometry",false): return
+	var depth: float = view_point(item.p).y
+	if depth<4 or depth>355 or (bend()>0 and (item.p-camera_ground).length()+ground_clearance(item)>limit): return
+	if not curved and item.kind in ["oak","pine","willow","rock","bush"]:
+		var lod: int = item.get("lod",0)
+		if (lod>1 and depth>110) or (lod==1 and depth>185): return
+	var at := project(item.p)
+	var height := sprite_height(item,depth)
+	var texture: Texture2D = textures.get(item.kind)
+	var half_width := height*(texture.get_width()/float(texture.get_height()))*.5 if texture!=null else height
+	if at.x < -half_width or at.x>1920+half_width or at.y-height>1080: return
+	visible_props.append(item)
+
 func update_visible() -> void:
 	visible_props.clear()
 	var limit := horizon_radius()
-	for item in props:
-		var depth: float = view_point(item.p).y
-		if depth<4 or depth>355 or (bend()>0 and (item.p-camera_ground).length()>limit):
-			continue
-		if not curved and item.kind in ["oak","pine","willow","rock","bush"]:
-			var lod: int = item.get("lod",0)
-			if (lod>1 and depth>110) or (lod==1 and depth>185): continue
-		var at := project(item.p)
-		var height: float = FOCAL*item.height/depth
-		if at.x < -height or at.x>1920+height or at.y-height>1080:
-			continue
-		visible_props.append(item)
+	for item in props: include_visible(item,limit)
+	include_visible(City.illustration_prop(),limit)
 	visible_props.append({"p":player,"kind":"rider","height":3.5})
 	visible_props.sort_custom(func(a: Dictionary,b: Dictionary): return view_point(a.p).y>view_point(b.p).y)
 
@@ -322,37 +425,93 @@ func draw_scene() -> void:
 		var p: Vector2 = item.p
 		var at := project(p)
 		var depth := view_point(p).y
-		if item.kind=="city_building":
-			City.draw_building(self,scenery,item)
-			continue
-		if item.kind=="city_fountain":
-			City.draw_fountain(self,scenery,p)
-			continue
 		if item.kind=="rider":
 			draw_rider(at)
 			continue
-		var size: float = FOCAL*item.height/depth
+		var size: float = sprite_height(item,depth)
 		var sway := sin(clock*1.35+item.phase)*.004 if item.kind in ["oak","pine","willow"] else 0.0
-		var shade: Color = item.tint.lerp(Color("b2c9b1"),smoothstep(80,330,depth)*.7)
+		var shade: Color = (item.tint*light_tint).lerp(lighting.haze,smoothstep(80,330,depth)*.7)
 		if not curved:
 			var lod: int = item.get("lod",0)
 			if lod>1: shade.a *= 1.0-smoothstep(80,110,depth)
 			elif lod==1: shade.a *= 1.0-smoothstep(155,185,depth)
 		if bend()>0:
-			shade.a *= 1.0-smoothstep(horizon_radius()-8,horizon_radius(),(p-camera_ground).length())
+			var rim := horizon_radius()-ground_clearance(item)
+			shade.a *= 1.0-smoothstep(rim-3,rim,(p-camera_ground).length())
+		if item.kind=="lamp" and lamp_weight>.01:
+			var pool := FOCAL*3.5/depth
+			scenery.draw_set_transform(at,surface_rotation(p),Vector2(1,.35))
+			Atmosphere.glow(scenery,Vector2.ZERO,pool,lamp_weight*.24,Color("ffca78"),false)
+			scenery.draw_set_transform(Vector2.ZERO)
 		# SVG foot anchor is (80,152). Rotate about that foot, including wind,
 		# so crowns and roofs lean with the terrain without sliding the base.
 		var texture: Texture2D = textures[item.kind]
 		var dimensions := texture.get_size()
-		var painted: bool = item.kind!="bush"
-		var foot := Vector2(dimensions.x*.5,dimensions.y*(.98 if painted else .95))
+		var foot: Vector2 = dimensions*foot_uv(item)
+		if item.kind=="city_illustration":
+			draw_city_grounding(at,size,dimensions.x/dimensions.y,surface_rotation(p),shade.a,false)
+		elif texture_feet.has(texture.get_instance_id()):
+			var tree: bool = item.kind in ["oak","pine","willow"]
+			var contact_width := size*(.16 if tree else .42)*dimensions.x/dimensions.y
+			scenery.draw_set_transform(at,surface_rotation(p),Vector2(contact_width,size*(.025 if tree else .055)))
+			Atmosphere.glow(scenery,Vector2.ZERO,1,shade.a*.28,Color("293b25"),false)
+			scenery.draw_set_transform(Vector2.ZERO)
 		scenery.draw_set_transform(at,surface_rotation(p)+sway,Vector2.ONE*(size/dimensions.y))
 		scenery.draw_texture_rect(texture,Rect2(-foot,dimensions),false,shade)
 		scenery.draw_set_transform(Vector2.ZERO)
+		if item.kind=="city_illustration":
+			draw_city_grounding(at,size,dimensions.x/dimensions.y,surface_rotation(p),shade.a,true)
+		draw_prop_details(item,at,size,dimensions,foot,shade.a)
 	if grid:
 		var at := project(player)
 		scenery.draw_line(at-Vector2(15,0),at+Vector2(15,0),Color("f4d386"),2)
 		scenery.draw_line(at-Vector2(0,10),at+Vector2(0,10),Color("f4d386"),2)
+
+func draw_city_grounding(at: Vector2, size: float, aspect: float, rotation: float, opacity: float, foreground: bool) -> void:
+	# Keep the ground contact attached to the painting's foundation, not a
+	# separately projected plaza behind the billboard. The gate path stays clear.
+	var width := size*aspect
+	if not foreground:
+		scenery.draw_set_transform(at+Vector2(0,-size*.07).rotated(rotation),rotation,Vector2(width*.34,size*.11))
+		Atmosphere.glow(scenery,Vector2.ZERO,1,opacity*.30,Color("334020"),false)
+		scenery.draw_set_transform(Vector2.ZERO)
+		return
+	var grass := Color("657b3b")*light_tint
+	grass.a = opacity*.68
+	for side in [-1.0,1.0]:
+		for i in 6:
+			var t: float = side*(.18+i*.052)
+			var base := Vector2(t*width,(.075-.85*t*t)*size)
+			var length := clampf(size*.014,2.0,5.0)
+			var point := at+base.rotated(rotation)
+			for blade in [-1.0,0.0,1.0]:
+				var tip := point+Vector2(blade*length*.65,-length*(1.0-absf(blade)*.25)).rotated(rotation)
+				scenery.draw_line(point,tip,grass,clampf(size*.004,1.0,1.5),true)
+
+func draw_prop_details(item: Dictionary, at: Vector2, size: float, dimensions: Vector2, foot: Vector2, opacity: float) -> void:
+	var rotation := surface_rotation(item.p)
+	if lamp_weight>.005 and Dressing.EMITTERS.has(item.kind):
+		for uv in Dressing.EMITTERS[item.kind]:
+			var point: Vector2 = at+((uv*dimensions-foot)*size/dimensions.y).rotated(rotation)
+			var flicker := .92+.08*sin(clock*1.7+float(item.phase))
+			var radius := clampf(size*(.10 if item.kind=="lamp" else .035),2,11)
+			Atmosphere.glow(scenery,point,radius,lamp_weight*flicker*opacity)
+			if item.kind=="lighthouse" and uv.y<.4:
+				var aim := Vector2(cos(clock*.28),sin(clock*.28)*.2).rotated(rotation)
+				var end := point+aim*minf(180,size*1.4)
+				var spread := aim.orthogonal()*size*.1
+				scenery.draw_colored_polygon(PackedVector2Array([point,end+spread,end-spread]),Color(1,.87,.54,lamp_weight*.07*opacity))
+	if item.kind in ["oak","willow","pine"] and posmod(hash(item.p),5)==0 and night_weight>.05:
+		for i in 2:
+			var drift := Vector2(sin(clock*.6+item.phase+i)*11,-8-cos(clock*.4+item.phase+i)*7)
+			Atmosphere.glow(scenery,at+drift,minf(3,size*.04),night_weight*opacity*.55,Color("d9ee8f"))
+	if item.kind in ["ivy_cottage","balcony_cottage","bakery","watermill"]:
+		var uv := Vector2(.73,.07) if item.kind!="watermill" else Vector2(.29,.02)
+		var chimney: Vector2 = at+((uv*dimensions-foot)*size/dimensions.y).rotated(rotation)
+		for i in 3:
+			var age := fposmod(clock*.22+i*.33,1)
+			var point := chimney+Vector2(sin(clock*.35+i)*size*.04+age*size*.09,-age*size*.22)
+			Atmosphere.glow(scenery,point,maxf(1,size*(.015+age*.025)),(1-age)*.22*opacity,Color(.76,.80,.83),false)
 
 func draw_rider(at: Vector2) -> void:
 	mounted_rider.draw(scenery,at,FOCAL/CAMERA_LEAD*.021)
@@ -379,8 +538,8 @@ func draw_hud() -> void:
 		panel(Rect2(670,178,580,55))
 		text(Vector2(699,213),near_landmark+("  ·  F Enter Garden Square" if can_enter_town() else "  ·  F Inspect"),21)
 	panel(Rect2(28,971,1864,81))
-	text(Vector2(50,1003),"WASD / arrows  Roam     Q / E  Rotate camera     Home  North view     Shift  Faster hops     C  Curve     Esc  Pause",20)
-	text(Vector2(50,1032),"1–8 Landmarks   M Region map   F Inspect   G Grid   [ / ] Bend   Tab Minimap   R Reset   F3 Stats   F4 Rider   F11 Screen",18,Color("c3c9a8"))
+	text(Vector2(50,1003),"WASD / arrows  Roam     Shift  Faster hops     Fixed north-facing camera     C  Curve     Esc  Pause",20)
+	text(Vector2(50,1032),"1–8 Landmarks   T Next time   M Region map   F Inspect   G Grid   [ / ] Bend   Tab Minimap   R Reset   F3 Stats   F4 Rider   F11 Screen",18,Color("c3c9a8"))
 	panel(Rect2(28,875,485,66))
 	text(Vector2(48,902),"CURVATURE  "+("ON" if curved else "OFF"),18)
 	text(Vector2(48,926),"Bend %.0f%%  ·  All terrain and scenery rendered in 2D" % (curvature/MAX_BEND*100),16,Color("c3c9a8"))
@@ -399,7 +558,7 @@ func draw_hud() -> void:
 		panel(Rect2(28,150,475,128))
 		text(Vector2(48,180),"%d FPS  ·  %d visible props" % [Engine.get_frames_per_second(),visible_props.size()],21)
 		text(Vector2(48,211),"Position  %.1f, %.1f  ·  Travelled %.1f" % [player.x,player.y,distance_walked],18)
-		text(Vector2(48,242),"Camera %.0f° · 2D projection · no 3D nodes" % rad_to_deg(camera_yaw),18)
+		text(Vector2(48,242),"Fixed north view · 2D projection · no 3D nodes",18)
 	if region_map:
 		draw_region_map()
 	if paused and not region_map:
@@ -438,16 +597,19 @@ func draw_map_contents(large: bool) -> void:
 		var at := map_point(markers[i].get("location",markers[i].p),large)
 		hud.draw_circle(at,7 if large else 3,Color("496b48"))
 		if large:
-			var glyph := {2:"pine",4:"windmill",6:"ruins",7:"rock"}
+			var glyph := {2:"pine",3:"city_illustration",4:"windmill",6:"ruins",7:"rock"}
 			if glyph.has(i):
 				var texture: Texture2D = textures[glyph[i]]
 				var size := Vector2(texture.get_width()*38.0/texture.get_height(),38)
 				hud.draw_texture_rect(texture,Rect2(at-Vector2(size.x*.5,39),size),false,Color(1,1,1,.85))
-			if i==3:
-				for offset in [-11.0,0.0,11.0]:
-					hud.draw_rect(Rect2(at+Vector2(offset-4,-18),Vector2(9,15)),Color("c5b084"))
-					hud.draw_colored_polygon(PackedVector2Array([at+Vector2(offset-6,-18),at+Vector2(offset+6,-18),at+Vector2(offset,-25)]),Color("527081"))
 			text(at+Vector2(10,5),str(i+1)+" "+markers[i].short,16,Color("335140"))
+	if large:
+		for extra in [["watermill",Map.WATERMILL,"Watermill"],["lighthouse",Map.LIGHTHOUSE,"Lighthouse"]]:
+			var marker := map_point(extra[1],true)
+			var texture: Texture2D = textures[extra[0]]
+			var size := Vector2(texture.get_width()*28.0/texture.get_height(),28)
+			hud.draw_texture_rect(texture,Rect2(marker-Vector2(size.x*.5,28),size),false,Color.WHITE)
+			text(marker+Vector2(8,4),extra[2],13,Color("53694b"))
 	var at := map_point(player,large)
 	hud.draw_circle(at,6 if large else 4,Color("a84738"))
 	hud.draw_arc(at,10 if large else 7,0,TAU,24,Color("fff2c6"),2,true)
@@ -488,6 +650,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 	if transitioning or not event is InputEventKey or not event.pressed or event.echo:
 		return
 	match event.physical_keycode:
+		KEY_T: clock_target = floorf(day_phase)+1
 		KEY_C: curved = not curved
 		KEY_G: grid = not grid
 		KEY_F3: diagnostics = not diagnostics
@@ -511,9 +674,6 @@ func _unhandled_key_input(event: InputEvent) -> void:
 			camera_yaw = 0
 			paused = false
 			visit(0)
-		KEY_HOME:
-			camera_yaw = 0
-			rotate_camera(0,0)
 		KEY_F5:
 			if linked_journey:
 				save_requested.emit()

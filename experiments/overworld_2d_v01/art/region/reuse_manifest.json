@@ -1,0 +1,25 @@
+{
+  "usage": "Existing stalls, flowers, bench and lamp reused unchanged. Houses now use art/architecture paintings.",
+  "assets": [
+    {
+      "source": "res://experiments/anime_hub_assets_v06/vendors/bakery_stall.png",
+      "sha256": "610a393e194940b4735591125f604005d2515e0e6d17f9d760b666f1cee039bc"
+    },
+    {
+      "source": "res://experiments/anime_hub_assets_v06/vendors/produce_stall.png",
+      "sha256": "2c16ad1475dd2ce9ac908938acec3755e281c8c30084962a628464863a78aa3c"
+    },
+    {
+      "source": "res://experiments/anime_hub_assets_v06/scenery/flower_planter.png",
+      "sha256": "aa2232e6f878c80a9d8887611e7ec7d557a7e3bb81b4896cd92f32183a84112e"
+    },
+    {
+      "source": "res://experiments/anime_hub_assets_v06/scenery/bench.png",
+      "sha256": "b27aa8853bf957ee2443dbe98ecc07995984b381fc4604d931606362ac102dc0"
+    },
+    {
+      "source": "res://experiments/anime_hub_assets_v06/scenery/street_lamp.png",
+      "sha256": "be85e87a4a2b42d45b40efd7173424ba58dec7612b43db130fb68211d989fba6"
+    }
+  ]
+}

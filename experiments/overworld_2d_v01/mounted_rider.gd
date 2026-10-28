@@ -16,6 +16,7 @@ const KEYS := [
 	[1.00,0.0,1.0,1.0,0.0,0.0,0.0,0.0]
 ]
 const DIRECTION_NAMES := ["N","NE","E","SE","S","SW","W","NW"]
+var light_tint := Color.WHITE
 var direction_index := 0
 var mirror_view := false
 static var hero_heads: Dictionary = {}
@@ -131,7 +132,7 @@ func part(canvas: Node2D, id: String, origin: Vector2, scale: float, pivot: Vect
 	var xaxis := Vector2(cos(rotation),sin(rotation))*scale*stretch.x*flip
 	var yaxis := Vector2(-sin(rotation),cos(rotation))*scale*stretch.y
 	canvas.draw_set_transform_matrix(Transform2D(xaxis,yaxis,origin+(joint-ANCHOR+offset)*scale))
-	canvas.draw_texture_rect(textures[id],Rect2(-pivot,Vector2(256,256)),false)
+	canvas.draw_texture_rect(textures[id],Rect2(-pivot,Vector2(256,256)),false,light_tint)
 	canvas.draw_set_transform(Vector2.ZERO)
 
 func oval(canvas: Node2D, at: Vector2, size: Vector2, color: Color) -> void:
@@ -252,5 +253,5 @@ func draw_hero_head(canvas: Node2D, at: Vector2, scale: float, offset: Vector2, 
 		angle = -angle
 	var anchor := at+(Vector2(shift,110-ANCHOR.y)+offset)*scale
 	canvas.draw_set_transform(anchor,angle,Vector2.ONE*scale)
-	canvas.draw_texture_rect(texture,Rect2(-width*.5,-height,width,height),false)
+	canvas.draw_texture_rect(texture,Rect2(-width*.5,-height,width,height),false,light_tint)
 	canvas.draw_set_transform(Vector2.ZERO)
