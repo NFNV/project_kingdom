@@ -9,7 +9,8 @@ no longer starts sparring. Combat is enabled only in Briarwood Wilds.
 **Windsong Mill is now enterable from the Greenshire overworld.** Near the mill
 at Windsong Ridge, press **F** for its flower garden and backyard, then **E** at
 the front steps for the cozy hearthroom. Four friendly cat residents, a tea corner,
-fireplace and roped-off loft stairs make it a peaceful stop. The same journey and
+fireplace and three upstairs inn rooms make it a peaceful stop. Use E at the stairs,
+then E beside a bed to rest until 7 AM and restore your hearts. The same journey and
 save/load systems continue through the visit. [Mill details and previews](WINDSONG_MILL.md).
 
 ## Play

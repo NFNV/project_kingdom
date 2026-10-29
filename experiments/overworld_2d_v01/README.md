@@ -22,7 +22,8 @@ For a standalone artwork/camera preview, double-click **Play Overworld.command**
 Windsong Ridge now leads to an enterable mill garden and hearthroom. Near its
 windmill, press **F** to visit; **5** previews that landmark. Explore the backyard,
 talk to the cats, and use **E** at the mill steps to go inside. The garden's south
-gate returns beside the mill on this map. The loft stairs are closed for now.
+gate returns beside the mill on this map. Inside, E at the stairs leads to three
+cozy inn rooms; E beside a bed opens a complimentary overnight stay until 7 AM.
 [Windsong Mill guide](../anime_hub_demo_v07/WINDSONG_MILL.md).
 
 | Control | Action |

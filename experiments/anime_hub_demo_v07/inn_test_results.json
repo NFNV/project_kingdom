@@ -1,0 +1,7 @@
+{
+  "checks": 57,
+  "failures": [],
+  "native": true,
+  "passed": 57,
+  "scope": "Physical staircase/room navigation, collisions, modal cancel/confirm, day/night rendering, resting, health, save/load and return downstairs."
+}

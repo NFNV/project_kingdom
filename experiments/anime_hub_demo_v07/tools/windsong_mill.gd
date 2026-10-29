@@ -1,5 +1,5 @@
 extends Node2D
-## Two hand-authored peaceful areas, using the existing live RPG journey.
+## Hand-authored peaceful areas, using the existing live RPG journey.
 const ROOT := "res://experiments/anime_hub_demo_v07/assets/mill/"
 const GARDEN_SIZE := Vector2i(1920,1280)
 const GARDEN_LAYOUT := 2
@@ -42,11 +42,11 @@ static func floor_for(inside: bool) -> PackedVector2Array:
 
 static func exits_for(inside: bool) -> Dictionary:
  if inside:
-  return {"mill_garden":{"at":room(840,800),"to":"mill_garden","entry":"mill_room","sign":"Mill garden","label":"Front door → Mill garden"}}
+  return {"mill_garden":{"at":room(840,800),"to":"mill_garden","entry":"mill_room","sign":"Mill garden","label":"Front door → Mill garden"},"mill_loft":{"at":room(1320,600),"to":"mill_loft","entry":"mill_room","sign":"Guest rooms","label":"Stairs → Guest rooms","automatic":false}}
  return {"mill_room":{"at":MILL_DOOR,"to":"mill_room","entry":"mill_garden","sign":"Windsong Mill","label":"Enter the cozy mill","automatic":false},"overworld":{"at":GARDEN_EXIT,"to":"overworld","entry":"mill_garden","sign":"The Greenshire","label":"Garden gate → Windsong Ridge"}}
 
 static func arrival(inside: bool, entry: String) -> Vector2:
- if inside: return room(840,745)
+ if inside: return room(1290,635) if entry=="mill_loft" else room(840,745)
  return MILL_DOOR+Vector2(0,60) if entry=="mill_room" else GARDEN_ENTRY
 
 static func mill_footprint() -> PackedVector2Array:
@@ -97,18 +97,18 @@ func build_garden() -> void:
  resident("mill_grandfather","Orin · Keeper of the orchard","cat_elder",garden(425,310),"I planted this apple tree when the mill was young. Sit a while if you like. Rowan keeps the kettle warm inside.")
  landmark("mill_backyard","The flower garden",garden(1230,95),"Mint, rosemary and hollyhocks fill the little backyard. Fresh laundry catches the breeze beyond the vegetable beds.")
  landmark("mill_garden_bench","The orchard bench",garden(340,258),"A quiet seat beneath the apple tree. The sound of the windmill drifts across the garden.")
- landmark("mill_sign","Windsong Mill",MILL_DOOR+Vector2(115,90),"A mill, a warm hearth and an open door. Rowan welcomes travellers on the ground floor; the loft is closed for repairs.")
+ landmark("mill_sign","Windsong Mill",MILL_DOOR+Vector2(115,90),"A mill, a warm hearth and an open door. Rowan welcomes travellers by the hearth. Three cozy guest rooms upstairs offer a good night’s sleep.")
 
 func build_room() -> void:
  room_material = ShaderMaterial.new()
  room_material.shader = load(ROOT+"mill_room_light.gdshader")
- room_material.set_shader_parameter("night_painting",load(ROOT+"mill_interior_night_v1.png"))
+ room_material.set_shader_parameter("night_painting",load(ROOT+"mill_interior_night_v2.png"))
  hub.backgrounds[0].material = room_material
  update_lighting(hub.clock)
  # Traced against the painting: millstone, counter, sacks and stairs cannot be crossed.
  for coords in [[[420,310],[760,270],[790,310],[745,355],[470,415]],[[1050,310],[1240,355],[1305,435],[1250,465],[1060,380]],[[1270,390],[1440,470],[1460,550],[1360,570]],[[425,510],[480,530],[500,625],[470,660],[420,615]]]:
   hub._solid(polygon(coords,true))
- var miller := resident("mill_keeper","Rowan · Windsong miller","cat_baker",room(650,260),"Come in, friend. There is always a place by the fire here. The flour is fresh, the kettle is on, and the road can wait a little.")
+ var miller := resident("mill_keeper","Rowan · Windsong miller","cat_baker",room(650,260),"Come in, friend. There is always a place by the fire here. The flour is fresh, the kettle is on, and the road can wait a little. Take the stairs on the right for our three guest rooms. A bed is yours for the night, on the house.")
  miller.face_towards(room(665,415))
  hub.interactables.mill_keeper.at = room(665,410)
  # Restore the painted counter in front of the keeper's lower body. It shares
@@ -122,14 +122,13 @@ func build_room() -> void:
  for p in source: points.append(room(p.x,p.y)-counter_anchor.position)
  counter.polygon = points
  counter.uv = source
- counter.texture = load(ROOT+"mill_interior_v1.png")
+ counter.texture = load(ROOT+"mill_interior_v2.png")
  counter.material = room_material
  counter.set_meta("mill_room_painting",true)
  counter_anchor.add_child(counter)
  hub.pieces.append(counter)
  resident("mill_reader","Juniper · A travelling reader","cat_bookseller",room(1095,670),"I came for a cup of tea and stayed for the stories. On windy evenings, the timbers hum like a very old song.")
  landmark("mill_tea","A pot of meadow tea",room(520,610),"Rowan pours fragrant chamomile tea. A little warmth, a little honey, and nowhere you have to hurry.")
- landmark("mill_stairs","Stairs to the loft",room(1325,575),"The upper loft is closed for repairs. For now, make yourself at home downstairs.")
  landmark("mill_hearth","The mill hearth",room(970,390),"The kettle murmurs over a gentle fire. The stones hold their warmth long after sunset.")
 
 func _process(delta: float) -> void:
