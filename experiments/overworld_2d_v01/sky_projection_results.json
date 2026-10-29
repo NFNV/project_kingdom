@@ -1,0 +1,7 @@
+{
+  "checks": 7,
+  "failures": [],
+  "passed": 7,
+  "renderer": "forward_plus",
+  "scope": "Native GPU pixel comparisons of angular sky/terrain alignment, edge perspective, full-turn and yaw-wrap continuity, painting-seam rays, time stability and stationary night painting with star twinkle."
+}

@@ -19,6 +19,9 @@ uniform float bridge_x = 18.0;
 uniform float bridge_half = 5.5;
 uniform vec4 routes[32];
 uniform int route_count = 0;
+uniform vec4 terrain_tint = vec4(1.0);
+uniform vec4 haze_color = vec4(.66,.79,.67,1.0);
+uniform float night_weight = 0.0;
 
 float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
 float noise(vec2 p){
@@ -55,14 +58,8 @@ void fragment(){
    grass=mix(grass,vec3(.86,.80,.58)+n*.04,smoothstep(-22.0,-4.0,shore)*coast_region);
    vec3 soil=mix(vec3(.66,.53,.33),vec3(.88,.77,.51),n);
    vec3 col=mix(grass,soil,1.0-smoothstep(2.6,4.2,path));
-   float plaza_distance=length(p-city_center);
-   if(plaza_distance<6.0){
-    float paving=noise(floor(p*1.7))*.045;
-    vec3 stone=vec3(.78,.72,.53)+paving;
-    float rings=1.0-smoothstep(.06,.18,abs(fract(plaza_distance/.76)-.5));
-    stone-=rings*.065;
-    col=mix(col,stone,1.0-smoothstep(5.4,6.0,plaza_distance));
-   }
+   // The city painting already contains its plaza. A second projected circle
+   // appeared outside the cutout as the player moved past the town.
    float waterline=abs(p.y-(river_z+sin(p.x*river_rate)*river_wave));
    col=mix(col,vec3(.76,.73,.48),1.0-smoothstep(river_half,river_half+1.3,waterline));
    float water=1.0-smoothstep(river_half-.45,river_half,waterline);
@@ -91,8 +88,14 @@ void fragment(){
     float line=1.0-smoothstep(.03,.12,min(cell.x,cell.y));
     col=mix(col,vec3(.17,.32,.27),line*.5);
    }
+   col*=terrain_tint.rgb;
+   // A soft moon reflection keeps water readable without brightening the shore.
+   if(night_weight>.001){
+    float reflection=pow(max(0.0,sin(p.y*1.2+sin(p.x*.5)*.7-world_time*.4)),14.0);
+    col+=vec3(.12,.17,.23)*reflection*max(water,max(lake_water,sea))*night_weight;
+   }
    float haze=smoothstep(90.0,340.0,depth);
-   col=mix(col,vec3(.66,.79,.67),haze*.8);
+   col=mix(col,haze_color.rgb,haze*.8);
    COLOR=vec4(col,1.0-smoothstep(320.0,360.0,depth));
   }
  }

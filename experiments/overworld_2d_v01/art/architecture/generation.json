@@ -1,0 +1,82 @@
+{
+  "mode": "Built-in imagegen",
+  "created": "2026-10-28",
+  "assets": [
+    {
+      "id": "mosswood_painted_v1",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-f6c17e3a-3467-445c-a7a9-1d7ac1a5b486.png",
+      "workspace": "art/architecture/mosswood_painted_v1.png",
+      "prompt": "Use case: stylized-concept. Asset type: isolated transparent hand-drawn 2D JRPG overworld map illustration.\nSubject: One complete compact miniature walled town, Mosswood: a charming clock hall with a short clock tower in the back center, a tiny central fountain plaza, nine varied cream and pale ochre houses around it, slate-blue and a few terracotta roofs, a blue-striped bakery awning and green market awning, little gardens and round trees. A low ivory stone wall encloses the whole settlement with one clearly open gateway at the BOTTOM CENTER, a very short approach path, and a small grassy planted foundation. Every rooftop and the full outer town silhouette visible together. Wide oval-ish layout, approximately 1.5 times wider than tall, a single cohesive city map illustration.\nStyle: a handcrafted gouache and watercolor ANIME BACKGROUND DRAWING, charming countryside fantasy picture-book art. Broad matte color washes, clearly visible loose brush marks, delicate warm ink-pencil contour lines, restrained simple shading, softly simplified painted details. Cream, sage, ochre and slate blue with tiny flower accents. Flat illustrative color shapes; NOT a photoreal model, NOT a 3D render, NOT glossy, NOT a miniature product photograph, NOT realistic stone/tile microtexture.\nCamera: consistent elevated three-quarter near-orthographic view, around 30 degrees down; front and a little right side visible; straight structural verticals and level lintels, no leaning or skewing. Daylight is gentle and diffuse, no dramatic cast shadow.\nComposition: one complete single cutout centered, generous transparent padding, entire silhouette uncut. Real transparent alpha surrounding the artwork, no sky, backdrop, large terrain tile, frame, text, watermark or other separate objects. Must read clearly as a small painted map symbol at 100\u2013350 pixels.",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "sha256": "86c872b94fc80c7c3f5da83612b6f1f0166d00427f322264923356da65f191c2",
+      "transparent_fraction": 0.4303,
+      "alpha_bbox": [
+        37,
+        34,
+        1505,
+        986
+      ]
+    },
+    {
+      "id": "cottage_sage_drawn_v1",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-3d2b51ac-8fe5-4fc6-a1d9-4dbf63f27886.png",
+      "workspace": "art/architecture/cottage_sage_drawn_v1.png",
+      "prompt": "Use case: stylized-concept. Asset type: isolated transparent hand-drawn 2D JRPG overworld map illustration.\nSubject: One compact one-and-a-half-storey countryside cottage, warm ivory plaster, a muted sage-blue roof with one small dormer, a teal front door, two simple windows with white flowers, a small chimney and a little ivy. Squat storybook proportions, wide cozy silhouette, minimal grass at its foot. No fences or surrounding scene.\nStyle: a handcrafted gouache and watercolor ANIME BACKGROUND DRAWING, charming countryside fantasy picture-book art. Broad matte color washes, clearly visible loose brush marks, delicate warm ink-pencil contour lines, restrained simple shading, softly simplified painted details. Cream, sage, ochre and slate blue with tiny flower accents. Flat illustrative color shapes; NOT a photoreal model, NOT a 3D render, NOT glossy, NOT a miniature product photograph, NOT realistic stone/tile microtexture.\nCamera: consistent elevated three-quarter near-orthographic view, around 30 degrees down; front and a little right side visible; straight structural verticals and level lintels, no leaning or skewing. Daylight is gentle and diffuse, no dramatic cast shadow.\nComposition: one complete single cutout centered, generous transparent padding, entire silhouette uncut. Real transparent alpha surrounding the artwork, no sky, backdrop, large terrain tile, frame, text, watermark or other separate objects. Must read clearly as a small painted map symbol at 100\u2013350 pixels.",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "sha256": "f51c9aed561a25e7a0b8f3ee88b3676453878392470f75140ce57c6c7a456c13",
+      "transparent_fraction": 0.5293,
+      "alpha_bbox": [
+        219,
+        58,
+        1369,
+        979
+      ]
+    },
+    {
+      "id": "cottage_ochre_drawn_v1",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-5e6e63aa-2d0c-45da-9b87-00877043229a.png",
+      "workspace": "art/architecture/cottage_ochre_drawn_v1.png",
+      "prompt": "Use case: stylized-concept. Asset type: isolated transparent hand-drawn 2D JRPG overworld map illustration.\nSubject: One compact cozy one-storey cottage with a loft, soft ochre plaster, a gently pitched terracotta roof with one small blue dormer, cream window frames, green shutters, a wooden front door and a tiny white-and-pink flower patch at its foot. Distinct low wide silhouette. No fences or surrounding scene.\nStyle: a handcrafted gouache and watercolor ANIME BACKGROUND DRAWING, charming countryside fantasy picture-book art. Broad matte color washes, clearly visible loose brush marks, delicate warm ink-pencil contour lines, restrained simple shading, softly simplified painted details. Cream, sage, ochre and slate blue with tiny flower accents. Flat illustrative color shapes; NOT a photoreal model, NOT a 3D render, NOT glossy, NOT a miniature product photograph, NOT realistic stone/tile microtexture.\nCamera: consistent elevated three-quarter near-orthographic view, around 30 degrees down; front and a little right side visible; straight structural verticals and level lintels, no leaning or skewing. Daylight is gentle and diffuse, no dramatic cast shadow.\nComposition: one complete single cutout centered, generous transparent padding, entire silhouette uncut. Real transparent alpha surrounding the artwork, no sky, backdrop, large terrain tile, frame, text, watermark or other separate objects. Must read clearly as a small painted map symbol at 100\u2013350 pixels.",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "sha256": "7d21e098432fbf34a7d62bb1e08c4f70af768ccbe1fdbb5401fd4c55822abd1f",
+      "transparent_fraction": 0.4606,
+      "alpha_bbox": [
+        77,
+        84,
+        1461,
+        958
+      ]
+    },
+    {
+      "id": "village_shop_drawn_v1",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-c60366cb-3bec-404e-8dec-da961c514614.png",
+      "workspace": "art/architecture/village_shop_drawn_v1.png",
+      "prompt": "Use case: stylized-concept. Asset type: isolated transparent hand-drawn 2D JRPG overworld map illustration.\nSubject: One small quaint village shop cottage, warm ivory plaster with a soft dusty-blue pitched roof, a blue-and-cream striped fabric awning above a wooden front door and two little shop windows, a few potted flowers and a modest chimney. A compact low storybook silhouette, one-and-a-half storeys, no text or signs with lettering. No surrounding scene.\nStyle: a handcrafted gouache and watercolor ANIME BACKGROUND DRAWING, charming countryside fantasy picture-book art. Broad matte color washes, clearly visible loose brush marks, delicate warm ink-pencil contour lines, restrained simple shading, softly simplified painted details. Cream, sage, ochre and slate blue with tiny flower accents. Flat illustrative color shapes; NOT a photoreal model, NOT a 3D render, NOT glossy, NOT a miniature product photograph, NOT realistic stone/tile microtexture.\nCamera: consistent elevated three-quarter near-orthographic view, around 30 degrees down; front and a little right side visible; straight structural verticals and level lintels, no leaning or skewing. Daylight is gentle and diffuse, no dramatic cast shadow.\nComposition: one complete single cutout centered, generous transparent padding, entire silhouette uncut. Real transparent alpha surrounding the artwork, no sky, backdrop, large terrain tile, frame, text, watermark or other separate objects. Must read clearly as a small painted map symbol at 100\u2013350 pixels.",
+      "size": [
+        1374,
+        1145
+      ],
+      "mode": "RGBA",
+      "sha256": "2431d13f17fa6a7b17b81739769c6ab6d0219c5ee6123efe9bd5a76e53df9fa5",
+      "transparent_fraction": 0.4894,
+      "alpha_bbox": [
+        191,
+        25,
+        1269,
+        1091
+      ]
+    }
+  ]
+}

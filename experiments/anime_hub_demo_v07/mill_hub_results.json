@@ -1,0 +1,6 @@
+{
+  "checks": 56,
+  "failures": [],
+  "passed": 56,
+  "scope": "Title-launched live journey, real F/E entry, garden/backyard and interior physical navigation, cat greetings, counter, closed stairs, save/load in isolated /tmp slot, retained overworld and hero identity, mill checkpoint, town return and fresh overworld departure after loading a mill save."
+}

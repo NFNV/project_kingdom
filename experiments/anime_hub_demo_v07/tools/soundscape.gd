@@ -147,9 +147,10 @@ func enter_zone(zone: String) -> void:
 		props[0].max_distance = 620
 		props[0].volume_db = -10
 		props[0].play()
-	elif zone in ["bakery","forge"]:
+	elif zone in ["bakery","forge","mill_room"]:
 		props[0].stream = streams.oven
 		props[0].position = Vector2(1381,468) if zone=="forge" else Vector2(1331,427)
+		if zone=="mill_room": props[0].position = hub.Map.Mill.room(950,270)
 		props[0].max_distance = 530
 		props[0].volume_db = -9
 		props[0].play()
@@ -163,7 +164,7 @@ func enter_zone(zone: String) -> void:
 
 func _select_music() -> void:
 	var night: bool = hub.clock>=2.65 or hub.clock<.35
-	var desired := "music_night" if night else ("music_town" if active_zone in ["town","district","bakery","forge"] else "music_woodland")
+	var desired := "music_night" if night else ("music_town" if active_zone in ["town","district","bakery","forge","mill_room"] else "music_woodland")
 	if active_zone=="wilds" and hub.combat_active and battle_hold>0:
 		desired = "music_battle"
 	request_music(desired)
@@ -209,7 +210,7 @@ func _process(delta: float) -> void:
 			music_positions[music_ids[i]] = music[i].get_playback_position()
 			music[i].stop()
 	var night := smoothstep(2.35,3.0,hub.clock) if hub.clock>=1 else 1.0-smoothstep(0,.6,hub.clock)
-	var indoors := active_zone in ["bakery","forge"]
+	var indoors := active_zone in ["bakery","forge","mill_room"]
 	beds[0].volume_db = move_toward(beds[0].volume_db,-48.0 if indoors else lerpf(-13,-34,night),delta*18)
 	beds[1].volume_db = move_toward(beds[1].volume_db,-55.0 if indoors else lerpf(-45,-12,night),delta*18)
 
@@ -241,7 +242,7 @@ func _exit_tree() -> void:
 			AudioServer.remove_bus(index)
 
 func surface_at(point: Vector2) -> String:
-	if active_zone=="bakery":
+	if active_zone in ["bakery","mill_room"]:
 		return "wood"
 	if active_zone=="forge":
 		return "stone"
@@ -253,7 +254,7 @@ func surface_at(point: Vector2) -> String:
 		return "stone"
 	if active_zone=="river" and Geometry2D.is_point_in_polygon(point,hub.Map.polygon([[780,329],[795,281],[1010,160],[1140,206],[960,325],[850,380]])):
 		return "wood"
-	return "grass" if active_zone=="trail" else "earth"
+	return "grass" if active_zone in ["trail","mill_garden"] else "earth"
 
 func footsteps(actor: Node2D, distance: float, running := false) -> void:
 	if paused or hub.transitioning or distance<=.025:

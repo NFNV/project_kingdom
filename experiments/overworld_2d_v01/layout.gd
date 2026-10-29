@@ -8,6 +8,8 @@ const WINDMILL := Vector2(-135,155)
 const LAKESIDE := Vector2(105,197)
 const RUINS := Vector2(-80,315)
 const COAST := Vector2(165,350)
+const WATERMILL := Vector2(-88,70)
+const LIGHTHOUSE := Vector2(174,369)
 const LAKE := Vector2(145,205)
 const LAKE_SIZE := Vector2(30,38)
 const BRIDGE_X := 18.0
@@ -21,7 +23,9 @@ const ROUTES := [
  [Vector2(3,173),Vector2(60,170),Vector2(100,180),LAKESIDE],
  [LAKESIDE,Vector2(100,260),Vector2(130,320),COAST],
  [WINDMILL,Vector2(-115,220),RUINS,Vector2(-18,295)],
- [Vector2(-47,24),Vector2(-47,15),Vector2(4,15)]
+ [Vector2(-47,24),Vector2(-47,15),Vector2(4,15)],
+ [Vector2(-47,15),Vector2(-92,30),Vector2(-98,56),Vector2(-88,62)],
+ [COAST,Vector2(169,363),Vector2(174,363)]
 ]
 
 static func landmarks() -> Array[Dictionary]:
@@ -30,10 +34,10 @@ static func landmarks() -> Array[Dictionary]:
   {"p":Vector2(18,river_z(18)-14),"name":"RIVERBEND CROSSING","short":"Bridge","description":"The timber bridge is the safe passage to the northern routes."},
   {"p":FOREST,"name":"BRIARWOOD FOREST","short":"Briarwood","description":"Deep fir groves frame a fork toward the lake and old ruins."},
   {"p":TOWN+Vector2(15,-25),"location":TOWN,"name":"MOSSWOOD","short":"Mosswood","description":"Clock Hall, Garden Square and the market nestle inside the town walls."},
-  {"p":WINDMILL+Vector2(10,-15),"location":WINDMILL,"name":"WINDSONG RIDGE","short":"Windmill","description":"A cream-stone mill watches over the western meadows."},
+  {"p":WINDMILL+Vector2(10,-15),"location":WINDMILL,"name":"WINDSONG RIDGE","short":"Windmill","description":"A cream-stone mill and a tiny market hamlet watch over the western meadows."},
   {"p":LAKESIDE,"name":"WILLOWMERE LAKE","short":"Willowmere","description":"Follow the shore path south or continue north toward the coast."},
   {"p":RUINS+Vector2(10,-16),"location":RUINS,"name":"IVYKEEP RUINS","short":"Ivykeep","description":"An ivy-covered arch is all that remains of the old watch keep."},
-  {"p":COAST,"name":"PALESTONE COAST","short":"Coast","description":"The eastern road ends at pale rocks and an open sea."}
+  {"p":COAST,"name":"PALESTONE COAST","short":"Coast","description":"A little lighthouse watches over the pale rocks and open sea."}
  ]
 
 static func branch_segments() -> Array[Vector4]:

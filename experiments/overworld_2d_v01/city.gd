@@ -1,5 +1,5 @@
 extends RefCounted
-# Height-aware CanvasItem polygons: the city can be viewed from every heading.
+# City layout/colliders and legacy polygon study; the active map uses illustration_prop().
 const CENTER := Vector2(-47,39)
 const SCALE := .38
 const HEIGHT_SCALE := .5
@@ -31,7 +31,12 @@ static func props() -> Array[Dictionary]:
 		result.append({"p":CENTER+wall[1],"kind":"city_building","id":wall[0],"dims":wall[2],"wall_height":wall[3],"height":wall[3]+.2,"heading":0.0,"style":"wall","radius":1.0,"tint":Color.WHITE,"phase":0.0})
 	for offset in [Vector2(-10,8),Vector2(10,8),Vector2(-10,-8),Vector2(10,-8)]:
 		result.append({"p":CENTER+offset,"kind":"oak","height":2.9,"radius":.65,"tint":Color.WHITE,"phase":offset.x})
+	for item in result: item["city_geometry"] = true
 	return result
+
+static func illustration_prop() -> Dictionary:
+	# Its painted south gate is the foot anchor, shared with the actual portal.
+	return {"p":GATE,"kind":"city_illustration","height":13.0,"max_height":340.0,"max_width":520.0,"anchor_uv":Vector2(.5,.84),"tint":Color.WHITE,"phase":0.0}
 
 static func local(item: Dictionary, p: Vector2) -> Vector2:
 	return item.p+p.rotated(item.heading)
@@ -47,7 +52,7 @@ static func project(world: Node2D, p: Vector2, height := 0.0) -> Vector2:
 	# Height follows the same local surface normal as the surrounding scenery.
 	return world.project(p)+Vector2.UP.rotated(world.surface_rotation(p))*world.FOCAL*height/depth
 
-static func polygon(world: Node2D, canvas: Node2D, points: Array, color: Color, outline := true) -> void:
+static func polygon(world: Node2D, canvas: Node2D, points: Array, color: Color, outline := true, emission := 0.0) -> void:
 	var projected := PackedVector2Array()
 	for point in points:
 		var screen: Vector2 = project(world,point[0],point[1])
@@ -56,13 +61,14 @@ static func polygon(world: Node2D, canvas: Node2D, points: Array, color: Color, 
 	# Edge-on walls/windows can collapse to a line during a full orbit.
 	if Geometry2D.triangulate_polygon(projected).is_empty():
 		return
+	color = (color*world.light_tint).lerp(Color("ffd28b"),emission*.9)
 	canvas.draw_colored_polygon(projected,color)
 	if outline:
 		projected.append(projected[0])
 		canvas.draw_polyline(projected,Color(color.r*.68,color.g*.68,color.b*.68,color.a),1.2,false)
 
-static func wall_patch(world: Node2D, canvas: Node2D, a: Vector2, b: Vector2, left: float, right: float, bottom: float, top: float, color: Color) -> void:
-	polygon(world,canvas,[[a.lerp(b,left),bottom],[a.lerp(b,right),bottom],[a.lerp(b,right),top],[a.lerp(b,left),top]],color,false)
+static func wall_patch(world: Node2D, canvas: Node2D, a: Vector2, b: Vector2, left: float, right: float, bottom: float, top: float, color: Color, emission := 0.0) -> void:
+	polygon(world,canvas,[[a.lerp(b,left),bottom],[a.lerp(b,right),bottom],[a.lerp(b,right),top],[a.lerp(b,left),top ]],color,false,emission)
 
 static func draw_building(world: Node2D, canvas: Node2D, item: Dictionary) -> void:
 	var w: float = item.dims.x*.5
@@ -84,7 +90,7 @@ static func draw_building(world: Node2D, canvas: Node2D, item: Dictionary) -> vo
 			wall_patch(world,canvas,a,b,0,1,h-.25,h,Color("f0dfb1"))
 			for joint in range(1,maxi(2,int(a.distance_to(b)/1.5))):
 				var at: Vector2 = a.lerp(b,joint/float(maxi(2,int(a.distance_to(b)/1.5))))
-				canvas.draw_line(project(world,at,.3),project(world,at,h-.25),Color("bba985"),.7,false)
+				canvas.draw_line(project(world,at,.3),project(world,at,h-.25),Color("bba985")*world.light_tint,.7,false)
 			continue
 		var window_top := h*.75
 		if item.style=="tower":
@@ -98,11 +104,11 @@ static func draw_building(world: Node2D, canvas: Node2D, item: Dictionary) -> vo
 		else:
 			for pos in [.15,.7]:
 				wall_patch(world,canvas,a,b,pos,pos+.15,h*.46,window_top,Color("f5e8bf"))
-				wall_patch(world,canvas,a,b,pos+.025,pos+.125,h*.49,window_top-.15,Color("527d83"))
+				wall_patch(world,canvas,a,b,pos+.025,pos+.125,h*.49,window_top-.15,Color("527d83"),world.lamp_weight)
 				wall_patch(world,canvas,a,b,pos-.025,pos+.175,h*.4,h*.46,Color("739251"))
 				for t in [.0,.06,.12]:
 					var flower: Vector2 = project(world,a.lerp(b,pos+t),h*.45)
-					canvas.draw_circle(flower,.9,Color("e5b3a5"))
+					canvas.draw_circle(flower,.9,Color("e5b3a5")*world.light_tint)
 			if i==0:
 				wall_patch(world,canvas,a,b,.41,.59,.7,h*.49,Color("8b6c45"))
 				wall_patch(world,canvas,a,b,.44,.56,.75,h*.46,Color("3f6d69"))
@@ -134,7 +140,7 @@ static func draw_building(world: Node2D, canvas: Node2D, item: Dictionary) -> vo
 		for t in [.25,.5,.75]:
 			var c0: Vector2 = roof.p[0][0].lerp(roof.p[3][0],t)
 			var c1: Vector2 = roof.p[1][0].lerp(roof.p[2][0],t)
-			canvas.draw_line(project(world,c0,h+rise*t),project(world,c1,h+rise*t),Color("6f8796"),.7,false)
+			canvas.draw_line(project(world,c0,h+rise*t),project(world,c1,h+rise*t),Color("6f8796")*world.light_tint,.7,false)
 
 static func draw_fountain(world: Node2D, canvas: Node2D, p: Vector2) -> void:
 	for ring in [[2.8,.1,Color("b9ad8c")],[2.5,.55,Color("e3d4ab")],[2.1,.65,Color("6bb1af")],[1.0,2.0,Color("dfd3b0")],[.75,2.2,Color("78b7b0")]]:

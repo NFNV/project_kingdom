@@ -1,0 +1,20 @@
+{
+  "mode": "RGBA",
+  "created": "2026-10-28",
+  "asset": "moon_full_v1.png",
+  "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-d079fc5d-c8c8-48fe-b966-29786c1447ec.png",
+  "prompt": "Use case: stylized-concept.\nAsset type: transparent 2D moon illustration for the night sky of a charming hand-painted anime fantasy JRPG.\nPrimary request: one enormous, beautiful FULL MOON, a complete round lunar disc painted by hand. Soft luminous ivory, pale buttercream and pearl tones, subtle lavender-blue lunar seas and a few broad softly brushed craters. Elegant gouache and watercolor brush texture, gentle animated-film background illustration in the spirit of Ghibli countryside skies. Clearly an illustrated drawing, with tasteful simplified shapes and painterly depth.\nComposition: the single full circular moon centered, nearly filling a square canvas, a small clean transparent margin on all sides. Keep it circular and uncropped. Calm, softly uneven painted edge; enough surface detail to look lovely at 320 pixels in a 1080p game.\nLighting: softly self-luminous, gentle tonal variation across the disc, no dramatic side shadow.\nConstraints: genuine transparent alpha outside the disc; no sky, clouds, stars, landscapes, other objects, frames, text or watermark. No face, eyes or smile. No crescent, no cutout bite, no photorealistic NASA texture, no 3D render, no large baked glow halo; the game adds a subtle glow separately.",
+  "render_diameter_at_1080p": 380,
+  "usage": "Transparent painting replacing the geometric crescent; original preserved, cached with runtime cropping and mipmaps.",
+  "size": [
+    1254,
+    1254
+  ],
+  "sha256": "46ea8399d5c6f3028b32eef94f357314946b560aec5b9f105ee145c1770e7e15",
+  "alpha_bbox": [
+    0,
+    0,
+    1251,
+    1254
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "mode": "Built-in imagegen",
+  "created": "2026-10-28",
+  "assets": [
+    {
+      "id": "mill_garden_v1",
+      "prompt": "Use case: stylized-concept. Asset type: painted 2D RPG playable garden background. Create a beautiful wide 3:2 landscape background for a cozy countryside anime game, elevated fixed isometric camera about 35 degrees down, orthographic with no horizon or sky. Entire image is a gently landscaped green-grass garden surrounding a small countryside WINDMILL THAT WILL BE ADDED SEPARATELY: do not draw any windmill, house, building or people. Preserve a large empty grassy footprint near the center, about x=47% and y=50%. A broad soft beige footpath enters at the bottom center and leads toward that empty center. A looping garden path goes around the right side to a charming backyard at the upper right, with flower beds of white daisies, lavender, pink hollyhocks, a tiny herb and vegetable patch, white picket fencing, a wooden garden gate, a clothesline along the far edge, a small picnic table near the upper-right boundary, a watering can, low fieldstone borders. A quiet apple tree and bench on the upper left, a few lush trees and shrubs along the outer image edges. Keep the middle and lower half spacious and unobstructed for walking and characters. Short soft grass texture and irregular natural patches, charming handmade gouache and watercolor anime background painting with delicate warm pencil contours, sage, fresh spring green, cream stone, pale pink and buttery sunlight. Matte painted look, no 3D render or photographic textures. Gentle diffuse daylight, no extreme shadow. The whole garden is seen from above as a coherent ground plane, straight level fences, no floating objects, no tilted structures. No UI, labels, captions, lettering, watermark, characters or animals. Fill entire frame with the environment, no border or blank margin.",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-ae17b2c0-deeb-45be-82aa-fd8041caa146.png",
+      "workspace": "mill_garden_v1.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode_image": "RGB",
+      "sha256": "3e1f84398102b4af442b797a3282c19422f70739c283ede761c2cdb9fd409df8"
+    },
+    {
+      "id": "mill_interior_v1",
+      "prompt": "Use case: stylized-concept. Asset type: hand-painted 2D RPG enterable mill ground-floor background. Create a cozy handcrafted anime countryside WINDMILL INTERIOR, a wide 16:9 image, fixed elevated isometric cutaway camera about 35 degrees down, orthographic, entirely visible roomy ground floor with the front walls removed. A rounded warm cream-stone mill room, honey-colored timber posts and beams, a beautiful oak plank floor and a broad unobstructed central walking area. Back wall has small sunlit arched windows, flour sacks and a few shelves of jars; a big vertical timber drive shaft and old millstone safely near the upper-left perimeter. A welcoming compact wooden service counter at the BACK LEFT with an empty staff space behind it for a cat miller NPC to be added separately; no character. A stone fireplace glowing gently at the back, a kettle, hanging herbs, a little round tea table and two chairs near the left edge, a woven sage rug in the open center. Along the BACK RIGHT wall, clearly readable wooden STAIRS climb toward a dark upper loft doorway that disappears above the cutaway; the second floor itself is not shown. A small rope barrier at the stairs. Place furniture against the perimeter; leave the center and bottom-center entry route very open. Bottom center has a small doorstep and green doormat suggesting the exit to the garden. No people or animals, no UI or lettering. Style: matte traditional gouache and watercolor storybook anime background drawing, delicate warm pencil contours, visible brush texture, inviting amber lamplight, cream, sage, warm oak and muted terracotta, soft natural shadows. Charming but structurally straight, no warped stairs or crooked counter, no fisheye, no cinematic perspective, no 3D-render look, no photoreal textures. Entire room and cutaway silhouette fit inside image with a muted deep forest green backdrop outside the room, no frame, logos or watermark.",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-e9a01b1f-807c-49fc-9d0c-e6f5c544e9a1.png",
+      "workspace": "mill_interior_v1.png",
+      "size": [
+        1672,
+        941
+      ],
+      "mode_image": "RGB",
+      "sha256": "65ed1c31a697ab58537dfde04832fa9fff404d983827b31e44a090d1632ee2a6"
+    },
+    {
+      "id": "mill_garden_v2",
+      "prompt": "Use case: precise-object-edit. Edit target: the attached garden background. Change ONLY the closed wooden picket garden gate at the upper right, between the lavender barrel and vegetable garden. Make this gate fully OPEN, swung away against the adjoining fence, leaving a clear wide gap and a connected dirt footpath from the lower-right curved path into the fenced backyard. Keep the fence, flower beds, vegetables, table, clothesline, lighting, camera angle, image framing and every other area unchanged. Do not add buildings or people. Preserve the exact same hand-painted anime garden style and the clear empty central grass footprint.",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-215348d2-596f-481a-b527-03ef2d4d9e0f.png",
+      "workspace": "mill_garden_v2.png",
+      "edit_reference": "mill_garden_v1.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode_image": "RGB",
+      "sha256": "d7f74b27c3a1f81608a1005fc7c09ea1f73823c2490cf2a2ec599c1e553c0a5a"
+    }
+  ]
+}

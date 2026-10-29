@@ -275,9 +275,9 @@ func label(text: String, at: Vector2, font_size: int, parent: Node, width := 0.0
 
 func refresh() -> void:
 	location_label.text = hub.zone_title()
-	location_subtitle.text = {"town":"North  →  Northgate  /  Southeast  →  Forest","trail":"Old elm paths  /  Riverbend to the southeast","river":"Across the bridge  →  Briarwood Wilds","bakery":"Warm bread, meadow tea, and a place to rest","wilds":"Four clearings  /  West trail to Riverbend","district":"Sunstone Plaza  /  Market Lane  →  Emberforge","forge":"Tomas the smith  /  Gear, stories and warm embers"}[hub.zone]
+	location_subtitle.text = {"town":"SW → Greenshire · N → Northgate · SE → Forest","trail":"Old elm paths  /  Riverbend to the southeast","river":"Across the bridge  →  Briarwood Wilds","bakery":"Warm bread, meadow tea, and a place to rest","wilds":"Four clearings  /  West trail to Riverbend","district":"Sunstone Plaza  /  Market Lane  →  Emberforge","forge":"Tomas the smith  /  Gear, stories and warm embers","mill_garden":"Flowers, an orchard and a warm welcome","mill_room":"Rowan's kettle  /  A peaceful place beside the fire"}[hub.zone]
 	combat_panel.visible = hub.zone=="wilds"
-	skill_panel.visible = hub.zone not in ["bakery","forge"]
+	skill_panel.visible = hub.zone not in ["bakery","forge","mill_garden","mill_room"]
 	skill_panel.position.y = 310 if hub.zone=="wilds" else 195
 	skill_button.disabled = hub.peaceful_mode or hub.player.skill_cooldown>0 or not hub.player.active or int(hub.state.stats().attack)<=0
 	skill_bar.max_value = float(hub.state.stats().recharge)
@@ -298,6 +298,9 @@ func refresh() -> void:
 		objective.text = "Explore Sunstone Plaza, Linden Park and the old town hall."
 		status_label.text = "%d / 3 places visited  ·  The streets are peaceful" % hub.district_places.size()
 		forest_map.queue_redraw()
+	elif hub.zone in ["mill_garden","mill_room"]:
+		objective.text = "Explore the backyard, meet the cats, or step inside Windsong Mill." if hub.zone=="mill_garden" else "Talk to Rowan by the counter, enjoy the tea corner and warm hearth."
+		status_label.text = "South gate → The Greenshire" if hub.zone=="mill_garden" else "The upper loft is closed for repairs · Front door → Garden"
 	elif hub.zone=="wilds":
 		objective.text = "Drive the dog bandits from the four forest clearings." if hub.combat_active else "Briarwood is quiet. Explore or take the western trail home."
 		status_label.text = "%d / 12 bandits defeated  ·  %d coins" % [hub.forest_defeated.size(),hub.coins]
@@ -319,6 +322,9 @@ func refresh() -> void:
 	elif hub.state.tracked_quest=="morning_rounds":
 		objective.text = hub.OBJECTIVES[hub.quest_stage]
 		status_label.text = "%d / 5 deliveries  ·  J journal" % mini(hub.quest_stage,5)
+	if hub.zone in ["mill_garden","mill_room"]:
+		objective.text = "Explore the backyard, meet the cats, or step inside Windsong Mill." if hub.zone=="mill_garden" else "A warm hearth, meadow tea and Rowan's stories."
+		status_label.text = "%d coins · I satchel · J journal · F5 save" % hub.coins
 	debug_label.visible = debug_visible
 	debug_label.text = "%d FPS  ·  1920 × 1080  ·  %s  ·  F3 debug" % [Engine.get_frames_per_second(),hub.zone]
 	var suffix := ""
@@ -341,10 +347,16 @@ func _process(delta: float) -> void:
 	notice_left = maxf(0,notice_left-delta)
 	if is_instance_valid(notice):
 		notice.visible = notice_left>0
+	# The compact garden can put the cat in the journal card's corner. Keep
+	# the character visible there; J still opens the full journal normally.
+	if is_instance_valid(hub.player):
+		var at: Vector2 = hub.player.get_global_transform_with_canvas().origin
+		var hero_rect := Rect2(at-Vector2(28,95),Vector2(56,115))
+		journal_panel.visible = hub.zone!="mill_garden" or not journal_panel.get_rect().grow(12).intersects(hero_rect)
 
 
 func show_notice(message: String) -> void:
-	notice.position.y = 54 if hub.paused or hub.shopping else 744
+	notice.position.y = 54 if hub.paused or hub.shopping else (925 if hub.zone in ["mill_garden","mill_room"] else 744)
 	notice_text.text = message
 	notice_left = 4.0
 	notice.show()

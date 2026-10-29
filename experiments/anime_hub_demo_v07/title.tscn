@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://8bwy41m4pit7"]
 
-[ext_resource type="Script" path="res://experiments/anime_hub_demo_v07/tools/title_screen.gd" id="1"]
+[ext_resource type="Script" uid="uid://1r11voicjtqr" path="res://experiments/anime_hub_demo_v07/tools/title_screen.gd" id="1"]
 
-[node name="KingdomJourney" type="Node"]
+[node name="KingdomJourney" type="Node" unique_id=1246730288]
 script = ExtResource("1")

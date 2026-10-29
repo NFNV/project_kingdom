@@ -1,0 +1,294 @@
+{
+  "description": "Calibrated original-image contact points at the trunk or structural foundation, excluding decorative ground skirts and transparent padding. Originals are unchanged. Runtime converts these pixels through its cropped texture rectangle.",
+  "assets": {
+    "res://experiments/overworld_2d_v01/art/architecture/mosswood_painted_v1.png": {
+      "contact_pixel": [
+        770,
+        850
+      ],
+      "source_size": [
+        1536,
+        1024
+      ],
+      "solid_bounds": [
+        38,
+        34,
+        1505,
+        986
+      ],
+      "sha256": "86c872b94fc80c7c3f5da83612b6f1f0166d00427f322264923356da65f191c2"
+    },
+    "res://experiments/overworld_2d_v01/art/architecture/cottage_sage_drawn_v1.png": {
+      "contact_pixel": [
+        770,
+        875
+      ],
+      "source_size": [
+        1536,
+        1024
+      ],
+      "solid_bounds": [
+        219,
+        58,
+        1369,
+        978
+      ],
+      "sha256": "f51c9aed561a25e7a0b8f3ee88b3676453878392470f75140ce57c6c7a456c13"
+    },
+    "res://experiments/overworld_2d_v01/art/architecture/cottage_ochre_drawn_v1.png": {
+      "contact_pixel": [
+        768,
+        853
+      ],
+      "source_size": [
+        1536,
+        1024
+      ],
+      "solid_bounds": [
+        77,
+        84,
+        1460,
+        958
+      ],
+      "sha256": "7d21e098432fbf34a7d62bb1e08c4f70af768ccbe1fdbb5401fd4c55822abd1f"
+    },
+    "res://experiments/overworld_2d_v01/art/architecture/village_shop_drawn_v1.png": {
+      "contact_pixel": [
+        730,
+        974
+      ],
+      "source_size": [
+        1374,
+        1145
+      ],
+      "solid_bounds": [
+        191,
+        25,
+        1268,
+        1091
+      ],
+      "sha256": "2431d13f17fa6a7b17b81739769c6ab6d0219c5ee6123efe9bd5a76e53df9fa5"
+    },
+    "res://experiments/overworld_2d_v01/art/region/watermill_v1.png": {
+      "contact_pixel": [
+        675,
+        1020
+      ],
+      "source_size": [
+        1351,
+        1164
+      ],
+      "solid_bounds": [
+        55,
+        59,
+        1301,
+        1119
+      ],
+      "sha256": "cb34908922247fd79ce14692eb9a36d12e51b40387b828867a8bc941601c6386"
+    },
+    "res://experiments/overworld_2d_v01/art/region/lighthouse_v1.png": {
+      "contact_pixel": [
+        702,
+        1033
+      ],
+      "source_size": [
+        1351,
+        1164
+      ],
+      "solid_bounds": [
+        196,
+        32,
+        1207,
+        1144
+      ],
+      "sha256": "0d9ea0f35a08abaaefb7f7fa0525067d229ab32bbe3f0f3d30c8218adddef9cf"
+    },
+    "res://experiments/overworld_2d_v01/art/region/windmill.png": {
+      "contact_pixel": [
+        716,
+        1007
+      ],
+      "source_size": [
+        1351,
+        1164
+      ],
+      "solid_bounds": [
+        230,
+        22,
+        1201,
+        1116
+      ],
+      "sha256": "6e1c191e8e6f500dedbb5186642dbac68585a00fd7685893c844f39ff981e6c9"
+    },
+    "res://experiments/overworld_2d_v01/art/region/ruins.png": {
+      "contact_pixel": [
+        786,
+        831
+      ],
+      "source_size": [
+        1536,
+        1024
+      ],
+      "solid_bounds": [
+        127,
+        46,
+        1445,
+        938
+      ],
+      "sha256": "1e46c6e030db115c8c199c3204d9e1b2448ab73372881b40663f0e362decc693"
+    },
+    "res://experiments/overworld_2d_v01/art/region/pine_grove.png": {
+      "contact_pixel": [
+        616,
+        1098
+      ],
+      "source_size": [
+        1223,
+        1286
+      ],
+      "solid_bounds": [
+        141,
+        57,
+        1092,
+        1214
+      ],
+      "sha256": "f2750157e08880a711cb122ff032cf41ec4ce8c050f7105cebdeb90706f6dbd4"
+    },
+    "res://experiments/overworld_2d_v01/art/region/coastal_rocks.png": {
+      "contact_pixel": [
+        770,
+        791
+      ],
+      "source_size": [
+        1536,
+        1024
+      ],
+      "solid_bounds": [
+        45,
+        165,
+        1494,
+        901
+      ],
+      "sha256": "aaab385f9c8bac74c01dcd3ae72b1f4c0e48a63ca96d5962583eb50fbe3e2b41"
+    },
+    "res://experiments/anime_hub_assets_v06/scenery/elm_tree.png": {
+      "contact_pixel": [
+        674,
+        1064
+      ],
+      "source_size": [
+        1349,
+        1166
+      ],
+      "solid_bounds": [
+        43,
+        45,
+        1306,
+        1129
+      ],
+      "sha256": "5d7121e8f11cab18059b0b9ef43ad9bb05e904673a6054fd3da2731140983e17"
+    },
+    "res://experiments/anime_hub_assets_v06/scenery/willow_tree.png": {
+      "contact_pixel": [
+        850,
+        1090
+      ],
+      "source_size": [
+        1312,
+        1199
+      ],
+      "solid_bounds": [
+        34,
+        32,
+        1275,
+        1174
+      ],
+      "sha256": "2249a922bbd1a984b7c5403a31e0d1f0e81a09fd73020e3040c5b1f121f1b5db"
+    },
+    "res://experiments/anime_hub_assets_v06/scenery/street_lamp.png": {
+      "contact_pixel": [
+        508,
+        1423
+      ],
+      "source_size": [
+        1024,
+        1536
+      ],
+      "solid_bounds": [
+        377,
+        85,
+        638,
+        1457
+      ],
+      "sha256": "be85e87a4a2b42d45b40efd7173424ba58dec7612b43db130fb68211d989fba6"
+    },
+    "res://experiments/anime_hub_assets_v06/scenery/flower_planter.png": {
+      "contact_pixel": [
+        790,
+        892
+      ],
+      "source_size": [
+        1536,
+        1024
+      ],
+      "solid_bounds": [
+        170,
+        83,
+        1411,
+        982
+      ],
+      "sha256": "aa2232e6f878c80a9d8887611e7ec7d557a7e3bb81b4896cd92f32183a84112e"
+    },
+    "res://experiments/anime_hub_assets_v06/scenery/bench.png": {
+      "contact_pixel": [
+        762,
+        900
+      ],
+      "source_size": [
+        1536,
+        1024
+      ],
+      "solid_bounds": [
+        233,
+        47,
+        1291,
+        995
+      ],
+      "sha256": "b27aa8853bf957ee2443dbe98ecc07995984b381fc4604d931606362ac102dc0"
+    },
+    "res://experiments/anime_hub_assets_v06/vendors/bakery_stall.png": {
+      "contact_pixel": [
+        732,
+        972
+      ],
+      "source_size": [
+        1411,
+        1114
+      ],
+      "solid_bounds": [
+        205,
+        57,
+        1260,
+        1062
+      ],
+      "sha256": "610a393e194940b4735591125f604005d2515e0e6d17f9d760b666f1cee039bc"
+    },
+    "res://experiments/anime_hub_assets_v06/vendors/produce_stall.png": {
+      "contact_pixel": [
+        762,
+        902
+      ],
+      "source_size": [
+        1536,
+        1024
+      ],
+      "solid_bounds": [
+        194,
+        22,
+        1330,
+        989
+      ],
+      "sha256": "2c16ad1475dd2ce9ac908938acec3755e281c8c30084962a628464863a78aa3c"
+    }
+  }
+}

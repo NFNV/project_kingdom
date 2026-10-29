@@ -1,0 +1,6 @@
+{
+  "checks": 26,
+  "failures": [],
+  "passed": 26,
+  "scope": "Title-launched journey, physical southwest exit navigation, mounted departure, physical automatic return, real E/F/F5/M/Esc input, retained inventory/equipment/quest/clock/health, safe autosave/manual checkpoint in isolated /tmp slot, camera/HUD/audio restoration, repeat-trip protection and existing southeast forest travel."
+}

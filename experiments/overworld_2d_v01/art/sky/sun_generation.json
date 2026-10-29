@@ -1,0 +1,19 @@
+{
+  "mode": "Built-in imagegen",
+  "created": "2026-10-28",
+  "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-a1ddc1e1-0b60-43ce-a214-f8fcc570a0e7.png",
+  "workspace": "art/sky/sun_painted_v1.png",
+  "prompt": "Use case: stylized-concept. Asset type: transparent 2D game sky illustration. Primary request: a beautiful hand-painted sun for a charming countryside anime RPG, matching gouache and watercolor storybook backgrounds. Subject: a single luminous golden sun, a round warm ivory-yellow center with subtle hand-brushed pale gold and apricot washes, surrounded by a soft irregular corona and delicate short tapered golden rays. Tender, serene, magical daylight; refined traditional animation background painting, visibly handmade watercolor edges, subtle paper-like brush texture within the painted forms. It must read as the SUN in the sky, not a moon, planet, UI icon, symbol, face or realistic solar photograph. Composition: centered isolated complete sun and rays, generous transparent padding around all sides, square image. Keep a clean bright circular body, soft painterly amber perimeter, no hard vector outline. Background: actual transparent alpha everywhere outside the sun and soft rays. No sky, clouds, stars, scenery, text, watermark, face, symbols, lens flares or black background. Intended display size roughly 150-220 pixels on a 1080p screen.",
+  "size": [
+    1254,
+    1254
+  ],
+  "mode_image": "RGBA",
+  "sha256": "ba27e8ba79b3b1726a8c2f3bab40985328e84dd5aefd2456af9bf16d97088170",
+  "alpha_bbox": [
+    38,
+    24,
+    1215,
+    1212
+  ]
+}

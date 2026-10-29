@@ -1,0 +1,6 @@
+{
+  "checks": 5,
+  "failures": [],
+  "passed": 5,
+  "scope": "Native 1920x1080 day/dawn/dusk/night/pre-dawn views, actual floor sunbeam removal, window darkness, warm hearth contrast and cat-to-room scale."
+}

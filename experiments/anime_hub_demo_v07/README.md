@@ -2,8 +2,15 @@
 
 Walk as the cat adventurer through a painted anime town, a woodland trail, and
 a riverside glade, enterable bakery and blacksmith, and the large Briarwood combat forest. A 1.5× camera follows the cat
-through every area and stops at the painted scene edges. The three dog wardens are peaceful residents. Talking to Bram
+through the original areas and stops at painted scene edges; Windsong Mill uses
+wider garden framing and a complete-room interior view. The three dog wardens are peaceful residents. Talking to Bram
 no longer starts sparring. Combat is enabled only in Briarwood Wilds.
+
+**Windsong Mill is now enterable from the Greenshire overworld.** Near the mill
+at Windsong Ridge, press **F** for its flower garden and backyard, then **E** at
+the front steps for the cozy hearthroom. Four friendly cat residents, a tea corner,
+fireplace and roped-off loft stairs make it a peaceful stop. The same journey and
+save/load systems continue through the visit. [Mill details and previews](WINDSONG_MILL.md).
 
 ## Play
 
@@ -36,6 +43,23 @@ New Journey / Continue. F6 still runs the currently edited scene, which may be a
 | R | Save and return to the title menu |
 | F11 | Toggle full screen |
 | F3 | Show / hide FPS and rendering diagnostics |
+
+## The Greenshire overworld
+
+Garden Square’s **southwest exit**, labelled **The Greenshire**, leads to the
+chibi overworld. Walk through the marker or approach and press **E**. The cat
+mounts the frog outside miniature Mosswood. Walk into the city’s south gate, or
+press **F** nearby, to return inside Garden Square’s southwest entrance.
+Inventory, equipment, money, quests and health stay in the same journey.
+The shared twenty-minute day/night clock advances while roaming and returns to
+town at the new time, with starry skies and lit lamps visible in the overworld.
+Press **T** there to preview the next phase.
+
+In the overworld, **WASD** roams, **Q/E** rotates the camera, **M** opens the region
+map and **F5** saves a town-side checkpoint. Continue resumes at this safe point
+inside Garden Square; exact overworld coordinates are not saved yet. Travel
+also autosaves this checkpoint when autosaving is enabled. The southeast forest
+and north district connections retain their existing destinations.
 
 ## A complete forest quest
 
