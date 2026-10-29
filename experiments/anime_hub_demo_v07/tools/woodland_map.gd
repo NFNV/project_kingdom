@@ -2,7 +2,8 @@ extends RefCounted
 
 const Wilds := preload("res://experiments/anime_hub_demo_v07/tools/deep_forest.gd")
 const District := preload("res://experiments/anime_hub_demo_v07/tools/northgate_district.gd")
-const NAMES := {"town":"Garden Square","trail":"Mosswood Trail","river":"Riverbend Glade","bakery":"The Bluebird Bakery","wilds":"Briarwood Wilds","district":"Northgate Quarter","forge":"Emberforge Workshop"}
+const Mill := preload("res://experiments/anime_hub_demo_v07/tools/windsong_mill.gd")
+const NAMES := {"town":"Garden Square","trail":"Mosswood Trail","river":"Riverbend Glade","bakery":"The Bluebird Bakery","wilds":"Briarwood Wilds","district":"Northgate Quarter","forge":"Emberforge Workshop","mill_garden":"Windsong Mill Garden","mill_room":"Windsong Hearthroom"}
 const SOURCE_SIZE := Vector2(1672,941)
 
 
@@ -18,10 +19,13 @@ static func polygon(coords: Array) -> PackedVector2Array:
 
 
 static func world_size(zone: String) -> Vector2i:
+	if zone=="mill_garden": return Mill.GARDEN_SIZE
+	if zone=="mill_room": return Mill.ROOM_SIZE
 	return District.SIZE if zone=="district" else (Wilds.SIZE if zone=="wilds" else Vector2i(1920,1080))
 
 
 static func floor_for(zone: String) -> PackedVector2Array:
+	if zone in ["mill_garden","mill_room"]: return Mill.floor_for(zone=="mill_room")
 	if zone=="district":
 		return District.floor_polygon()
 	if zone=="wilds":
@@ -33,6 +37,7 @@ static func floor_for(zone: String) -> PackedVector2Array:
 
 
 static func exits_for(zone: String) -> Dictionary:
+	if zone in ["mill_garden","mill_room"]: return Mill.exits_for(zone=="mill_room")
 	if zone=="district":
 		return {"south":{"at":District.RETURN,"to":"town","entry":"north","sign":"Garden Square","label":"Southern avenue  →  Garden Square"},"forge":{"at":District.forge_door(),"to":"forge","entry":"district","sign":"Emberforge","label":"Enter Emberforge Workshop","automatic":false}}
 	if zone=="forge":
@@ -52,6 +57,7 @@ static func exits_for(zone: String) -> Dictionary:
 
 
 static func arrival(zone: String, entry: String) -> Vector2:
+	if zone in ["mill_garden","mill_room"]: return Mill.arrival(zone=="mill_room",entry)
 	if zone=="district":
 		return District.forge_door()+Vector2(36,18) if entry=="forge" else District.ENTRY
 	if zone=="wilds":

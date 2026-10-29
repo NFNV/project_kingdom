@@ -12,12 +12,18 @@ and clock remain in the existing live journey. The southeast forest route and
 northern district route remain available.
 
 **F5** while roaming saves that journey at a safe town-side checkpoint. Continue
-returns to Garden Square’s southwest entrance; overworld roaming coordinates
+returns to Garden Square’s southwest entrance, or the mill garden after a mill visit; overworld roaming coordinates
 are not persisted yet. Leaving town also writes this checkpoint when autosaving
 is enabled. The existing save format is unchanged.
 
 For a standalone artwork/camera preview, double-click **Play Overworld.command**, or open `world.tscn` in Godot and use
 **Run Current Scene / F6**. Project Run / F5 opens the original RPG.
+
+Windsong Ridge now leads to an enterable mill garden and hearthroom. Near its
+windmill, press **F** to visit; **5** previews that landmark. Explore the backyard,
+talk to the cats, and use **E** at the mill steps to go inside. The garden's south
+gate returns beside the mill on this map. The loft stairs are closed for now.
+[Windsong Mill guide](../anime_hub_demo_v07/WINDSONG_MILL.md).
 
 | Control | Action |
 |---|---|
@@ -27,8 +33,8 @@ For a standalone artwork/camera preview, double-click **Play Overworld.command**
 | T | Smoothly preview the next time of day |
 | Tab | Toggle minimap |
 | 1–8 | Preview meadow, bridge, forest, Mosswood, windmill, lake, ruins, coast |
-| F | Enter Garden Square near its gate when linked; otherwise inspect a place |
-| F5 | Save the linked journey at the town-side checkpoint |
+| F | Visit Windsong Mill; enter Garden Square near its gate when linked; otherwise inspect a place |
+| F5 | Save the linked journey at the town or mill-garden checkpoint |
 | Esc | Close map, or pause / resume roaming |
 | C | Compare curved and flat projection |
 | [ / ] | Adjust curvature |
@@ -193,8 +199,8 @@ Read `performance.json` and `PERFORMANCE.md` for their scope and limitations.
 This is a prototype scale/layout and art pass. The camera is deliberately fixed
 to suit the single-view paintings. Terrain heights,
 cliff occlusion, overworld encounters and quest-map integration remain future work.
-Garden Square is connected; the other region landmarks do not enter detailed
-areas yet. Saves preserve the journey at the town-side checkpoint, rather than
+Garden Square and Windsong Mill are connected; the other landmarks do not enter
+detailed areas yet. Saves preserve the journey at the town or mill-garden checkpoint, rather than
 the exact overworld coordinates. The main title scene remains the project entry.
 
 Previews: [whole city](previews/fixed_city_day.png),

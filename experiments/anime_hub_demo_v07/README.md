@@ -2,8 +2,15 @@
 
 Walk as the cat adventurer through a painted anime town, a woodland trail, and
 a riverside glade, enterable bakery and blacksmith, and the large Briarwood combat forest. A 1.5× camera follows the cat
-through every area and stops at the painted scene edges. The three dog wardens are peaceful residents. Talking to Bram
+through the original areas and stops at painted scene edges; Windsong Mill uses
+wider garden framing and a complete-room interior view. The three dog wardens are peaceful residents. Talking to Bram
 no longer starts sparring. Combat is enabled only in Briarwood Wilds.
+
+**Windsong Mill is now enterable from the Greenshire overworld.** Near the mill
+at Windsong Ridge, press **F** for its flower garden and backyard, then **E** at
+the front steps for the cozy hearthroom. Four friendly cat residents, a tea corner,
+fireplace and roped-off loft stairs make it a peaceful stop. The same journey and
+save/load systems continue through the visit. [Mill details and previews](WINDSONG_MILL.md).
 
 ## Play
 

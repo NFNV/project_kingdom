@@ -1,5 +1,6 @@
 extends Node2D
 signal return_requested
+signal mill_requested
 signal save_requested
 signal journey_clock_changed(phase: float)
 var linked_journey := false
@@ -322,6 +323,41 @@ func enter_from_town() -> void:
 func can_enter_town() -> bool:
 	return linked_journey and not paused and not region_map and not transitioning and gate_cooldown<=0 and player.distance_to(City.GATE)<6
 
+func can_enter_mill() -> bool:
+	return not paused and not region_map and not transitioning and gate_cooldown<=0 and player.distance_to(Map.WINDMILL)<22
+
+func request_mill_entry() -> void:
+	if not can_enter_mill(): return
+	transitioning = true
+	velocity = Vector2.ZERO
+	if linked_journey: mill_requested.emit()
+	else: launch_standalone_mill.call_deferred()
+
+func launch_standalone_mill() -> void:
+	# A standalone art study has no live journey to retain. Give its mill visit
+	# a separate save slot so it cannot overwrite the main RPG's progress.
+	var game := load("res://experiments/anime_hub_demo_v07/demo.tscn").instantiate() as Node2D
+	game.save_path = "user://kingdom_mill_preview.json"
+	get_tree().root.add_child(game)
+	game.clock = day_phase
+	game.auto_clock = auto_clock
+	game._load_zone("mill_garden","overworld")
+	game.dialogue_left = 0
+	game.talk_panel.hide()
+	game.ui.show_notice("Windsong Mill · Separate preview journey · E to talk or enter.")
+	get_tree().current_scene = game
+	queue_free()
+
+func enter_from_mill() -> void:
+	player = Map.WINDMILL+Vector2(10,-15)
+	velocity = Vector2.ZERO
+	gate_cooldown = 1.0
+	update_camera()
+	update_visible()
+	notice = "Windsong Mill is behind you. F near the mill visits its garden and hearthroom."
+	notice_left = 7
+	get_window().title = "Project Kingdom — The Greenshire"
+
 func request_town_entry() -> void:
 	if not can_enter_town(): return
 	transitioning = true
@@ -536,7 +572,7 @@ func draw_hud() -> void:
 	text(Vector2(50,98),"A little world to explore",29)
 	if near_landmark!="":
 		panel(Rect2(670,178,580,55))
-		text(Vector2(699,213),near_landmark+("  ·  F Enter Garden Square" if can_enter_town() else "  ·  F Inspect"),21)
+		text(Vector2(699,213),near_landmark+("  ·  F Enter Garden Square" if can_enter_town() else ("  ·  F Visit Windsong Mill" if can_enter_mill() else "  ·  F Inspect")),21)
 	panel(Rect2(28,971,1864,81))
 	text(Vector2(50,1003),"WASD / arrows  Roam     Shift  Faster hops     Fixed north-facing camera     C  Curve     Esc  Pause",20)
 	text(Vector2(50,1032),"1–8 Landmarks   T Next time   M Region map   F Inspect   G Grid   [ / ] Bend   Tab Minimap   R Reset   F3 Stats   F4 Rider   F11 Screen",18,Color("c3c9a8"))
@@ -679,6 +715,10 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				save_requested.emit()
 				get_viewport().set_input_as_handled()
 		KEY_F:
+			if can_enter_mill():
+				request_mill_entry()
+				get_viewport().set_input_as_handled()
+				return
 			if can_enter_town():
 				request_town_entry()
 				get_viewport().set_input_as_handled()

@@ -18,6 +18,7 @@ const SaveStore := preload("res://experiments/anime_hub_demo_v07/tools/save_stor
 const Loot := preload("res://experiments/anime_hub_demo_v07/tools/loot_drop.gd")
 const Forge := preload("res://experiments/anime_hub_demo_v07/tools/forge_room.gd")
 const OverworldTravel := preload("res://experiments/anime_hub_demo_v07/tools/overworld_travel.gd")
+const Mill := preload("res://experiments/anime_hub_demo_v07/tools/windsong_mill.gd")
 var overworld_travel: Node
 var state: Node
 var saves := SaveStore.new()
@@ -176,6 +177,8 @@ func _ready() -> void:
 		load_game.call_deferred()
 	if "--forge" in OS.get_cmdline_user_args():
 		_load_zone("forge","district")
+	if "--mill" in OS.get_cmdline_user_args():
+		_load_zone("mill_garden","overworld")
 	_activate_direct_session.call_deferred()
 
 func _activate_direct_session() -> void:
@@ -235,6 +238,9 @@ func _load_zone(destination: String, entry: String) -> void:
 			files.append(ART+"backgrounds/plaza_"+time.to_lower()+".png")
 	elif zone in ["bakery","forge"]:
 		FLOOR = Forge.floor_polygon() if zone=="forge" else Bakery.floor_polygon()
+	elif zone in ["mill_garden","mill_room"]:
+		FLOOR = Mill.floor_for(zone=="mill_room")
+		files = [Mill.ROOT+("mill_interior_v1.png" if zone=="mill_room" else "mill_garden_v2.png")]
 	elif zone=="district":
 		FLOOR = Map.District.floor_polygon()
 	elif zone=="wilds":
@@ -265,6 +271,8 @@ func _load_zone(destination: String, entry: String) -> void:
 		_build_bakery()
 	elif zone=="forge":
 		bakery_room = Forge.build(self)
+	elif zone in ["mill_garden","mill_room"]:
+		bakery_room = Mill.build(self,zone=="mill_room")
 	elif zone=="district":
 		Map.District.build(self)
 	elif zone=="wilds":
@@ -311,8 +319,11 @@ func _load_zone(destination: String, entry: String) -> void:
 		camera.limit_right = SIZE.x
 		camera.limit_bottom = SIZE.y
 		player.add_child(camera)
+	camera.zoom = Vector2.ONE*(1.0 if zone=="mill_garden" else 1.5)
+	camera.position = Vector2(0,-220 if zone=="mill_garden" else -55)
 	camera.limit_right = world_size.x
 	camera.limit_bottom = world_size.y
+	camera.enabled = true
 	camera.make_current()
 	camera.reset_physics_interpolation()
 	camera.reset_smoothing()
@@ -400,7 +411,7 @@ func _draw_forest_air() -> void:
 func request_travel(exit_id: String) -> void:
 	if paused or shopping or transitioning or not exits.has(exit_id):
 		return
-	if exit_id in ["bakery","forge"] or zone in ["bakery","forge"]:
+	if exit_id in ["bakery","forge","mill_room"] or zone in ["bakery","forge","mill_room"]:
 		audio.play_event("door",player.position,-5)
 	transitioning = true
 	var target: Dictionary = exits[exit_id]
@@ -409,7 +420,7 @@ func request_travel(exit_id: String) -> void:
 			overworld_travel = OverworldTravel.new()
 			overworld_travel.hub = self
 			add_child(overworld_travel)
-		overworld_travel.begin.call_deferred()
+		overworld_travel.begin.call_deferred(zone)
 		return
 	_travel.call_deferred(target["to"],target["entry"])
 
@@ -804,9 +815,12 @@ func toggle_charm() -> void:
 
 
 func make_save_document() -> Dictionary:
-	return {"format":"project_kingdom","version":SaveStore.VERSION,"state":state.snapshot(),
+	var document := {"format":"project_kingdom","version":SaveStore.VERSION,"state":state.snapshot(),
 		"player":{"zone":zone,"position":[player.position.x,player.position.y],"health":player.health,
 		"facing":[player.facing.x,player.facing.y],"skill_cooldown":player.skill_cooldown}}
+	if zone=="mill_garden": document.player.mill_garden_layout = Mill.GARDEN_LAYOUT
+	if zone=="mill_room": document.player.mill_room_layout = Mill.ROOM_LAYOUT
+	return document
 
 
 func save_game(automatic := false) -> bool:
@@ -836,6 +850,12 @@ func load_game() -> bool:
 	_load_zone(document.player.zone,"start")
 	var coords: Array = document.player.position
 	var at := Vector2(coords[0],coords[1])
+	if zone=="mill_garden" and not document.player.has("mill_garden_layout"):
+		# The first mill garden was 2400x1600. Preserve old saved positions in
+		# the compact layout before checking newly enlarged building collision.
+		at *= Vector2(Mill.GARDEN_SIZE)/Vector2(2400,1600)
+	if zone=="mill_room" and not document.player.has("mill_room_layout"):
+		at *= Vector2(Mill.ROOM_SIZE)/Vector2(1920,1080)
 	if not is_walkable(at,14):
 		# An NPC may now occupy the saved spot, or geometry may have changed.
 		var cell := _nav_cell(at)
@@ -870,10 +890,11 @@ func is_walkable(point: Vector2, padding := 20.0) -> bool:
 
 
 func _build_navigation() -> void:
-	var grid_size := Vector2i(ceili(world_size.x/32.0),ceili(world_size.y/32.0))
+	var cell_size := 16.0 if zone in ["mill_garden","mill_room"] else 32.0
+	var grid_size := Vector2i(ceili(world_size.x/cell_size),ceili(world_size.y/cell_size))
 	navigation.region = Rect2i(Vector2i.ZERO,grid_size)
-	navigation.cell_size = Vector2(32,32)
-	navigation.offset = Vector2(16,16)
+	navigation.cell_size = Vector2.ONE*cell_size
+	navigation.offset = Vector2.ONE*cell_size*.5
 	navigation.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_ONLY_IF_NO_OBSTACLES
 	navigation.update()
 	if zone in ["wilds","district"]:
@@ -886,7 +907,7 @@ func _build_navigation() -> void:
 
 
 func _nav_cell(point: Vector2) -> Vector2i:
-	var center := Vector2i((point-Vector2(16,16))/32)
+	var center := Vector2i((point-navigation.offset)/navigation.cell_size)
 	var best := Vector2i(-1,-1)
 	var best_distance := INF
 	for x in range(maxi(0,center.x-5),mini(navigation.region.size.x,center.x+6)):
@@ -925,7 +946,7 @@ func find_path(from: Vector2, to: Vector2) -> PackedVector2Array:
 
 
 func _nearby_nav_cells(point: Vector2) -> Array[Vector2i]:
-	var center := Vector2i((point-Vector2(16,16))/32)
+	var center := Vector2i((point-navigation.offset)/navigation.cell_size)
 	var cells: Array[Vector2i] = []
 	for x in range(maxi(0,center.x-3),mini(navigation.region.size.x,center.x+4)):
 		for y in range(maxi(0,center.y-3),mini(navigation.region.size.y,center.y+4)):
@@ -1026,6 +1047,9 @@ func interact(id := "") -> void:
 			district_places[id] = true
 		_say(interactables[id]["name"],interactables[id]["text"])
 		_update_hud()
+		return
+	if zone in ["mill_garden","mill_room"]:
+		_say(interactables[id].name,interactables[id].text)
 		return
 	if zone!="town":
 		var landmark: Dictionary = interactables[id]
@@ -1161,6 +1185,13 @@ func _update_lighting() -> void:
 		actor_tint = Color("fff1db").lerp(Color("c7b99e"),clampf(1.0-actor_tint.g,0,1)*.6)
 		if is_instance_valid(bakery_room):
 			bakery_room.queue_redraw()
+	elif zone in ["mill_garden","mill_room"]:
+		if zone=="mill_room":
+			actor_tint = Color("fff1db").lerp(Color("c6c4d2"),Mill.night_weight(clock))
+			backgrounds[0].modulate = Color.WHITE
+			if is_instance_valid(bakery_room): bakery_room.update_lighting(clock)
+		else:
+			backgrounds[0].modulate = actor_tint
 	elif zone=="district":
 		pass
 	elif zone=="wilds":
@@ -1170,7 +1201,7 @@ func _update_lighting() -> void:
 		backgrounds[0].modulate = Color.WHITE.lerp(actor_tint,0.20)
 		backgrounds[1].modulate.a = lerpf(night_weights[base],night_weights[next],weight)
 	for piece in pieces:
-		piece.modulate = actor_tint
+		piece.modulate = Color.WHITE if piece.get_meta("mill_room_painting",false) else actor_tint
 	for foliage in occluders:
 		if is_instance_valid(player) and player.position.y<foliage.get_parent().position.y:
 			var local_point := foliage.to_local(player.global_position-Vector2(0,60))

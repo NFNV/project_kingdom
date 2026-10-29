@@ -4,7 +4,7 @@ const VERSION := 2
 const Legacy := preload("res://experiments/anime_hub_demo_v07/tools/save_v1.gd")
 const State := preload("res://experiments/anime_hub_demo_v07/tools/game_state.gd")
 const DEFAULT_PATH := "user://kingdom_journey.json"
-const ZONES := ["town","bakery","district","trail","river","wilds","forge"]
+const ZONES := ["town","bakery","district","trail","river","wilds","forge","mill_garden","mill_room"]
 const MEMORIES := ["old_elm","meadow","river_view"]
 const PLACES := ["north_place_plaza","north_place_park","north_place_civic"]
 var definitions: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://experiments/anime_hub_demo_v07/data/items.json"))
@@ -111,10 +111,19 @@ func validate(doc: Variant) -> bool:
 	# or among the three already handed in. A damaged save cannot duplicate it.
 	if int(items.bandit_badge)+loot.size()+(3 if quest.rewarded else 0)!=data.forest_defeated.size():
 		return false
-	var sizes := {"town":Vector2(1920,1080),"bakery":Vector2(1920,1080),"district":Vector2(6400,3840),"trail":Vector2(1920,1080),"river":Vector2(1920,1080),"wilds":Vector2(4608,2592),"forge":Vector2(1920,1080)}
+	# Unmarked garden saves used the original larger map; the current layout
+	# has stricter dimensions below. Loading rescales those legacy coordinates.
+	var sizes := {"town":Vector2(1920,1080),"bakery":Vector2(1920,1080),"district":Vector2(6400,3840),"trail":Vector2(1920,1080),"river":Vector2(1920,1080),"wilds":Vector2(4608,2592),"forge":Vector2(1920,1080),"mill_garden":Vector2(2400,1600),"mill_room":Vector2(1920,1080)}
 	if player.get("zone") not in ZONES:
 		return false
 	var dimensions: Vector2 = sizes[player.zone]
+	if player.zone=="mill_garden" and player.has("mill_garden_layout"):
+		if player.mill_garden_layout!=2: return false
+		dimensions = Vector2(1920,1280)
+	if player.zone=="mill_room" and player.has("mill_room_layout"):
+		# Unmarked room saves retain the original 1920x1080 validation above.
+		if player.mill_room_layout!=2: return false
+		dimensions = Vector2(1280,720)
 	if not pair_valid(player.get("position"),dimensions.x,dimensions.y) or not whole(player.get("health"),1,maximum_health):
 		return false
 	var facing: Variant = player.get("facing")

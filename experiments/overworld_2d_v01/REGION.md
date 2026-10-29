@@ -70,8 +70,9 @@ an actual journey from the bridge's north bank to Windsong Ridge, compare the
 collision grid with brute force over 600 positions, check water barriers, verify
 whole-city framing and exercise real map/shortcut keyboard input.
 
-Garden Square is connected through its southwest exit. Return through miniature
+Garden Square is connected through its southwest exit. Windsong Ridge also opens
+the mill garden and enterable hearthroom with F near its windmill. Return through miniature
 Mosswood’s south gate. The live journey is retained, and autosaves/F5 store a safe
-town-side checkpoint using the existing save format. Other detailed locations,
+town or mill-garden checkpoint using the existing save format. Other detailed locations,
 encounters and world-map quests are not connected yet. See README.md for travel
 controls and checkpoint behavior.

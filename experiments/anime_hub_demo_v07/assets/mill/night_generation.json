@@ -1,0 +1,13 @@
+{
+  "mode": "Built-in imagegen",
+  "created": "2026-10-28",
+  "prompt": "Use case: lighting-weather. Edit target: the attached painted windmill interior. Create a NIGHT LIGHTING VARIANT of exactly this same image, keeping the exact original 1672 x 941 canvas, crop, camera, pixel alignment, walls, stairs, furniture, counter, plants, rug, doors, floorboards and every object in precisely the same shapes and positions. Change ONLY lighting, colors and what is visible through the existing windows. It is midnight outside: the windows show deep blue night and a few tiny stars, with gentle cool moonlight. REMOVE ALL GOLDEN DAYLIGHT AND SUNBEAM PATCHES ON THE FLOOR, especially the bright yellow stripe from the central back window toward the rug and door. Replace those sunlit areas with continuous subdued wooden floor, matching the existing grain and geometry. Most of the room is dim blue-gray and softly shadowed; keep it readable and deeply cozy. The existing fireplace remains lit and casts a warm amber pool close to the hearth. Existing lanterns glow warmly near the counter, tea corner and stairs, with small soft local pools on nearby wood and stone. The scene must clearly read as NIGHT, not orange daytime with darkened windows. Preserve the original matte gouache/watercolor anime style, all outlines and structure. The rope remains across the staircase. No new furniture, objects, people, animals, UI, text, symbols, logos or watermark. No view change, no geometric changes, no rearranging, no new light sources, no crop or border changes. Preserve the deep green backdrop outside the room silhouette but darken it subtly for night.",
+  "reference": "mill_interior_v1.png",
+  "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-ea0921ea-266f-4efa-af82-8259dfbac52b.png",
+  "workspace": "mill_interior_night_v1.png",
+  "size": [
+    1672,
+    941
+  ],
+  "sha256": "c6d9a8a9218de8f07d7d736631c8f6ab2c5b6e4aafba8ded4bf00fbe0bd7151c"
+}
