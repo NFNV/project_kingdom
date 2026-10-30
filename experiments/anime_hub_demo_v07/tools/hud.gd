@@ -349,6 +349,11 @@ func refresh() -> void:
 	elif hub.state.tracked_quest=="morning_rounds":
 		objective.text = hub.OBJECTIVES[hub.quest_stage]
 		status_label.text = "%d / 5 deliveries  ·  J journal" % mini(hub.quest_stage,5)
+	if hub.zone=="wilds" and hub.forest_defeated.size()==12:
+		var remaining: int = hub.dogs.filter(func(dog): return dog.active).size()
+		status_label.text = "Returning patrol · %d bandits remain" % remaining if remaining>0 else "Patrol cleared · Leave and return for another"
+		if remaining>0 and hub.state.rewarded:
+			objective.text = "Fight the returning patrol. Original quest rewards are already secured."
 	if hub.zone in ["mill_garden","mill_room","mill_loft"]:
 		objective.text = "Explore the backyard, meet the cats, or step inside Windsong Mill." if hub.zone=="mill_garden" else "A warm hearth, meadow tea and Rowan's stories."
 		status_label.text = "%d coins · I satchel · J journal · F5 save" % hub.coins

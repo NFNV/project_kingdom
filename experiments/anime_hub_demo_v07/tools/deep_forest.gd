@@ -42,18 +42,21 @@ static func build(hub: Node2D) -> void:
 	for pack in CAMPS.size():
 		for member in 3:
 			var id := "wild_dog_%d_%d" % [pack,member]
-			if hub.forest_defeated.has(id):
+			var returning: bool = hub.forest_defeated.size()==12
+			var casualties: Dictionary = hub.state.forest_patrol_defeated if returning else hub.forest_defeated
+			if casualties.has(id):
 				continue
 			var at: Vector2 = CAMPS[pack]+[Vector2(-70,15),Vector2(65,20),Vector2(0,-60)][member]
 			var dog = hub._actor(false,at,"mauler" if member==2 else "raider")
 			dog.resident_id = id
+			dog.set_meta("returning_patrol",returning)
 			dog.enemy = true
 			dog.home = at
 			dog.patrol = PackedVector2Array([at,at+Vector2(65,30),at+Vector2(-45,38)])
 			dog.patrol_wait = .5+member*.65+pack*.17
 			dog.maximum_health = 3
 			dog.health = 3
-			if id==hub.GameState.CAPTAIN_ID:
+			if id==hub.GameState.CAPTAIN_ID and not returning:
 				dog.captain = true
 				dog.maximum_health = 8
 				dog.health = 8

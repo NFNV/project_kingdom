@@ -1,0 +1,39 @@
+{
+  "renderer": "Native Godot Metal at 1920x1080",
+  "comparisons": {
+    "city": {
+      "screen_region": [
+        1030,
+        370,
+        1460,
+        645
+      ],
+      "before_mean_luminance": 77.121,
+      "after_mean_luminance": 90.218,
+      "increase_percent": 17.0
+    },
+    "shops": {
+      "screen_region": [
+        805,
+        480,
+        915,
+        565
+      ],
+      "before_mean_luminance": 64.258,
+      "after_mean_luminance": 77.49,
+      "increase_percent": 20.6
+    },
+    "mill": {
+      "screen_region": [
+        740,
+        380,
+        895,
+        550
+      ],
+      "before_mean_luminance": 57.982,
+      "after_mean_luminance": 66.791,
+      "increase_percent": 15.2
+    }
+  },
+  "scope": "Read-only RGB luminance analysis of identical-view midnight captures; not a performance benchmark."
+}

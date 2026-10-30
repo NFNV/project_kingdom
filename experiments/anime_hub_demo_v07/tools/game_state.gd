@@ -30,6 +30,8 @@ var delivery_stage := 0
 var discoveries: Dictionary = {}
 var district_places: Dictionary = {}
 var forest_defeated: Dictionary = {}
+# Separate current patrol casualties from one-time quest/reward history.
+var forest_patrol_defeated: Dictionary = {}
 var forest_recoveries := 0
 var pending_loot: Dictionary = {}
 var accepted := false
@@ -334,9 +336,25 @@ func record_defeat(id: String, at: Vector2) -> bool:
 	if forest_defeated.has(id):
 		return false
 	forest_defeated[id] = true
+	if forest_defeated.size()==12:
+		# Keep this first clear empty until the next actual visit. Loading a
+		# completed encounter must not immediately resurrect the last enemy.
+		forest_patrol_defeated = forest_defeated.duplicate()
 	coins += 2
 	pending_loot[id] = {"position":[at.x,at.y]}
 	update_quest()
+	changed.emit()
+	return true
+
+func begin_forest_visit() -> void:
+	if forest_defeated.size()==12 and forest_patrol_defeated.size()==12:
+		forest_patrol_defeated.clear()
+		changed.emit()
+
+func record_patrol_defeat(id: String) -> bool:
+	if forest_defeated.size()!=12 or not forest_defeated.has(id) or forest_patrol_defeated.has(id):
+		return false
+	forest_patrol_defeated[id] = true
 	changed.emit()
 	return true
 
@@ -355,6 +373,7 @@ func snapshot() -> Dictionary:
 	return {"coins":coins,"delivery_stage":delivery_stage,"clock":clock,
 		"discoveries":discoveries.keys(),"district_places":district_places.keys(),
 		"forest_defeated":forest_defeated.keys(),"forest_recoveries":forest_recoveries,
+		"forest_patrol_defeated":forest_patrol_defeated.keys(),
 		"loot":pending_loot.duplicate(true),"items":item_counts(),
 		"equipment":equipped_ids(),"tracked_quest":tracked_quest,
 		"smith":{"accepted":smith_accepted,"rewarded":smith_rewarded,"tools_recovered":tools_recovered},
@@ -373,9 +392,14 @@ func restore(data: Dictionary, player_health: int) -> void:
 	discoveries.clear()
 	district_places.clear()
 	forest_defeated.clear()
+	forest_patrol_defeated.clear()
 	for pair in [[discoveries,data.discoveries],[district_places,data.district_places],[forest_defeated,data.forest_defeated]]:
 		for id in pair[1]:
 			pair[0][id] = true
+	# Older saves have only the permanent defeat history. A fully cleared old
+	# forest starts a fresh patrol, preserving every existing quest and item.
+	for id in data.get("forest_patrol_defeated",[]):
+		forest_patrol_defeated[id] = true
 	pending_loot = data.loot.duplicate(true)
 	accepted = bool(data.quest.accepted)
 	rewarded = bool(data.quest.rewarded)

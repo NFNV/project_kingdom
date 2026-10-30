@@ -65,6 +65,8 @@ var textures: Dictionary = {}
 var texture_cache: Dictionary = {}
 var ground_contacts: Dictionary = {}
 var texture_feet: Dictionary = {}
+var texture_crops: Dictionary = {}
+var light_emitters: Dictionary = {}
 var terrain: ColorRect
 var scenery: Node2D
 var hud: Node2D
@@ -113,6 +115,13 @@ func _ready() -> void:
 		textures[pair[0]] = cache_texture(pair[1])
 	for id in Dressing.CATALOG:
 		textures[id] = cache_texture(Dressing.CATALOG[id])
+	light_emitters = Dressing.EMITTERS.duplicate(true)
+	for kind in Dressing.EMITTER_PIXELS:
+		var crop: Rect2i = texture_crops[textures[kind].get_instance_id()]
+		var points: Array[Vector2] = []
+		for pixel in Dressing.EMITTER_PIXELS[kind]:
+			points.append((pixel-Vector2(crop.position))/Vector2(crop.size))
+		light_emitters[kind] = points
 	region_segments = Map.branch_segments()
 	build_region()
 	scenery = Node2D.new()
@@ -142,6 +151,7 @@ func cache_texture(path: String) -> Texture2D:
 	image.generate_mipmaps()
 	var texture := ImageTexture.create_from_image(image)
 	texture_cache[path] = texture
+	texture_crops[texture.get_instance_id()] = crop
 	if ground_contacts.has(path):
 		var point: Array = ground_contacts[path].contact_pixel
 		texture_feet[texture.get_instance_id()] = (Vector2(point[0],point[1])-Vector2(crop.position))/Vector2(crop.size)
@@ -466,7 +476,12 @@ func draw_scene() -> void:
 			continue
 		var size: float = sprite_height(item,depth)
 		var sway := sin(clock*1.35+item.phase)*.004 if item.kind in ["oak","pine","willow"] else 0.0
-		var shade: Color = (item.tint*light_tint).lerp(lighting.haze,smoothstep(80,330,depth)*.7)
+		var tint: Color = item.tint*light_tint
+		# A little reflected window light keeps inhabited buildings readable,
+		# while trees, terrain and the sky retain their existing moonlit palette.
+		if item.kind in Dressing.HOUSE_KINDS or item.kind in ["city_illustration","windmill","watermill","lighthouse"]:
+			tint = tint.lerp(Color("f4dbaf"),lamp_weight*(.27 if item.kind=="city_illustration" else .22))
+		var shade: Color = tint.lerp(lighting.haze,smoothstep(80,330,depth)*.7)
 		if not curved:
 			var lod: int = item.get("lod",0)
 			if lod>1: shade.a *= 1.0-smoothstep(80,110,depth)
@@ -474,11 +489,6 @@ func draw_scene() -> void:
 		if bend()>0:
 			var rim := horizon_radius()-ground_clearance(item)
 			shade.a *= 1.0-smoothstep(rim-3,rim,(p-camera_ground).length())
-		if item.kind=="lamp" and lamp_weight>.01:
-			var pool := FOCAL*3.5/depth
-			scenery.draw_set_transform(at,surface_rotation(p),Vector2(1,.35))
-			Atmosphere.glow(scenery,Vector2.ZERO,pool,lamp_weight*.24,Color("ffca78"),false)
-			scenery.draw_set_transform(Vector2.ZERO)
 		# SVG foot anchor is (80,152). Rotate about that foot, including wind,
 		# so crowns and roofs lean with the terrain without sliding the base.
 		var texture: Texture2D = textures[item.kind]
@@ -492,6 +502,19 @@ func draw_scene() -> void:
 			scenery.draw_set_transform(at,surface_rotation(p),Vector2(contact_width,size*(.025 if tree else .055)))
 			Atmosphere.glow(scenery,Vector2.ZERO,1,shade.a*.28,Color("293b25"),false)
 			scenery.draw_set_transform(Vector2.ZERO)
+		if lamp_weight>.01:
+			var pool := 0.0
+			var strength := .0
+			if item.kind=="lamp":
+				pool = minf(115,FOCAL*4.6/depth)
+				strength = .48
+			elif item.kind in Dressing.HOUSE_KINDS or item.kind in ["windmill","watermill","lighthouse","city_illustration"]:
+				pool = size*(.52 if item.kind=="city_illustration" else .38)
+				strength = .22 if item.kind=="city_illustration" else .17
+			if pool>0:
+				scenery.draw_set_transform(at+Vector2(0,size*.015),surface_rotation(p),Vector2(1,.32))
+				Atmosphere.glow(scenery,Vector2.ZERO,pool,lamp_weight*strength*shade.a,Color("ffd292"),false)
+				scenery.draw_set_transform(Vector2.ZERO)
 		scenery.draw_set_transform(at,surface_rotation(p)+sway,Vector2.ONE*(size/dimensions.y))
 		scenery.draw_texture_rect(texture,Rect2(-foot,dimensions),false,shade)
 		scenery.draw_set_transform(Vector2.ZERO)
@@ -526,11 +549,11 @@ func draw_city_grounding(at: Vector2, size: float, aspect: float, rotation: floa
 
 func draw_prop_details(item: Dictionary, at: Vector2, size: float, dimensions: Vector2, foot: Vector2, opacity: float) -> void:
 	var rotation := surface_rotation(item.p)
-	if lamp_weight>.005 and Dressing.EMITTERS.has(item.kind):
-		for uv in Dressing.EMITTERS[item.kind]:
+	if lamp_weight>.005 and light_emitters.has(item.kind):
+		for uv in light_emitters[item.kind]:
 			var point: Vector2 = at+((uv*dimensions-foot)*size/dimensions.y).rotated(rotation)
 			var flicker := .92+.08*sin(clock*1.7+float(item.phase))
-			var radius := clampf(size*(.10 if item.kind=="lamp" else .035),2,11)
+			var radius := clampf(size*(.16 if item.kind=="lamp" else (.019 if item.kind=="city_illustration" else .065)),2.5,20 if item.kind=="lamp" else 14)
 			Atmosphere.glow(scenery,point,radius,lamp_weight*flicker*opacity)
 			if item.kind=="lighthouse" and uv.y<.4:
 				var aim := Vector2(cos(clock*.28),sin(clock*.28)*.2).rotated(rotation)

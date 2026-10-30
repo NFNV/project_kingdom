@@ -364,14 +364,22 @@ cancels pending/airborne attacks and preserves cooldown.
 
 Move away from red enemy warnings to dodge. A bandit takes three normal hits
 or one wind slash. The cat has five health and brief invulnerability after
-being hit. Each unique defeat rewards **two coins**. Defeated bandits remain
-defeated across travel and checkpoint recovery; clearing all twelve completes
-the objective. Bandit bodies use their own cached sheets and native silhouettes.
+being hit. Each original defeat rewards **two coins**. Original defeats remain
+recorded for quest progress, and clearing all twelve completes the objective.
+Once the whole forest is cleared, leaving and returning supplies twelve regular
+bandits as a new patrol. These returning patrols do not duplicate coins, badges,
+stolen tools or the named quest captain. Current patrol casualties survive
+save/load and recovery; after clearing that patrol, leave and return for another.
+Older fully cleared saves automatically receive a fresh patrol when loaded.
+The HUD shows how many patrol members remain. Bandit bodies use their own cached
+sheets and native silhouettes. `tools/test_forest_patrols.gd` verifies this with
+real damage, original/repeat clears, save/load, legacy saves and reward retention
+using an isolated `/tmp` slot; results are in `forest_patrol_results.json`.
 
 On defeat, a short fade returns the cat to the sheltered western entrance with
 full health. Coins, defeated enemies, errands, purchases and the shared clock
-remain intact. Leaving a zone restores health. The town wardens, older forest
-areas and bakery remain peaceful. Progress is in memory until restarting.
+remain intact. The town wardens, older forest areas and bakery remain peaceful.
+F5/F9 and safe autosaves preserve journey and encounter progress between sessions.
 
 The painted [ground asset](assets/forest/briarwood_ground.png) was made with
 **built-in imagegen**; its exact [prompt and source](assets/forest/briarwood_generation.json)

@@ -55,6 +55,9 @@ func validate(doc: Variant) -> bool:
 		return false
 	if not ids_valid(data.get("discoveries"),MEMORIES) or not ids_valid(data.get("district_places"),PLACES) or not ids_valid(data.get("forest_defeated"),enemy_ids()):
 		return false
+	var patrol: Variant = data.get("forest_patrol_defeated",[])
+	if not ids_valid(patrol,enemy_ids()) or (not patrol.is_empty() and data.forest_defeated.size()!=12):
+		return false
 	var items: Variant = data.get("items")
 	var equipment: Variant = data.get("equipment")
 	var quest: Variant = data.get("quest")

@@ -438,6 +438,7 @@ func _travel(destination: String, entry: String) -> void:
 	var tween := create_tween()
 	tween.tween_property(ui.fade,"modulate:a",1.0,.22)
 	await tween.finished
+	if destination=="wilds": state.begin_forest_visit()
 	_load_zone(destination,entry)
 	dialogue_left = 0
 	talk_panel.hide()
@@ -1124,17 +1125,21 @@ func actor_yielded(actor_node) -> void:
 		transitioning = true
 		_recover_in_forest.call_deferred()
 		return
-	if not state.record_defeat(actor_node.resident_id,actor_node.position):
-		return
-	_add_loot(actor_node.resident_id)
-	audio.play_event("coin",actor_node.position,-12)
+	var returning: bool = actor_node.get_meta("returning_patrol",false)
+	if returning:
+		if not state.record_patrol_defeat(actor_node.resident_id): return
+	else:
+		if not state.record_defeat(actor_node.resident_id,actor_node.position): return
+		_add_loot(actor_node.resident_id)
+		audio.play_event("coin",actor_node.position,-12)
 	var fade: Tween = actor_node.create_tween()
 	fade.tween_property(actor_node.sprite,"modulate:a",0.0,.35)
 	combat_active = dogs.any(func(dog): return dog.active)
 	if not combat_active:
 		audio.play_event("victory",player.position,-5)
-		_say("The forest is quiet", "All twelve bandits have fled. The clearings are safe to explore. Your coin rewards and progress will remain when you return.")
+		_say("The forest is quiet", "This patrol has fled. Explore the clearings or take the western trail home. Another patrol will arrive on your next visit; your quest rewards and progress are kept.")
 	_update_hud()
+	queue_autosave()
 
 
 func _recover_in_forest() -> void:

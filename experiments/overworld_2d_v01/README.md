@@ -75,6 +75,16 @@ map. Destination keys are development previews, not unlocked fast travel.
 
 ## Painted skies and shared day/night cycle
 
+Nighttime streetlamps cast wider, stronger warm pools. Houses and mills receive
+a gentle warm lift, with window lights aligned to each original painting through
+the runtime texture crop. Mosswood's miniature city has 37 window/lantern glow
+points. These fade with the existing dusk/dawn lighting; noon remains unchanged.
+Native midnight previews: [city](previews/night_lights_city.png),
+[cottages](previews/night_lights_shops.png), [mill](previews/night_lights_mill.png).
+Measured matching-view building regions are 15–21% brighter in the native render;
+details are in `night_lights_render_results.json`. This is visual verification,
+not a new performance benchmark.
+
 The complete cycle lasts **20 minutes**, using the same dawn/noon/dusk/night
 phases as Garden Square. **T** smoothly previews the next phase. The celestial
 sun-and-moon clock shows the time. Painted sky panoramas crossfade into a starry
