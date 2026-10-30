@@ -1,6 +1,6 @@
 # Windsong Mill
 
-A peaceful, enterable countryside hub at Windsong Ridge in the Greenshire.
+A peaceful countryside mill and inn at Windsong Ridge in the Greenshire.
 
 From Garden Square, take the southwest road to the overworld. Follow the west
 road after the river crossing to Windsong Ridge, or press **5** for its development
@@ -36,7 +36,7 @@ NPC positions scale together; cats keep their existing size. A 1.5× camera fram
 the complete room, making the cats 50% taller on screen than the first version.
 Rowan the miller greets the player from behind the counter;
 Juniper the travelling reader has a story to share. **E** inspects the tea,
-hearth and stair landing. Fireplace sparks and warm indoor ambience accompany
+hearth. Fireplace sparks and warm indoor ambience accompany
 the existing music, with wood footsteps inside and grass footsteps outside.
 
 The room follows the shared twenty-minute day/night cycle. A separately painted
@@ -48,18 +48,41 @@ consistent while Rowan stands behind it. Characters also receive indoor night
 coloring. Native rendered comparisons are saved for dawn, day, dusk, midnight
 and 05:08.
 
-The stairs are physically blocked by a rope barrier. Interacting explains that
-the loft is closed for repairs. There is no second-floor scene or transition yet.
-The front doormat returns to the garden. Furniture and stairs have hand-traced
-collision, and the central room remains open for walking.
+The rope has been removed from both day and night paintings. Walk to the foot
+of the stairs on the right and press **E** to visit the guest floor. The front
+doormat returns to the garden. Furniture and stairs have hand-traced collision,
+and the central room remains open for walking.
+
+## Upstairs inn
+
+The second floor has three furnished guest rooms: **Sage**, **Bluebell** and
+**Rose**. Each has its own quilt, bed, bedside lantern, window and chest. Open
+doorways connect the rooms to a shared corridor and the return staircase.
+The same 1280 × 720 room size and 1.5× camera retain the corrected cat scale.
+Walls and furniture block movement; foreground wall pieces hide the lower
+body naturally when the cat stands behind a partition. A finer 8px navigation
+grid keeps the narrow bedside paths connected.
+
+Press **E** beside any bed to open the rest dialog. Choose **Sleep until 7 AM**
+with the mouse or **Enter**; **Tab** switches buttons, and **Esc/E** cancels.
+The stay is complimentary. A short fade advances the shared clock to 7 AM,
+restores all hearts and the skill cooldown, then leaves the cat beside the
+chosen bed. Inventory, equipment, money and quests stay intact. The completed
+stay autosaves when journey autosaves are enabled. Rest confirmation freezes
+the clock and movement; cancelling does not spend time or change progress.
+
+Upstairs has aligned day/night paintings: blue night windows, warm bedside
+lamps and dimmer floors without baked daytime sunbeams. The existing clock
+blends them through dawn and dusk. Walk to the stair landing and press **E**
+to return to the hearthroom.
 
 ## Journey and saves
 
 In the main RPG, the same hero and GameState remain active through
-town → overworld → mill garden → hearthroom and back. Inventory, equipment,
+town → overworld → mill garden → hearthroom → guest rooms and back. Inventory, equipment,
 quests, money, health and shared twenty-minute clock are retained. **I**, **J**,
 **F5** and **F9** use the existing inventory, journal and save/load systems.
-Both mill locations are valid save destinations. Overworld saving after a mill
+All three mill locations are valid save destinations. Overworld saving after a mill
 visit records a safe mill-garden checkpoint. No quest rewards or purchases have
 been added to this peaceful hub.
 New garden saves record layout 2; original 2400 × 1600 garden saves are still
@@ -78,9 +101,12 @@ v1 remains as the source reference. The midnight painting is an edit of the same
 interior, retaining the original canvas and layout. Its saved path, full prompt,
 reference, dimensions and hash are recorded in
 [night_generation.json](assets/mill/night_generation.json).
+The guest-floor paintings and opened-staircase edits are recorded in
+[inn_generation.json](assets/mill/inn_generation.json), including full prompts,
+source files and hashes. All use built-in imagegen; source PNGs are copied unchanged.
 
 `tools/test_mill_hub.gd` checks real F/E entry, physical backyard/room navigation,
-NPC greetings, solid planted beds, blocked stairs, save/load in an isolated `/tmp`
+NPC greetings, solid planted beds, the guest-floor stair entry, save/load in an isolated `/tmp`
 slot, retained journey identity, overworld resumption, Garden Square return,
 checkpoint recovery and the standalone demo's separate save slot. Run with
 `--fixed-fps 60`; add `-- --mill-capture` on a native renderer for screenshots.
@@ -91,7 +117,16 @@ migration, actual T input, midnight character coloring and shared counter lighti
 night windows, warm hearth contrast and visible cat height; results are in
 `mill_room_render_results.json`. It requires the native GPU renderer.
 
+`tools/test_windsong_inn.gd` walks the actual cat up and down the stairs and
+through all three room doorways, checks furniture collision, keyboard and modal
+behavior, sleeps overnight, checks healing and retained journey facts, then saves
+and continues upstairs. It uses `/tmp/kingdom-inn-test.json`, never the player's
+slot. On the native renderer it also captures day/night and rest-dialog views,
+and checks actual window/floor pixels. Results are in `inn_test_results.json`.
+
 Rendered previews: [garden](previews/mill_garden_entry.png),
 [backyard](previews/mill_backyard.png), [room by day](previews/mill_room_day.png),
 [room at night](previews/mill_room_night.png).
+Upstairs: [day](previews/inn_day.png), [night](previews/inn_night.png),
+[rest dialog](previews/inn_rest_dialog.png).
 These are functional and visual checks, not a new 1080p60 performance benchmark.

@@ -1,0 +1,67 @@
+{
+  "mode": "Built-in imagegen",
+  "dimensions": [
+    1672,
+    941
+  ],
+  "assets": [
+    {
+      "asset": "mill_inn_day_v1.png",
+      "prompt": "Use case: stylized-concept. Asset type: production painted 2D RPG background, upstairs of Windsong Mill Inn.\nReference image 1 is STYLE AND ARCHITECTURE only: match its handcrafted storybook anime painting, warm cream stone, oak timber, sage textiles, dark green surround, same elevated three-quarter fixed game camera and visible cutaway walls. Create a DIFFERENT floor, the second-floor inn, full canvas landscape 1672 by 941.\nLayout: three cozy SMALL guest bedrooms across the back half, each with one single wooden bed oriented vertically in the image (head at back, foot toward viewer), patchwork quilt (left sage green, center dusty blue, right muted red), pillow, bedside lamp, small chest and a window. Rooms separated by low cutaway timber partitions; each has an OPEN doorway along its front edge leading to a shared broad continuous oak corridor spanning the full lower half. Ensure room floors and corridor connect visibly through each opening. Left room is the player's room. The corridor has a small rug, two reading chairs against the rear wall between doorways, potted flowers and a little tea tray at the far left. Rightmost lower corner: clearly visible staircase opening DOWN to the ground floor, short oak railings around the stairwell, safe entrance from its LEFT side. No upward stairs. No barriers or clutter in corridor or bedroom doorways. Exterior footprint compact, slightly rounded stone mill walls, roof removed, dark forest-green solid surround. Large clear continuous walking surfaces. Beds and furniture proportioned to a small cat adventurer, not huge furniture. Entire floor fully inside image with margins; no clipped edges. No people, no animals, no labels, no lettering, no UI. Daytime through windows with soft warm light, subtle lantern glow. Hand-painted line and watercolor-gouache textures, carefully straight timber geometry, cozy lived-in inn. Not photorealistic, no 3D render.",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-a5b900f4-0c97-43f4-95f8-b88be6f85536.png",
+      "used": false,
+      "sha256": "ac444e2783f1b41367e37ceb46f049eb90530a02f4c8c3ff1c6bdf1ad1f8f2b1",
+      "reference_assets": [
+        "mill_interior_v1.png"
+      ]
+    },
+    {
+      "asset": "mill_inn_day_v2.png",
+      "prompt": "Use case: precise-object-edit. Edit target: this upstairs inn background. Keep the EXACT 1672x941 canvas, camera, architecture, three beds, windows, stairwell, colors and every unaffected pixel. The center guest room currently has no doorway because two green chairs and a tea table stand against its front wall. Remove ONLY those two central chairs, tea table, flower pot and books, and make a clearly OPEN timber-framed doorway in the CENTER room's front partition at image x790 to910, y370 to490, connecting the blue-bed bedroom directly to the shared front corridor. Show continuous oak floor through this opening and a small sage doormat. Keep the left and right room doorways unchanged. Do not add a door leaf or a barrier. Keep the inn cozy, same hand-painted textures. No characters, labels or UI.",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-7421222b-0755-40a8-8667-b279b0e75d62.png",
+      "used": true,
+      "sha256": "274f3054d2ae10dec2ae326e8ac33669f13973b2f969adea41133d51e1b48bf5",
+      "reference_type": "Style reference for initial floor; precise layout/lighting edits for variants",
+      "saved_path": "/Users/n/Documents/project-kingdom/experiments/anime_hub_demo_v07/assets/mill/mill_inn_day_v2.png",
+      "reference_assets": [
+        "mill_inn_day_v1.png"
+      ]
+    },
+    {
+      "asset": "mill_inn_night_v1.png",
+      "prompt": "Use case: lighting-weather. Edit target: upstairs inn day painting. Produce a pixel-aligned NIGHT variant of the exact 1672x941 image. Change ONLY lighting. Keep all walls, beds, three open doorways, rugs, props, furniture, stairs and every silhouette at EXACT same pixel coordinates. Windows show deep navy blue nighttime and a few tiny stars, no daylight; REMOVE the bright gold daylight floor stripes in the three open doorways and hallway. Moonlight is subtle cool blue on timber, warmly glowing bedside lanterns and corridor sconces make inviting localized amber pools. Floor remains readable in deep blue-brown mids, no black crushing. Dark forest green surround stays same. Cozy hand-painted watercolor storybook illustration, not a render. No new objects, characters, labels, no sunbeams.",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-03db7f0f-a88c-48c4-b89c-9dc37821952f.png",
+      "used": true,
+      "sha256": "ae904ab36c3df722a88d5b0292455b568590ac17b77dae76c530268420570546",
+      "reference_type": "Style reference for initial floor; precise layout/lighting edits for variants",
+      "saved_path": "/Users/n/Documents/project-kingdom/experiments/anime_hub_demo_v07/assets/mill/mill_inn_night_v1.png",
+      "reference_assets": [
+        "mill_inn_day_v2.png"
+      ]
+    },
+    {
+      "asset": "mill_interior_v2.png",
+      "prompt": "Use case: precise-object-edit. Edit target: ground-floor Windsong Mill painting. Exact 1672x941 canvas. Remove ONLY the rope stretched across the bottom of the staircase on the RIGHT (around image x1400 to1530, y455 to525) so visitors can walk up the stairs. Repaint the tiny areas behind that rope with the matching wooden stair treads. Keep the wooden posts, flowerpot, staircase and every other object, pixel coordinates, original lighting and art unchanged. No other changes.",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-b3ddfa0c-6468-4e58-84be-077277c1e4e9.png",
+      "used": true,
+      "sha256": "e22dd97dfa3ed8925bf63f4838c3944bc20c19bcd6cde01ebb68316edbc3a99f",
+      "reference_type": "Style reference for initial floor; precise layout/lighting edits for variants",
+      "saved_path": "/Users/n/Documents/project-kingdom/experiments/anime_hub_demo_v07/assets/mill/mill_interior_v2.png",
+      "reference_assets": [
+        "mill_interior_v1.png"
+      ]
+    },
+    {
+      "asset": "mill_interior_night_v2.png",
+      "prompt": "Use case: precise-object-edit. Edit target: ground-floor Windsong Mill painting. Exact 1672x941 canvas. Remove ONLY the rope stretched across the bottom of the staircase on the RIGHT (around image x1400 to1530, y455 to525) so visitors can walk up the stairs. Repaint the tiny areas behind that rope with the matching wooden stair treads. Keep the wooden posts, flowerpot, staircase and every other object, pixel coordinates, original nighttime lighting and art unchanged. No other changes.",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-07151a63-496e-4722-a9f8-9fe771e6e595.png",
+      "used": true,
+      "sha256": "dbe3da1f99c15388a3bc70cc0dd061e4d68d55cb97d7375103cb0d2cc0803ef2",
+      "reference_type": "Style reference for initial floor; precise layout/lighting edits for variants",
+      "saved_path": "/Users/n/Documents/project-kingdom/experiments/anime_hub_demo_v07/assets/mill/mill_interior_night_v2.png",
+      "reference_assets": [
+        "mill_interior_night_v1.png"
+      ]
+    }
+  ]
+}

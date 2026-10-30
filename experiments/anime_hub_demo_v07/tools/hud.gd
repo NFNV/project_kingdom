@@ -56,6 +56,9 @@ var load_button: Button
 var notice: Panel
 var notice_text: Label
 var notice_left := 0.0
+var inn_dialog: Control
+var inn_title: Label
+var inn_sleep_button: Button
 
 
 func _ready() -> void:
@@ -183,6 +186,7 @@ func _ready() -> void:
 	notice_text = label("",Vector2(18,16),18,notice,864,Color("fff0cd"))
 	notice_text.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	notice.hide()
+	_build_inn()
 	fade = ColorRect.new()
 	fade.size = Vector2(1920,1080)
 	fade.color = Color("10241d")
@@ -192,6 +196,29 @@ func _ready() -> void:
 	hub.audio.settings_changed.connect(refresh_audio)
 	refresh_audio()
 	refresh_save_controls()
+
+func _build_inn() -> void:
+	inn_dialog = Control.new()
+	inn_dialog.size = Vector2(1920,1080)
+	add_child(inn_dialog)
+	var shade := ColorRect.new()
+	shade.size = Vector2(1920,1080)
+	shade.color = Color(.035,.07,.06,.68)
+	inn_dialog.add_child(shade)
+	var card := panel(Vector2(610,365),Vector2(700,350),inn_dialog)
+	label("A NIGHT AT WINDSONG",Vector2(34,25),14,card,630,Color("887043"))
+	inn_title = label("Guest room",Vector2(34,58),30,card,630,Color("2e4239"),true)
+	label("Fresh linen, a soft quilt, and the quiet hum of the mill.\nSleep until 7 AM and restore all your hearts.\nYour stay is complimentary.",Vector2(36,113),21,card,628,Color("52604d"))
+	inn_sleep_button = action_button("Sleep until 7 AM",Vector2(35,245),Vector2(305,52),card)
+	inn_sleep_button.focus_mode = Control.FOCUS_ALL
+	inn_sleep_button.pressed.connect(func():
+		if hub.zone=="mill_loft": hub.bakery_room.rest(hub.inn_bed)
+	)
+	var cancel := action_button("Keep exploring",Vector2(360,245),Vector2(305,52),card)
+	cancel.focus_mode = Control.FOCUS_ALL
+	cancel.pressed.connect(func(): hub.close_inn())
+	label("Enter  Choose       Esc / E  Cancel",Vector2(35,316),14,card,630,Color("887043"))
+	inn_dialog.hide()
 
 func _build_audio_menu(menu: Control) -> void:
 	label("SOUND",Vector2(44,344),14,menu,0,Color("887043"))
@@ -275,9 +302,9 @@ func label(text: String, at: Vector2, font_size: int, parent: Node, width := 0.0
 
 func refresh() -> void:
 	location_label.text = hub.zone_title()
-	location_subtitle.text = {"town":"SW → Greenshire · N → Northgate · SE → Forest","trail":"Old elm paths  /  Riverbend to the southeast","river":"Across the bridge  →  Briarwood Wilds","bakery":"Warm bread, meadow tea, and a place to rest","wilds":"Four clearings  /  West trail to Riverbend","district":"Sunstone Plaza  /  Market Lane  →  Emberforge","forge":"Tomas the smith  /  Gear, stories and warm embers","mill_garden":"Flowers, an orchard and a warm welcome","mill_room":"Rowan's kettle  /  A peaceful place beside the fire"}[hub.zone]
+	location_subtitle.text = {"town":"SW → Greenshire · N → Northgate · SE → Forest","trail":"Old elm paths  /  Riverbend to the southeast","river":"Across the bridge  →  Briarwood Wilds","bakery":"Warm bread, meadow tea, and a place to rest","wilds":"Four clearings  /  West trail to Riverbend","district":"Sunstone Plaza  /  Market Lane  →  Emberforge","forge":"Tomas the smith  /  Gear, stories and warm embers","mill_garden":"Flowers, an orchard and a warm welcome","mill_room":"Rowan's kettle  /  Guest rooms upstairs","mill_loft":"Three cozy rooms  /  E by a bed to rest"}[hub.zone]
 	combat_panel.visible = hub.zone=="wilds"
-	skill_panel.visible = hub.zone not in ["bakery","forge","mill_garden","mill_room"]
+	skill_panel.visible = hub.zone not in ["bakery","forge","mill_garden","mill_room","mill_loft"]
 	skill_panel.position.y = 310 if hub.zone=="wilds" else 195
 	skill_button.disabled = hub.peaceful_mode or hub.player.skill_cooldown>0 or not hub.player.active or int(hub.state.stats().attack)<=0
 	skill_bar.max_value = float(hub.state.stats().recharge)
@@ -298,9 +325,9 @@ func refresh() -> void:
 		objective.text = "Explore Sunstone Plaza, Linden Park and the old town hall."
 		status_label.text = "%d / 3 places visited  ·  The streets are peaceful" % hub.district_places.size()
 		forest_map.queue_redraw()
-	elif hub.zone in ["mill_garden","mill_room"]:
+	elif hub.zone in ["mill_garden","mill_room","mill_loft"]:
 		objective.text = "Explore the backyard, meet the cats, or step inside Windsong Mill." if hub.zone=="mill_garden" else "Talk to Rowan by the counter, enjoy the tea corner and warm hearth."
-		status_label.text = "South gate → The Greenshire" if hub.zone=="mill_garden" else "The upper loft is closed for repairs · Front door → Garden"
+		status_label.text = "South gate → The Greenshire" if hub.zone=="mill_garden" else "Stairs → Guest rooms · Front door → Garden"
 	elif hub.zone=="wilds":
 		objective.text = "Drive the dog bandits from the four forest clearings." if hub.combat_active else "Briarwood is quiet. Explore or take the western trail home."
 		status_label.text = "%d / 12 bandits defeated  ·  %d coins" % [hub.forest_defeated.size(),hub.coins]
@@ -322,9 +349,19 @@ func refresh() -> void:
 	elif hub.state.tracked_quest=="morning_rounds":
 		objective.text = hub.OBJECTIVES[hub.quest_stage]
 		status_label.text = "%d / 5 deliveries  ·  J journal" % mini(hub.quest_stage,5)
-	if hub.zone in ["mill_garden","mill_room"]:
+	if hub.zone=="wilds" and hub.forest_defeated.size()==12:
+		var remaining: int = hub.dogs.filter(func(dog): return dog.active).size()
+		status_label.text = "Returning patrol · %d bandits remain" % remaining if remaining>0 else "Patrol cleared · Leave and return for another"
+		if remaining>0 and hub.state.rewarded:
+			objective.text = "Fight the returning patrol. Original quest rewards are already secured."
+	if hub.zone in ["mill_garden","mill_room","mill_loft"]:
 		objective.text = "Explore the backyard, meet the cats, or step inside Windsong Mill." if hub.zone=="mill_garden" else "A warm hearth, meadow tea and Rowan's stories."
 		status_label.text = "%d coins · I satchel · J journal · F5 save" % hub.coins
+	if hub.zone=="mill_loft":
+		objective.text = "Choose a guest room. E beside a bed to sleep until 7 AM and restore your hearts."
+		status_label.text = "Complimentary stay · Stairs → Hearthroom"
+	elif hub.zone=="mill_room":
+		objective.text = "A warm hearth, meadow tea and three cozy guest rooms upstairs."
 	debug_label.visible = debug_visible
 	debug_label.text = "%d FPS  ·  1920 × 1080  ·  %s  ·  F3 debug" % [Engine.get_frames_per_second(),hub.zone]
 	var suffix := ""
@@ -356,7 +393,7 @@ func _process(delta: float) -> void:
 
 
 func show_notice(message: String) -> void:
-	notice.position.y = 54 if hub.paused or hub.shopping else (925 if hub.zone in ["mill_garden","mill_room"] else 744)
+	notice.position.y = 54 if hub.paused or hub.shopping else (925 if hub.zone in ["mill_garden","mill_room","mill_loft"] else 744)
 	notice_text.text = message
 	notice_left = 4.0
 	notice.show()

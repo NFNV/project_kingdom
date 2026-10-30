@@ -110,6 +110,8 @@ var victory_count := 0
 var camera: Camera2D
 var bakery_room: Node2D
 var shopping := false
+var inn_bed := ""
+var resting := false
 var coins: int:
 	get: return state.coins
 	set(value): state.coins = value
@@ -212,6 +214,8 @@ func _load_zone(destination: String, entry: String) -> void:
 	if is_instance_valid(ui):
 		ui.merchant.hide()
 		ui.forge_view.hide()
+		ui.inn_dialog.hide()
+	inn_bed = ""
 	zone = destination
 	world_size = Map.world_size(zone)
 	peaceful_mode = zone!="wilds"
@@ -238,9 +242,12 @@ func _load_zone(destination: String, entry: String) -> void:
 			files.append(ART+"backgrounds/plaza_"+time.to_lower()+".png")
 	elif zone in ["bakery","forge"]:
 		FLOOR = Forge.floor_polygon() if zone=="forge" else Bakery.floor_polygon()
+	elif zone=="mill_loft":
+		FLOOR = Map.Inn.floor_polygon()
+		files = [Mill.ROOT+"mill_inn_day_v2.png"]
 	elif zone in ["mill_garden","mill_room"]:
 		FLOOR = Mill.floor_for(zone=="mill_room")
-		files = [Mill.ROOT+("mill_interior_v1.png" if zone=="mill_room" else "mill_garden_v2.png")]
+		files = [Mill.ROOT+("mill_interior_v2.png" if zone=="mill_room" else "mill_garden_v2.png")]
 	elif zone=="district":
 		FLOOR = Map.District.floor_polygon()
 	elif zone=="wilds":
@@ -271,6 +278,8 @@ func _load_zone(destination: String, entry: String) -> void:
 		_build_bakery()
 	elif zone=="forge":
 		bakery_room = Forge.build(self)
+	elif zone=="mill_loft":
+		bakery_room = Map.Inn.build(self)
 	elif zone in ["mill_garden","mill_room"]:
 		bakery_room = Mill.build(self,zone=="mill_room")
 	elif zone=="district":
@@ -411,7 +420,7 @@ func _draw_forest_air() -> void:
 func request_travel(exit_id: String) -> void:
 	if paused or shopping or transitioning or not exits.has(exit_id):
 		return
-	if exit_id in ["bakery","forge","mill_room"] or zone in ["bakery","forge","mill_room"]:
+	if exit_id in ["bakery","forge","mill_room","mill_loft"] or zone in ["bakery","forge","mill_room","mill_loft"]:
 		audio.play_event("door",player.position,-5)
 	transitioning = true
 	var target: Dictionary = exits[exit_id]
@@ -429,6 +438,7 @@ func _travel(destination: String, entry: String) -> void:
 	var tween := create_tween()
 	tween.tween_property(ui.fade,"modulate:a",1.0,.22)
 	await tween.finished
+	if destination=="wilds": state.begin_forest_visit()
 	_load_zone(destination,entry)
 	dialogue_left = 0
 	talk_panel.hide()
@@ -630,6 +640,12 @@ func close_shop() -> void:
 	ui.merchant.hide()
 	ui.forge_view.hide()
 	audio.play_event("ui_open",player.position,-12,.80)
+
+
+func close_inn() -> void:
+	ui.inn_dialog.hide()
+	shopping = false
+	inn_bed = ""
 
 
 func buy(index: int) -> bool:
@@ -890,7 +906,7 @@ func is_walkable(point: Vector2, padding := 20.0) -> bool:
 
 
 func _build_navigation() -> void:
-	var cell_size := 16.0 if zone in ["mill_garden","mill_room"] else 32.0
+	var cell_size := 8.0 if zone=="mill_loft" else (16.0 if zone in ["mill_garden","mill_room"] else 32.0)
 	var grid_size := Vector2i(ceili(world_size.x/cell_size),ceili(world_size.y/cell_size))
 	navigation.region = Rect2i(Vector2i.ZERO,grid_size)
 	navigation.cell_size = Vector2.ONE*cell_size
@@ -903,7 +919,7 @@ func _build_navigation() -> void:
 	for x in grid_size.x:
 		for y in grid_size.y:
 			var cell := Vector2i(x,y)
-			navigation.set_point_solid(cell,not is_walkable(navigation.get_point_position(cell)))
+			navigation.set_point_solid(cell,not is_walkable(navigation.get_point_position(cell),18.0 if zone=="mill_loft" else 20.0))
 
 
 func _nav_cell(point: Vector2) -> Vector2i:
@@ -995,7 +1011,7 @@ func _physics_process(_delta: float) -> void:
 			item["at"] = item["anchor"].position
 		var candidate: float = Actor.ground_vector(item["at"]-player.position).length()
 		var quest_target: bool = zone=="town" and quest_stage<5 and id==QUEST_TARGETS[quest_stage]
-		if candidate<150 and (candidate<distance or quest_target):
+		if candidate<float(item.get("range",150.0)) and (candidate<distance or quest_target):
 			var excluded: Array[RID] = []
 			if item.has("body"):
 				excluded.append(item["body"].get_rid())
@@ -1048,7 +1064,10 @@ func interact(id := "") -> void:
 		_say(interactables[id]["name"],interactables[id]["text"])
 		_update_hud()
 		return
-	if zone in ["mill_garden","mill_room"]:
+	if zone=="mill_loft" and Map.Inn.BEDS.has(id):
+		bakery_room.open_bed(id)
+		return
+	if zone in ["mill_garden","mill_room","mill_loft"]:
 		_say(interactables[id].name,interactables[id].text)
 		return
 	if zone!="town":
@@ -1106,17 +1125,21 @@ func actor_yielded(actor_node) -> void:
 		transitioning = true
 		_recover_in_forest.call_deferred()
 		return
-	if not state.record_defeat(actor_node.resident_id,actor_node.position):
-		return
-	_add_loot(actor_node.resident_id)
-	audio.play_event("coin",actor_node.position,-12)
+	var returning: bool = actor_node.get_meta("returning_patrol",false)
+	if returning:
+		if not state.record_patrol_defeat(actor_node.resident_id): return
+	else:
+		if not state.record_defeat(actor_node.resident_id,actor_node.position): return
+		_add_loot(actor_node.resident_id)
+		audio.play_event("coin",actor_node.position,-12)
 	var fade: Tween = actor_node.create_tween()
 	fade.tween_property(actor_node.sprite,"modulate:a",0.0,.35)
 	combat_active = dogs.any(func(dog): return dog.active)
 	if not combat_active:
 		audio.play_event("victory",player.position,-5)
-		_say("The forest is quiet", "All twelve bandits have fled. The clearings are safe to explore. Your coin rewards and progress will remain when you return.")
+		_say("The forest is quiet", "This patrol has fled. Explore the clearings or take the western trail home. Another patrol will arrive on your next visit; your quest rewards and progress are kept.")
 	_update_hud()
+	queue_autosave()
 
 
 func _recover_in_forest() -> void:
@@ -1147,15 +1170,15 @@ func _process(delta: float) -> void:
 		if autosave_delay<=0 and safe and not transitioning and player.active and player.swing<=0:
 			autosave_queued = false
 			save_game(true)
-	if not paused:
+	if not paused and not resting:
 		elapsed += delta
 		travel_cooldown = maxf(0,travel_cooldown-delta)
-		if clock_target>=0:
+		if clock_target>=0 and inn_bed.is_empty():
 			clock = move_toward(clock,clock_target,delta/2.0)
 			if is_equal_approx(clock,clock_target):
 				clock = fposmod(clock,4.0)
 				clock_target = -1.0
-		elif auto_clock:
+		elif auto_clock and inn_bed.is_empty():
 			clock = fposmod(clock+delta*4.0/CYCLE_SECONDS,4.0)
 		dialogue_left = maxf(0,dialogue_left-delta)
 		talk_panel.visible = dialogue_left>0
@@ -1185,8 +1208,8 @@ func _update_lighting() -> void:
 		actor_tint = Color("fff1db").lerp(Color("c7b99e"),clampf(1.0-actor_tint.g,0,1)*.6)
 		if is_instance_valid(bakery_room):
 			bakery_room.queue_redraw()
-	elif zone in ["mill_garden","mill_room"]:
-		if zone=="mill_room":
+	elif zone in ["mill_garden","mill_room","mill_loft"]:
+		if zone in ["mill_room","mill_loft"]:
 			actor_tint = Color("fff1db").lerp(Color("c6c4d2"),Mill.night_weight(clock))
 			backgrounds[0].modulate = Color.WHITE
 			if is_instance_valid(bakery_room): bakery_room.update_lighting(clock)
@@ -1277,6 +1300,22 @@ func set_paused(value: bool) -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if resting:
+		get_viewport().set_input_as_handled()
+		return
+	if is_instance_valid(ui) and is_instance_valid(ui.inn_dialog) and ui.inn_dialog.visible:
+		if event.is_action_pressed("hub_pause") or event.is_action_pressed("hub_interact"):
+			close_inn()
+		elif event is InputEventKey and event.pressed and not event.echo and event.physical_keycode==KEY_ENTER:
+			var focused := get_viewport().gui_get_focus_owner()
+			if focused is Button and ui.inn_dialog.is_ancestor_of(focused):
+				focused.pressed.emit()
+			else:
+				bakery_room.rest(inn_bed)
+		# Let mouse clicks and keyboard focus reach the inn buttons.
+		if event is InputEventKey and event.physical_keycode not in [KEY_TAB,KEY_SPACE]:
+			get_viewport().set_input_as_handled()
+		return
 	if event.is_echo() or title_active:
 		return
 	if event.is_action_pressed("hub_journal") or (journal_open and event.is_action_pressed("hub_pause")):
@@ -1310,6 +1349,8 @@ func _input(event: InputEvent) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if resting:
+		return
 	if title_active:
 		return
 	if event is InputEventKey and event.echo:

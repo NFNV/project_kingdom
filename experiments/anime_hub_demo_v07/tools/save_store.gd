@@ -4,7 +4,7 @@ const VERSION := 2
 const Legacy := preload("res://experiments/anime_hub_demo_v07/tools/save_v1.gd")
 const State := preload("res://experiments/anime_hub_demo_v07/tools/game_state.gd")
 const DEFAULT_PATH := "user://kingdom_journey.json"
-const ZONES := ["town","bakery","district","trail","river","wilds","forge","mill_garden","mill_room"]
+const ZONES := ["town","bakery","district","trail","river","wilds","forge","mill_garden","mill_room","mill_loft"]
 const MEMORIES := ["old_elm","meadow","river_view"]
 const PLACES := ["north_place_plaza","north_place_park","north_place_civic"]
 var definitions: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://experiments/anime_hub_demo_v07/data/items.json"))
@@ -54,6 +54,9 @@ func validate(doc: Variant) -> bool:
 	if not whole(data.get("coins"),0,999999) or not whole(data.get("delivery_stage"),0,5) or not number(data.get("clock"),0,3.99999999) or not whole(data.get("forest_recoveries"),0,999999):
 		return false
 	if not ids_valid(data.get("discoveries"),MEMORIES) or not ids_valid(data.get("district_places"),PLACES) or not ids_valid(data.get("forest_defeated"),enemy_ids()):
+		return false
+	var patrol: Variant = data.get("forest_patrol_defeated",[])
+	if not ids_valid(patrol,enemy_ids()) or (not patrol.is_empty() and data.forest_defeated.size()!=12):
 		return false
 	var items: Variant = data.get("items")
 	var equipment: Variant = data.get("equipment")
@@ -113,7 +116,7 @@ func validate(doc: Variant) -> bool:
 		return false
 	# Unmarked garden saves used the original larger map; the current layout
 	# has stricter dimensions below. Loading rescales those legacy coordinates.
-	var sizes := {"town":Vector2(1920,1080),"bakery":Vector2(1920,1080),"district":Vector2(6400,3840),"trail":Vector2(1920,1080),"river":Vector2(1920,1080),"wilds":Vector2(4608,2592),"forge":Vector2(1920,1080),"mill_garden":Vector2(2400,1600),"mill_room":Vector2(1920,1080)}
+	var sizes := {"town":Vector2(1920,1080),"bakery":Vector2(1920,1080),"district":Vector2(6400,3840),"trail":Vector2(1920,1080),"river":Vector2(1920,1080),"wilds":Vector2(4608,2592),"forge":Vector2(1920,1080),"mill_garden":Vector2(2400,1600),"mill_room":Vector2(1920,1080),"mill_loft":Vector2(1280,720)}
 	if player.get("zone") not in ZONES:
 		return false
 	var dimensions: Vector2 = sizes[player.zone]

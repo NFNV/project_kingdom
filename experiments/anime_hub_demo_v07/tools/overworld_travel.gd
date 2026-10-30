@@ -80,7 +80,7 @@ func sync_journey_clock(phase: float) -> void:
 
 func save_checkpoint(automatic := false) -> bool:
 	var document: Dictionary = hub.make_save_document()
-	var zone := "mill_garden" if hub.zone in ["mill_garden","mill_room"] else "town"
+	var zone := "mill_garden" if hub.zone in ["mill_garden","mill_room","mill_loft"] else "town"
 	var at: Vector2 = hub.Map.arrival(zone,"overworld")
 	document.player.zone = zone
 	document.player.erase("mill_room_layout")
@@ -91,7 +91,7 @@ func save_checkpoint(automatic := false) -> bool:
 func save_from_overworld() -> void:
 	if not is_instance_valid(overworld) or overworld.transitioning: return
 	var saved := save_checkpoint()
-	overworld.notice = ("Journey saved · Continue returns to Windsong Mill's garden." if hub.zone in ["mill_garden","mill_room"] else "Journey saved · Continue returns to Garden Square's southwest gate.") if saved else hub.saves.last_error
+	overworld.notice = ("Journey saved · Continue returns to Windsong Mill's garden." if hub.zone in ["mill_garden","mill_room","mill_loft"] else "Journey saved · Continue returns to Garden Square's southwest gate.") if saved else hub.saves.last_error
 	overworld.notice_left = 6
 
 func _process(_delta: float) -> void:

@@ -164,7 +164,7 @@ func enter_zone(zone: String) -> void:
 
 func _select_music() -> void:
 	var night: bool = hub.clock>=2.65 or hub.clock<.35
-	var desired := "music_night" if night else ("music_town" if active_zone in ["town","district","bakery","forge","mill_room"] else "music_woodland")
+	var desired := "music_night" if night else ("music_town" if active_zone in ["town","district","bakery","forge","mill_room","mill_loft"] else "music_woodland")
 	if active_zone=="wilds" and hub.combat_active and battle_hold>0:
 		desired = "music_battle"
 	request_music(desired)
@@ -210,7 +210,7 @@ func _process(delta: float) -> void:
 			music_positions[music_ids[i]] = music[i].get_playback_position()
 			music[i].stop()
 	var night := smoothstep(2.35,3.0,hub.clock) if hub.clock>=1 else 1.0-smoothstep(0,.6,hub.clock)
-	var indoors := active_zone in ["bakery","forge","mill_room"]
+	var indoors := active_zone in ["bakery","forge","mill_room","mill_loft"]
 	beds[0].volume_db = move_toward(beds[0].volume_db,-48.0 if indoors else lerpf(-13,-34,night),delta*18)
 	beds[1].volume_db = move_toward(beds[1].volume_db,-55.0 if indoors else lerpf(-45,-12,night),delta*18)
 
@@ -242,7 +242,7 @@ func _exit_tree() -> void:
 			AudioServer.remove_bus(index)
 
 func surface_at(point: Vector2) -> String:
-	if active_zone in ["bakery","mill_room"]:
+	if active_zone in ["bakery","mill_room","mill_loft"]:
 		return "wood"
 	if active_zone=="forge":
 		return "stone"

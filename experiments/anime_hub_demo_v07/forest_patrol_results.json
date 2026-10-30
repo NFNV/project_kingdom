@@ -1,0 +1,6 @@
+{
+  "checks": 43,
+  "failures": [],
+  "passed": 43,
+  "scope": "Real damage, original/returning bandit spawning, partial and complete encounter persistence, repeated visits, nonduplicated rewards, schema validation and legacy cleared-save compatibility. Isolated temporary save slot."
+}
