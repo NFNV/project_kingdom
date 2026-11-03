@@ -1,0 +1,6 @@
+{
+  "checks": 1281,
+  "failures": [],
+  "passed": 1281,
+  "scope": "160 registered poses, raised/lowered guard, face clearance, per-direction body occlusion despite mismatched logical heading, mapped paw/handle attachment, combat expiry; native 1440p contact sheets."
+}

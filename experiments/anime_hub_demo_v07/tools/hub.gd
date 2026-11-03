@@ -318,6 +318,7 @@ func _load_zone(destination: String, entry: String) -> void:
 	player.parry_rearm = 0
 	player.guard_requested = Input.is_action_pressed("hub_guard")
 	player.riposte_left = 0
+	player.combat_left = 0
 	player.defence_flash = 0
 	player.sprite.modulate.a = 1
 	player.intent = Vector2.ZERO
@@ -1311,6 +1312,8 @@ func set_paused(value: bool) -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if not is_node_ready():
+		return
 	if resting:
 		get_viewport().set_input_as_handled()
 		return
@@ -1370,7 +1373,7 @@ func _input(event: InputEvent) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if resting:
+	if not is_node_ready() or resting:
 		return
 	if title_active:
 		return

@@ -119,7 +119,7 @@ func _run() -> void:
 	await ticks(7)
 	right.position = center-Vector2(70,10)
 	await ticks(13)
-	check(right.health==3 and not game.player.combat_art.visible and not game.player.weapon.visible,"Recovery and sheathing cannot hit late arrivals and end with empty hands")
+	check(right.health==3 and not game.player.combat_art.visible and game.player.weapon.visible,"Recovery cannot hit late arrivals and keeps the sword drawn during the combat timer")
 	# Mouse follow-up uses buffered aim; Q has priority over that buffer.
 	game.player.automated = true
 	game.player.cooldown = 0

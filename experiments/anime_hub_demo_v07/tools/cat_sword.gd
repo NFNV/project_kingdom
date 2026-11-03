@@ -1,23 +1,35 @@
 extends Node2D
 
-# Legacy rig stays hidden: walking art already has a sheathed sword. Coordinates
+# The drawn attack already includes its blade; this rig carries it between
+# attacks during the ten-second combat stance. Coordinates
 # are in ground/world pixels so changing a pose never changes blade proportions.
-const GRIPS := {
-	"e":Vector2(16,-28),"se":Vector2(15,-27),"s":Vector2(-12,-27),
-	"sw":Vector2(-16,-28),"w":Vector2(-17,-29),"nw":Vector2(-11,-32),
-	"n":Vector2(12,-32),"ne":Vector2(16,-31)
-}
+const Pose := preload("res://experiments/anime_hub_demo_v07/tools/equipment_pose.gd")
 var actor: CharacterBody2D
+var hand_anchor := Vector2.ZERO
+var near_hand := false
+var pose_key := ""
 
 
 func sync_pose() -> void:
 	var facing: String = actor.sprite.facing_direction
-	position = GRIPS[facing]*actor.sprite.display_height/73.0
-	rotation = -.42 if facing in ["s","sw","w","nw"] else .42
-	show_behind_parent = facing in ["nw","n","ne"]
-
+	var was_visible := visible
+	visible = actor.is_in_combat() and actor.hub.state.equipped_id("weapon")!="" and actor.swing<=0 and actor.roll_left<=0
+	if not visible: return
+	# A relaxed low carry keeps the blade outside the face as an arm swings
+	# across the chest. The separate attack art raises it for an actual strike.
+	rotation = 2.0 if facing in ["n","ne"] else -2.0
+	if facing=="nw":
+		# Keep the grip behind the far arm and show the blade above the tail.
+		rotation = 1.35
+	scale = Vector2.ONE*actor.sprite.display_height/73.0*.82
+	hand_anchor = Pose.hand(actor,"weapon")
+	position = hand_anchor-Vector2(0,-2).rotated(rotation)*scale
+	near_hand = facing in ["e","se","s","ne"] and Pose.measured(actor,"weapon")
+	Pose.order(actor,self,not near_hand)
 	modulate = actor.sprite.modulate
-	visible = false
+	var key: String = actor.sprite.animation+"/"+str(actor.sprite.frame)
+	if not was_visible or key!=pose_key: reset_physics_interpolation()
+	pose_key = key
 	queue_redraw()
 
 
@@ -32,8 +44,15 @@ func _draw() -> void:
 	draw_line(Vector2(0,-7),Vector2(0,3),Color("4c3b2c"),4,true)
 	for y in [-5,-2,1]:
 		draw_line(Vector2(-1.5,y),Vector2(1.5,y-1),Color("ac8350"),1,true)
-	draw_circle(Vector2(0,4),3,Color("d8af5c"))
+	draw_circle(Vector2(0,3),1.7,Color("a98552"),true,-1,true)
 	draw_circle(Vector2(0,-10),2,Color("466e83"))
-	# A small paw covers the grip, tying the equipment to the drawn character.
-	draw_circle(Vector2(0,-2),3.1,Color("dfaa62"))
-	draw_circle(Vector2(-.7,-3),1.7,Color("f4cf8f"))
+	if near_hand:
+		# Reuse the actual drawn paw over the handle. This is a native texture
+		# region, with the same registration transform, not an invented paw.
+		var sprite: AnimatedSprite2D = actor.sprite
+		var texture := sprite.sprite_frames.get_frame_texture(sprite.animation,sprite.frame) as AtlasTexture
+		var point: Vector2 = sprite.transform.affine_inverse()*hand_anchor-texture.margin.position-sprite.offset
+		var radius := Vector2(10,10)
+		draw_set_transform_matrix(transform.affine_inverse()*sprite.transform)
+		draw_texture_rect_region(texture.atlas,Rect2(point-radius+texture.margin.position+sprite.offset,radius*2),Rect2(texture.region.position+point-radius,radius*2))
+		draw_set_transform_matrix(Transform2D.IDENTITY)

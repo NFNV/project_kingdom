@@ -27,7 +27,29 @@ The **Trailwarden buckler** starts equipped in a new eighth inventory slot.
 Tomas at Emberforge sells an **Ironleaf shield** for 14 coins; it cuts real block
 stamina costs by 30%. Both have distinct vector icons and appear on the character
 when carried or guarding. Removing a shield disables guard/parry; rolls still
-work. No sword is displayed in the character's hand outside an attack.
+work. Sword and shield are drawn only during the character's combat stance:
+starting a sword attack or Wind Slash, or being attacked, starts a **10-second**
+timer. Each new outgoing or incoming attack refreshes it, including blocked,
+parried and dodged strikes. Merely standing near enemies, holding guard, moving
+or rolling does not refresh it. After ten seconds both items hide automatically.
+The drawn attack supplies its own sword, avoiding a duplicate carried blade;
+equipment tucks away during rolls. Pause freezes the timer and safe travel/load
+clears it. Equipment remains visible in inventory regardless of combat stance.
+
+Carried equipment now uses paw landmarks for each of the 160 idle/walk/run
+poses in all eight directions. `equipment_pose.gd` maps source-region coordinates
+through the actual sprite's registration, scale, lean and bob. Hidden far paws
+use inferred anchors with body occlusion; a single visible paw is never assigned
+both items. The sword rests low beside the body between attacks, and its near
+grip reuses the original paw pixels. The shield stays below the muzzle, follows
+the visible sprite direction during turns, and shows wooden straps from behind.
+Native multi-frame contact sheets and face/layer checks are produced by
+`tools/preview_equipment_alignment.gd`; the original sprite PNGs are unchanged.
+
+`tools/test_combat_stance.gd` checks the real expiry, refresh sources, carried
+equipment visibility and pause/load/travel behavior. It also produces native
+1440p [armed](previews/combat_stance_armed.png) and
+[sheathed](previews/combat_stance_sheathed.png) captures when run graphically.
 
 Briarwood raiders have **4 hearts**, move faster and recover sooner. Maulers have
 **6 hearts**, deal **2 damage**, and resist interruption from one light hit during

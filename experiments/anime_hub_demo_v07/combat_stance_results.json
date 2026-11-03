@@ -1,0 +1,6 @@
+{
+  "checks": 23,
+  "failures": [],
+  "passed": 23,
+  "scope": "Actual ten-second expiry, outgoing melee/skill refresh, incoming attack commitment and damage/block/parry/dodge refresh, guard/roll isolation, no duplicate attack blade, pause, equipment ownership, travel and load."
+}

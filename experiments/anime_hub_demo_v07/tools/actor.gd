@@ -14,6 +14,7 @@ const MAX_STAMINA := 100.0
 const ROLL_COST := 28.0
 const ROLL_DURATION := .46
 const PARRY_WINDOW := .18
+const COMBAT_LINGER := 10.0
 var hub: Node2D
 var controlled := false
 var enemy := false
@@ -79,6 +80,7 @@ var parries := 0
 var blocks := 0
 var dodges := 0
 var riposte_left := 0.0
+var combat_left := 0.0
 
 
 func _ready() -> void:
@@ -130,6 +132,7 @@ func _physics_process(delta: float) -> void:
 	flash = maxf(0,flash-delta*4)
 	knockback = knockback.move_toward(Vector2.ZERO,1000*delta)
 	if controlled:
+		combat_left = maxf(0,combat_left-delta)
 		_update_defence(delta)
 		if not automated:
 			intent = Input.get_vector("hub_left","hub_right","hub_up","hub_down")
@@ -271,6 +274,10 @@ func try_attack(aim := Vector2.ZERO) -> bool:
 	cooldown = .64 if controlled else 1.25
 	swing_hits.clear()
 	swing_audio_played = false
+	if controlled:
+		enter_combat()
+	elif enemy:
+		hub.player.enter_combat()
 	return true
 
 
@@ -296,6 +303,7 @@ func try_skill() -> bool:
 	hub.audio.play_event("wind_charge",position,-6)
 	swing_hits.clear()
 	route.clear()
+	enter_combat()
 	return true
 
 
@@ -316,7 +324,7 @@ func _update_combat_art() -> void:
 	var attacking := swing>0
 	sprite.visible = not attacking
 	combat_art.visible = attacking and active
-	weapon.visible = false
+	weapon.sync_pose()
 	if attacking:
 		combat_art.pose(facing,1.0-swing/attack_duration,attack_kind=="wind")
 		combat_art.modulate = sprite.modulate
@@ -345,6 +353,10 @@ func resolve_hits() -> void:
 func receive_hit(from: Vector2, damage := 1, force := 170.0, source: Node2D = null) -> bool:
 	if hub.peaceful_mode or hub.transitioning:
 		return false
+	# An incoming strike counts even when blocked, parried, rolled through,
+	# or absorbed by post-hit invulnerability.
+	if controlled and active:
+		enter_combat()
 	if not active or grace>0:
 		return false
 	if controlled:
@@ -400,6 +412,17 @@ func receive_hit(from: Vector2, damage := 1, force := 170.0, source: Node2D = nu
 		collision_layer = 0
 		hub.actor_yielded(self)
 	return true
+
+
+func is_in_combat() -> bool:
+	return controlled and active and combat_left>0 and not hub.peaceful_mode and not hub.shopping and not hub.title_active
+
+func enter_combat() -> void:
+	if not controlled or not active or hub.peaceful_mode or hub.transitioning or hub.paused or hub.shopping or hub.title_active:
+		return
+	combat_left = COMBAT_LINGER
+	if is_instance_valid(weapon): weapon.sync_pose()
+	if is_instance_valid(shield): shield.sync_pose()
 
 
 func _friendly_intent(delta: float) -> Vector2:

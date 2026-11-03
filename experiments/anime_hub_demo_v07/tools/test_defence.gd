@@ -69,7 +69,7 @@ func run() -> void:
  heavy = game.dogs[2]
  reset()
  await ticks(2)
- check(game.state.equipped_id("shield")=="trail_shield" and hero.shield.image.texture!=null,"A new character has a real equipped and visible offhand shield")
+ check(game.state.equipped_id("shield")=="trail_shield" and hero.shield.image.texture!=null and not hero.shield.visible,"A new character has a real equipped offhand shield hidden until combat")
  check(game.ui.satchel.slots.size()==8 and game.ui.satchel.slots.shield.icon!=null,"Inventory exposes a distinct eighth shield slot and illustration")
  check(raider.maximum_health==4 and heavy.maximum_health==6 and game.dogs[-1].maximum_health==12,"Raider, heavy and captain have tougher distinct health pools")
  var guard_key := InputEventKey.new()

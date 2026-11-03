@@ -34,6 +34,7 @@ func run() -> void:
  raider.attack_kind = "slash"
  raider.windup = .20
  raider._update_animation(0,0)
+ hero.enter_combat()
  hero.set_guard(true)
  hero.guard_age = .30
  hero.stamina = 63

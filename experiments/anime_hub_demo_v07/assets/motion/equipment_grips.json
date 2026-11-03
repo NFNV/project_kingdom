@@ -1,0 +1,2629 @@
+{
+  "notes": "Paw centers in each native AtlasTexture region; inferred hidden paws stay behind the body. Original PNGs are unchanged. Review with preview_equipment_alignment.gd.",
+  "directions": {
+    "e": {
+      "walk": [
+        {
+          "weapon": {
+            "point": [
+              83.0,
+              167.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              177.0,
+              162.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              143.0,
+              158.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              157.4,
+              159.66
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              112.0,
+              167.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              143.6,
+              157.11
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              143.0,
+              155.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              152.4,
+              158.66
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              160.5,
+              149.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              161.2,
+              160.28
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              130.0,
+              161.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              158.6,
+              156.91
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              131.0,
+              158.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              145.0,
+              160.9
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              79.0,
+              158.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              166.0,
+              150.0
+            ],
+            "measured": true
+          }
+        }
+      ],
+      "run": [
+        {
+          "weapon": {
+            "point": [
+              106.0,
+              140.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              211.0,
+              138.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              189.0,
+              137.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              200.6,
+              140.86
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              186.0,
+              134.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              199.8,
+              139.98
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              191.0,
+              128.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              192.8,
+              138.98
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              184.0,
+              134.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              196.8,
+              138.98
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              180.0,
+              133.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              197.6,
+              138.86
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              117.0,
+              146.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              214.0,
+              132.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              149.0,
+              142.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              162.91,
+              136.99
+            ],
+            "measured": false
+          }
+        }
+      ],
+      "idle": [
+        {
+          "weapon": {
+            "point": [
+              83.0,
+              175.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              154.0,
+              171.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              102.0,
+              177.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              166.0,
+              170.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              97.0,
+              177.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              155.0,
+              174.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              96.0,
+              178.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              162.0,
+              171.0
+            ],
+            "measured": true
+          }
+        }
+      ]
+    },
+    "se": {
+      "walk": [
+        {
+          "weapon": {
+            "point": [
+              67.0,
+              163.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              194.0,
+              159.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              78.0,
+              167.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              147.8,
+              177.22
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              83.0,
+              165.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              198.0,
+              163.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              81.0,
+              167.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              147.8,
+              175.72
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              148.0,
+              156.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              169.8,
+              176.22
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              94.0,
+              165.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              150.0,
+              173.6
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              156.0,
+              154.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              162.8,
+              175.22
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              102.0,
+              166.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              153.0,
+              155.0
+            ],
+            "measured": true
+          }
+        }
+      ],
+      "run": [
+        {
+          "weapon": {
+            "point": [
+              86.0,
+              140.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              205.0,
+              143.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              94.0,
+              137.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              169.0,
+              146.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              74.0,
+              141.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              203.0,
+              143.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              157.0,
+              137.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              184.0,
+              148.4
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              162.0,
+              140.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              183.2,
+              145.52
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              151.0,
+              138.5
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              177.0,
+              147.9
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              60.0,
+              132.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              166.0,
+              145.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              148.0,
+              137.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              177.6,
+              150.66
+            ],
+            "measured": false
+          }
+        }
+      ],
+      "idle": [
+        {
+          "weapon": {
+            "point": [
+              69.0,
+              175.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              165.0,
+              171.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              69.0,
+              174.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              172.0,
+              173.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              62.0,
+              172.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              156.0,
+              170.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              72.0,
+              173.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              172.0,
+              167.0
+            ],
+            "measured": true
+          }
+        }
+      ]
+    },
+    "s": {
+      "walk": [
+        {
+          "weapon": {
+            "point": [
+              37.0,
+              167.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              149.0,
+              185.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              33.0,
+              175.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              148.0,
+              178.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              29.0,
+              175.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              149.0,
+              178.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              37.0,
+              167.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              148.0,
+              181.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              27.0,
+              177.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              130.0,
+              170.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              31.0,
+              178.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              149.0,
+              174.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              31.0,
+              179.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              144.0,
+              178.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              29.0,
+              178.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              128.0,
+              169.0
+            ],
+            "measured": true
+          }
+        }
+      ],
+      "run": [
+        {
+          "weapon": {
+            "point": [
+              35.0,
+              162.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              151.0,
+              168.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              55.0,
+              171.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              155.0,
+              163.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              54.0,
+              157.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              154.0,
+              161.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              31.0,
+              161.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              118.5,
+              168.5
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              66.0,
+              164.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              151.0,
+              169.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              34.0,
+              172.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              124.0,
+              153.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              54.0,
+              153.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              149.0,
+              165.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              51.0,
+              167.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              151.0,
+              176.0
+            ],
+            "measured": true
+          }
+        }
+      ],
+      "idle": [
+        {
+          "weapon": {
+            "point": [
+              29.0,
+              185.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              149.0,
+              185.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              29.0,
+              182.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              150.0,
+              183.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              28.5,
+              184.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              148.0,
+              184.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              28.0,
+              184.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              148.0,
+              184.0
+            ],
+            "measured": true
+          }
+        }
+      ]
+    },
+    "sw": {
+      "walk": [
+        {
+          "weapon": {
+            "point": [
+              19.0,
+              172.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              96.0,
+              191.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              16.0,
+              168.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              139.0,
+              189.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              33.8,
+              192.68
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              103.0,
+              193.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              16.0,
+              171.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              97.0,
+              189.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              30.0,
+              172.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              133.0,
+              176.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              28.5,
+              160.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              105.0,
+              182.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              32.2,
+              185.82
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              80.0,
+              169.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              14.5,
+              155.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              134.0,
+              172.0
+            ],
+            "measured": true
+          }
+        }
+      ],
+      "run": [
+        {
+          "weapon": {
+            "point": [
+              20.0,
+              147.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              157.0,
+              149.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              43.0,
+              161.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              149.0,
+              159.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              52.0,
+              159.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              148.0,
+              158.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              16.0,
+              152.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              156.0,
+              148.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              14.0,
+              148.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              149.0,
+              150.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              39.0,
+              155.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              155.0,
+              147.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              30.0,
+              145.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              78.0,
+              146.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              36.0,
+              156.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              92.0,
+              151.0
+            ],
+            "measured": true
+          }
+        }
+      ],
+      "idle": [
+        {
+          "weapon": {
+            "point": [
+              11.0,
+              165.5
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              122.0,
+              176.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              17.0,
+              170.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              111.0,
+              179.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              14.0,
+              173.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              114.0,
+              180.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              13.0,
+              172.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              121.0,
+              180.0
+            ],
+            "measured": true
+          }
+        }
+      ]
+    },
+    "w": {
+      "walk": [
+        {
+          "weapon": {
+            "point": [
+              37.19,
+              166.98
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              36.0,
+              170.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              22.3,
+              165.4
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              56.0,
+              177.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              22.88,
+              161.54
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              44.0,
+              172.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              27.8,
+              164.7
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              32.0,
+              171.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              33.0,
+              163.9
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              33.0,
+              162.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              24.16,
+              163.28
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              108.0,
+              162.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              22.88,
+              159.04
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              44.0,
+              166.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              30.8,
+              162.78
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              27.0,
+              160.0
+            ],
+            "measured": true
+          }
+        }
+      ],
+      "run": [
+        {
+          "weapon": {
+            "point": [
+              22.0,
+              148.0
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              134.0,
+              153.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              27.6,
+              145.24
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              41.0,
+              145.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              26.8,
+              144.62
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              34.0,
+              139.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              30.8,
+              147.62
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              25.0,
+              145.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              26.6,
+              144.24
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              34.0,
+              145.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              20.44,
+              141.98
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              134.0,
+              142.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              28.2,
+              140.48
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              35.0,
+              137.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              27.2,
+              142.48
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              19.0,
+              136.0
+            ],
+            "measured": true
+          }
+        }
+      ],
+      "idle": [
+        {
+          "weapon": {
+            "point": [
+              19.0,
+              176.5
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              85.0,
+              178.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              22.0,
+              174.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              78.0,
+              175.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              18.0,
+              173.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              82.0,
+              177.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              21.0,
+              177.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              89.0,
+              178.0
+            ],
+            "measured": true
+          }
+        }
+      ]
+    },
+    "nw": {
+      "walk": [
+        {
+          "weapon": {
+            "point": [
+              78.15,
+              156.42
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              13.0,
+              169.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              72.24,
+              156.06
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              28.0,
+              167.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              74.32,
+              152.5
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              22.5,
+              173.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              75.05,
+              152.7
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              13.0,
+              169.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              74.97,
+              156.68
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              14.0,
+              168.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              72.97,
+              157.18
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              33.0,
+              169.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              74.24,
+              156.56
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              7.0,
+              148.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              76.24,
+              156.56
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              11.0,
+              161.0
+            ],
+            "measured": true
+          }
+        }
+      ],
+      "run": [
+        {
+          "weapon": {
+            "point": [
+              71.97,
+              134.32
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              20.0,
+              127.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              72.7,
+              134.7
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              20.0,
+              127.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              72.24,
+              133.94
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              21.0,
+              139.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              72.7,
+              136.2
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              14.0,
+              135.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              71.51,
+              132.56
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              25.0,
+              141.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              71.7,
+              136.2
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              19.0,
+              147.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              72.51,
+              133.06
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              21.0,
+              134.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              73.43,
+              137.08
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              11.0,
+              156.0
+            ],
+            "measured": true
+          }
+        }
+      ],
+      "idle": [
+        {
+          "weapon": {
+            "point": [
+              73.89,
+              161.66
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              12.0,
+              166.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              79.43,
+              158.42
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              12.0,
+              166.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              73.89,
+              163.16
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              16.0,
+              171.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              77.6,
+              157.7
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              13.0,
+              164.0
+            ],
+            "measured": true
+          }
+        }
+      ]
+    },
+    "n": {
+      "walk": [
+        {
+          "weapon": {
+            "point": [
+              157.0,
+              151.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              85.4,
+              160.64
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              168.0,
+              148.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              50.0,
+              164.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              156.0,
+              149.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              67.16,
+              153.28
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              157.0,
+              146.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              70.9,
+              153.32
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              134.0,
+              151.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              16.0,
+              152.5
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              148.0,
+              151.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              59.3,
+              156.9
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              155.0,
+              151.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              70.0,
+              158.4
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              162.0,
+              152.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              143.0,
+              143.0
+            ],
+            "measured": true
+          }
+        }
+      ],
+      "run": [
+        {
+          "weapon": {
+            "point": [
+              165.0,
+              140.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              79.58,
+              134.36
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              178.0,
+              139.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              52.0,
+              148.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              172.0,
+              134.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              82.27,
+              136.68
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              158.0,
+              135.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              79.72,
+              136.25
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              175.0,
+              121.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              77.16,
+              130.22
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              163.0,
+              136.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              86.4,
+              138.36
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              162.0,
+              140.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              87.6,
+              138.24
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              163.0,
+              143.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              72.58,
+              137.86
+            ],
+            "measured": false
+          }
+        }
+      ],
+      "idle": [
+        {
+          "weapon": {
+            "point": [
+              161.0,
+              162.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              49.0,
+              162.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              159.0,
+              166.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              42.0,
+              162.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              157.0,
+              160.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              44.0,
+              161.0
+            ],
+            "measured": true
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              149.0,
+              157.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              25.0,
+              167.0
+            ],
+            "measured": true
+          }
+        }
+      ]
+    },
+    "ne": {
+      "walk": [
+        {
+          "weapon": {
+            "point": [
+              170.0,
+              170.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              105.27,
+              173.12
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              181.0,
+              161.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              97.73,
+              169.88
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              189.0,
+              160.5
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              101.46,
+              176.4
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              174.0,
+              172.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              104.0,
+              171.5
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              173.0,
+              170.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              94.81,
+              174.86
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              127.0,
+              178.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              66.81,
+              175.36
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              179.0,
+              155.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              101.54,
+              173.74
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              184.0,
+              169.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              104.81,
+              174.36
+            ],
+            "measured": false
+          }
+        }
+      ],
+      "run": [
+        {
+          "weapon": {
+            "point": [
+              208.0,
+              136.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              126.08,
+              147.52
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              192.3,
+              149.9
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              130.35,
+              149.9
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              210.0,
+              134.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              126.08,
+              147.2
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              211.0,
+              132.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              128.69,
+              145.24
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              181.16,
+              148.28
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              118.62,
+              148.28
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              190.02,
+              150.16
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              126.89,
+              150.16
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              203.0,
+              136.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              115.03,
+              147.34
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              180.44,
+              146.52
+            ],
+            "measured": false
+          },
+          "shield": {
+            "point": [
+              119.08,
+              146.52
+            ],
+            "measured": false
+          }
+        }
+      ],
+      "idle": [
+        {
+          "weapon": {
+            "point": [
+              171.0,
+              179.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              90.35,
+              176.6
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              171.0,
+              177.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              83.27,
+              172.12
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              170.0,
+              177.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              91.94,
+              178.04
+            ],
+            "measured": false
+          }
+        },
+        {
+          "weapon": {
+            "point": [
+              168.0,
+              177.0
+            ],
+            "measured": true
+          },
+          "shield": {
+            "point": [
+              89.35,
+              176.6
+            ],
+            "measured": false
+          }
+        }
+      ]
+    }
+  }
+}

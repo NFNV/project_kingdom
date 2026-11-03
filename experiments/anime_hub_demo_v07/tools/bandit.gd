@@ -184,6 +184,7 @@ func try_attack(aim := Vector2.ZERO) -> bool:
 	last_attack = attack_kind
 	hub.audio.play_event("club" if variant=="mauler" else "sword",position,-6)
 	state = "attack"
+	hub.player.enter_combat()
 	return true
 
 func attack_contains(point: Vector2) -> bool:

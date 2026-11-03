@@ -69,7 +69,7 @@ func _run() -> void:
 	await ticks(10)
 	check(first.health==2,"Normal sword attack still deals one actual damage")
 	await ticks(25)
-	check(not game.player.combat_art.visible and game.player.sprite.visible and not game.player.weapon.visible,"Attack recovers to the registered walking/idle character")
+	check(not game.player.combat_art.visible and game.player.sprite.visible and game.player.weapon.visible,"Attack recovers to the registered character with its sword drawn during the combat timer")
 	# Reproduce the reported problem: Q pressed while Space is held mid-attack.
 	first.health = 3
 	first.grace = 0

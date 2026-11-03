@@ -9,6 +9,10 @@ cross, and smaller location, quest, health and map components. **Q** or click th
 skill icon; its countdown shows the remaining cooldown.
 [HUD details and previews](HUD.md).
 
+The character draws sword and shield for **10 seconds** after attacking or being
+attacked. Each new attack refreshes the timer; exploration and held guard alone
+do not. Both items hide again when the timer expires.
+
 **Shield, parry and dodge roll are playable.** Hold **F** to guard; raise it just
 before impact to parry, then counter for +2 damage. **V / Ctrl** rolls. Watch
 the turquoise stamina bar. Every journey receives a Trailwarden buckler; Tomas
@@ -355,8 +359,9 @@ locked 60 FPS under every desktop condition.
 The MP4 was recorded at a fixed 60 FPS for inspection; its encoding speed is
 not a live gameplay benchmark.
 
-The cat keeps its sword sheathed while idle, walking, running and shopping.
-Only attack/skill poses show the blade in its paw. During attacks, **32 drawn combat
+The cat keeps its sword and shield hidden during peaceful exploration and shopping.
+After attacking or being attacked, equipped gear stays drawn through a ten-second
+combat timer, including while moving or standing. During attacks, **32 drawn combat
 poses** replace the walking body: eight timed stages in four real facing views,
 including drawing the blade, anticipation, early slash, contact, follow-through,
 settling, recovery and sheathing. Arms, shoulders and the held blade move together.
