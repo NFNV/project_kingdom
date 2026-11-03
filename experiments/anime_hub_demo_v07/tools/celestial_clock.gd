@@ -9,6 +9,7 @@ var serif: Font
 var paintings: Array[AtlasTexture] = []
 
 func _ready() -> void:
+ texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
  mouse_filter = Control.MOUSE_FILTER_IGNORE
  size = Vector2(280,212)
  var atlas: Texture2D = load(ATLAS)

@@ -103,7 +103,7 @@ func run() -> void:
  await wait_zone("mill_room")
  check(game.residents.size()==2 and game.peaceful_mode and game.dogs.is_empty(),"Hearthroom has two friendly cats and no combat")
  check(game.audio.active_zone=="mill_room" and game.audio.surface_at(game.player.position)=="wood","Interior has hearth ambience and wood footsteps")
- check(game.world_size==Vector2i(1280,720) and game.camera.zoom==Vector2(1.5,1.5) and game.is_walkable(game.player.position,14),"Cat-scaled interior is framed as a complete room with a safe entry")
+ check(game.world_size==Vector2i(1280,720) and game.camera.zoom==Vector2(1.5,1.5)*game.RenderSettings.SCALE and game.is_walkable(game.player.position,14),"Cat-scaled interior is framed as a complete room with a safe entry")
  var room_material: ShaderMaterial = game.bakery_room.room_material
  check(room_material.get_shader_parameter("night_painting")!=null and game.Mill.night_weight(1)==0 and game.Mill.night_weight(3)==1,"Interior has a real night painting and distinct noon/midnight lighting")
  var day_tint: Color = game.actor_tint
@@ -161,7 +161,7 @@ func run() -> void:
  await key(KEY_F)
  await wait_zone("town")
  check(game.player.get_instance_id()==hero_id and game.state.get_instance_id()==state_id and game.state.snapshot()==original,"Mill → overworld → Garden Square retains the original journey")
- check(game.camera.enabled and game.camera.zoom==Vector2(1.5,1.5) and game.audio.active_zone=="town","Town camera framing and sound return correctly after the mill")
+ check(game.camera.enabled and game.camera.zoom==Vector2(1.5,1.5)*game.RenderSettings.SCALE and game.audio.active_zone=="town","Town camera framing and sound return correctly after the mill")
  # A loaded mill save can leave through the overworld even without a retained world.
  check(game.load_game() and game.zone=="mill_garden","Continue can load the mill-garden checkpoint")
  check(game.make_save_document().player.mill_garden_layout==2,"New saves record the compact garden layout")

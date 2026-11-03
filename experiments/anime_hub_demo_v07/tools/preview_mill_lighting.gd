@@ -19,7 +19,7 @@ func capture(phase: float) -> Image:
  return root.get_texture().get_image()
 func sample_source(picture: Image, source: Vector2) -> Color:
  # The complete room occupies the viewport at 1.5x and shares this source UV.
- return picture.get_pixelv(Vector2i(source*Vector2(1920,1080)/Vector2(1672,941)))
+ return picture.get_pixelv(Vector2i(source*Vector2(game.RenderSettings.RENDER_SIZE)/Vector2(1672,941)))
 func run() -> void:
  if DisplayServer.get_name()=="headless":
   push_error("Mill lighting preview requires the native renderer")
@@ -53,17 +53,17 @@ func run() -> void:
  var feet: Vector2 = game.player.get_global_transform_with_canvas().origin
  game.player.hide()
  var without_hero := await capture(3.85556)
- var top := 1080
+ var top := game.RenderSettings.RENDER_SIZE.y
  var bottom := 0
- for x in range(int(feet.x)-50,int(feet.x)+50):
-  for y in range(int(feet.y)-135,int(feet.y)+20):
+ for x in range(int(feet.x)-67,int(feet.x)+67):
+  for y in range(int(feet.y)-180,int(feet.y)+27):
    var a: Color = images.before_dawn.get_pixel(x,y)
    var b: Color = without_hero.get_pixel(x,y)
    if maxf(absf(a.r-b.r),maxf(absf(a.g-b.g),absf(a.b-b.b)))>.05:
     top = mini(top,y)
     bottom = maxi(bottom,y)
- check(bottom-top>=100,"Actual rendered cat occupies at least 100 pixels beside the furniture")
- FileAccess.open(ROOT+"mill_room_render_results.json",FileAccess.WRITE).store_string(JSON.stringify({"checks":checks,"passed":checks-failures.size(),"failures":failures,"scope":"Native 1920x1080 day/dawn/dusk/night/pre-dawn views, actual floor sunbeam removal, window darkness, warm hearth contrast and cat-to-room scale."},"  ")+"\n")
+ check(bottom-top>=133,"Actual rendered cat occupies at least 133 pixels beside the furniture")
+ FileAccess.open(ROOT+"mill_room_render_results.json",FileAccess.WRITE).store_string(JSON.stringify({"checks":checks,"passed":checks-failures.size(),"failures":failures,"scope":"Native 2560x1440 day/dawn/dusk/night/pre-dawn views, actual floor sunbeam removal, window darkness, warm hearth contrast and cat-to-room scale."},"  ")+"\n")
  print("MILL ROOM RENDER CHECKS ",checks-failures.size(),"/",checks)
  game.queue_free()
  await process_frame

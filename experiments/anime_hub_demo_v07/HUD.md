@@ -30,8 +30,9 @@ transparency are preserved; atlas cropping occurs at runtime.
 Verification: `tools/preview_handcrafted_hud.gd` renders town, four combat time
 phases, cooldown, mill and overworld views. It checks the actual viewport mouse
 hit target, accurate clock times, icon bounds and compact bar dimensions. The
-normal 1280×720 window uses the existing internal 1920×1080 viewport; native
-captures show that internal viewport. The script also opens a 1920×1080 window.
+normal 1280×720 window now uses an internal 2560×1440 viewport; the HUD retains
+its authored 1920×1080 coordinates through a 4/3 canvas scale. Native captures
+show the internal viewport. The script also opens a 1920×1080 output window.
 It uses an isolated `/tmp` save path. Results: `handcrafted_hud_results.json`.
 The existing skill, atmosphere and complete journey regression suites pass.
 These are rendering and behavior checks, not a new performance benchmark.

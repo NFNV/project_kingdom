@@ -49,7 +49,12 @@ func run() -> void:
  game._update_lighting()
  game._update_hud()
  # Deliver actual viewport mouse events to exercise the relocated hit target.
- var at: Vector2 = game.ui.skill_button.get_global_rect().get_center()
+ var at: Vector2 = game.ui.skill_button.get_global_transform_with_canvas()*(game.ui.skill_button.size*.5)
+ var motion := InputEventMouseMotion.new()
+ motion.position = at
+ motion.global_position = at
+ root.push_input(motion,true)
+ await process_frame
  for pressed in [true,false]:
   var event := InputEventMouseButton.new()
   event.position = at

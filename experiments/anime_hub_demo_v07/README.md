@@ -1,5 +1,9 @@
 # Garden Square, Mosswood & Briarwood — playable RPG demo
 
+**Current internal rendering: 2560 × 1440 (QHD).** Camera framing and HUD
+proportions stay the same; the default output window remains 1280 × 720.
+[Rendering details and native captures](RENDERING.md).
+
 The HUD now has a painted four-phase clock, a bottom-left Wind Slash equipment
 cross, and smaller location, quest, health and map components. **Q** or click the
 skill icon; its countdown shows the remaining cooldown.

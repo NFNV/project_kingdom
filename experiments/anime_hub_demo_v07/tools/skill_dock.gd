@@ -10,6 +10,7 @@ var countdown: Label
 var serif: Font
 
 func _ready() -> void:
+	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	size = Vector2(216,230)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_theme_stylebox_override("panel",StyleBoxEmpty.new())

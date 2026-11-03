@@ -8,6 +8,7 @@ var transitioning := false
 var gate_cooldown := .25
 # All geometry is CanvasItem drawing. Logical positions are 2D map coordinates.
 const Atmosphere := preload("res://experiments/overworld_2d_v01/atmosphere.gd")
+const RenderSettings := preload("res://experiments/anime_hub_demo_v07/tools/render_settings.gd")
 const Dressing := preload("res://experiments/overworld_2d_v01/region_dressing.gd")
 const ClockDial := preload("res://experiments/anime_hub_demo_v07/tools/celestial_clock.gd")
 const CYCLE_SECONDS := Atmosphere.CYCLE_SECONDS
@@ -77,8 +78,8 @@ var bound_hint := 0.0
 
 func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
-	get_tree().root.content_scale_size = Vector2i(1920,1080)
-	get_tree().root.content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
+	RenderSettings.configure(get_window())
+	scale = Vector2.ONE*RenderSettings.SCALE
 	get_window().title = "Project Kingdom — 2D overworld laboratory"
 	Engine.max_fps = 60
 	font = ThemeDB.fallback_font

@@ -21,11 +21,12 @@ Questify="*uid://b07jy1yytqpum"
 
 [display]
 
-window/size/viewport_width=1280
-window/size/viewport_height=720
+window/size/viewport_width=2560
+window/size/viewport_height=1440
 window/size/window_width_override=1280
 window/size/window_height_override=720
-window/stretch/mode="canvas_items"
+window/stretch/mode="viewport"
+window/stretch/aspect="keep"
 
 [editor_plugins]
 
@@ -87,6 +88,6 @@ general/add_quests_to_pot_generation=false
 
 [rendering]
 
-textures/canvas_textures/default_texture_filter=0
+textures/canvas_textures/default_texture_filter=1
 rendering_device/driver.windows="d3d12"
 environment/defaults/default_clear_color=Color(0.12, 0.24, 0.28, 1)

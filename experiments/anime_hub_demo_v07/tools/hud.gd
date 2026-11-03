@@ -5,8 +5,10 @@ const JournalView := preload("res://experiments/anime_hub_demo_v07/tools/quest_j
 const ForgeShop := preload("res://experiments/anime_hub_demo_v07/tools/forge_shop.gd")
 const SkillDock := preload("res://experiments/anime_hub_demo_v07/tools/skill_dock.gd")
 const Clock := preload("res://experiments/anime_hub_demo_v07/tools/celestial_clock.gd")
+const RenderSettings := preload("res://experiments/anime_hub_demo_v07/tools/render_settings.gd")
+const UI := preload("res://experiments/anime_hub_demo_v07/tools/rpg_ui.gd")
 var hub: Node2D
-var serif := SystemFont.new()
+var serif: Font = UI.heading_font()
 var objective: Label
 var status_label: Label
 var location_label: Label
@@ -63,7 +65,7 @@ var inn_sleep_button: Button
 
 
 func _ready() -> void:
-	serif.font_names = PackedStringArray(["Georgia","Baskerville","Noto Serif","serif"])
+	scale = Vector2.ONE*RenderSettings.SCALE
 	var location := panel(Vector2(24,22),Vector2(304,74))
 	location_label = label("Garden Square",Vector2(14,10),23,location,274,Color("263e37"),true)
 	location_label.autowrap_mode = TextServer.AUTOWRAP_OFF
@@ -348,7 +350,7 @@ func refresh() -> void:
 	elif hub.zone=="mill_room":
 		objective.text = "A warm hearth, meadow tea and three cozy guest rooms upstairs."
 	debug_label.visible = debug_visible
-	debug_label.text = "%d FPS  ·  1920 × 1080  ·  %s  ·  F3 debug" % [Engine.get_frames_per_second(),hub.zone]
+	debug_label.text = "%d FPS  ·  %d × %d  ·  %s  ·  F3 debug" % [Engine.get_frames_per_second(),RenderSettings.RENDER_SIZE.x,RenderSettings.RENDER_SIZE.y,hub.zone]
 	var suffix := ""
 	if hub.near_exit!="":
 		suffix = "E  ·  "+hub.exits[hub.near_exit]["label"]
@@ -372,10 +374,13 @@ func _process(delta: float) -> void:
 	# The compact garden can put the cat in the journal card's corner. Keep
 	# the character visible there; J still opens the full journal normally.
 	if is_instance_valid(hub.player):
-		var at: Vector2 = hub.player.get_global_transform_with_canvas().origin
+		var at: Vector2 = world_to_ui(hub.player.global_position)
 		var hero_rect := Rect2(at-Vector2(28,95),Vector2(56,115))
 		journal_panel.visible = hub.zone!="mill_garden" or not journal_panel.get_rect().grow(12).intersects(hero_rect)
 
+
+func world_to_ui(point: Vector2) -> Vector2:
+	return get_final_transform().affine_inverse()*(hub.get_canvas_transform()*point)
 
 func show_notice(message: String) -> void:
 	notice.position.y = 54 if hub.paused or hub.shopping else (925 if hub.zone in ["mill_garden","mill_room","mill_loft"] else 744)
