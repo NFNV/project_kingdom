@@ -1,5 +1,10 @@
 # Garden Square, Mosswood & Briarwood — playable RPG demo
 
+The HUD now has a painted four-phase clock, a bottom-left Wind Slash equipment
+cross, and smaller location, quest, health and map components. **Q** or click the
+skill icon; its countdown shows the remaining cooldown.
+[HUD details and previews](HUD.md).
+
 Walk as the cat adventurer through a painted anime town, a woodland trail, and
 a riverside glade, enterable bakery and blacksmith, and the large Briarwood combat forest. A 1.5× camera follows the cat
 through the original areas and stops at painted scene edges; Windsong Mill uses

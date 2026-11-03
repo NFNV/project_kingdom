@@ -397,8 +397,8 @@ func _draw_exit_marks(node: Node2D) -> void:
 		sign.set_border_width_all(1)
 		sign.set_corner_radius_all(5)
 		var label_y := -150.0 if id=="bakery" else -57.0
-		node.draw_style_box(sign,Rect2(at+Vector2(-82,label_y),Vector2(164,29)))
-		node.draw_string(ThemeDB.fallback_font,at+Vector2(-76,label_y+21),exits[id].get("sign","Mosswood" if zone=="town" else ("Garden Square" if id=="town" else ("Riverbend" if id=="river" else "Mosswood"))),HORIZONTAL_ALIGNMENT_CENTER,152,16,Color("fff1cb"))
+		node.draw_style_box(sign,Rect2(at+Vector2(-59,label_y),Vector2(118,23)))
+		node.draw_string(ThemeDB.fallback_font,at+Vector2(-54,label_y+16),exits[id].get("sign","Mosswood" if zone=="town" else ("Garden Square" if id=="town" else ("Riverbend" if id=="river" else "Mosswood"))),HORIZONTAL_ALIGNMENT_CENTER,108,12,Color("fff1cb"))
 
 
 func _draw_forest_air() -> void:
