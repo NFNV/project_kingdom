@@ -8,10 +8,10 @@ const QUEST_ID := "briarwood_patrol"
 const QUEST_PATH := ROOT+"data/briarwood_patrol.tres"
 const SMITH_PATH := ROOT+"data/emberforge_tools.tres"
 const CAPTAIN_ID := "wild_dog_3_2"
-const SLOTS := ["head","chest","legs","gloves","boots","weapon","charm"]
-const SLOT_NAMES := {"head":"Helmet","chest":"Chest","legs":"Pants","gloves":"Gloves","boots":"Boots","weapon":"Weapon","charm":"Charm"}
-const STARTER := {"head":"","chest":"traveller_tunic","legs":"field_trousers","gloves":"riding_gloves","boots":"trail_boots","weapon":"travel_sword","charm":""}
-const FORGE_STOCK := ["leather_cap","reinforced_vest","hunter_boots","swift_charm"]
+const SLOTS := ["head","chest","legs","gloves","boots","weapon","charm","shield"]
+const SLOT_NAMES := {"head":"Helmet","chest":"Chest","legs":"Pants","gloves":"Gloves","boots":"Boots","weapon":"Weapon","charm":"Charm","shield":"Shield"}
+const STARTER := {"head":"","chest":"traveller_tunic","legs":"field_trousers","gloves":"riding_gloves","boots":"trail_boots","weapon":"travel_sword","charm":"","shield":"trail_shield"}
+const FORGE_STOCK := ["leather_cap","reinforced_vest","hunter_boots","swift_charm","ironleaf_shield"]
 static var shared_prototypes: JSON
 var definitions: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(ROOT+"data/items.json"))
 var bag: Inventory
@@ -95,7 +95,7 @@ func owned(id: String) -> int:
 	return total
 
 func stats(replacements: Dictionary = {}) -> Dictionary:
-	var result := {"hearts":5,"attack":0,"recharge":6.0,"speed":1.0,"wind":0}
+	var result := {"hearts":5,"attack":0,"recharge":6.0,"speed":1.0,"wind":0,"guard":0.0}
 	for slot in SLOTS:
 		var id: String = replacements.get(slot,equipped_id(slot))
 		if not definitions.has(id):
@@ -105,6 +105,7 @@ func stats(replacements: Dictionary = {}) -> Dictionary:
 		result.attack += int(item.get("attack",0))
 		result.recharge -= float(item.get("haste",0))
 		result.speed += float(item.get("speed",0))
+		result.guard += float(item.get("guard",0))
 	result.wind = 2+int(result.attack) if int(result.attack)>0 else 0
 	return result
 
@@ -158,6 +159,8 @@ func equipment_summary(id: String) -> String:
 		parts.append("Wind Slash recharge: %.1f seconds" % (6-float(item.haste)))
 	if item.has("attack"):
 		parts.append("%d sword damage" % int(item.attack))
+	if item.has("guard"):
+		parts.append("Guard stamina cost: %d%%" % roundi(100/float(item.guard)))
 	parts.append(SLOT_NAMES[item.slot])
 	return "  ·  ".join(parts)
 

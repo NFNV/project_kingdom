@@ -189,6 +189,8 @@ func _activate_direct_session() -> void:
 
 func _install_input() -> void:
 	var bindings := {"left":[KEY_A,KEY_LEFT],"right":[KEY_D,KEY_RIGHT],"up":[KEY_W,KEY_UP],"down":[KEY_S,KEY_DOWN],"run":[KEY_SHIFT],"attack":[KEY_SPACE],"skill":[KEY_Q],"interact":[KEY_E],"time":[KEY_T],"pause":[KEY_ESCAPE],"restart":[KEY_R],"fullscreen":[KEY_F11],"journal":[KEY_J],"debug":[KEY_F3],"mute":[KEY_M],"bag":[KEY_I],"food":[KEY_H],"save":[KEY_F5],"load":[KEY_F9]}
+	bindings.guard = [KEY_F]
+	bindings.roll = [KEY_V,KEY_CTRL]
 	for action in bindings:
 		var name := "hub_"+str(action)
 		if not InputMap.has_action(name):
@@ -309,6 +311,14 @@ func _load_zone(destination: String, entry: String) -> void:
 	player.skill_launched = false
 	player.windup = 0
 	player.knockback = Vector2.ZERO
+	player.stamina = Actor.MAX_STAMINA
+	player.stamina_delay = 0
+	player.guard_break = 0
+	player.roll_cooldown = 0
+	player.parry_rearm = 0
+	player.guard_requested = Input.is_action_pressed("hub_guard")
+	player.riposte_left = 0
+	player.defence_flash = 0
 	player.sprite.modulate.a = 1
 	player.intent = Vector2.ZERO
 	player.velocity = Vector2.ZERO
@@ -839,7 +849,7 @@ func make_save_document() -> Dictionary:
 
 
 func save_game(automatic := false) -> bool:
-	if transitioning or not player.active or player.swing>0 or player.windup>0:
+	if transitioning or not player.active or player.swing>0 or player.windup>0 or player.roll_left>0 or player.guarding or player.guard_break>0:
 		ui.show_notice("Finish your action before saving.")
 		return false
 	var result := saves.write_document(make_save_document(),save_path+".auto" if automatic else save_path)
@@ -1291,6 +1301,8 @@ func set_paused(value: bool) -> void:
 	audio.set_paused(value)
 	pause_overlay.visible = value
 	if value:
+		player.set_guard(false)
+		player.parry_rearm = maxf(player.parry_rearm,.55)
 		prompt.hide()
 		quest_marker.hide()
 	for actor in [player]+dogs:
@@ -1316,6 +1328,16 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 		return
 	if event.is_echo() or title_active:
+		return
+	if event.is_action_released("hub_guard"):
+		player.set_guard(false)
+	if event.is_action_pressed("hub_guard"):
+		player.set_guard(true)
+		get_viewport().set_input_as_handled()
+		return
+	if event.is_action_pressed("hub_roll"):
+		player.try_roll()
+		get_viewport().set_input_as_handled()
 		return
 	if event.is_action_pressed("hub_journal") or (journal_open and event.is_action_pressed("hub_pause")):
 		toggle_journal()

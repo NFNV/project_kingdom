@@ -99,6 +99,8 @@ func _run() -> void:
 	game.player.sprite.heading_angle = 0
 	var left = game.dogs[0]
 	var right = game.dogs[1]
+	left.health = 3
+	right.health = 3
 	left.position = center-Vector2(75,0)
 	right.position = center+Vector2(75,0)
 	Input.action_press("hub_left")

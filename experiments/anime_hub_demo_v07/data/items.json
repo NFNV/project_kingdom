@@ -126,6 +126,23 @@
     "max_stack_size": 1,
     "kind": "gear"
   },
+  "trail_shield": {
+    "name": "Trailwarden buckler",
+    "description": "Oak, brass and a leaf crest. Hold F to guard the direction you face; raise it just before impact to parry.",
+    "slot": "shield",
+    "guard": 1.0,
+    "max_stack_size": 1,
+    "kind": "gear"
+  },
+  "ironleaf_shield": {
+    "name": "Ironleaf shield",
+    "description": "Tomas's reinforced oak shield. Blocking costs thirty percent less stamina. F guards; a well-timed raise parries.",
+    "slot": "shield",
+    "guard": 1.428571,
+    "price": 14,
+    "max_stack_size": 1,
+    "kind": "gear"
+  },
   "smith_tools": {
     "name": "Tomas's stolen tools",
     "description": "A hammer and tongs recovered from Rook. Return them to Tomas at Emberforge in Northgate.",

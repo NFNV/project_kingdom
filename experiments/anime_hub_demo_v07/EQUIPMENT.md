@@ -8,9 +8,9 @@ and Questify 1.6.0 remain pinned and unmodified; see `addons.lock.json`.
 Run the project with F5 or launch `Play Garden Square.command` for New Journey /
 Continue. F6 runs whichever scene is currently open in the editor.
 
-I opens a parchment equipment screen with a base cat illustration, seven
-labelled slots and 24 backpack cells. Helmet, chest, pants, gloves, boots, weapon
-and charm each have a separate item image and a real GLoot ItemSlot. Click to
+I opens a parchment equipment screen with a base cat illustration, eight
+labelled slots and 24 backpack cells. Helmet, chest, pants, gloves, boots, weapon,
+charm and shield each have a separate item image and a real GLoot ItemSlot. Click to
 inspect and compare, double-click to equip/use, or drag gear between the bag and
 its matching slot. Swapping returns the previous item to the bag. Food and quest
 items cannot enter equipment slots. Opening inventory or J's journal pauses the
@@ -29,6 +29,8 @@ Wind Slash until another weapon is equipped.
 | Windfeather charm | Charm | Wind Slash recharge 6 → 4.5 seconds | Tomas, 12 coins |
 | Warden's charm | Charm | +1 maximum heart | Bram's bounty |
 | Embersteel sword | Weapon | Normal damage 1 → 2; Wind Slash 3 → 4 | Stolen-tools reward |
+| Trailwarden buckler | Shield | Directional guard and timed parry | Starts equipped; supplied to older journeys |
+| Ironleaf shield | Shield | 30% less block stamina cost | Tomas, 14 coins |
 
 Projectile damage is captured when cast. Changing weapons while a wave flies
 does not change that wave's damage. Starter clothing without bonuses still
@@ -37,7 +39,8 @@ hearts; both charms cannot be worn together.
 
 The paper-doll portrait is a fixed base illustration. Slot icons and gameplay
 stats change; equipping gear does not yet replace the portrait's clothing or the
-animated world sprite. A cosmetic outfit pipeline remains future work.
+animated world sprite. Shields do appear as a directional carried/raised offhand.
+A cosmetic outfit pipeline for clothing remains future work. See [defense controls](DEFENCE.md).
 
 ## Workshop, quest and journal
 
@@ -50,8 +53,8 @@ Tomas stands behind the counter and faces the player. The outdoor resident with
 stable ID `tomas` is now Nico, the smith's apprentice; existing IDs remain valid.
 
 Tomas accepts The stolen tools. Rook replaces the existing southeast camp
-mauler (`wild_dog_3_2`), keeping Briarwood's population at twelve. Rook has eight
-health and a two-heart sweep, with a 1.25-second warning and longer recovery.
+mauler (`wild_dog_3_2`), keeping Briarwood's population at twelve. Rook now has twelve
+health, three-damage hits and a two-hit combo with a new warning before the follow-up.
 Collect his pouch, then return the hammer and tongs for twelve coins and the
 Embersteel sword. Ordinary badges still drop. Previously defeated Rook can yield
 the tools without respawning or blocking the quest.
@@ -62,16 +65,17 @@ rewards. Tracking a card changes both the HUD text and world guide marker.
 
 ## Persistence and title flow
 
-`save_store.gd` writes schema 2. `save_v1.gd` retains the strict schema-1 validator
+`save_store.gd` writes schema 3. `save_v1.gd` retains the strict schema-1 validator
 for migration. Both manual and autosave slots use temporary-file validation,
 atomic replacement and a previous validated backup. The manual slot is
 `user://kingdom_journey.json`; the autosave has `.auto` appended. A high-resolution
 `saved_at` stamp determines the newest validated slot, even within one second.
 
-Schema 2 adds all seven equipment IDs, additional inventory quantities, smith
+Schema 2 added seven equipment IDs, additional inventory quantities, smith
 quest state, tracked quest and the forge location. Ownership, compatible slots,
 unique items, reward flags and badge/tool conservation are checked before any
-live state changes. Unsupported future schemas are rejected. Valid schema-1
+live state changes. Schema 3 adds the eighth shield slot and the two shield items;
+valid schema-2 journeys receive the starter buckler in memory. Unsupported future schemas are rejected. Valid schema-1
 saves receive starter clothing and retain money, quests and weapon/charm state.
 An already collected captain pouch supplies the tools during migration; an
 uncollected pouch keeps them in the world. Reading does not rewrite the old file.

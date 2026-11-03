@@ -25,11 +25,13 @@ func key(code: Key) -> void:
 	event.physical_keycode = code
 	event.pressed = true
 	Input.parse_input_event(event)
+	await get_tree().process_frame
 	await ticks(1)
 	event = InputEventKey.new()
 	event.physical_keycode = code
 	event.pressed = false
 	Input.parse_input_event(event)
+	await get_tree().process_frame
 	await ticks(1)
 
 func approach(id: String) -> void:
@@ -92,6 +94,7 @@ func run() -> void:
 	game.player.grace = 100
 	game.player.health = 2
 	for i in 3:
+		game.dogs[i].health = 3 # Fixed quest projectile fixture; combat difficulty has its own suite.
 		game.dogs[i].position = center+Vector2(120+i*125,0)
 	await key(KEY_Q)
 	await ticks(85)

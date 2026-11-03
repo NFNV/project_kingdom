@@ -25,11 +25,13 @@ func key(code: Key) -> void:
 	event.physical_keycode = code
 	event.pressed = true
 	Input.parse_input_event(event)
+	await get_tree().process_frame
 	await ticks(1)
 	event = InputEventKey.new()
 	event.physical_keycode = code
 	event.pressed = false
 	Input.parse_input_event(event)
+	await get_tree().process_frame
 	await ticks(1)
 
 func approach(id: String) -> bool:
@@ -82,8 +84,8 @@ func mouse_move(at: Vector2, relative: Vector2) -> void:
 	await get_tree().process_frame
 
 func drag(from: Control, to: Control) -> void:
-	var start := from.global_position+from.size*.5
-	var end := to.global_position+to.size*.5
+	var start := from.get_global_transform_with_canvas()*(from.size*.5)
+	var end := to.get_global_transform_with_canvas()*(to.size*.5)
 	await mouse_move(start,Vector2.ZERO)
 	await mouse_button(start,true)
 	await mouse_move(start+Vector2(25,0),Vector2(25,0))
@@ -102,18 +104,18 @@ func run() -> void:
 	Engine.max_fps = 0
 	game.auto_clock = false
 	await ticks(3)
-	check(game.state.equipment.size()==7,"Seven real GLoot slots represent helmet, chest, pants, gloves, boots, weapon and charm")
+	check(game.state.equipment.size()==8,"Eight real GLoot slots represent clothing, weapon, charm and shield")
 	check(game.state.equipped_id("chest")=="traveller_tunic" and game.state.equipped_id("legs")=="field_trousers","The cat starts with clothing in the correct body slots")
 	check(game.state.maximum_health==5 and game.state.stats().attack==1,"Starting clothing preserves the original health and sword balance")
 	await key(KEY_I)
 	check(game.backpack_open and game.ui.satchel.visible and game.paused,"I opens the paper-doll inventory and pauses play")
-	check(game.ui.satchel.slots.size()==7 and game.ui.satchel.grid.size()==24,"The actual equipment screen contains seven body targets and a 24-cell backpack")
+	check(game.ui.satchel.slots.size()==8 and game.ui.satchel.grid.size()==24,"The actual equipment screen contains eight body targets and a 24-cell backpack")
 	check(game.ui.satchel.character_image.texture!=null,"The character preview uses the prepared full-body illustration")
 	var images := {}
 	for slot in game.ui.satchel.slots.values():
 		check(slot.icon!=null,"Each equipped/empty body slot has its own image")
 		images[slot.icon.get_rid()] = true
-	check(images.size()==7,"Body slots do not reuse one generic equipment image")
+	check(images.size()==8,"Body slots do not reuse one generic equipment image")
 	check(not game.ui.satchel.slots.boots._can_drop_data(Vector2.ZERO,{"item":"travel_sword","origin":"bag"}),"A sword cannot be dropped into the boots slot")
 	await key(KEY_ESCAPE)
 	if not await approach("warden"):
@@ -153,7 +155,7 @@ func run() -> void:
 		dog.set_physics_process(false)
 		if dog.resident_id==game.GameState.CAPTAIN_ID:
 			captain = dog
-	check(captain!=null and captain.captain and captain.health==8,"Rook is an eight-heart captain among the existing twelve bandits")
+	check(captain!=null and captain.captain and captain.health==12,"Rook is a twelve-heart captain among the existing twelve bandits")
 	game.player.route = game.find_path(game.player.position,game.Map.Wilds.CAMPS[3]+Vector2(-125,0))
 	for i in 4800:
 		await get_tree().physics_frame
@@ -170,9 +172,9 @@ func run() -> void:
 	captain.cooldown = 0
 	captain.set_physics_process(true)
 	await ticks(5)
-	check(captain.windup>1.0,"The stronger captain gives a longer visible sweep warning")
-	await ticks(100)
-	check(game.player.health==4,"Rook's committed sweep deals two actual hearts of damage")
+	check(captain.windup>.6,"The stronger captain gives a readable committed sweep warning")
+	await ticks(60)
+	check(game.player.health==3,"Rook's committed sweep deals three actual hearts of damage")
 	captain.set_physics_process(false)
 	captain.windup = 0
 	captain.swing = 0
@@ -182,20 +184,22 @@ func run() -> void:
 	game.player.facing = Vector2.RIGHT
 	check(game.player.try_attack(Vector2.RIGHT),"The starter sword can attack Rook")
 	await ticks(42)
-	check(captain.health==7,"The starter sword deals one actual damage to the stronger enemy")
-	for cast in 2:
+	check(captain.health==11,"The starter sword deals one actual damage to the stronger enemy")
+	for cast in 3:
 		captain.grace = 0
 		game.player.skill_cooldown = 0
 		game.player.position = captain.position-Vector2(170,0)
 		game.player.facing = Vector2.RIGHT
 		check(game.player.try_skill(),"Wind Slash can be cast against Rook")
 		await ticks(85)
-	check(captain.health==1,"Two real starter Wind Slash projectiles remove six captain hearts")
+	check(captain.health==2,"Three real starter Wind Slash projectiles remove nine captain hearts")
 	captain.grace = 0
 	game.player.position = captain.position-Vector2(75,0)
 	game.player.facing = Vector2.RIGHT
-	game.player.try_attack()
-	await ticks(42)
+	for hit in 2:
+		captain.grace = 0
+		game.player.try_attack()
+		await ticks(42)
 	check(not captain.active and game.forest_defeated.has(game.GameState.CAPTAIN_ID),"Actual combat defeats Rook and records his permanent identity")
 	check(game.interactables["loot:"+game.GameState.CAPTAIN_ID].name.contains("tools"),"Rook's dropped pouch identifies the stolen tools")
 	game.player.automated = false
@@ -211,6 +215,7 @@ func run() -> void:
 	game.player.stop_motion()
 	game.player.facing = Vector2.RIGHT
 	for i in 3:
+		game.dogs[i].health = 3 # Fixed projectile fixture; difficulty is tested separately.
 		game.dogs[i].position = center+Vector2(150+i*115,0)
 	game.player.skill_cooldown = 0
 	game.player.try_skill()
@@ -285,7 +290,7 @@ func run() -> void:
 	check(game.objective.text==game.OBJECTIVES[game.quest_stage],"The HUD actually follows the quest selected in the journal")
 	await key(KEY_ESCAPE)
 	check(not game.journal_open and not game.paused,"Esc closes the quest journal and resumes play")
-	check(game.save_game(),"All seven slots and both completed quests serialize")
+	check(game.save_game(),"All eight slots and both completed quests serialize")
 	game.state.unequip_item("chest")
 	check(game.load_game() and game.state.equipped_id("chest")=="reinforced_vest" and game.state.smith_quest.completed,"Save/load restores the workshop location, armor and second Questify graph")
 	check(game.zone=="forge" and game.state.tracked_quest=="morning_rounds","The new interior and tracked quest survive loading")
@@ -308,7 +313,7 @@ func verify_combat_and_movement() -> void:
 	target.grace = 0
 	game.player.try_attack()
 	await ticks(42)
-	check(target.health==1,"The equipped upgraded sword deals two actual melee damage")
+	check(target.health==2,"The equipped upgraded sword deals two actual melee damage")
 	target.maximum_health = 5
 	target.health = 5
 	target.grace = 0
@@ -406,7 +411,7 @@ func verify_legacy_migration() -> void:
 	file.close()
 	var original := FileAccess.get_file_as_bytes(path)
 	var upgraded := store.load_document(path)
-	check(not upgraded.is_empty() and store.migrated and upgraded.version==2,"An actual version-1 disk save migrates to schema 2")
+	check(not upgraded.is_empty() and store.migrated and upgraded.version==3,"An actual version-1 disk save migrates to schema 3")
 	check(FileAccess.get_file_as_bytes(path)==original,"Reading an old save leaves the original file byte-for-byte intact")
 	if upgraded.is_empty():
 		return

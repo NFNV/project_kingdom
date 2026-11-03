@@ -1,6 +1,6 @@
 extends RefCounted
 ## Whitelisted, versioned JSON. Validate everything before touching live state.
-const VERSION := 2
+const VERSION := 3
 const Legacy := preload("res://experiments/anime_hub_demo_v07/tools/save_v1.gd")
 const State := preload("res://experiments/anime_hub_demo_v07/tools/game_state.gd")
 const DEFAULT_PATH := "user://kingdom_journey.json"
@@ -137,6 +137,7 @@ func validate(doc: Variant) -> bool:
 
 func upgrade(source: Variant) -> Dictionary:
 	migrated = false
+	last_error = "The save is incomplete or contains invalid game data."
 	if not source is Dictionary:
 		last_error = "The save is incomplete or contains invalid game data."
 		return {}
@@ -157,6 +158,21 @@ func upgrade(source: Variant) -> Dictionary:
 		result.state.smith = {"accepted":false,"rewarded":false,"tools_recovered":recovered}
 		result.state.items.smith_tools = 1 if recovered else 0
 		result.state.tracked_quest = "briarwood_patrol"
+		migrated = true
+		return result
+	if source.get("version")==2:
+		# Only add the two new definitions and offhand slot. Missing old fields
+		# stay invalid; migration must not repair corrupt inventories silently.
+		var result: Dictionary = source.duplicate(true)
+		var data: Variant = result.get("state")
+		if not data is Dictionary or not data.get("items") is Dictionary or not data.get("equipment") is Dictionary:
+			return {}
+		if data.items.size()!=definitions.size()-2 or data.equipment.size()!=State.SLOTS.size()-1 or data.equipment.has("shield") or data.items.has("trail_shield") or data.items.has("ironleaf_shield"):
+			return {}
+		result.version = VERSION
+		data.items.trail_shield = 0
+		data.items.ironleaf_shield = 0
+		data.equipment.shield = "trail_shield"
 		migrated = true
 		return result
 	return source

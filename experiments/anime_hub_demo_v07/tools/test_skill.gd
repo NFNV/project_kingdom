@@ -60,6 +60,7 @@ func _run() -> void:
 	game._update_hud()
 	check(not game.ui.skill_button.disabled and game.ui.skill_button.tooltip_text.contains("Wind Slash"),"A distinct clickable Wind Slash button is ready in combat")
 	var first = game.dogs[0]
+	first.health = 3
 	first.position = center+Vector2(75,0)
 	game.player.try_attack()
 	await ticks(5)

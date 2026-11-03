@@ -35,6 +35,9 @@ var controls_label: Label
 var combat_panel: Panel
 var health_label: Label
 var health_bar: ProgressBar
+var stamina_bar: ProgressBar
+var defence_label: Label
+var defence_panel: Panel
 var forest_panel: Panel
 var forest_map: Control
 var skill_panel: SkillDock
@@ -102,7 +105,7 @@ func _ready() -> void:
 	quest_marker = label("▼",Vector2.ZERO,23,self,0,Color("ffe0a0"))
 	quest_marker.add_theme_color_override("font_outline_color",Color("63502d"))
 	quest_marker.add_theme_constant_override("outline_size",5)
-	debug_label = label("",Vector2(26,187),12,self,0,Color("fff1d2"))
+	debug_label = label("",Vector2(26,258),12,self,0,Color("fff1d2"))
 	debug_label.add_theme_color_override("font_shadow_color",Color("20382d"))
 	debug_label.add_theme_constant_override("shadow_offset_y",2)
 	debug_label.hide()
@@ -124,6 +127,20 @@ func _ready() -> void:
 	combat_panel.add_child(health_bar)
 	health_bar.size = Vector2(218,8)
 	combat_panel.hide()
+	defence_panel = panel(Vector2(24,180),Vector2(244,65),null,true)
+	defence_label = label("F guard / parry · V / Ctrl roll",Vector2(13,8),12,defence_panel,218,Color("e9dfbc"))
+	stamina_bar = ProgressBar.new()
+	stamina_bar.position = Vector2(13,45)
+	stamina_bar.show_percentage = false
+	stamina_bar.max_value = 100
+	stamina_bar.add_theme_font_size_override("font_size",1)
+	stamina_bar.add_theme_stylebox_override("background",bar_back.duplicate())
+	var stamina_fill := bar_fill.duplicate() as StyleBoxFlat
+	stamina_fill.bg_color = Color("75c7c1")
+	stamina_bar.add_theme_stylebox_override("fill",stamina_fill)
+	defence_panel.add_child(stamina_bar)
+	stamina_bar.size = Vector2(218,6)
+	defence_panel.hide()
 	skill_panel = SkillDock.new()
 	skill_panel.hub = hub
 	skill_panel.serif = serif
@@ -301,7 +318,7 @@ func refresh() -> void:
 		skill_label.text = "Equip a weapon"
 	forest_panel.visible = hub.zone in ["wilds","district"]
 	map_title.text = "NORTHGATE" if hub.zone=="district" else "BRIARWOOD"
-	controls_label.text = "WASD move · Shift run · Space / Click sword · Q skill · Right click walk" if hub.zone=="wilds" else "WASD walk · Shift run · E interact · Right click walk"
+	controls_label.text = "WASD · Space / Click sword · Q wind · F guard / parry · V / Ctrl roll" if hub.zone=="wilds" else "WASD walk · Shift run · V roll · E interact · Right click walk"
 	if hub.zone=="town":
 		objective.text = hub.OBJECTIVES[hub.quest_stage]
 		status_label.text = "%d / 5 deliveries  ·  The wardens are friendly" % mini(hub.quest_stage,5)
@@ -368,6 +385,10 @@ func refresh() -> void:
 
 
 func _process(delta: float) -> void:
+	if is_instance_valid(hub.player):
+		defence_panel.visible = hub.zone=="wilds"
+		stamina_bar.value = hub.player.stamina
+		defence_label.text = "GUARD BROKEN" if hub.player.guard_break>0 else ("PARRY · strike now! +2 damage" if hub.player.riposte_left>0 else ("Guarding · face the incoming blow" if hub.player.guarding else ("No shield · equip one in I" if hub.state.equipped_id("shield")=="" else "F guard / parry · V / Ctrl roll")))
 	notice_left = maxf(0,notice_left-delta)
 	if is_instance_valid(notice):
 		notice.visible = notice_left>0

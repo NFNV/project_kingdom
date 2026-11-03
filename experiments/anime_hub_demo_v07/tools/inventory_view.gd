@@ -2,7 +2,7 @@ extends Control
 const UI := preload("res://experiments/anime_hub_demo_v07/tools/rpg_ui.gd")
 const Art := preload("res://experiments/anime_hub_demo_v07/tools/equipment_art.gd")
 const Slot := preload("res://experiments/anime_hub_demo_v07/tools/equipment_slot.gd")
-const POSITIONS := {"head":Vector2(267,8),"chest":Vector2(32,165),"gloves":Vector2(32,315),"weapon":Vector2(32,465),"charm":Vector2(502,165),"legs":Vector2(502,315),"boots":Vector2(502,465)}
+const POSITIONS := {"head":Vector2(267,8),"chest":Vector2(32,165),"gloves":Vector2(32,315),"weapon":Vector2(32,465),"charm":Vector2(502,15),"shield":Vector2(502,165),"legs":Vector2(502,315),"boots":Vector2(502,465)}
 var hub: Node2D
 var slots: Dictionary = {}
 var grid: Array[Button] = []
@@ -89,7 +89,7 @@ func _ready() -> void:
 	hide()
 
 func draw_links(node: Control) -> void:
-	var targets := {"head":Vector2(309,158),"chest":Vector2(288,313),"gloves":Vector2(228,385),"weapon":Vector2(259,455),"charm":Vector2(344,286),"legs":Vector2(355,428),"boots":Vector2(358,532)}
+	var targets := {"head":Vector2(309,158),"chest":Vector2(288,313),"gloves":Vector2(228,385),"weapon":Vector2(259,455),"charm":Vector2(344,286),"shield":Vector2(385,365),"legs":Vector2(355,428),"boots":Vector2(358,532)}
 	for key in POSITIONS:
 		var start: Vector2 = POSITIONS[key]+Vector2(42,42)
 		var end: Vector2 = targets[key]
@@ -167,6 +167,8 @@ func refresh_details() -> void:
 		replacements[item.slot] = "" if source=="equipped" else selected
 		var after: Dictionary = state.stats(replacements)
 		comparison.text = "After %s:\nHearts %d (%+d)   •   Sword %d (%+d)\nSkill %.1f s (%+.1f)   •   Movement %d%%" % ["removing" if source=="equipped" else "equipping",after.hearts,int(after.hearts)-int(now.hearts),after.attack,int(after.attack)-int(now.attack),after.recharge,float(after.recharge)-float(now.recharge),roundi(after.speed*100)]
+		if item.slot=="shield":
+			comparison.text = "Guard: %s → %s\nF: guard / timed parry   •   V / Ctrl: roll" % ["%d%% stamina cost" % roundi(100/now.guard) if now.guard>0 else "unavailable","%d%% stamina cost" % roundi(100/after.guard) if after.guard>0 else "unavailable"]
 		primary_button.text = "Unequip to backpack" if source=="equipped" else "Equip in "+state.SLOT_NAMES[item.slot]
 		primary_button.disabled = hub.player.swing>0 or (source=="bag" and state.count(selected)==0)
 	elif item.kind=="food":

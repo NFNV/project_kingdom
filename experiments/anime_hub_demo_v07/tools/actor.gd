@@ -9,6 +9,11 @@ const SKILL_COOLDOWN := 6.0
 const WindSlash := preload("res://experiments/anime_hub_demo_v07/tools/wind_slash.gd")
 const CombatArt := preload("res://experiments/anime_hub_demo_v07/tools/cat_combat.gd")
 const Timing := preload("res://experiments/anime_hub_demo_v07/tools/combat_timing.gd")
+const Shield := preload("res://experiments/anime_hub_demo_v07/tools/cat_shield.gd")
+const MAX_STAMINA := 100.0
+const ROLL_COST := 28.0
+const ROLL_DURATION := .46
+const PARRY_WINDOW := .18
 var hub: Node2D
 var controlled := false
 var enemy := false
@@ -57,6 +62,23 @@ var skill_casts := 0
 var light_buffer := 0.0
 var buffered_aim := Vector2.ZERO
 var swing_audio_played := false
+var shield: Node2D
+var stamina := MAX_STAMINA
+var stamina_delay := 0.0
+var guarding := false
+var guard_requested := false
+var guard_age := 0.0
+var parry_rearm := 0.0
+var guard_break := 0.0
+var roll_left := 0.0
+var roll_cooldown := 0.0
+var roll_heading := Vector2.ZERO
+var defence_flash := 0.0
+var defence_result := ""
+var parries := 0
+var blocks := 0
+var dodges := 0
+var riposte_left := 0.0
 
 
 func _ready() -> void:
@@ -79,6 +101,9 @@ func _ready() -> void:
 		add_child(combat_art)
 		combat_art.configure_reference(sprite.metadata,sprite.display_height)
 		combat_art.hide()
+		shield = Shield.new()
+		shield.actor = self
+		add_child(shield)
 	physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_ON
 	queue_redraw()
 
@@ -105,14 +130,17 @@ func _physics_process(delta: float) -> void:
 	flash = maxf(0,flash-delta*4)
 	knockback = knockback.move_toward(Vector2.ZERO,1000*delta)
 	if controlled:
+		_update_defence(delta)
 		if not automated:
 			intent = Input.get_vector("hub_left","hub_right","hub_up","hub_down")
 			if intent.length()>0.1:
 				route.clear()
 			elif not route.is_empty():
 				intent = follow_route()
-		if intent.length()>.05 and swing<=0:
+		if intent.length()>.05 and swing<=0 and roll_left<=0:
 			facing = intent.normalized()
+		if not automated:
+			set_guard(Input.is_action_pressed("hub_guard"))
 		if skill_buffer>0 and cooldown<=0 and swing<=0:
 			skill_buffer = 0
 			try_skill()
@@ -132,12 +160,16 @@ func _physics_process(delta: float) -> void:
 		speed = 325.0
 	if controlled:
 		speed *= float(hub.state.stats().speed)
+		if guarding: speed *= .38
+		if guard_break>0: speed *= .3
 	if swing>0 or windup>0:
 		speed *= 0.0 if controlled else 0.2
 	if not controlled and hub.peaceful_mode:
 		speed = 74.0
 	var before := position
 	velocity = Vector2(intent.x,intent.y*GROUND_Y)*speed+knockback
+	if controlled and roll_left>0:
+		velocity = Vector2(roll_heading.x,roll_heading.y*GROUND_Y)*390.0
 	move_and_slide()
 	moved_distance = ground_vector(position-before).length()
 	if intent.length()>.05 and swing<=0 and windup<=0:
@@ -166,6 +198,7 @@ func _physics_process(delta: float) -> void:
 	if is_instance_valid(weapon):
 		weapon.sync_pose()
 		_update_combat_art()
+	if is_instance_valid(shield): shield.sync_pose()
 	queue_redraw()
 
 
@@ -215,6 +248,7 @@ func _enemy_intent(delta: float) -> Vector2:
 
 
 func try_attack(aim := Vector2.ZERO) -> bool:
+	if controlled and (guarding or guard_break>0 or roll_left>0): return false
 	if controlled and int(hub.state.stats().attack)<=0:
 		return false
 	if hub.peaceful_mode or hub.transitioning or hub.shopping:
@@ -241,6 +275,7 @@ func try_attack(aim := Vector2.ZERO) -> bool:
 
 
 func try_skill() -> bool:
+	if guarding or guard_break>0 or roll_left>0: return false
 	if controlled and int(hub.state.stats().attack)<=0:
 		return false
 	if not controlled or not active or hub.peaceful_mode or hub.paused or hub.transitioning or hub.shopping:
@@ -300,17 +335,59 @@ func resolve_hits() -> void:
 		if not hub.clear_line(position,target.position):
 			continue
 		swing_hits.append(target)
-		target.receive_hit(facing,int(hub.state.stats().attack) if controlled else 1)
+		var damage: int = int(hub.state.stats().attack) if controlled else 1
+		if controlled and riposte_left>0:
+			damage += 2
+		if target.receive_hit(facing,damage) and controlled:
+			riposte_left = 0
 
 
-func receive_hit(from: Vector2, damage := 1, force := 170.0) -> bool:
+func receive_hit(from: Vector2, damage := 1, force := 170.0, source: Node2D = null) -> bool:
 	if hub.peaceful_mode or hub.transitioning:
 		return false
 	if not active or grace>0:
 		return false
+	if controlled:
+		if roll_invulnerable():
+			dodges += 1
+			return false
+		var incoming := ground_vector(source.position-position).normalized() if is_instance_valid(source) else -from.normalized()
+		if guarding and facing.dot(incoming)>=.25:
+			if guard_age<=PARRY_WINDOW:
+				parries += 1
+				guard_age = PARRY_WINDOW+1
+				riposte_left = 1.6
+				stamina = minf(MAX_STAMINA,stamina+14)
+				_defence_feedback("PARRY",.65)
+				hub.audio.play_event("hit",position,-5)
+				if is_instance_valid(source) and source.has_method("receive_parry"): source.receive_parry()
+				return false
+			var cost := 23.0*damage/maxf(.1,float(hub.state.stats().guard))
+			stamina_delay = .85
+			if stamina>=cost:
+				stamina -= cost
+				blocks += 1
+				knockback = Vector2(from.x,from.y*GROUND_Y)*force*.2
+				_defence_feedback("BLOCK",.35)
+				hub.audio.play_event("hit",position,-10)
+				return false
+			stamina = 0
+			guarding = false
+			guard_break = 1.0
+			_defence_feedback("GUARD BROKEN",1.0)
 	health = maxi(0,health-damage)
 	grace = 0.75 if controlled else 0.28
 	flash = 1.0
+	if controlled:
+		guarding = false
+		roll_left = 0
+		swing = 0
+		skill_buffer = 0
+		light_buffer = 0
+		sprite.rotation = 0
+		sprite.position = Vector2.ZERO
+		_update_combat_art()
+		if is_instance_valid(shield): shield.sync_pose()
 	knockback = Vector2(from.x,from.y*GROUND_Y)*force
 	hub.audio.play_event("hurt_player" if controlled else "hit",position,-2)
 	if enemy:
@@ -347,11 +424,25 @@ func _friendly_intent(delta: float) -> Vector2:
 
 func _update_animation(delta: float, distance: float) -> void:
 	var running := controlled and Input.is_action_pressed("hub_run")
+	if controlled and roll_left>0:
+		sprite.set_pose("idle",sprite.direction_for(roll_heading),0)
+		var progress := 1.0-roll_left/ROLL_DURATION
+		sprite.rotation = TAU*progress*(-1 if roll_heading.x<0 else 1)
+		var pivot := Vector2(0,-sprite.display_height*.45)
+		sprite.position = pivot-pivot.rotated(sprite.rotation)-Vector2(0,sin(progress*PI)*7)
+		return
+	sprite.rotation = 0
+	sprite.position = Vector2.ZERO
 	sprite.tick(delta,0.0 if controlled and swing>0 else distance,facing,running)
 	direction = sprite.facing_direction
 
 
 func stop_motion() -> void:
+	guarding = false
+	roll_left = 0
+	if is_instance_valid(sprite):
+		sprite.rotation = 0
+		sprite.position = Vector2.ZERO
 	intent = Vector2.ZERO
 	velocity = Vector2.ZERO
 	route.clear()
@@ -359,6 +450,70 @@ func stop_motion() -> void:
 	if is_instance_valid(weapon):
 		weapon.sync_pose()
 		_update_combat_art()
+	if is_instance_valid(shield): shield.sync_pose()
+
+
+func can_defend() -> bool:
+	return controlled and active and not hub.paused and not hub.transitioning and not hub.shopping and not hub.title_active
+
+func set_guard(held: bool) -> bool:
+	var fresh_raise := held and not guard_requested
+	guard_requested = held
+	if not held:
+		guarding = false
+		return false
+	if not can_defend() or hub.peaceful_mode or float(hub.state.stats().guard)<=0 or roll_left>0 or guard_break>0 or swing>0 or stamina<1:
+		guarding = false
+		return false
+	if not guarding:
+		guarding = true
+		# Repeated taps during the lockout can still block, but cannot parry.
+		guard_age = 0.0 if fresh_raise and parry_rearm<=0 else PARRY_WINDOW+1
+		if fresh_raise: parry_rearm = .55
+		route.clear()
+	return true
+
+func try_roll() -> bool:
+	if not can_defend() or roll_left>0 or roll_cooldown>0 or guard_break>0 or stamina<ROLL_COST:
+		return false
+	if swing>0 and attack_duration-swing<(.36 if attack_kind=="wind" else Timing.LIGHT_END_CONTACT):
+		return false
+	roll_heading = intent.normalized() if intent.length()>.1 else facing.normalized()
+	facing = roll_heading
+	stamina -= ROLL_COST
+	stamina_delay = .7
+	roll_left = ROLL_DURATION
+	roll_cooldown = .66
+	guarding = false
+	swing = 0
+	cooldown = maxf(cooldown,.2)
+	light_buffer = 0
+	skill_buffer = 0
+	knockback = Vector2.ZERO
+	route.clear()
+	hub.audio.play_event("sword",position,-17)
+	return true
+
+func roll_invulnerable() -> bool:
+	var elapsed := ROLL_DURATION-roll_left
+	return roll_left>0 and elapsed>=.06 and elapsed<=.32
+
+func _update_defence(delta: float) -> void:
+	roll_left = maxf(0,roll_left-delta)
+	roll_cooldown = maxf(0,roll_cooldown-delta)
+	guard_break = maxf(0,guard_break-delta)
+	parry_rearm = maxf(0,parry_rearm-delta)
+	riposte_left = maxf(0,riposte_left-delta)
+	defence_flash = maxf(0,defence_flash-delta)
+	stamina_delay = maxf(0,stamina_delay-delta)
+	if guarding: guard_age += delta
+	if stamina_delay<=0 and roll_left<=0 and guard_break<=0:
+		stamina = minf(MAX_STAMINA,stamina+delta*(7 if guarding else 30))
+	if guarding and (float(hub.state.stats().guard)<=0 or hub.peaceful_mode): guarding = false
+
+func _defence_feedback(result: String, duration: float) -> void:
+	defence_result = result
+	defence_flash = duration
 
 
 func _draw() -> void:
@@ -371,6 +526,15 @@ func _draw() -> void:
 		draw_circle(Vector2.ZERO,46,Color(1,.24,.12,.10))
 		draw_arc(Vector2.ZERO,46,-PI/2,-PI/2+TAU*(1.0-windup/.70),36,Color(1,.3,.14,.9),3,true)
 	draw_set_transform(Vector2.ZERO)
+	if controlled and defence_flash>0:
+		var ink := Color("b9f2e7") if defence_result=="PARRY" else Color("f3d093")
+		draw_arc(Vector2(0,-34),27+(1.0-defence_flash)*12,0,TAU,40,Color(ink,minf(1,defence_flash*3)),2,true)
+		draw_string_outline(ThemeDB.fallback_font,Vector2(-70,-sprite.display_height-18),defence_result,HORIZONTAL_ALIGNMENT_CENTER,140,12,3,Color("223a32"))
+		draw_string(ThemeDB.fallback_font,Vector2(-70,-sprite.display_height-18),defence_result,HORIZONTAL_ALIGNMENT_CENTER,140,12,ink)
+	if controlled and roll_left>0:
+		for i in 3:
+			var at := Vector2(-roll_heading.x,-roll_heading.y*GROUND_Y)*(15+i*11)
+			draw_arc(at,6+i*2,0,PI,12,Color(.87,.81,.57,.35-i*.08),1.5,true)
 	if enemy and hub.combat_active:
 		for i in maximum_health:
 			draw_circle(Vector2((i-(maximum_health-1)*0.5)*10,-sprite.display_height-12),3,Color("eea07f") if i<health else Color("473e38"))

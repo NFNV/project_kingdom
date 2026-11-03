@@ -54,12 +54,12 @@ static func build(hub: Node2D) -> void:
 			dog.home = at
 			dog.patrol = PackedVector2Array([at,at+Vector2(65,30),at+Vector2(-45,38)])
 			dog.patrol_wait = .5+member*.65+pack*.17
-			dog.maximum_health = 3
-			dog.health = 3
+			dog.maximum_health = 6 if member==2 else 4
+			dog.health = dog.maximum_health
 			if id==hub.GameState.CAPTAIN_ID and not returning:
 				dog.captain = true
-				dog.maximum_health = 8
-				dog.health = 8
+				dog.maximum_health = 12
+				dog.health = 12
 				dog.sprite.display_height *= 1.09
 			dog.path_timer = (pack*3+member)*.037
 			hub.dogs.append(dog)
