@@ -76,7 +76,7 @@ func run() -> void:
  await wait_zone("mill_loft")
  if game.zone!="mill_loft": finish(); return
  check(game.player.get_instance_id()==hero and game.state.get_instance_id()==state_id and facts()==original,"Stairs retain the original hero, inventory, coins and quests")
- check(game.peaceful_mode and game.world_size==Vector2i(1280,720) and game.camera.zoom==Vector2(1.5,1.5),"Guest floor retains the corrected compact cat scale")
+ check(game.peaceful_mode and game.world_size==Vector2i(1280,720) and game.camera.zoom==Vector2(1.5,1.5)*game.RenderSettings.SCALE,"Guest floor retains the corrected compact cat scale")
  check(game.is_walkable(game.player.position,14),"Upstairs landing has a safe arrival footprint")
  check(game.audio.active_zone=="mill_loft" and game.audio.surface_at(game.player.position)=="wood","Guest floor uses indoor ambience and wooden footsteps")
  check(not game.ui.skill_panel.visible and game.ui.objective.text.contains("7 AM"),"Inn HUD explains sleep and hides combat controls")
@@ -86,8 +86,8 @@ func run() -> void:
  var night := await capture("night",3)
  check(game.bakery_room.room_material.get_shader_parameter("night_weight")==1,"Upstairs replaces daytime art with night windows and lamplight")
  if captures:
-  var window := Vector2i(Vector2(780,100)*Vector2(1920,1080)/Vector2(1672,941))
-  var floor_point := Vector2i(Vector2(450,550)*Vector2(1920,1080)/Vector2(1672,941))
+  var window := Vector2i(Vector2(780,100)*Vector2(game.RenderSettings.RENDER_SIZE)/Vector2(1672,941))
+  var floor_point := Vector2i(Vector2(450,550)*Vector2(game.RenderSettings.RENDER_SIZE)/Vector2(1672,941))
   check(night.get_pixelv(window).get_luminance()<day.get_pixelv(window).get_luminance()*.5,"Rendered night window is visibly darker than daytime")
   check(night.get_pixelv(floor_point).get_luminance()<day.get_pixelv(floor_point).get_luminance()*.6,"Rendered nighttime removes daylight stripes from hallway")
  game.bakery_room.open_bed("inn_sage")

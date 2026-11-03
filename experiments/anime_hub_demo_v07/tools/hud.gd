@@ -3,9 +3,12 @@ extends CanvasLayer
 const InventoryView := preload("res://experiments/anime_hub_demo_v07/tools/inventory_view.gd")
 const JournalView := preload("res://experiments/anime_hub_demo_v07/tools/quest_journal.gd")
 const ForgeShop := preload("res://experiments/anime_hub_demo_v07/tools/forge_shop.gd")
+const SkillDock := preload("res://experiments/anime_hub_demo_v07/tools/skill_dock.gd")
 const Clock := preload("res://experiments/anime_hub_demo_v07/tools/celestial_clock.gd")
+const RenderSettings := preload("res://experiments/anime_hub_demo_v07/tools/render_settings.gd")
+const UI := preload("res://experiments/anime_hub_demo_v07/tools/rpg_ui.gd")
 var hub: Node2D
-var serif := SystemFont.new()
+var serif: Font = UI.heading_font()
 var objective: Label
 var status_label: Label
 var location_label: Label
@@ -34,7 +37,7 @@ var health_label: Label
 var health_bar: ProgressBar
 var forest_panel: Panel
 var forest_map: Control
-var skill_panel: Panel
+var skill_panel: SkillDock
 var skill_label: Label
 var skill_bar: ProgressBar
 var map_title: Label
@@ -62,46 +65,54 @@ var inn_sleep_button: Button
 
 
 func _ready() -> void:
-	serif.font_names = PackedStringArray(["Georgia","Baskerville","Noto Serif","serif"])
-	var location := panel(Vector2(28,28),Vector2(370,112))
-	label("PROJECT KINGDOM  /  MOSSWOOD VALLEY",Vector2(18,12),11,location,0,Color("7b7159"))
-	location_label = label("Garden Square",Vector2(18,30),29,location,0,Color("263e37"),true)
-	location_subtitle = label("A small town, a wider world",Vector2(20,78),14,location,0,Color("756a52"))
+	scale = Vector2.ONE*RenderSettings.SCALE
+	var location := panel(Vector2(24,22),Vector2(304,74))
+	location_label = label("Garden Square",Vector2(14,10),23,location,274,Color("263e37"),true)
+	location_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+	location_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	location_subtitle = label("A small town, a wider world",Vector2(15,46),12,location,274,Color("756a52"))
+	location_subtitle.autowrap_mode = TextServer.AUTOWRAP_OFF
+	location_subtitle.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	clock_dial = Clock.new()
-	clock_dial.position = Vector2(859,7)
-	clock_dial.scale = Vector2(.72,.72)
+	clock_dial.position = Vector2(848,7)
+	clock_dial.scale = Vector2(.8,.8)
 	clock_dial.serif = serif
 	add_child(clock_dial)
-	journal_panel = panel(Vector2(1498,28),Vector2(394,196))
-	label("THE TRAVELLER'S JOURNAL",Vector2(20,13),12,journal_panel,0,Color("887043"))
-	objective = label("",Vector2(20,41),20,journal_panel,350,Color("2e4239"),true)
-	status_label = label("",Vector2(20,164),13,journal_panel,354,Color("7e7054"))
-	var controls := panel(Vector2(28,1012),Vector2(746,44),null,true)
-	controls_label = label("WASD  walk     SHIFT  run     E  talk / use     Right click  walk to point",Vector2(16,11),15,controls,0,Color("f0e4c8"))
-	var actions := panel(Vector2(1515,1012),Vector2(377,44),null,true)
-	label("I satchel   H bread   M mute   Esc menu   F11 screen",Vector2(14,12),13,actions,0,Color("f0e4c8"))
-	route_label = label("",Vector2(1140,972),17,self,720,Color("fff2ca"),true)
+	journal_panel = panel(Vector2(1598,22),Vector2(296,140))
+	label("THE TRAVELLER'S JOURNAL",Vector2(14,11),10,journal_panel,0,Color("887043"))
+	objective = label("",Vector2(14,32),16,journal_panel,268,Color("2e4239"),true)
+	objective.max_lines_visible = 4
+	objective.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	status_label = label("",Vector2(14,116),11,journal_panel,268,Color("7e7054"))
+	status_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+	status_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	var controls := panel(Vector2(284,1024),Vector2(795,30),null,true)
+	controls_label = label("WASD walk · Shift run · E interact · Right click walk",Vector2(12,7),12,controls,770,Color("f0e4c8"))
+	var actions := panel(Vector2(1570,1024),Vector2(324,30),null,true)
+	label("I satchel · J journal · M mute · Esc menu",Vector2(12,7),12,actions,0,Color("f0e4c8"))
+	route_label = label("",Vector2(1170,989),14,self,720,Color("fff2ca"),true)
 	route_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	route_label.add_theme_color_override("font_shadow_color",Color("18372e"))
 	route_label.add_theme_constant_override("shadow_offset_y",2)
-	talk_panel = panel(Vector2(480,828),Vector2(960,146))
-	talk_name = label("",Vector2(24,16),20,talk_panel,910,Color("8b6431"),true)
-	talk_text = label("",Vector2(24,52),20,talk_panel,910,Color("33433a"))
-	prompt = panel(Vector2.ZERO,Vector2(292,42),null,true)
-	prompt_text = label("",Vector2(13,9),17,prompt,0,Color("fff2d2"))
-	quest_marker = label("▼",Vector2.ZERO,29,self,0,Color("ffe0a0"))
+	talk_panel = panel(Vector2(510,856),Vector2(900,128))
+	talk_name = label("",Vector2(20,12),18,talk_panel,860,Color("8b6431"),true)
+	talk_text = label("",Vector2(20,44),18,talk_panel,860,Color("33433a"))
+	prompt = panel(Vector2.ZERO,Vector2(266,34),null,true)
+	prompt_text = label("",Vector2(11,7),14,prompt,0,Color("fff2d2"))
+	quest_marker = label("▼",Vector2.ZERO,23,self,0,Color("ffe0a0"))
 	quest_marker.add_theme_color_override("font_outline_color",Color("63502d"))
 	quest_marker.add_theme_constant_override("outline_size",5)
-	debug_label = label("",Vector2(30,151),14,self,0,Color("fff1d2"))
+	debug_label = label("",Vector2(26,187),12,self,0,Color("fff1d2"))
 	debug_label.add_theme_color_override("font_shadow_color",Color("20382d"))
 	debug_label.add_theme_constant_override("shadow_offset_y",2)
 	debug_label.hide()
-	combat_panel = panel(Vector2(28,195),Vector2(300,99),null,true)
-	health_label = label("",Vector2(17,12),19,combat_panel,0,Color("fff0cc"),true)
+	combat_panel = panel(Vector2(24,114),Vector2(244,58),null,true)
+	health_label = label("",Vector2(13,8),15,combat_panel,0,Color("fff0cc"),true)
 	health_bar = ProgressBar.new()
-	health_bar.position = Vector2(18,44)
-	health_bar.size = Vector2(263,15)
+	health_bar.position = Vector2(13,36)
+	health_bar.size = Vector2(218,8)
 	health_bar.show_percentage = false
+	health_bar.add_theme_font_size_override("font_size",1)
 	var bar_back := StyleBoxFlat.new()
 	bar_back.bg_color = Color("132c25")
 	bar_back.set_corner_radius_all(5)
@@ -111,45 +122,22 @@ func _ready() -> void:
 	bar_fill.set_corner_radius_all(5)
 	health_bar.add_theme_stylebox_override("fill",bar_fill)
 	combat_panel.add_child(health_bar)
-	label("Move away from red attack warnings",Vector2(18,68),13,combat_panel,0,Color("d9c49b"))
+	health_bar.size = Vector2(218,8)
 	combat_panel.hide()
-	skill_panel = panel(Vector2(28,310),Vector2(300,97),null,true)
-	skill_button = Button.new()
-	skill_button.position = Vector2(12,7)
-	skill_button.size = Vector2(276,30)
-	skill_button.text = "Q  ·  WIND SLASH"
-	skill_button.focus_mode = Control.FOCUS_NONE
-	skill_button.tooltip_text = "Q or click: launch a piercing wind blade. Three damage, six-second cooldown. Can be queued during a normal attack."
-	skill_button.add_theme_font_size_override("font_size",18)
-	for state in ["normal","hover","pressed","disabled"]:
-		var button_style := StyleBoxFlat.new()
-		button_style.bg_color = Color("38687a") if state=="hover" else Color("284c53")
-		button_style.border_color = Color("a4d8db")
-		button_style.set_border_width_all(1)
-		button_style.set_corner_radius_all(5)
-		skill_button.add_theme_stylebox_override(state,button_style)
-	skill_button.add_theme_color_override("font_color",Color("f9ebbb"))
-	skill_button.pressed.connect(func(): hub.player.try_skill())
-	skill_panel.add_child(skill_button)
-	skill_label = label("",Vector2(18,40),14,skill_panel,263,Color("deead7"))
-	skill_bar = ProgressBar.new()
-	skill_bar.position = Vector2(18,73)
-	skill_bar.size = Vector2(263,9)
-	skill_bar.max_value = 6.0
-	skill_bar.show_percentage = false
-	skill_bar.add_theme_font_size_override("font_size",1)
-	skill_bar.add_theme_stylebox_override("background",bar_back)
-	var skill_fill := StyleBoxFlat.new()
-	skill_fill.bg_color = Color("9bcad3")
-	skill_fill.set_corner_radius_all(4)
-	skill_bar.add_theme_stylebox_override("fill",skill_fill)
-	skill_panel.add_child(skill_bar)
+	skill_panel = SkillDock.new()
+	skill_panel.hub = hub
+	skill_panel.serif = serif
+	skill_panel.position = Vector2(28,816)
+	add_child(skill_panel)
+	skill_button = skill_panel.button
+	skill_label = skill_panel.status
+	skill_bar = skill_panel.recharge
 	skill_panel.hide()
-	forest_panel = panel(Vector2(28,423),Vector2(250,182),null,true)
-	map_title = label("BRIARWOOD  /  WEST TRAIL HOME",Vector2(15,13),11,forest_panel,0,Color("ddc791"))
+	forest_panel = panel(Vector2(1710,180),Vector2(184,136),null,true)
+	map_title = label("BRIARWOOD",Vector2(12,11),11,forest_panel,0,Color("ddc791"))
 	forest_map = Control.new()
-	forest_map.position = Vector2(15,43)
-	forest_map.size = Vector2(220,124)
+	forest_map.position = Vector2(12,33)
+	forest_map.size = Vector2(160,91)
 	forest_map.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	forest_panel.add_child(forest_map)
 	forest_map.draw.connect(_draw_forest_map)
@@ -182,8 +170,8 @@ func _ready() -> void:
 	forge_view = ForgeShop.new()
 	forge_view.hub = hub
 	add_child(forge_view)
-	notice = panel(Vector2(510,744),Vector2(900,55),null,true)
-	notice_text = label("",Vector2(18,16),18,notice,864,Color("fff0cd"))
+	notice = panel(Vector2(580,744),Vector2(760,44),null,true)
+	notice_text = label("",Vector2(14,12),15,notice,732,Color("fff0cd"))
 	notice_text.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	notice.hide()
 	_build_inn()
@@ -305,16 +293,15 @@ func refresh() -> void:
 	location_subtitle.text = {"town":"SW → Greenshire · N → Northgate · SE → Forest","trail":"Old elm paths  /  Riverbend to the southeast","river":"Across the bridge  →  Briarwood Wilds","bakery":"Warm bread, meadow tea, and a place to rest","wilds":"Four clearings  /  West trail to Riverbend","district":"Sunstone Plaza  /  Market Lane  →  Emberforge","forge":"Tomas the smith  /  Gear, stories and warm embers","mill_garden":"Flowers, an orchard and a warm welcome","mill_room":"Rowan's kettle  /  Guest rooms upstairs","mill_loft":"Three cozy rooms  /  E by a bed to rest"}[hub.zone]
 	combat_panel.visible = hub.zone=="wilds"
 	skill_panel.visible = hub.zone not in ["bakery","forge","mill_garden","mill_room","mill_loft"]
-	skill_panel.position.y = 310 if hub.zone=="wilds" else 195
 	skill_button.disabled = hub.peaceful_mode or hub.player.skill_cooldown>0 or not hub.player.active or int(hub.state.stats().attack)<=0
 	skill_bar.max_value = float(hub.state.stats().recharge)
 	skill_bar.value = skill_bar.max_value-hub.player.skill_cooldown
-	skill_label.text = "Use this skill in Briarwood Wilds" if hub.peaceful_mode else ("Queued — releases after this swing" if hub.player.skill_buffer>0 else ("Ready — Q or click  /  piercing blade" if hub.player.skill_cooldown<=0 else "Recharging  %.1f s" % hub.player.skill_cooldown))
+	skill_label.text = "Briarwood only" if hub.peaceful_mode else ("Queued" if hub.player.skill_buffer>0 else ("Ready" if hub.player.skill_cooldown<=0 else "Recharging  %.1f s" % hub.player.skill_cooldown))
 	if int(hub.state.stats().attack)<=0:
-		skill_label.text = "Equip a weapon in your inventory"
+		skill_label.text = "Equip a weapon"
 	forest_panel.visible = hub.zone in ["wilds","district"]
-	map_title.text = "NORTHGATE  /  SOUTH TO GARDEN SQ." if hub.zone=="district" else "BRIARWOOD  /  WEST TRAIL HOME"
-	controls_label.text = "WASD move   Shift run   Space / Click sword   Q wind slash   Right click walk" if hub.zone=="wilds" else "WASD  walk     SHIFT  run     E  talk / use     Right click  walk to point"
+	map_title.text = "NORTHGATE" if hub.zone=="district" else "BRIARWOOD"
+	controls_label.text = "WASD move · Shift run · Space / Click sword · Q skill · Right click walk" if hub.zone=="wilds" else "WASD walk · Shift run · E interact · Right click walk"
 	if hub.zone=="town":
 		objective.text = hub.OBJECTIVES[hub.quest_stage]
 		status_label.text = "%d / 5 deliveries  ·  The wardens are friendly" % mini(hub.quest_stage,5)
@@ -363,7 +350,7 @@ func refresh() -> void:
 	elif hub.zone=="mill_room":
 		objective.text = "A warm hearth, meadow tea and three cozy guest rooms upstairs."
 	debug_label.visible = debug_visible
-	debug_label.text = "%d FPS  ·  1920 × 1080  ·  %s  ·  F3 debug" % [Engine.get_frames_per_second(),hub.zone]
+	debug_label.text = "%d FPS  ·  %d × %d  ·  %s  ·  F3 debug" % [Engine.get_frames_per_second(),RenderSettings.RENDER_SIZE.x,RenderSettings.RENDER_SIZE.y,hub.zone]
 	var suffix := ""
 	if hub.near_exit!="":
 		suffix = "E  ·  "+hub.exits[hub.near_exit]["label"]
@@ -387,10 +374,13 @@ func _process(delta: float) -> void:
 	# The compact garden can put the cat in the journal card's corner. Keep
 	# the character visible there; J still opens the full journal normally.
 	if is_instance_valid(hub.player):
-		var at: Vector2 = hub.player.get_global_transform_with_canvas().origin
+		var at: Vector2 = world_to_ui(hub.player.global_position)
 		var hero_rect := Rect2(at-Vector2(28,95),Vector2(56,115))
 		journal_panel.visible = hub.zone!="mill_garden" or not journal_panel.get_rect().grow(12).intersects(hero_rect)
 
+
+func world_to_ui(point: Vector2) -> Vector2:
+	return get_final_transform().affine_inverse()*(hub.get_canvas_transform()*point)
 
 func show_notice(message: String) -> void:
 	notice.position.y = 54 if hub.paused or hub.shopping else (925 if hub.zone in ["mill_garden","mill_room","mill_loft"] else 744)

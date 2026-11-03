@@ -1,6 +1,7 @@
 extends Node
 ## Keep the live journey in memory while its overworld is displayed.
 const OVERWORLD := preload("res://experiments/overworld_2d_v01/world.tscn")
+const RenderSettings := preload("res://experiments/anime_hub_demo_v07/tools/render_settings.gd")
 var hub: Node2D
 var overworld: Node2D
 var fade: ColorRect
@@ -14,6 +15,7 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	var layer := CanvasLayer.new()
 	layer.layer = 90
+	layer.scale = Vector2.ONE*RenderSettings.SCALE
 	add_child(layer)
 	fade = ColorRect.new()
 	fade.size = Vector2(1920,1080)
@@ -142,8 +144,7 @@ func resume_from_region(from_zone: String) -> void:
 	hub.audio.process_mode = Node.PROCESS_MODE_ALWAYS
 	hub.audio.enter_zone("trail")
 	get_viewport().canvas_transform = Transform2D.IDENTITY
-	get_window().content_scale_size = Vector2i(1920,1080)
-	get_window().content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
+	RenderSettings.configure(get_window())
 	overworld.day_phase = hub.clock
 	overworld.clock_target = hub.clock_target
 	overworld.auto_clock = hub.auto_clock

@@ -56,7 +56,7 @@ func _run() -> void:
 		return
 	check(game.player.get_instance_id()==identity,"The same cat and attached camera travel north")
 	check(game.world_size==Vector2i(6400,3840) and game.navigation.region.size==Vector2i(200,120),"The district has a full-size 6400x3840 world and navigation grid")
-	check(game.camera.limit_right==6400 and game.camera.limit_bottom==3840 and game.camera.zoom.x==1.5,"Camera follows through the large town at the player's existing zoom")
+	check(game.camera.limit_right==6400 and game.camera.limit_bottom==3840 and is_equal_approx(game.camera.zoom.x,1.5*game.RenderSettings.SCALE),"Camera follows through the large town at the player's existing zoom")
 	check(game.Map.District.houses().size()==48 and get_nodes_in_group("district_buildings").size()==52,"Forty-eight homes, three shops and a civic hall are real separate buildings")
 	check(game.residents.size()==14 and game.humans.size()==4 and game.dogs.size()==2,"Twenty animals, taller humans and peaceful strolling wardens populate the district")
 	check(game.peaceful_mode and not game.combat_active and not game.player.try_attack() and not game.player.try_skill(),"The new town district remains peaceful")

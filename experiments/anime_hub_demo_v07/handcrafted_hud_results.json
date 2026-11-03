@@ -1,0 +1,6 @@
+{
+  "checks": 13,
+  "failures": [],
+  "passed": 13,
+  "scope": "Native 1280x720 and 1920x1080 HUD views, four painted time phases, compact layouts, actual relocated mouse hit target, cooldown feedback, indoor hiding and shared overworld clock."
+}

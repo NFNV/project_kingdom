@@ -19,6 +19,7 @@ const Loot := preload("res://experiments/anime_hub_demo_v07/tools/loot_drop.gd")
 const Forge := preload("res://experiments/anime_hub_demo_v07/tools/forge_room.gd")
 const OverworldTravel := preload("res://experiments/anime_hub_demo_v07/tools/overworld_travel.gd")
 const Mill := preload("res://experiments/anime_hub_demo_v07/tools/windsong_mill.gd")
+const RenderSettings := preload("res://experiments/anime_hub_demo_v07/tools/render_settings.gd")
 var overworld_travel: Node
 var state: Node
 var saves := SaveStore.new()
@@ -126,9 +127,7 @@ const GOODS := [
 
 func _ready() -> void:
 	get_window().title = "Project Kingdom — Garden Square"
-	get_window().content_scale_size = SIZE
-	get_window().content_scale_mode = Window.CONTENT_SCALE_MODE_VIEWPORT
-	get_window().content_scale_aspect = Window.CONTENT_SCALE_ASPECT_KEEP
+	RenderSettings.configure(get_window())
 	get_window().size = Vector2i(1280,720)
 	Engine.max_fps = 60
 	if OS.get_name()=="macOS" and DisplayServer.get_name()!="headless":
@@ -328,7 +327,7 @@ func _load_zone(destination: String, entry: String) -> void:
 		camera.limit_right = SIZE.x
 		camera.limit_bottom = SIZE.y
 		player.add_child(camera)
-	camera.zoom = Vector2.ONE*(1.0 if zone=="mill_garden" else 1.5)
+	camera.zoom = Vector2.ONE*(1.0 if zone=="mill_garden" else 1.5)*RenderSettings.SCALE
 	camera.position = Vector2(0,-220 if zone=="mill_garden" else -55)
 	camera.limit_right = world_size.x
 	camera.limit_bottom = world_size.y
@@ -397,8 +396,8 @@ func _draw_exit_marks(node: Node2D) -> void:
 		sign.set_border_width_all(1)
 		sign.set_corner_radius_all(5)
 		var label_y := -150.0 if id=="bakery" else -57.0
-		node.draw_style_box(sign,Rect2(at+Vector2(-82,label_y),Vector2(164,29)))
-		node.draw_string(ThemeDB.fallback_font,at+Vector2(-76,label_y+21),exits[id].get("sign","Mosswood" if zone=="town" else ("Garden Square" if id=="town" else ("Riverbend" if id=="river" else "Mosswood"))),HORIZONTAL_ALIGNMENT_CENTER,152,16,Color("fff1cb"))
+		node.draw_style_box(sign,Rect2(at+Vector2(-59,label_y),Vector2(118,23)))
+		node.draw_string(ThemeDB.fallback_font,at+Vector2(-54,label_y+16),exits[id].get("sign","Mosswood" if zone=="town" else ("Garden Square" if id=="town" else ("Riverbend" if id=="river" else "Mosswood"))),HORIZONTAL_ALIGNMENT_CENTER,108,12,Color("fff1cb"))
 
 
 func _draw_forest_air() -> void:
@@ -1267,7 +1266,7 @@ func _update_prompt() -> void:
 	prompt.visible = (not nearest.is_empty() or not near_exit.is_empty()) and (not combat_active or near_exit!="" or nearest.begins_with("loot:")) and not shopping and not transitioning and not paused
 	if prompt.visible:
 		var offset_y := -165.0 if dialogue_left>0 else 25.0
-		prompt.position = (get_canvas_transform()*player.global_position+Vector2(-140,offset_y)).clamp(Vector2(15,170),Vector2(1620,940))
+		prompt.position = (ui.world_to_ui(player.global_position)+Vector2(-140,offset_y)).clamp(Vector2(15,170),Vector2(1620,940))
 		prompt_text.text = "E   "+("Enter bakery" if near_exit=="bakery" else ("Go to "+exits[near_exit].get("sign","the next path") if near_exit!="" else interactables[nearest]["name"]))
 	var target: Dictionary = {}
 	if state.tracked_quest=="morning_rounds" and zone=="town" and quest_stage<5:
@@ -1282,7 +1281,7 @@ func _update_prompt() -> void:
 			target = {"at":exits.forge.at,"height":40.0}
 	quest_marker.visible = not target.is_empty() and not transitioning and not paused
 	if quest_marker.visible:
-		var point: Vector2 = get_canvas_transform()*(target["at"]+Vector2(0,-target["height"]-24))
+		var point: Vector2 = ui.world_to_ui(target["at"]+Vector2(0,-target["height"]-24))
 		quest_marker.position = point+Vector2(-14,-18+sin(elapsed*2.3)*5)
 		quest_marker.visible = Rect2(20,190,1880,760).has_point(point)
 

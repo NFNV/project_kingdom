@@ -8,6 +8,7 @@ var transitioning := false
 var gate_cooldown := .25
 # All geometry is CanvasItem drawing. Logical positions are 2D map coordinates.
 const Atmosphere := preload("res://experiments/overworld_2d_v01/atmosphere.gd")
+const RenderSettings := preload("res://experiments/anime_hub_demo_v07/tools/render_settings.gd")
 const Dressing := preload("res://experiments/overworld_2d_v01/region_dressing.gd")
 const ClockDial := preload("res://experiments/anime_hub_demo_v07/tools/celestial_clock.gd")
 const CYCLE_SECONDS := Atmosphere.CYCLE_SECONDS
@@ -77,8 +78,8 @@ var bound_hint := 0.0
 
 func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
-	get_tree().root.content_scale_size = Vector2i(1920,1080)
-	get_tree().root.content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
+	RenderSettings.configure(get_window())
+	scale = Vector2.ONE*RenderSettings.SCALE
 	get_window().title = "Project Kingdom — 2D overworld laboratory"
 	Engine.max_fps = 60
 	font = ThemeDB.fallback_font
@@ -131,8 +132,8 @@ func _ready() -> void:
 	hud.draw.connect(draw_hud)
 	add_child(hud)
 	clock_dial = ClockDial.new()
-	clock_dial.position = Vector2(859,7)
-	clock_dial.scale = Vector2(.72,.72)
+	clock_dial.position = Vector2(848,7)
+	clock_dial.scale = Vector2(.8,.8)
 	add_child(clock_dial)
 	update_lighting()
 	update_shader()
@@ -590,18 +591,18 @@ func panel_style(color: Color) -> StyleBoxFlat:
 	return style
 
 func draw_hud() -> void:
-	panel(Rect2(28,28,484,103),Color("203e36"))
-	text(Vector2(50,61),"PROJECT KINGDOM  /  THE GREENSHIRE" if linked_journey else "MOSSWOOD  /  THE GREENSHIRE",16,Color("d1c38d"))
-	text(Vector2(50,98),"A little world to explore",29)
+	panel(Rect2(24,22,316,74),Color("203e36"))
+	text(Vector2(40,46),"THE GREENSHIRE  /  MOSSWOOD",12,Color("d1c38d"))
+	text(Vector2(40,77),"A little world to explore",23)
 	if near_landmark!="":
-		panel(Rect2(670,178,580,55))
-		text(Vector2(699,213),near_landmark+("  ·  F Enter Garden Square" if can_enter_town() else ("  ·  F Visit Windsong Mill" if can_enter_mill() else "  ·  F Inspect")),21)
-	panel(Rect2(28,971,1864,81))
-	text(Vector2(50,1003),"WASD / arrows  Roam     Shift  Faster hops     Fixed north-facing camera     C  Curve     Esc  Pause",20)
-	text(Vector2(50,1032),"1–8 Landmarks   T Next time   M Region map   F Inspect   G Grid   [ / ] Bend   Tab Minimap   R Reset   F3 Stats   F4 Rider   F11 Screen",18,Color("c3c9a8"))
-	panel(Rect2(28,875,485,66))
-	text(Vector2(48,902),"CURVATURE  "+("ON" if curved else "OFF"),18)
-	text(Vector2(48,926),"Bend %.0f%%  ·  All terrain and scenery rendered in 2D" % (curvature/MAX_BEND*100),16,Color("c3c9a8"))
+		panel(Rect2(710,184,500,40))
+		text(Vector2(728,210),near_landmark+("  ·  F Enter Garden Square" if can_enter_town() else ("  ·  F Visit Windsong Mill" if can_enter_mill() else "  ·  F Inspect")),16)
+	panel(Rect2(440,1024,1454,30))
+	text(Vector2(454,1044),"WASD / arrows Roam   Shift Run   F Interact   T Time   M Map   1–8 Landmarks   Esc Pause   F11 Screen",14)
+	if diagnostics:
+		panel(Rect2(24,930,370,66))
+		text(Vector2(40,955),"CURVATURE  "+("ON" if curved else "OFF"),14)
+		text(Vector2(40,980),"Bend %.0f%%  ·  C toggle · [ / ] strength" % (curvature/MAX_BEND*100),12,Color("c3c9a8"))
 	if notice_left>0:
 		panel(Rect2(540,882,1040,52),Color("e9dfb9"))
 		text(Vector2(562,916),notice,20,Color("294c3e"))
@@ -626,10 +627,10 @@ func draw_hud() -> void:
 		text(Vector2(786,526),"Press Esc to continue roaming",22,Color("294c3e"))
 
 func map_point(p: Vector2, large := false) -> Vector2:
-	return (Vector2(846,535) if large else Vector2(1697,166))+(p-Vector2(0,200))*(Vector2(1.17,-1.17) if large else Vector2(.29,-.29))
+	return (Vector2(846,535) if large else Vector2(1770,116))+(p-Vector2(0,200))*(Vector2(1.17,-1.17) if large else Vector2(.21,-.21))
 
 func draw_map_contents(large: bool) -> void:
-	var scale := 1.17 if large else .29
+	var scale := 1.17 if large else .21
 	# Vegetation washes and sea shape stay in map coordinates, north always up.
 	for area in [[Vector2(-80,265),Vector2(100,125)],[Vector2(60,365),Vector2(90,75)]]:
 		hud.draw_set_transform(map_point(area[0],large),0,area[1]*scale)
@@ -675,11 +676,11 @@ func draw_map_contents(large: bool) -> void:
 	hud.draw_line(at,map_point(player+camera_forward()*18,large),Color("9e6543"),2,true)
 
 func draw_minimap() -> void:
-	panel(Rect2(1540,28,352,242),Color("e5dbb4"))
-	text(Vector2(1560,58),"THE GREENSHIRE",17,Color("335140"))
+	panel(Rect2(1640,22,254,178),Color("e5dbb4"))
+	text(Vector2(1654,45),"THE GREENSHIRE",13,Color("335140"))
 	draw_map_contents(false)
-	text(Vector2(1835,59),"N ↑",16,Color("335140"))
-	text(Vector2(1560,249),"M  Open the regional map",14,Color("586d4c"))
+	text(Vector2(1856,45),"N ↑",12,Color("335140"))
+	text(Vector2(1654,185),"M  Regional map",12,Color("586d4c"))
 
 func draw_region_map() -> void:
 	hud.draw_rect(Rect2(0,0,1920,1080),Color(.08,.17,.14,1))

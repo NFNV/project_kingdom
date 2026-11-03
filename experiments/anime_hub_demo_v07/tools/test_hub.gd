@@ -274,7 +274,7 @@ func _run() -> void:
 	game.auto_clock = false
 	for tick in 5:
 		await physics_frame
-	_check(root.get_texture().get_size()==Vector2(1920,1080),"Internal canvas is 1920x1080")
+	_check(root.get_texture().get_size()==Vector2(game.RenderSettings.RENDER_SIZE),"Internal render target is 2560x1440")
 	_check(game.player.controlled,"Cat is controlled")
 	_check(game.player.sprite.sprite_frames.has_animation("walk_nw"),"Registered directional character resources load")
 	_check(game.interactables.size()==13,"Animal residents, four humans, postbox and three peaceful wardens are interactive")
@@ -376,7 +376,7 @@ func _run() -> void:
 	_check(absf(game.clock-1.4)<.001,"The shared clock is not reset by any zone transition")
 	_check(game.player.get_parent()==game.world,"The same playable cat transfers into the current ground-sorted scene")
 	# Close camera follows the same actor across the new room and every return trip.
-	_check(game.camera.get_parent()==game.player and is_equal_approx(game.camera.zoom.x,1.5),"Follow camera is attached to the cat at the wider 1.5x zoom")
+	_check(game.camera.get_parent()==game.player and is_equal_approx(game.camera.zoom.x,1.5*game.RenderSettings.SCALE),"Follow camera is attached to the cat at the same world framing at the 1440p render scale")
 	await _settle(Vector2(960,630))
 	game.camera.force_update_scroll()
 	var screen_before: Vector2 = game.get_canvas_transform()*game.player.position
@@ -386,12 +386,12 @@ func _run() -> void:
 	_check(game.camera.get_screen_center_position().x>camera_before.x+40,"Camera tracks real character movement")
 	_check(absf((game.get_canvas_transform()*end_camera).x-screen_before.x)<3,"Following keeps the cat at a fixed horizontal screen position")
 	var view_origin: Vector2 = game.get_canvas_transform().affine_inverse()*Vector2.ZERO
-	var view_end: Vector2 = game.get_canvas_transform().affine_inverse()*Vector2(1920,1080)
+	var view_end: Vector2 = game.get_canvas_transform().affine_inverse()*Vector2(game.RenderSettings.RENDER_SIZE)
 	_check(view_origin.x>=-.1 and view_origin.y>=-.1 and view_end.x<=1920.1 and view_end.y<=1080.1,"Camera frustum stays inside painted scene bounds")
 	await _settle(Vector2(485,755))
 	game.camera.force_update_scroll()
 	game._update_prompt()
-	_check(game.prompt.visible and game.prompt.position.distance_to((game.get_canvas_transform()*game.player.position+Vector2(-140,-165 if game.dialogue_left>0 else 25)).clamp(Vector2(15,170),Vector2(1620,940)))<2,"NPC prompt projects world position through the moving camera")
+	_check(game.prompt.visible and game.prompt.position.distance_to((game.ui.world_to_ui(game.player.position)+Vector2(-140,-165 if game.dialogue_left>0 else 25)).clamp(Vector2(15,170),Vector2(1620,940)))<2,"NPC prompt projects world position through the moving camera")
 	_check(is_instance_valid(game.ripples) and game.ripples.streams.size()==4,"Fountain has four registered animated spilling streams")
 	var curve_before: Vector2 = game.ripples.curve(game.ripples.streams[0],.2)
 	var curve_after: Vector2 = game.ripples.curve(game.ripples.streams[0],.7)

@@ -1,0 +1,14 @@
+{
+  "checks": 18,
+  "failures": [],
+  "logical_size": [
+    1920,
+    1080
+  ],
+  "passed": 18,
+  "render_size": [
+    2560,
+    1440
+  ],
+  "scope": "Native GPU target dimensions in title, town, combat, mill, inn, linked overworld and return; matching camera framing, UI scale, world-to-HUD projection, actual skill click and resized output window. Isolated temporary save slot."
+}

@@ -11,6 +11,7 @@ static func heading_font() -> Font:
 	if serif==null:
 		serif = SystemFont.new()
 		serif.font_names = PackedStringArray(["Georgia","Baskerville","Noto Serif","serif"])
+		serif.multichannel_signed_distance_field = true
 	return serif
 
 static func style(dark := false, selected := false) -> StyleBoxFlat:

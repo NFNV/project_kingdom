@@ -12,6 +12,7 @@ func _ready() -> void:
 	spawn_game()
 	var layer := CanvasLayer.new()
 	layer.layer = 80
+	layer.scale = Vector2.ONE*game.RenderSettings.SCALE
 	add_child(layer)
 	menu = Control.new()
 	menu.size = Vector2(1920,1080)
