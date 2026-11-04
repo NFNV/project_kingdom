@@ -411,7 +411,7 @@ func verify_legacy_migration() -> void:
 	file.close()
 	var original := FileAccess.get_file_as_bytes(path)
 	var upgraded := store.load_document(path)
-	check(not upgraded.is_empty() and store.migrated and upgraded.version==3,"An actual version-1 disk save migrates to schema 3")
+	check(not upgraded.is_empty() and store.migrated and upgraded.version==store.VERSION,"An actual version-1 disk save migrates to the current schema")
 	check(FileAccess.get_file_as_bytes(path)==original,"Reading an old save leaves the original file byte-for-byte intact")
 	if upgraded.is_empty():
 		return

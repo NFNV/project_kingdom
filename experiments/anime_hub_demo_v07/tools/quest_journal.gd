@@ -1,6 +1,10 @@
 extends Control
 const UI := preload("res://experiments/anime_hub_demo_v07/tools/rpg_ui.gd")
 var hub: Node2D
+var board_mode := false
+var banner: Label
+var heading: Label
+var close_button: Button
 var selected := "briarwood_patrol"
 var cards: Dictionary = {}
 var names: Dictionary = {}
@@ -18,8 +22,8 @@ func _ready() -> void:
 	size = Vector2(1920,1080)
 	UI.shade(self)
 	var sheet := UI.panel(self,Vector2(300,145),Vector2(1320,790))
-	UI.text(sheet,"THE TRAVELLER'S JOURNAL",Vector2(32,24),1000,13,UI.GOLD)
-	UI.text(sheet,"Stories along the road",Vector2(32,51),950,36,UI.INK,true)
+	banner = UI.text(sheet,"THE TRAVELLER'S JOURNAL",Vector2(32,24),1000,13,UI.GOLD)
+	heading = UI.text(sheet,"Stories along the road",Vector2(32,51),950,36,UI.INK,true)
 	tally = UI.text(sheet,"",Vector2(1000,68),280,17,UI.MUTED)
 	var row := 0
 	for entry in hub.state.journal_entries():
@@ -43,11 +47,15 @@ func _ready() -> void:
 		hub._update_hud()
 		refresh()
 	)
-	var close := UI.button(sheet,"Return  /  J or Esc",Vector2(930,717),Vector2(360,43))
-	close.pressed.connect(func(): hub.toggle_journal())
+	close_button = UI.button(sheet,"Return  /  J or Esc",Vector2(930,717),Vector2(360,43))
+	close_button.pressed.connect(func(): hub.toggle_journal())
 	hide()
 
-func open() -> void:
+func open(from_board := false) -> void:
+	board_mode = from_board
+	banner.text = "GARDEN SQUARE QUEST BOARD" if board_mode else "THE TRAVELLER'S JOURNAL"
+	heading.text = "Town notices and requests" if board_mode else "Stories along the road"
+	close_button.text = "Return to the square  /  E or Esc" if board_mode else "Return  /  J or Esc"
 	selected = hub.state.tracked_quest
 	refresh()
 	show()

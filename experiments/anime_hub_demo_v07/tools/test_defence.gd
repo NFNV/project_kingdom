@@ -206,17 +206,19 @@ func run() -> void:
  game.state.equip_item("trail_shield")
  var document: Dictionary = game.make_save_document()
  var store = game.SaveStore.new()
- check(store.write_document(document,SLOT) and store.load_document(SLOT).state.equipment.shield=="trail_shield","New shield equipment survives an actual version-three disk save")
+ check(store.write_document(document,SLOT) and store.load_document(SLOT).state.equipment.shield=="trail_shield","New shield equipment survives an actual current-version disk save")
  var old: Dictionary = document.duplicate(true)
  old.version = 2
  old.state.equipment.erase("shield")
  old.state.items.erase("trail_shield")
  old.state.items.erase("ironleaf_shield")
+ for id in store.POTION_IDS:
+  old.state.items.erase(id)
  # Previous journeys never owned a shield; emulate that exact old schema.
  var old_coins: int = old.state.coins
  FileAccess.open(SLOT+".v2",FileAccess.WRITE).store_string(JSON.stringify(old))
  var migrated: Dictionary = store.load_document(SLOT+".v2")
- check(not migrated.is_empty() and store.migrated and migrated.version==3 and migrated.state.equipment.shield=="trail_shield" and migrated.state.coins==old_coins,"An existing version-two save gains its starter shield and preserves its old economy")
+ check(not migrated.is_empty() and store.migrated and migrated.version==store.VERSION and migrated.state.equipment.shield=="trail_shield" and migrated.state.coins==old_coins,"An existing version-two save gains its starter shield and preserves its old economy")
  old.state.items.erase("bread")
  check(store.upgrade(old).is_empty(),"Migration rejects an old save missing existing inventory data")
  game._load_zone("town","forest")

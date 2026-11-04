@@ -55,7 +55,7 @@ var town_floor := FLOOR.duplicate()
 const OBJECTIVES := [
 	"Visit Pippa at the blue bakery cart.",
 	"Take the warm bread to Elder Mallow by the bench.",
-	"Pick up a fruit basket from Moss at the green stall.",
+	"Pick up a fruit basket from Moss beside the apothecary.",
 	"Bring the fruit basket to Pip, the courier.",
 	"Post Pip's letter in the red postbox.",
 	"Morning rounds complete! Explore Mosswood through the southeast gate."
@@ -140,6 +140,12 @@ const GOODS := [
 	{"id":"bread","name":"Warm sourdough","description":"Restore 2 hearts. H to eat a loaf on the trail.","price":2},
 	{"id":"tea","name":"Meadow tea","description":"Restore 2 hearts and refresh Wind Slash.","price":3},
 	{"id":"honey","name":"Valley honey","description":"Restore 3 hearts. Wildflowers from Mosswood.","price":4}
+]
+
+
+const POTIONS := [
+	{"id":"healing_draught","name":"Rosehip Draught","description":"Restores 4 hearts. Use it from your satchel.","price":6},
+	{"id":"wind_tonic","name":"Windmint Tonic","description":"Restores 1 heart and refreshes Wind Slash.","price":5}
 ]
 
 
@@ -489,7 +495,7 @@ func _piece(id: String, at: Vector2, height: float) -> Node2D:
 	anchor.position = at
 	world.add_child(anchor)
 	var sprite := Sprite2D.new()
-	sprite.texture = load(ART+"godot/"+id+".tres")
+	sprite.texture = load(ROOT+"assets/town/"+id+".tres" if id=="potion_counter" else ART+"godot/"+id+".tres")
 	sprite.centered = false
 	sprite.offset = Vector2(-sprite.texture.get_width()/2.0,-sprite.texture.get_height())
 	sprite.scale = Vector2.ONE*height/sprite.texture.get_height()
@@ -584,10 +590,18 @@ func _build_plaza() -> void:
 	_solid(_ellipse(Vector2(970,675),Vector2(139,48)))
 	_piece("bakery_stall",Vector2(560,625),205)
 	_solid(_ellipse(Vector2(560,604),Vector2(90,28)))
-	_piece("produce_stall",Vector2(1340,620),205)
-	_solid(_ellipse(Vector2(1340,597),Vector2(90,27)))
+	var counter_at := Vector2(1350,641)
+	var counter := _piece("potion_counter",counter_at,158)
+	# Match the planter's diagonal without tilting the counter's upright posts.
+	var counter_alignment := Transform2D(Vector2(1,0.14),Vector2.DOWN,Vector2.ZERO)
+	var counter_sprite := counter.get_child(0) as Sprite2D
+	counter_sprite.transform = counter_alignment * counter_sprite.transform
+	var counter_footprint := _ellipse(Vector2(0,-17),Vector2(112,25))
+	for index in counter_footprint.size():
+		counter_footprint[index] = counter_at + counter_alignment * counter_footprint[index]
+	_solid(counter_footprint)
 	_resident("baker","Pippa · Baker","cat_baker",Vector2(485,694))
-	_resident("grocer","Moss · Grocer","dog_grocer",Vector2(1430,707))
+	_resident("grocer","Moss · Orchard keeper","dog_grocer",Vector2(1430,707))
 	_resident("elder","Elder Mallow","cat_elder",Vector2(660,850),104)
 	_stroller("bookseller","Sage · Bookseller","cat_bookseller",[Vector2(1200,752),Vector2(1136,848),Vector2(1200,816)],108)
 	_stroller("courier","Pip · Courier","dog_courier",[Vector2(1360,848),Vector2(1456,816),Vector2(1488,912)],108)
@@ -597,14 +611,32 @@ func _build_plaza() -> void:
 	_stroller("fennel","Fennel · Apprentice courier","dog_courier",[Vector2(976,944),Vector2(1040,880),Vector2(1136,944)],86,Color("c8e5ef"))
 	_human_resident("rhea","Rhea · Wayfarer","human_wayfarer",Vector2(1085,980),"nw")
 	_human_resident("alden","Captain Alden · Town Warden","human_warden",Vector2(1185,575),"sw")
-	_human_resident("iris","Iris · Herbalist","human_herbalist",Vector2(730,940),"se")
+	_human_resident("iris","Iris · Apothecary","human_herbalist",counter_at + counter_alignment * Vector2(-32,-50),"se")
+	interactables.iris.anchor.tracks_player = false
+	interactables.iris.approach = counter_at + counter_alignment * Vector2(0,36)
+	interactables.iris.at = interactables.iris.approach
 	_human_resident("tomas","Nico · Smith's apprentice","human_smith",Vector2(740,760),"se")
 	_piece("bench",Vector2(590,829),80)
 	_solid(_ellipse(Vector2(590,815),Vector2(57,17)))
 	_piece("postbox",Vector2(1430,785),108)
 	var post_body := _solid(_ellipse(Vector2(1430,777),Vector2(19,13)))
 	interactables["postbox"] = {"name":"Postbox","at":Vector2(1430,785),"height":108,"body":post_body}
-	_piece("notice_board",Vector2(1510,490),165)
+	var board_at := Vector2(1020,476)
+	var board := _piece("notice_board",board_at,142)
+	var board_sprite := board.get_child(0) as Sprite2D
+	board_sprite.flip_h = true
+	board.draw.connect(func():
+		for foot in [Vector2(-43,-20),Vector2(39,-2)]:
+			board.draw_set_transform(foot,0.22,Vector2(1.0,0.36))
+			board.draw_circle(Vector2.ZERO,16,Color(0.10,0.08,0.07,0.19),true,-1.0,true)
+			board.draw_circle(Vector2.ZERO,11,Color(0.10,0.08,0.07,0.17),true,-1.0,true)
+	)
+	var board_footprint := _ellipse(Vector2.ZERO,Vector2(57,13))
+	for index in board_footprint.size():
+		board_footprint[index] = board_at + Vector2(0,-10) + board_footprint[index].rotated(0.22)
+	var board_body := _solid(board_footprint)
+	var reading_spot := board_at + Vector2(0,45)
+	interactables.quest_board = {"name":"Quest board","at":reading_spot,"approach":reading_spot,"anchor":board,"height":142,"body":board_body,"range":94.0}
 	_piece("street_lamp",Vector2(365,715),235)
 	_piece("elm_tree",Vector2(90,940),480)
 	_piece("willow_tree",Vector2(1930,960),500)
@@ -725,15 +757,21 @@ func _build_bakery() -> void:
 	trail_effects.draw.connect(bakery_room.draw_air.bind(trail_effects))
 
 
+func shop_stock() -> Array:
+	return POTIONS if zone == "town" else GOODS
+
+
 func open_shop() -> void:
+	var apothecary := zone == "town"
 	shopping = true
 	player.stop_motion()
-	interactables["shop_vendor"]["anchor"].greet()
+	interactables["iris" if apothecary else "shop_vendor"].anchor.greet()
 	dialogue_left = 0
 	talk_panel.hide()
 	prompt.hide()
+	ui.configure_shop(apothecary)
 	ui.merchant.show()
-	ui.refresh_shop("Welcome in! Everything was baked this morning.")
+	ui.refresh_shop("Take a bottle for the road. Use it from your satchel." if apothecary else "Welcome in! Everything was baked this morning.")
 
 
 func close_shop() -> void:
@@ -750,9 +788,10 @@ func close_inn() -> void:
 
 
 func buy(index: int) -> bool:
-	if not shopping or zone!="bakery" or index<0 or index>=GOODS.size():
+	var stock := shop_stock()
+	if not shopping or not ui.merchant.visible or zone not in ["town","bakery"] or index<0 or index>=stock.size():
 		return false
-	var product: Dictionary = GOODS[index]
+	var product: Dictionary = stock[index]
 	if coins<int(product["price"]):
 		audio.play_event("ui_error",player.position,-10)
 		ui.refresh_shop("A little short of coins for that one. Try something smaller.")
@@ -836,7 +875,7 @@ func return_to_title() -> void:
 		else:
 			ui.show_notice(saves.last_error)
 
-func toggle_journal() -> void:
+func toggle_journal(board := false) -> void:
 	if transitioning or shopping or title_active or not player.active:
 		return
 	if backpack_open:
@@ -848,7 +887,7 @@ func toggle_journal() -> void:
 	ui.journal_view.visible = journal_open
 	if journal_open:
 		player.stop_motion()
-		ui.journal_view.open()
+		ui.journal_view.open(board)
 
 func _add_loot(id: String) -> void:
 	var key := "loot:"+id
@@ -1111,7 +1150,7 @@ func _physics_process(_delta: float) -> void:
 		if item.has("anchor") and (zone == "town" or item.anchor is CharacterBody2D):
 			if not item.anchor.visible:
 				continue
-			item["at"] = item.anchor.position
+			item["at"] = item.get("approach", item.anchor.position)
 		var candidate: float = Actor.ground_vector(item["at"]-player.position).length()
 		var quest_target: bool = zone=="town" and quest_stage<5 and id==QUEST_TARGETS[quest_stage]
 		if candidate<float(item.get("range",150.0)) and (candidate<distance or quest_target):
@@ -1141,6 +1180,12 @@ func interact(id := "") -> void:
 	if not interactables.has(id) or (interactables[id].has("anchor") and not interactables[id].anchor.visible):
 		return
 	audio.play_event("ui_open",player.position,-12)
+	if zone == "town" and id == "quest_board":
+		toggle_journal(true)
+		return
+	if zone == "town" and id == "iris":
+		open_shop()
+		return
 	if interactables[id].has("anchor") and interactables[id]["anchor"].has_method("greet"):
 		interactables[id]["anchor"].greet()
 	var lines := {
@@ -1156,7 +1201,6 @@ func interact(id := "") -> void:
 		"postbox":"A sturdy red postbox. Today's collection hasn't gone yet.",
 		"rhea":"I've just come back from Mosswood. Take the southeast gate and follow the trail past the meadow. The river is worth the walk.",
 		"alden":"Small paws or long strides, everyone is welcome here. Bram and I keep the square peaceful. Enjoy your visit.",
-		"iris":"The meadow is full of chamomile. Clover brews it into a lovely tea at the Bluebird Bakery, under the blue awning.",
 		"tomas":"Tomas is working inside Emberforge in Northgate's Market Lane. Take the northern passage, then follow the road toward the shops. Look for the Emberforge doorway. He has equipment to sell, and a job for a brave traveller."
 	}
 	if zone=="bakery":
@@ -1453,7 +1497,7 @@ func _input(event: InputEvent) -> void:
 		player.try_roll()
 		get_viewport().set_input_as_handled()
 		return
-	if event.is_action_pressed("hub_journal") or (journal_open and event.is_action_pressed("hub_pause")):
+	if event.is_action_pressed("hub_journal") or (journal_open and (event.is_action_pressed("hub_pause") or (ui.journal_view.board_mode and event.is_action_pressed("hub_interact")))):
 		toggle_journal()
 		get_viewport().set_input_as_handled()
 		return
@@ -1495,8 +1539,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			close_shop()
 		elif event is InputEventKey and event.pressed:
 			var index: int = event.physical_keycode-KEY_1
-			if index>=0 and index<GOODS.size():
-				buy(index)
+			buy(index)
 		get_viewport().set_input_as_handled()
 		return
 	if event.is_action_pressed("hub_pause"):

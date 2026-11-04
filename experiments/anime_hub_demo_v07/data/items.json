@@ -21,6 +21,21 @@
     "max_stack_size": 99,
     "kind": "food"
   },
+  "healing_draught": {
+    "name": "Rosehip Draught",
+    "description": "Iris's rosehip potion restores 4 hearts.",
+    "heal": 4,
+    "max_stack_size": 99,
+    "kind": "food"
+  },
+  "wind_tonic": {
+    "name": "Windmint Tonic",
+    "description": "An herbal potion that restores 1 heart and refreshes Wind Slash.",
+    "heal": 1,
+    "refresh_skill": true,
+    "max_stack_size": 99,
+    "kind": "food"
+  },
   "bandit_badge": {
     "name": "Bandit badge",
     "description": "Recovered from a defeated bandit. Bring three to Bram.",

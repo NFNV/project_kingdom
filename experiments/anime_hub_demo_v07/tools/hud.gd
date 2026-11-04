@@ -31,6 +31,12 @@ var shop_balance: Label
 var shop_feedback: Label
 var shop_satchel: Label
 var shop_buttons: Array[Button] = []
+var shop_names: Array[Label] = []
+var shop_descriptions: Array[Label] = []
+var shop_banner: Label
+var shop_title: Label
+var shopkeeper: Label
+var shop_close: Button
 var controls_label: Label
 var combat_panel: Panel
 var health_label: Label
@@ -493,17 +499,15 @@ func _build_merchant() -> void:
 	shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	merchant.add_child(shade)
 	var sheet := panel(Vector2(505,220),Vector2(910,640),merchant)
-	label("THE BLUEBIRD BAKERY",Vector2(40,27),14,sheet,0,Color("967344"))
-	label("Good things, fresh from the oven",Vector2(40,56),30,sheet,820,Color("304c3d"),true)
-	label("Clover  /  Bakery keeper",Vector2(42,108),17,sheet,0,Color("826c4a"))
+	shop_banner = label("",Vector2(40,27),14,sheet,0,Color("967344"))
+	shop_title = label("",Vector2(40,56),30,sheet,820,Color("304c3d"),true)
+	shopkeeper = label("",Vector2(42,108),17,sheet,0,Color("826c4a"))
 	shop_balance = label("",Vector2(640,111),17,sheet,225,Color("826c4a"))
 	for index in hub.GOODS.size():
-		var good: Dictionary = hub.GOODS[index]
 		var top: int = 162+index*95
-		label(good["name"],Vector2(44,top),22,sheet,500,Color("314b3d"),true)
-		label(good["description"],Vector2(44,top+33),16,sheet,500,Color("80745b"))
+		shop_names.append(label("",Vector2(44,top),22,sheet,500,Color("314b3d"),true))
+		shop_descriptions.append(label("",Vector2(44,top+33),16,sheet,500,Color("80745b")))
 		var button := Button.new()
-		button.text = "%d  ·  Buy / %d coins" % [index+1,good["price"]]
 		button.position = Vector2(608,top+4)
 		button.size = Vector2(250,53)
 		button.focus_mode = Control.FOCUS_NONE
@@ -522,7 +526,7 @@ func _build_merchant() -> void:
 	shop_feedback = label("",Vector2(44,469),18,sheet,810,Color("8a6035"))
 	shop_satchel = label("",Vector2(44,518),15,sheet,810,Color("6a745b"))
 	var close := Button.new()
-	close.text = "Back to the bakery   /   E or Esc"
+	shop_close = close
 	close.position = Vector2(255,569)
 	close.size = Vector2(400,42)
 	close.focus_mode = Control.FOCUS_NONE
@@ -540,9 +544,31 @@ func _build_merchant() -> void:
 	merchant.hide()
 
 
+func configure_shop(apothecary: bool) -> void:
+	shop_banner.text = "GARDEN SQUARE APOTHECARY" if apothecary else "THE BLUEBIRD BAKERY"
+	shop_title.text = "Potions for the road" if apothecary else "Good things, fresh from the oven"
+	shopkeeper.text = "Iris  /  Apothecary" if apothecary else "Clover  /  Bakery keeper"
+	shop_close.text = "Back to the square   /   E or Esc" if apothecary else "Back to the bakery   /   E or Esc"
+	var stock: Array = hub.shop_stock()
+	for index in shop_buttons.size():
+		var available := index < stock.size()
+		shop_names[index].visible = available
+		shop_descriptions[index].visible = available
+		shop_buttons[index].visible = available
+		if available:
+			var good: Dictionary = stock[index]
+			shop_names[index].text = good.name
+			shop_descriptions[index].text = good.description
+			shop_buttons[index].text = "%d  ·  Buy / %d coins" % [index+1,good.price]
+
+
 func refresh_shop(message: String) -> void:
 	shop_balance.text = "Your purse: %d coins" % hub.coins
 	shop_feedback.text = message
-	shop_satchel.text = "IN YOUR SATCHEL    %d loaves  /  %d teas  /  %d honey jars" % [hub.inventory.bread,hub.inventory.tea,hub.inventory.honey]
-	for index in shop_buttons.size():
-		shop_buttons[index].disabled = hub.coins<int(hub.GOODS[index]["price"])
+	var stock: Array = hub.shop_stock()
+	var counts := PackedStringArray()
+	for index in stock.size():
+		var good: Dictionary = stock[index]
+		counts.append("%d × %s" % [hub.state.count(good.id),good.name])
+		shop_buttons[index].disabled = hub.coins<int(good.price)
+	shop_satchel.text = "IN YOUR SATCHEL    " + "  /  ".join(counts)

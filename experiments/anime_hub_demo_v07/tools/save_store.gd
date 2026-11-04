@@ -1,6 +1,7 @@
 extends RefCounted
 ## Whitelisted, versioned JSON. Validate everything before touching live state.
-const VERSION := 3
+const VERSION := 4
+const POTION_IDS := ["healing_draught","wind_tonic"]
 const Legacy := preload("res://experiments/anime_hub_demo_v07/tools/save_v1.gd")
 const State := preload("res://experiments/anime_hub_demo_v07/tools/game_state.gd")
 const DEFAULT_PATH := "user://kingdom_journey.json"
@@ -160,19 +161,27 @@ func upgrade(source: Variant) -> Dictionary:
 		result.state.tracked_quest = "briarwood_patrol"
 		migrated = true
 		return result
-	if source.get("version")==2:
-		# Only add the two new definitions and offhand slot. Missing old fields
-		# stay invalid; migration must not repair corrupt inventories silently.
+	if source.get("version")==2 or source.get("version")==3:
+		# Add only items introduced since the saved version.
+		var needs_shields: bool = source.version == 2
+		var new_items := POTION_IDS.duplicate()
+		if needs_shields:
+			new_items.append_array(["trail_shield","ironleaf_shield"])
 		var result: Dictionary = source.duplicate(true)
 		var data: Variant = result.get("state")
 		if not data is Dictionary or not data.get("items") is Dictionary or not data.get("equipment") is Dictionary:
 			return {}
-		if data.items.size()!=definitions.size()-2 or data.equipment.size()!=State.SLOTS.size()-1 or data.equipment.has("shield") or data.items.has("trail_shield") or data.items.has("ironleaf_shield"):
+		if data.items.size()!=definitions.size()-new_items.size() or data.equipment.size()!=State.SLOTS.size()-int(needs_shields):
 			return {}
+		for id in new_items:
+			if data.items.has(id):
+				return {}
+			data.items[id] = 0
+		if needs_shields:
+			if data.equipment.has("shield"):
+				return {}
+			data.equipment.shield = "trail_shield"
 		result.version = VERSION
-		data.items.trail_shield = 0
-		data.items.ironleaf_shield = 0
-		data.equipment.shield = "trail_shield"
 		migrated = true
 		return result
 	return source
