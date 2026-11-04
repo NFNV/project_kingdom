@@ -47,6 +47,8 @@ var direction := "se"
 var automated := false
 var resident_id := ""
 var patrol := PackedVector2Array()
+var routine_goal := Vector2.INF
+var routine_repath := 0.0
 var patrol_index := 1
 var patrol_wait := 2.0
 var moved_distance := 0.0
@@ -426,9 +428,23 @@ func enter_combat() -> void:
 
 
 func _friendly_intent(delta: float) -> Vector2:
-	if patrol.is_empty() or not is_instance_valid(hub.player):
+	if not is_instance_valid(hub.player):
 		return Vector2.ZERO
 	var offset: Vector2 = hub.player.position-position
+	if routine_goal != Vector2.INF:
+		if hub.dialogue_left > 0 and hub.conversation_actor == resident_id:
+			if not offset.is_zero_approx():
+				facing = ground_vector(offset).normalized()
+			return Vector2.ZERO
+		if position.distance_to(routine_goal) < 16:
+			return Vector2.ZERO
+		routine_repath = maxf(0, routine_repath - delta)
+		if route.is_empty() and routine_repath <= 0:
+			route = hub.find_path(position, routine_goal)
+			routine_repath = 1.0
+		return follow_route()
+	if patrol.is_empty():
+		return Vector2.ZERO
 	if ground_vector(offset).length()<155:
 		facing = ground_vector(offset).normalized()
 		return Vector2.ZERO

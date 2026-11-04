@@ -2,6 +2,7 @@ shader_type canvas_item;
 
 // A gentle shared ink/ivory response before the existing day/night modulation.
 // No outlines, dithering, pixel snapping or replacement of the authored frames.
+uniform vec3 blue_fabric = vec3(1.0);
 varying vec4 sprite_tint;
 void vertex() {
 	sprite_tint = COLOR;
@@ -12,5 +13,10 @@ void fragment() {
 	vec3 pigment = mix(vec3(lightness), texel.rgb, 0.94);
 	pigment = mix(pigment, vec3(0.24, 0.30, 0.31), 0.075 * (1.0 - smoothstep(0.05, 0.50, lightness)));
 	pigment = mix(pigment, pigment * vec3(1.0, 0.98, 0.94), 0.30 * smoothstep(0.45, 1.0, lightness));
+	// Target the blue cloth and enamel while preserving fur, metal and gold trim.
+	float blue = smoothstep(0.045, 0.20, texel.b - texel.r)
+		* smoothstep(0.012, 0.13, texel.b - texel.g);
+	float recolor = step(0.01, length(blue_fabric - vec3(1.0)));
+	pigment = mix(pigment, blue_fabric * (0.16 + lightness), blue * recolor);
 	COLOR = vec4(pigment, texel.a) * sprite_tint;
 }

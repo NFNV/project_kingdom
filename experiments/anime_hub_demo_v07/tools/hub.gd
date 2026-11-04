@@ -31,6 +31,22 @@ var autosave_enabled := false
 var autosave_queued := false
 var autosave_delay := 0.0
 const CYCLE_SECONDS := 1200.0
+# Dawn gate briefing, daylight posts, then the evening watch.
+const CROWD_HOURS := {
+	"linn": Vector2(7, 19),
+	"tansy": Vector2(8, 20),
+	"rowan": Vector2(10, 21),
+	"fennel": Vector2(11, 18),
+	"bookseller": Vector2(7, 22),
+}
+const WARDEN_FABRIC := {
+	"guard_west": Vector3(0.43, 0.94, 0.59),
+	"guard_east": Vector3(1.24, 0.40, 0.53),
+}
+const WARDEN_POSTS := {
+	"warden": [Vector2(1296, 944), Vector2(1104, 784), Vector2(656, 944)],
+	"guard_east": [Vector2(1360, 944), Vector2(1264, 848), Vector2(1328, 880)],
+}
 const SIZE := Vector2i(1920,1080)
 const TIMES := ["Dawn","Noon","Dusk","Night"]
 const TINTS := Style.LIGHTING
@@ -97,6 +113,8 @@ var quest_stage: int:
 	get: return state.delivery_stage
 	set(value): state.delivery_stage = value
 var nearest := ""
+var conversation_actor := ""
+var heard_gate_briefing := -1
 var clock: float:
 	get: return state.clock
 	set(value): state.clock = value
@@ -152,7 +170,7 @@ func _ready() -> void:
 	_update_hud()
 	if DisplayServer.get_name()!="headless":
 		DisplayServer.window_move_to_foreground()
-	_say("Welcome to Garden Square", "Speak to Bram by the fountain for a forest quest. I opens your satchel; H eats bread. F5 saves your journey, F9 continues a saved one. The southeast gate leads to Mosswood; the southwest road opens the Greenshire overworld.")
+	_say("Welcome to Garden Square", "Speak to Bram for a forest quest. Look for his quest marker in the square. I opens your satchel; H eats bread. F5 saves your journey, F9 continues a saved one. The southeast gate leads to Mosswood; the southwest road opens the Greenshire overworld.")
 	if "--night" in OS.get_cmdline_user_args():
 		clock = 3.0
 	if "--bakery" in OS.get_cmdline_user_args():
@@ -234,6 +252,7 @@ func _load_zone(destination: String, entry: String) -> void:
 	bakery_room = null
 	nearest = ""
 	near_exit = ""
+	conversation_actor = ""
 	zone_root = Node2D.new()
 	add_child(zone_root)
 	var files: Array = []
@@ -293,6 +312,9 @@ func _load_zone(destination: String, entry: String) -> void:
 		_build_forest()
 	exits = Map.exits_for(zone)
 	_build_navigation()
+	if zone == "town":
+		_update_warden_routines(true)
+		_update_square_crowd()
 	if not is_instance_valid(player):
 		player = _actor(true,Map.arrival(zone,entry))
 	else:
@@ -532,6 +554,14 @@ func _resident(id: String, name_text: String, asset: String, at: Vector2, height
 	interactables[id] = {"name":name_text,"at":at,"anchor":anchor,"body":body,"height":anchor.height}
 
 
+func _stroller(id: String, name_text: String, asset: String, stops: PackedVector2Array, height: float, palette := Color.WHITE) -> void:
+	var anchor := _animated_resident(id, asset, stops[0], height)
+	anchor.stops = stops
+	anchor.rest_left = 0.8 + float(absi(hash(id)) % 18) * 0.14
+	anchor.modulate = palette
+	interactables[id] = {"name":name_text,"at":anchor.position,"anchor":anchor,"height":anchor.height}
+
+
 func _human_resident(id: String, name_text: String, asset: String, at: Vector2, facing: String) -> void:
 	var human := Human.new()
 	human.name = id
@@ -559,8 +589,12 @@ func _build_plaza() -> void:
 	_resident("baker","Pippa · Baker","cat_baker",Vector2(485,694))
 	_resident("grocer","Moss · Grocer","dog_grocer",Vector2(1430,707))
 	_resident("elder","Elder Mallow","cat_elder",Vector2(660,850),104)
-	_resident("bookseller","Sage · Bookseller","cat_bookseller",Vector2(1220,740))
-	_resident("courier","Pip · Courier","dog_courier",Vector2(1365,850))
+	_stroller("bookseller","Sage · Bookseller","cat_bookseller",[Vector2(1200,752),Vector2(1136,848),Vector2(1200,816)],108)
+	_stroller("courier","Pip · Courier","dog_courier",[Vector2(1360,848),Vector2(1456,816),Vector2(1488,912)],108)
+	_stroller("linn","Linn · Bookbinder","cat_bookseller",[Vector2(432,784),Vector2(528,720),Vector2(656,720)],101,Color("efd1ef"))
+	_stroller("tansy","Tansy · Bakery runner","cat_baker",[Vector2(816,816),Vector2(912,880),Vector2(816,944)],95,Color("e0ebc5"))
+	_stroller("rowan","Rowan · Orchard keeper","dog_grocer",[Vector2(1584,752),Vector2(1456,720),Vector2(1520,848)],112,Color("ead2aa"))
+	_stroller("fennel","Fennel · Apprentice courier","dog_courier",[Vector2(976,944),Vector2(1040,880),Vector2(1136,944)],86,Color("c8e5ef"))
 	_human_resident("rhea","Rhea · Wayfarer","human_wayfarer",Vector2(1085,980),"nw")
 	_human_resident("alden","Captain Alden · Town Warden","human_warden",Vector2(1185,575),"sw")
 	_human_resident("iris","Iris · Herbalist","human_herbalist",Vector2(730,940),"se")
@@ -579,12 +613,13 @@ func _build_plaza() -> void:
 	for item in [["warden","Bram · Warden",Vector2(1150,850)],["guard_west","Oak · Warden",Vector2(760,545)],["guard_east","Fern · Warden",Vector2(1300,910)]]:
 		var warden = _actor(false,item[2])
 		warden.resident_id = item[0]
+		if WARDEN_FABRIC.has(item[0]):
+			var uniform: ShaderMaterial = warden.sprite.material.duplicate()
+			uniform.set_shader_parameter("blue_fabric", WARDEN_FABRIC[item[0]])
+			warden.sprite.material = uniform
 		warden.patrol_wait = 1.0+dogs.size()*1.7
-		warden.patrol = {
-			"warden":PackedVector2Array([Vector2(1150,850),Vector2(1040,925),Vector2(1160,955),Vector2(1210,860)]),
-			"guard_west":PackedVector2Array([Vector2(760,545),Vector2(870,545),Vector2(820,590)]),
-			"guard_east":PackedVector2Array([Vector2(1300,910),Vector2(1360,945),Vector2(1260,975)])
-		}[item[0]]
+		if item[0] == "guard_west":
+			warden.patrol = PackedVector2Array([Vector2(760,545),Vector2(870,545),Vector2(820,590)])
 		dogs.append(warden)
 		interactables[item[0]] = {"name":item[1],"at":warden.position,"anchor":warden,"height":warden.sprite.display_height}
 	# Animated water highlights are drawn over the painted water, using native 2D.
@@ -592,6 +627,62 @@ func _build_plaza() -> void:
 	ripples.hub = self
 	ripples.position = Vector2(970,700)
 	world.add_child(ripples)
+
+
+func _update_square_crowd() -> void:
+	var hour := fposmod((clock + 1.0) * 6.0, 24.0)
+	for id in CROWD_HOURS:
+		var hours: Vector2 = CROWD_HOURS[id]
+		var resident = interactables[id].anchor
+		var present := hour >= hours.x and hour < hours.y
+		if resident.in_square and dialogue_left > 0 and conversation_actor == id:
+			present = true
+		if resident.in_square != present:
+			resident.in_square = present
+			resident.visible = present
+			if not present and nearest == id:
+				nearest = ""
+
+
+func _update_warden_routines(placing := false) -> void:
+	var shift := mini(int(fposmod(clock, 4.0)), 2)
+	if shift != 0:
+		heard_gate_briefing = -1
+	if zone != "town":
+		return
+	for id in WARDEN_POSTS:
+		var warden = interactables[id].anchor
+		var goal: Vector2 = WARDEN_POSTS[id][shift]
+		if warden.routine_goal != goal:
+			warden.routine_goal = goal
+			warden.routine_repath = 0.0
+			warden.route.clear()
+		if placing:
+			warden.position = goal
+			interactables[id].at = goal
+			warden.reset_physics_interpolation()
+	if not placing and shift == 0 and not transitioning and not shopping and not title_active:
+		_try_gate_briefing()
+
+
+func _try_gate_briefing() -> void:
+	var progress := int(state.rewarded)
+	if dialogue_left > 0 or heard_gate_briefing == progress:
+		return
+	var bram = interactables.warden.anchor
+	var fern = interactables.guard_east.anchor
+	if bram.position.distance_to(bram.routine_goal) >= 16 or fern.position.distance_to(fern.routine_goal) >= 16:
+		return
+	var midpoint: Vector2 = (bram.position + fern.position) * 0.5
+	if Actor.ground_vector(midpoint - player.position).length() > 260 or not clear_line(player.position, midpoint):
+		return
+	heard_gate_briefing = progress
+	bram.facing = Actor.ground_vector(fern.position - bram.position).normalized()
+	fern.facing = -bram.facing
+	var lines := "Bram: The traveller brought back the badges. The trail is safer now.\nFern: Good. I'll tell the early traders they can head out together."
+	if not state.rewarded:
+		lines = "Bram: Bandits were spotted past Riverbend. Keep the early traders close.\nFern: I'll ask them to wait here until they have company."
+	_say("Overheard at the southeast gate", lines)
 
 
 func _furniture(id: String, at: Vector2, height: float) -> Node2D:
@@ -1017,8 +1108,10 @@ func _physics_process(_delta: float) -> void:
 		if combat_active and id=="warden":
 			continue
 		var item: Dictionary = interactables[id]
-		if item.has("anchor") and item["anchor"] is CharacterBody2D:
-			item["at"] = item["anchor"].position
+		if item.has("anchor") and (zone == "town" or item.anchor is CharacterBody2D):
+			if not item.anchor.visible:
+				continue
+			item["at"] = item.anchor.position
 		var candidate: float = Actor.ground_vector(item["at"]-player.position).length()
 		var quest_target: bool = zone=="town" and quest_stage<5 and id==QUEST_TARGETS[quest_stage]
 		if candidate<float(item.get("range",150.0)) and (candidate<distance or quest_target):
@@ -1045,11 +1138,17 @@ func interact(id := "") -> void:
 	if id.begins_with("loot:"):
 		collect_loot(id.trim_prefix("loot:"))
 		return
+	if not interactables.has(id) or (interactables[id].has("anchor") and not interactables[id].anchor.visible):
+		return
 	audio.play_event("ui_open",player.position,-12)
 	if interactables[id].has("anchor") and interactables[id]["anchor"].has_method("greet"):
 		interactables[id]["anchor"].greet()
 	var lines := {
 		"baker":"The oven's warm and the square is waking up. Good to see you!",
+		"linn":"I'm taking Sage's order book back to the bindery. That old spine has seen a few winters.",
+		"tansy":"The second batch is still warm. I'm taking a basket to the gardeners before they finish up.",
+		"rowan":"The south orchard got rain last night. The apples should be good this year.",
+		"fennel":"Pip says a good courier learns the quiet streets first. I'm trying the long way around today.",
 		"elder":"A quiet bench, a warm breeze. A fine place to spend the morning.",
 		"grocer":"Fresh apples from the valley. Even the wardens stop by for a bite.",
 		"courier":"One square, a hundred stories. That's what I love about my rounds.",
@@ -1097,10 +1196,16 @@ func interact(id := "") -> void:
 				audio.play_event("victory",player.position,-5)
 				_say("Bram · Town warden","Three badges, just as promised! Here are ten coins and a warden's charm. Open your satchel with I and equip it for an extra heart. Clover sells healing food inside the blue-awning bakery.")
 			else:
-				_say("Bram · Town warden",state.quest_text())
+				var reply: String = "I'll make sure Fern and the early traders hear what you did. You earned a rest." if state.rewarded else state.quest_text()
+				_say("Bram · Town warden",reply)
+			conversation_actor = id
 			_update_hud()
 			return
-		_say(interactables[id]["name"],"Safe travels, friend. The southeast gate leads into Mosswood. Follow the path to the river, and take your time — we'll look after the square.")
+		var greeting := "Safe travels, friend. The southeast gate leads into Mosswood. Follow the path to the river."
+		if id == "guard_east":
+			greeting = "Bram told me about the badges you brought back. The traders are grateful, and so am I." if state.rewarded else "I'm keeping watch for traders coming from Riverbend. Bram has the latest word on the bandits."
+		_say(interactables[id]["name"],greeting)
+		conversation_actor = id
 		return
 	var text: String = lines.get(id,"")
 	if quest_stage<5 and id==QUEST_TARGETS[quest_stage]:
@@ -1115,6 +1220,7 @@ func interact(id := "") -> void:
 		queue_autosave()
 	_update_hud()
 	_say(interactables[id]["name"],text)
+	conversation_actor = id
 
 
 func start_challenge() -> void:
@@ -1191,6 +1297,9 @@ func _process(delta: float) -> void:
 		elif auto_clock and inn_bed.is_empty():
 			clock = fposmod(clock+delta*4.0/CYCLE_SECONDS,4.0)
 		dialogue_left = maxf(0,dialogue_left-delta)
+		_update_warden_routines()
+		if zone == "town":
+			_update_square_crowd()
 		talk_panel.visible = dialogue_left>0
 		if is_instance_valid(ripples):
 			ripples.queue_redraw()
@@ -1262,6 +1371,7 @@ func _build_ui() -> void:
 
 
 func _say(speaker: String, text: String) -> void:
+	conversation_actor = ""
 	talk_name.text = speaker
 	talk_text.text = text
 	dialogue_left = 7.0
@@ -1292,7 +1402,8 @@ func _update_prompt() -> void:
 			target = {"at":exits.forge.at,"height":40.0}
 	quest_marker.visible = not target.is_empty() and not transitioning and not paused
 	if quest_marker.visible:
-		var point: Vector2 = ui.world_to_ui(target["at"]+Vector2(0,-target["height"]-24))
+		var at: Vector2 = target.anchor.position if target.has("anchor") else target.at
+		var point: Vector2 = ui.world_to_ui(at+Vector2(0,-target["height"]-24))
 		quest_marker.position = point+Vector2(-14,-18+sin(elapsed*2.3)*5)
 		quest_marker.visible = Rect2(20,190,1880,760).has_point(point)
 
