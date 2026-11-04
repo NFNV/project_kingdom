@@ -16,6 +16,13 @@ const KEYS := [
 	[1.00,0.0,1.0,1.0,0.0,0.0,0.0,0.0]
 ]
 const DIRECTION_NAMES := ["N","NE","E","SE","S","SW","W","NW"]
+# Joints projected on the visible flank, with the far-side pair tucked behind it.
+# Each entry stores the near hip, near shoulder, far hip and optional far shoulder.
+const PROFILE_JOINTS := {
+	"ne": [Vector2(93,185), Vector2(167,174), Vector2(130,191)],
+	"e": [Vector2(90,185), Vector2(174,180), Vector2(110,169), Vector2(186,171)],
+	"se": [Vector2(87,186), Vector2(156,186), Vector2(111,174), Vector2(181,177)],
+}
 var light_tint := Color.WHITE
 var direction_index := 0
 var mirror_view := false
@@ -39,14 +46,17 @@ func _init() -> void:
 			var image := source.get_region(Rect2i(box[0],box[1],box[2],box[3]))
 			image.generate_mipmaps()
 			hero_heads[direction] = ImageTexture.create_from_image(image)
-	for id in ["frog_body","hind_leg","hind_foot","fore_leg","frog_eye","saddle","cat_boot","cat_tail","cat_torso","cat_arm","backpack","cat_head","scarf","scarf_tail"]:
+	for id in ["frog_body","hind_leg","hind_foot","profile_hind_foot","profile_fore","fore_leg","frog_eye","saddle","cat_boot","cat_tail","cat_torso","cat_arm","backpack","cat_head","scarf","scarf_tail"]:
 		textures[id] = load(ART+id+".svg")
 	for view in ["n","ne","e","se","s"]:
 		textures[view+"_hero_vest"] = load(ART+view+"_hero_vest.svg")
 	for view in ["ne","e","se","s"]:
-		for layer in ["body","face","head","torso","arm","boot","pack","fore"]:
+		for layer in ["body","face","head","torso","arm","boot","pack"]:
+			if view == "ne" and layer == "face":
+				continue
 			var id: String = view+"_"+layer
 			textures[id] = load(ART+id+".svg")
+	textures.s_fore = load(ART+"s_fore.svg")
 
 func set_direction(direction: Vector2) -> void:
 	if direction.length_squared()<.01:
@@ -193,10 +203,13 @@ func draw_directional(canvas: Node2D, at: Vector2, scale: float) -> void:
 	if front:
 		draw_front_layers(canvas,at,scale,p,air,body_offset,rider)
 		return
-	# Far limbs appear behind the mount. Near limbs return after the torso.
-	part(canvas,"hind_leg",at,scale,Vector2(90,185),body_offset+Vector2(7,-6),p.hind,Vector2(.92,.96),true)
-	part(canvas,"hind_foot",at,scale,Vector2(83,214),Vector2(7,-maxf(lift,0)+p.foot_lift-6),p.hind*.6,Vector2(.92,.96),true)
-	part(canvas,view+"_fore",at,scale,Vector2(168,216),fore_offset(p)+Vector2(-12,-6),p.hind*.22,Vector2(.94,p.height*.95))
+	var joints: Array = PROFILE_JOINTS[view]
+	draw_profile_hind(canvas,at,scale,p,joints[2],Vector2(.82,.88))
+	var rear_diagonal := view == "ne"
+	if rear_diagonal:
+		draw_profile_fore(canvas,at,scale,p,joints[1],Vector2.ONE)
+	else:
+		draw_profile_fore(canvas,at,scale,p,joints[3],Vector2(.82,.88))
 	part(canvas,view+"_boot",at,scale,Vector2(130,150),body_offset+Vector2(15,-5),p.pitch,Vector2(.9,.97))
 	part(canvas,view+"_body",at,scale,Vector2(128,185),body_offset,0,Vector2(p.width,p.height))
 	part(canvas,"saddle",at,scale,Vector2(128,173),body_offset,p.pitch*.5,Vector2(.93,1))
@@ -212,10 +225,26 @@ func draw_directional(canvas: Node2D, at: Vector2, scale: float) -> void:
 	part(canvas,"scarf_tail",at,scale,Vector2(115,115),rider,p.pitch+sin(clock*6.5)*.07+air*.13)
 	part(canvas,"scarf",at,scale,Vector2(128,113),rider,p.pitch*.5)
 	part(canvas,view+"_boot",at,scale,Vector2(130,150),body_offset,p.pitch)
-	part(canvas,"hind_leg",at,scale,Vector2(90,185),body_offset,p.hind)
-	part(canvas,"hind_foot",at,scale,Vector2(83,214),Vector2(0,-maxf(lift,0)+p.foot_lift),p.hind*.6)
-	part(canvas,view+"_fore",at,scale,Vector2(168,216),fore_offset(p),p.hind*.22,Vector2(1,p.height))
-	part(canvas,view+"_face",at,scale,Vector2(144,166),body_offset)
+	draw_profile_hind(canvas,at,scale,p,joints[0],Vector2.ONE)
+	if not rear_diagonal:
+		draw_profile_fore(canvas,at,scale,p,joints[1],Vector2.ONE)
+		part(canvas,view+"_face",at,scale,Vector2(144,166),body_offset)
+
+func draw_profile_hind(canvas: Node2D, at: Vector2, scale: float, p: Dictionary, hip: Vector2, limb_scale: Vector2) -> void:
+	var thigh_pivot := Vector2(90,185)
+	var foot_pivot := Vector2(83,214)
+	var hip_shift := hip - thigh_pivot + Vector2(0,-p.elevation)
+	var bend: float = p.hind * .60
+	part(canvas,"hind_leg",at,scale,thigh_pivot,hip_shift,bend,limb_scale)
+	var ankle := hip + ((foot_pivot - thigh_pivot) * limb_scale).rotated(bend)
+	# The ankle follows the thigh through the hop. Ground compression keeps the toes planted.
+	ankle.y += -maxf(p.elevation,0.0) + float(p.foot_lift) * .35
+	part(canvas,"profile_hind_foot",at,scale,foot_pivot,ankle-foot_pivot,bend*.6,limb_scale)
+
+func draw_profile_fore(canvas: Node2D, at: Vector2, scale: float, p: Dictionary, shoulder: Vector2, limb_scale: Vector2) -> void:
+	var fore_pivot := Vector2(165,181)
+	var shoulder_shift := shoulder - fore_pivot + fore_offset(p)
+	part(canvas,"profile_fore",at,scale,fore_pivot,shoulder_shift,p.hind*-.288,limb_scale*Vector2(1,p.height))
 
 func fore_offset(p: Dictionary) -> Vector2:
 	# Plant the hands while crouching; tuck them toward the body during flight.

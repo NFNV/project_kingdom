@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <path d="M159 181Q165 176 172 181Q176 186 172 193L165 203L169 213Q172 215 178 215Q182 215 182 218Q181 221 175 221Q178 224 175 226Q172 227 168 223Q169 228 165 228Q162 228 160 223Q156 224 154 220Q153 217 158 214L154 203Q152 199 155 193Z" fill="#769c4d" stroke="#3d663a" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M163 184Q171 186 166 193L159 202L162 212" fill="none" stroke="#a9bf6a" stroke-width="2.6" stroke-linecap="round"/>
+</svg>
