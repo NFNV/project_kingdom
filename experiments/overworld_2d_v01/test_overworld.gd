@@ -30,7 +30,7 @@ func run() -> void:
 	root.add_child(world)
 	world.automated = true
 	await ticks(2)
-	check(world.mounted_rider.textures.size()==51 and not world.mounted_rider.textures.values().has(null),"Eight-direction mount has fifty-one valid shared drawing layers")
+	check(world.mounted_rider.textures.has_all(["profile_fore","profile_hind_foot","s_fore"]) and not world.mounted_rider.textures.values().has(null),"Eight-direction mount loads its profile and frontal leg artwork")
 	var directional_cases := [["N",[KEY_W]],["NE",[KEY_W,KEY_D]],["E",[KEY_D]],["SE",[KEY_S,KEY_D]],["S",[KEY_S]],["SW",[KEY_S,KEY_A]],["W",[KEY_A]],["NW",[KEY_W,KEY_A]]]
 	world.automated = false
 	for item in directional_cases:

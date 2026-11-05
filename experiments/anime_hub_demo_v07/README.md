@@ -9,6 +9,16 @@ cross, and smaller location, quest, health and map components. **Q** or click th
 skill icon; its countdown shows the remaining cooldown.
 [HUD details and previews](HUD.md).
 
+The character draws sword and shield for **10 seconds** after attacking or being
+attacked. Each new attack refreshes the timer; exploration and held guard alone
+do not. Both items hide again when the timer expires.
+
+**Shield, parry and dodge roll are playable.** Hold **F** to guard; raise it just
+before impact to parry, then counter for +2 damage. **V / Ctrl** rolls. Watch
+the turquoise stamina bar. Every journey receives a Trailwarden buckler; Tomas
+sells the stronger Ironleaf shield. Briarwood has faster, tougher enemies, heavy
+poise and a two-hit captain combo. [Combat controls and details](DEFENCE.md).
+
 Walk as the cat adventurer through a painted anime town, a woodland trail, and
 a riverside glade, enterable bakery and blacksmith, and the large Briarwood combat forest. A 1.5× camera follows the cat
 through the original areas and stops at painted scene edges; Windsong Mill uses
@@ -40,6 +50,8 @@ New Journey / Continue. F6 still runs the currently edited scene, which may be a
 | Shift | Run |
 | Right click | Walk to a point using obstacle navigation |
 | Space / left click | Sword attack; left click aims the strike |
+| F | Hold directional shield guard; raise just before impact to parry |
+| V / Ctrl | Dodge roll in the movement direction, or current facing when still |
 | Q | Wind Slash: piercing ranged blade; 6s recharge, 4.5s with Windfeather charm |
 | E | Speak, deliver, enter a building, browse the shop, or use an exit |
 | 1 / 2 / 3, or shop buttons | Buy bread / tea / honey while shopping |
@@ -82,8 +94,8 @@ He takes three badges and gives **10 coins and a warden's charm**, once only.
 The existing five-step town delivery errand remains available alongside this
 quest. Wardens and civilians remain peaceful.
 
-Press **I** for the paper-doll inventory: your cat stands between seven
-illustrated slots for helmet, chest, pants, gloves, boots, weapon and charm.
+Press **I** for the paper-doll inventory: your cat stands between eight
+illustrated slots for helmet, chest, pants, gloves, boots, weapon, charm and shield.
 Click an item to inspect it and compare stats, double-click to equip it, or drag
 it to the matching slot. Drag equipped gear back to the backpack to remove it.
 Food, Gear and Quest filters help find items in the 24-cell bag. The equipment
@@ -103,16 +115,17 @@ on Market Lane**, approach its doorstep and press **E** to enter. Speak to Tomas
 behind the counter to accept **The stolen tools** and browse four equipment
 upgrades. Nico, his apprentice, remains outside in Garden Square.
 
-Rook waits in **Briarwood's southeast clearing**. He has eight hearts and a
-slower, clearly signalled two-heart sweep. Defeat him, collect his pouch with E,
+Rook waits in **Briarwood's southeast clearing**. He has twelve hearts, a
+three-heart heavy strike and a two-hit combo with a fresh warning between hits. Defeat him, collect his pouch with E,
 and return the tools to Tomas for **12 coins and the Embersteel sword**. The
 sword deals two damage per normal hit and raises Wind Slash from three to four.
 The tools also drop if Rook was defeated before accepting the quest. Quest
 rewards and unique equipment cannot be collected twice.
 
 The shop sells a Scout cap (+1 maximum heart, 8 coins), Emberguard vest (+2
-hearts, 12 coins), Pathfinder boots (+10% movement, 10 coins), and Windfeather
-charm (4.5s Wind Slash recharge, 12 coins). Choose between the faster recharge
+hearts, 12 coins), Pathfinder boots (+10% movement, 10 coins), Windfeather
+charm (4.5s Wind Slash recharge, 12 coins), and Ironleaf shield (30% less guard
+stamina cost, 14 coins). Choose between the faster recharge
 and Bram's +1-heart charm. **J** opens all three quests, with objectives, routes,
 rewards and a Track button that also changes the on-screen guide.
 
@@ -121,8 +134,8 @@ travel, quest milestones, purchases, food and equipment changes queue an
 autosave. Nearby alerted enemies delay it. Esc also offers save/load and
 **Save and return to title**; R returns to that title. New Journey asks before
 starting a new autosave and preserves the last manual save. Both slots retain
-validated backups. Valid older saves migrate in memory to the seven equipment
-slots; reading an old save does not rewrite it. Audio preferences remain separate.
+validated backups. Valid older saves migrate in memory to the eight equipment
+slots, including a starter shield; reading an old save does not rewrite it. Audio preferences remain separate.
 The optional `-- --continue` argument resumes from the title automatically.
 
 Current sources, save details and limits: [Equipment chapter](EQUIPMENT.md).
@@ -314,16 +327,17 @@ The friendly blue town wardens keep their existing art and peaceful behavior.
 
 | Enemy attack | Warning | Escape |
 |---|---|---|
-| Raider slash | 0.55 seconds; red forward sector | Step back or behind |
-| Raider lunge | 0.72 seconds; red straight lane | Sidestep; trunks stop the dash |
-| Mauler sweep | 1.0 second; amber wide sector | Leave its reach or move behind |
+| Raider slash | 0.46 seconds; red forward sector | Step back or behind |
+| Raider lunge | 0.62 seconds; red straight lane | Sidestep; trunks stop the dash |
+| Mauler sweep | 0.84 seconds; amber wide sector | Leave its reach or move behind |
 
 Attack aim locks during the warning. Damage is confined to the visible active
 stage, once per swing; recovery is safe. Lunge damage stays within its lane and
-uses real collision movement. A sword hit cancels anticipation, briefly staggers
-the bandit, displays its drawn recoil pose, flashes the body, pushes it away and
-shows a short impact burst/damage number. Defeated bandits recoil and fade.
-All still take three normal hits or one Wind Slash, and give two coins each.
+uses real collision movement. A sword hit interrupts a raider. A committed mauler resists the first light hit,
+but a second quick hit, Wind Slash or a parry breaks its poise. Damage displays
+a drawn recoil pose when staggered, a body flash and an impact burst/number. Defeated bandits recoil and fade.
+Raiders have four hearts, maulers six and Rook twelve. Their attacks deal one,
+two and three hearts respectively. Unique first defeats still give two coins.
 
 The two [enemy sheets](assets/bandits/generation.json) contain **64 original
 drawings**: eight poses in four views per role, including three drawn walk poses,
@@ -345,8 +359,9 @@ locked 60 FPS under every desktop condition.
 The MP4 was recorded at a fixed 60 FPS for inspection; its encoding speed is
 not a live gameplay benchmark.
 
-The cat keeps its sword sheathed while idle, walking, running and shopping.
-Only attack/skill poses show the blade in its paw. During attacks, **32 drawn combat
+The cat keeps its sword and shield hidden during peaceful exploration and shopping.
+After attacking or being attacked, equipped gear stays drawn through a ten-second
+combat timer, including while moving or standing. During attacks, **32 drawn combat
 poses** replace the walking body: eight timed stages in four real facing views,
 including drawing the blade, anticipation, early slash, contact, follow-through,
 settling, recovery and sheathing. Arms, shoulders and the held blade move together.

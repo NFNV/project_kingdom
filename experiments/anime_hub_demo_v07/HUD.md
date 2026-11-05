@@ -22,6 +22,10 @@ the skill dock. Inventory, journal, merchant and pause screens keep their usable
 modal layouts. In the overworld the miniature map, location card and footer are
 also smaller; curvature implementation controls appear with diagnostics.
 
+In Briarwood, a compact turquoise stamina bar sits beneath health. Its caption
+shows guard/parry and roll bindings, guard breaks, and the brief bonus-damage
+counter window after a parry. The equipment screen includes the shield offhand.
+
 Assets are saved in `assets/hud/`. They were produced with **built-in imagegen**;
 [generation.json](assets/hud/generation.json) records full prompts, original
 paths, final workspace paths, dimensions and hashes. Original PNG bytes and

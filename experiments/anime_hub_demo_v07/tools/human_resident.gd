@@ -10,6 +10,7 @@ var data: Dictionary
 var sprite: AnimatedSprite2D
 var height := 172.0
 var facing_direction := "sw"
+var tracks_player := true
 var idle_clock := 0.0
 var greeting_left := 0.0
 var greeting_count := 0
@@ -35,7 +36,7 @@ func _process(delta: float) -> void:
 		return
 	idle_clock += delta
 	greeting_left = maxf(0,greeting_left-delta)
-	if is_instance_valid(hub.player):
+	if tracks_player and is_instance_valid(hub.player):
 		var toward := Actor.ground_vector(hub.player.global_position-global_position)
 		if toward.length()<220:
 			face_towards(toward)
@@ -57,7 +58,7 @@ func face_towards(toward: Vector2) -> void:
 func greet() -> void:
 	greeting_count += 1
 	greeting_left = .55
-	if is_instance_valid(hub.player):
+	if tracks_player and is_instance_valid(hub.player):
 		face_towards(Actor.ground_vector(hub.player.global_position-global_position))
 	_pose()
 

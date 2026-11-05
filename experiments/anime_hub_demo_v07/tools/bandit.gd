@@ -3,9 +3,9 @@ extends "res://experiments/anime_hub_demo_v07/tools/actor.gd"
 const BanditArt := preload("res://experiments/anime_hub_demo_v07/tools/bandit_sprite.gd")
 const HitFeedback := preload("res://experiments/anime_hub_demo_v07/tools/hit_feedback.gd")
 const ATTACKS := {
-	"slash":{"warning":.55,"duration":.44,"contact":.10,"end":.22,"reach":96.0,"cosine":.40,"cooldown":1.25},
-	"lunge":{"warning":.72,"duration":.58,"contact":.04,"end":.26,"reach":70.0,"cosine":.05,"cooldown":1.60},
-	"sweep":{"warning":1.0,"duration":.72,"contact":.12,"end":.30,"reach":132.0,"cosine":-.15,"cooldown":1.90}
+	"slash":{"warning":.46,"duration":.44,"contact":.10,"end":.22,"reach":96.0,"cosine":.40,"cooldown":.92,"damage":1},
+	"lunge":{"warning":.62,"duration":.58,"contact":.04,"end":.26,"reach":70.0,"cosine":.05,"cooldown":1.18,"damage":1},
+	"sweep":{"warning":.84,"duration":.72,"contact":.12,"end":.30,"reach":132.0,"cosine":-.15,"cooldown":1.42,"damage":2}
 }
 var variant := "raider"
 var captain := false
@@ -17,6 +17,9 @@ var hits_taken := 0
 var last_attack := ""
 var patrol_distance := 0.0
 var peak_navigation_ms := 0.0
+var poise_hits := 0
+var poise_reset := 0.0
+var combo_step := 0
 
 func _ready() -> void:
 	super._ready()
@@ -31,8 +34,9 @@ func _ready() -> void:
 func profile() -> Dictionary:
 	if captain:
 		var data: Dictionary = ATTACKS[attack_kind].duplicate()
-		data.warning += .25
-		data.cooldown += .4
+		data.warning *= .9
+		data.cooldown *= .8
+		data.damage = 3
 		return data
 	return ATTACKS[attack_kind]
 
@@ -42,7 +46,10 @@ func _physics_process(delta: float) -> void:
 	grace = maxf(0,grace-delta)
 	cooldown = maxf(0,cooldown-delta)
 	stagger = maxf(0,stagger-delta)
+	poise_reset = maxf(0,poise_reset-delta)
+	if poise_reset<=0: poise_hits = 0
 	flash = maxf(0,flash-delta*4)
+	defence_flash = maxf(0,defence_flash-delta)
 	knockback = knockback.move_toward(Vector2.ZERO,1000*delta)
 	if hub.peaceful_mode or not enemy or not hub.combat_active or not hub.player.active:
 		windup = 0
@@ -70,11 +77,19 @@ func _physics_process(delta: float) -> void:
 			var elapsed := attack_duration-swing
 			state = "attack" if elapsed<=float(profile().end) else "recover"
 			intent = facing if attack_kind=="lunge" and elapsed<float(profile().end) else Vector2.ZERO
+			if swing<=0 and captain and combo_step==0 and ground_vector(hub.player.position-position).length()<155 and hub.clear_line(position,hub.player.position):
+				# The captain commits twice, with a fresh locked warning between hits.
+				combo_step = 1
+				attack_kind = "slash"
+				facing = ground_vector(hub.player.position-position).normalized()
+				windup = profile().warning
+				cooldown = 0
+				state = "windup"
 		else:
 			intent = _enemy_intent(delta)
 	if intent.length()>.05 and windup<=0 and swing<=0 and stagger<=0 and state in ["patrol","return","chase"]:
 		facing = intent.normalized()
-	var speed := 136.0 if variant=="raider" else 105.0
+	var speed := 174.0 if variant=="raider" else 138.0
 	if state=="patrol":
 		speed = 72.0 if variant=="raider" else 57.0
 	elif state=="return":
@@ -132,6 +147,7 @@ func _enemy_intent(delta: float) -> Vector2:
 	state = "chase"
 	var attack_range := 200.0 if variant=="raider" else 122.0
 	if distance<attack_range and cooldown<=0 and hub.clear_line(position,hub.player.position):
+		combo_step = 0
 		attack_kind = "sweep" if variant=="mauler" else ("lunge" if distance>108 else "slash")
 		facing = offset.normalized()
 		windup = profile().warning
@@ -168,6 +184,7 @@ func try_attack(aim := Vector2.ZERO) -> bool:
 	last_attack = attack_kind
 	hub.audio.play_event("club" if variant=="mauler" else "sword",position,-6)
 	state = "attack"
+	hub.player.enter_combat()
 	return true
 
 func attack_contains(point: Vector2) -> bool:
@@ -185,13 +202,31 @@ func resolve_hits() -> void:
 	var target = hub.player
 	if target.active and target not in swing_hits and attack_contains(target.position) and hub.clear_line(position,target.position):
 		swing_hits.append(target)
-		target.receive_hit(facing,2 if captain else 1,230.0 if variant=="mauler" else 155.0)
+		target.receive_hit(facing,int(profile().damage),230.0 if variant=="mauler" else 155.0,self)
 
-func receive_hit(from: Vector2, damage := 1, force := 170.0) -> bool:
-	var accepted := super.receive_hit(from,damage,force)
+func receive_hit(from: Vector2, damage := 1, force := 170.0, source: Node2D = null) -> bool:
+	var committed_heavy := variant=="mauler" and (windup>0 or swing>0)
+	var saved_windup := windup
+	var saved_swing := swing
+	var accepted := super.receive_hit(from,damage,force,source)
 	if not accepted:
 		return false
 	hits_taken += 1
+	poise_hits += 1
+	poise_reset = 1.2
+	if active and committed_heavy and poise_hits<2 and damage<3:
+		# One light hit still deals damage, but cannot repeatedly stun a mauler.
+		windup = saved_windup
+		swing = saved_swing
+		knockback *= .15
+		_defence_feedback("ARMORED",.4)
+		var impact := HitFeedback.new()
+		impact.hub = hub
+		impact.amount = damage
+		impact.heading = from
+		impact.position = position
+		hub.world.add_child(impact)
+		return true
 	windup = 0
 	swing = 0
 	stagger = .34 if variant=="mauler" else .27
@@ -211,6 +246,20 @@ func receive_hit(from: Vector2, damage := 1, force := 170.0) -> bool:
 		fall.tween_property(sprite,"rotation",-.18 if from.x<0 else .18,.22)
 	queue_redraw()
 	return true
+
+func receive_parry() -> void:
+	if not active: return
+	windup = 0
+	swing = 0
+	stagger = 1.25
+	cooldown = 1.55
+	poise_hits = 0
+	combo_step = 1
+	knockback = Vector2(-facing.x,-facing.y*GROUND_Y)*110
+	intent = Vector2.ZERO
+	route.clear()
+	state = "hurt"
+	_update_animation(0,0)
 
 func _update_animation(delta: float, distance: float) -> void:
 	var heading: String = sprite.direction_for(facing)
@@ -250,6 +299,9 @@ func _draw() -> void:
 			draw_arc(Vector2.ZERO,profile().reach,angle-spread,angle+spread,40,Color(tint,.85),2.5,true)
 		draw_arc(Vector2.ZERO,22,-PI/2,-PI/2+TAU*strength,32,Color(tint,.95),3,true)
 	draw_set_transform(Vector2.ZERO)
+	if defence_flash>0:
+		draw_string_outline(ThemeDB.fallback_font,Vector2(-45,-sprite.display_height-27),"ARMORED",HORIZONTAL_ALIGNMENT_CENTER,90,11,3,Color("293b33"))
+		draw_string(ThemeDB.fallback_font,Vector2(-45,-sprite.display_height-27),"ARMORED",HORIZONTAL_ALIGNMENT_CENTER,90,11,Color("f2c67b"))
 	if captain:
 		draw_string_outline(ThemeDB.fallback_font,Vector2(-61,-sprite.display_height-35),"ROOK · CAPTAIN",HORIZONTAL_ALIGNMENT_LEFT,-1,14,3,Color("293b33"))
 		draw_string(ThemeDB.fallback_font,Vector2(-61,-sprite.display_height-35),"ROOK · CAPTAIN",HORIZONTAL_ALIGNMENT_LEFT,-1,14,Color("ffe3a5"))

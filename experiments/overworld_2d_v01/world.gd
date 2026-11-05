@@ -7,6 +7,14 @@ var linked_journey := false
 var transitioning := false
 var gate_cooldown := .25
 # All geometry is CanvasItem drawing. Logical positions are 2D map coordinates.
+const Stoneback := preload("res://experiments/overworld_2d_v01/stoneback.gd")
+var boss := Stoneback.new()
+const IvykeepArena := preload("res://experiments/overworld_2d_v01/ivykeep_arena.gd")
+var arena: IvykeepArena
+var journey_loadout: Node
+var journey_audio: Node
+var arena_fade: ColorRect
+
 const Atmosphere := preload("res://experiments/overworld_2d_v01/atmosphere.gd")
 const RenderSettings := preload("res://experiments/anime_hub_demo_v07/tools/render_settings.gd")
 const Dressing := preload("res://experiments/overworld_2d_v01/region_dressing.gd")
@@ -244,6 +252,7 @@ func build_region() -> void:
 			kind = "rock" if rng.randf()<.4 else "bush"
 		var height := rng.randf_range(4.0,6.5) if kind in ["oak","pine","willow"] else rng.randf_range(1.0,2.6)
 		props.append({"p":p,"kind":kind,"height":height,"radius":1.1 if kind in ["oak","pine","willow"] else .75,"tint":Color.from_hsv(rng.randf_range(.0,.04),rng.randf_range(.0,.05),rng.randf_range(.93,1.0)),"phase":rng.randf()*TAU})
+	props = props.filter(func(item: Dictionary): return item.p.distance_to(Stoneback.SITE) >= 23)
 	for item in [["windmill",Map.WINDMILL,11.0,3.0],["ruins",Map.RUINS,8.0,3.0]]:
 		props.append({"p":item[1],"kind":item[0],"height":item[2],"radius":item[3],"tint":Color.WHITE,"phase":0.0})
 	# Small stone outcrops make the coastline readable from the approach.
@@ -263,6 +272,7 @@ func grid_cell(p: Vector2) -> Vector2i:
 
 func can_stand(p: Vector2) -> bool:
 	if not Map.safe_ground(p): return false
+	if p.distance_to(Stoneback.SITE)<2.7: return false
 	var cell := grid_cell(p)
 	for x in range(cell.x-1,cell.x+2):
 		for y in range(cell.y-1,cell.y+2):
@@ -376,6 +386,7 @@ func request_town_entry() -> void:
 	return_requested.emit()
 
 func _process(_delta: float) -> void:
+	if is_instance_valid(arena): return
 	terrain.visible = not region_map
 	scenery.visible = not region_map
 	for sky in sky_tiles: sky.visible = not region_map
@@ -464,6 +475,8 @@ func update_visible() -> void:
 	var limit := horizon_radius()
 	for item in props: include_visible(item,limit)
 	include_visible(City.illustration_prop(),limit)
+	if view_point(Stoneback.SITE).y > 1 and camera_ground.distance_to(Stoneback.SITE) < limit - 4:
+		visible_props.append({"p":Stoneback.SITE,"kind":"stoneback"})
 	visible_props.append({"p":player,"kind":"rider","height":3.5})
 	visible_props.sort_custom(func(a: Dictionary,b: Dictionary): return view_point(a.p).y>view_point(b.p).y)
 
@@ -472,6 +485,9 @@ func draw_scene() -> void:
 		var p: Vector2 = item.p
 		var at := project(p)
 		var depth := view_point(p).y
+		if item.kind=="stoneback":
+			boss.draw_sprite(scenery, at, depth, light_tint)
+			continue
 		if item.kind=="rider":
 			draw_rider(at)
 			continue
@@ -594,7 +610,10 @@ func draw_hud() -> void:
 	panel(Rect2(24,22,316,74),Color("203e36"))
 	text(Vector2(40,46),"THE GREENSHIRE  /  MOSSWOOD",12,Color("d1c38d"))
 	text(Vector2(40,77),"A little world to explore",23)
-	if near_landmark!="":
+	if player.distance_to(Stoneback.SITE)<19 and boss.phase in ["idle", "defeated"]:
+		panel(Rect2(710,184,500,40))
+		text(Vector2(728,210),"IVYKEEP RUINS  ·  F Rematch Stoneback" if boss.phase == "defeated" else "IVYKEEP RUINS  ·  F Accept Stoneback's challenge",16)
+	elif near_landmark!="":
 		panel(Rect2(710,184,500,40))
 		text(Vector2(728,210),near_landmark+("  ·  F Enter Garden Square" if can_enter_town() else ("  ·  F Visit Windsong Mill" if can_enter_mill() else "  ·  F Inspect")),16)
 	panel(Rect2(440,1024,1454,30))
@@ -739,6 +758,12 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				save_requested.emit()
 				get_viewport().set_input_as_handled()
 		KEY_F:
+			if not paused and not region_map and boss.phase in ["idle", "defeated"] and player.distance_to(Stoneback.SITE)<19:
+				transitioning = true
+				velocity = Vector2.ZERO
+				enter_ivykeep.call_deferred()
+				get_viewport().set_input_as_handled()
+				return
 			if can_enter_mill():
 				request_mill_entry()
 				get_viewport().set_input_as_handled()
@@ -752,3 +777,55 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				if marker.name==near_landmark: notice = marker.description
 			notice_left = 5
 		KEY_F11: get_window().mode = Window.MODE_WINDOWED if get_window().mode==Window.MODE_FULLSCREEN else Window.MODE_FULLSCREEN
+
+func fade_ivykeep(alpha: float) -> void:
+	if not is_instance_valid(arena_fade):
+		var layer := CanvasLayer.new()
+		layer.layer = 91
+		add_child(layer)
+		arena_fade = ColorRect.new()
+		arena_fade.size = Vector2(RenderSettings.RENDER_SIZE)
+		arena_fade.color = Color("10241d")
+		arena_fade.modulate.a = 0
+		arena_fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		layer.add_child(arena_fade)
+	var tween := create_tween()
+	tween.tween_property(arena_fade, "modulate:a", alpha, .22)
+	await tween.finished
+
+func enter_ivykeep() -> void:
+	await fade_ivykeep(1)
+	arena = IvykeepArena.new()
+	arena.boss = boss
+	arena.actor_tint = light_tint
+	if is_instance_valid(journey_loadout):
+		arena.state.gear = journey_loadout.equipped_ids()
+		arena.state.attributes = journey_loadout.stats()
+	if is_instance_valid(journey_audio):
+		arena.audio = journey_audio
+	arena.return_requested.connect(leave_ivykeep, CONNECT_DEFERRED)
+	hide()
+	get_tree().root.add_child(arena)
+	get_window().title = "Project Kingdom — Ivykeep Ruins"
+	await fade_ivykeep(0)
+	arena.transitioning = false
+	arena.player.enter_combat()
+
+func leave_ivykeep() -> void:
+	await fade_ivykeep(1)
+	var won := boss.phase == "defeated"
+	if not won: boss.phase = "idle"
+	arena.hide()
+	arena.queue_free()
+	arena = null
+	show()
+	update_camera()
+	update_visible()
+	get_window().title = "Project Kingdom — The Greenshire"
+	notice = "Stoneback yields Ivykeep Ruins." if won else "You returned from Ivykeep Ruins."
+	notice_left = 5
+	await fade_ivykeep(0)
+	transitioning = false
+
+func _exit_tree() -> void:
+	if is_instance_valid(arena): arena.queue_free()

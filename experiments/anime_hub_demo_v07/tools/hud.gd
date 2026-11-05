@@ -31,10 +31,19 @@ var shop_balance: Label
 var shop_feedback: Label
 var shop_satchel: Label
 var shop_buttons: Array[Button] = []
+var shop_names: Array[Label] = []
+var shop_descriptions: Array[Label] = []
+var shop_banner: Label
+var shop_title: Label
+var shopkeeper: Label
+var shop_close: Button
 var controls_label: Label
 var combat_panel: Panel
 var health_label: Label
 var health_bar: ProgressBar
+var stamina_bar: ProgressBar
+var defence_label: Label
+var defence_panel: Panel
 var forest_panel: Panel
 var forest_map: Control
 var skill_panel: SkillDock
@@ -102,7 +111,7 @@ func _ready() -> void:
 	quest_marker = label("▼",Vector2.ZERO,23,self,0,Color("ffe0a0"))
 	quest_marker.add_theme_color_override("font_outline_color",Color("63502d"))
 	quest_marker.add_theme_constant_override("outline_size",5)
-	debug_label = label("",Vector2(26,187),12,self,0,Color("fff1d2"))
+	debug_label = label("",Vector2(26,258),12,self,0,Color("fff1d2"))
 	debug_label.add_theme_color_override("font_shadow_color",Color("20382d"))
 	debug_label.add_theme_constant_override("shadow_offset_y",2)
 	debug_label.hide()
@@ -124,6 +133,20 @@ func _ready() -> void:
 	combat_panel.add_child(health_bar)
 	health_bar.size = Vector2(218,8)
 	combat_panel.hide()
+	defence_panel = panel(Vector2(24,180),Vector2(244,65),null,true)
+	defence_label = label("F guard / parry · V / Ctrl roll",Vector2(13,8),12,defence_panel,218,Color("e9dfbc"))
+	stamina_bar = ProgressBar.new()
+	stamina_bar.position = Vector2(13,45)
+	stamina_bar.show_percentage = false
+	stamina_bar.max_value = 100
+	stamina_bar.add_theme_font_size_override("font_size",1)
+	stamina_bar.add_theme_stylebox_override("background",bar_back.duplicate())
+	var stamina_fill := bar_fill.duplicate() as StyleBoxFlat
+	stamina_fill.bg_color = Color("75c7c1")
+	stamina_bar.add_theme_stylebox_override("fill",stamina_fill)
+	defence_panel.add_child(stamina_bar)
+	stamina_bar.size = Vector2(218,6)
+	defence_panel.hide()
 	skill_panel = SkillDock.new()
 	skill_panel.hub = hub
 	skill_panel.serif = serif
@@ -301,7 +324,7 @@ func refresh() -> void:
 		skill_label.text = "Equip a weapon"
 	forest_panel.visible = hub.zone in ["wilds","district"]
 	map_title.text = "NORTHGATE" if hub.zone=="district" else "BRIARWOOD"
-	controls_label.text = "WASD move · Shift run · Space / Click sword · Q skill · Right click walk" if hub.zone=="wilds" else "WASD walk · Shift run · E interact · Right click walk"
+	controls_label.text = "WASD · Space / Click sword · Q wind · F guard / parry · V / Ctrl roll" if hub.zone=="wilds" else "WASD walk · Shift run · V roll · E interact · Right click walk"
 	if hub.zone=="town":
 		objective.text = hub.OBJECTIVES[hub.quest_stage]
 		status_label.text = "%d / 5 deliveries  ·  The wardens are friendly" % mini(hub.quest_stage,5)
@@ -368,6 +391,10 @@ func refresh() -> void:
 
 
 func _process(delta: float) -> void:
+	if is_instance_valid(hub.player):
+		defence_panel.visible = hub.zone=="wilds"
+		stamina_bar.value = hub.player.stamina
+		defence_label.text = "GUARD BROKEN" if hub.player.guard_break>0 else ("PARRY · strike now! +2 damage" if hub.player.riposte_left>0 else ("Guarding · face the incoming blow" if hub.player.guarding else ("No shield · equip one in I" if hub.state.equipped_id("shield")=="" else "F guard / parry · V / Ctrl roll")))
 	notice_left = maxf(0,notice_left-delta)
 	if is_instance_valid(notice):
 		notice.visible = notice_left>0
@@ -472,17 +499,15 @@ func _build_merchant() -> void:
 	shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	merchant.add_child(shade)
 	var sheet := panel(Vector2(505,220),Vector2(910,640),merchant)
-	label("THE BLUEBIRD BAKERY",Vector2(40,27),14,sheet,0,Color("967344"))
-	label("Good things, fresh from the oven",Vector2(40,56),30,sheet,820,Color("304c3d"),true)
-	label("Clover  /  Bakery keeper",Vector2(42,108),17,sheet,0,Color("826c4a"))
+	shop_banner = label("",Vector2(40,27),14,sheet,0,Color("967344"))
+	shop_title = label("",Vector2(40,56),30,sheet,820,Color("304c3d"),true)
+	shopkeeper = label("",Vector2(42,108),17,sheet,0,Color("826c4a"))
 	shop_balance = label("",Vector2(640,111),17,sheet,225,Color("826c4a"))
 	for index in hub.GOODS.size():
-		var good: Dictionary = hub.GOODS[index]
 		var top: int = 162+index*95
-		label(good["name"],Vector2(44,top),22,sheet,500,Color("314b3d"),true)
-		label(good["description"],Vector2(44,top+33),16,sheet,500,Color("80745b"))
+		shop_names.append(label("",Vector2(44,top),22,sheet,500,Color("314b3d"),true))
+		shop_descriptions.append(label("",Vector2(44,top+33),16,sheet,500,Color("80745b")))
 		var button := Button.new()
-		button.text = "%d  ·  Buy / %d coins" % [index+1,good["price"]]
 		button.position = Vector2(608,top+4)
 		button.size = Vector2(250,53)
 		button.focus_mode = Control.FOCUS_NONE
@@ -501,7 +526,7 @@ func _build_merchant() -> void:
 	shop_feedback = label("",Vector2(44,469),18,sheet,810,Color("8a6035"))
 	shop_satchel = label("",Vector2(44,518),15,sheet,810,Color("6a745b"))
 	var close := Button.new()
-	close.text = "Back to the bakery   /   E or Esc"
+	shop_close = close
 	close.position = Vector2(255,569)
 	close.size = Vector2(400,42)
 	close.focus_mode = Control.FOCUS_NONE
@@ -519,9 +544,31 @@ func _build_merchant() -> void:
 	merchant.hide()
 
 
+func configure_shop(apothecary: bool) -> void:
+	shop_banner.text = "GARDEN SQUARE APOTHECARY" if apothecary else "THE BLUEBIRD BAKERY"
+	shop_title.text = "Potions for the road" if apothecary else "Good things, fresh from the oven"
+	shopkeeper.text = "Iris  /  Apothecary" if apothecary else "Clover  /  Bakery keeper"
+	shop_close.text = "Back to the square   /   E or Esc" if apothecary else "Back to the bakery   /   E or Esc"
+	var stock: Array = hub.shop_stock()
+	for index in shop_buttons.size():
+		var available := index < stock.size()
+		shop_names[index].visible = available
+		shop_descriptions[index].visible = available
+		shop_buttons[index].visible = available
+		if available:
+			var good: Dictionary = stock[index]
+			shop_names[index].text = good.name
+			shop_descriptions[index].text = good.description
+			shop_buttons[index].text = "%d  ·  Buy / %d coins" % [index+1,good.price]
+
+
 func refresh_shop(message: String) -> void:
 	shop_balance.text = "Your purse: %d coins" % hub.coins
 	shop_feedback.text = message
-	shop_satchel.text = "IN YOUR SATCHEL    %d loaves  /  %d teas  /  %d honey jars" % [hub.inventory.bread,hub.inventory.tea,hub.inventory.honey]
-	for index in shop_buttons.size():
-		shop_buttons[index].disabled = hub.coins<int(hub.GOODS[index]["price"])
+	var stock: Array = hub.shop_stock()
+	var counts := PackedStringArray()
+	for index in stock.size():
+		var good: Dictionary = stock[index]
+		counts.append("%d × %s" % [hub.state.count(good.id),good.name])
+		shop_buttons[index].disabled = hub.coins<int(good.price)
+	shop_satchel.text = "IN YOUR SATCHEL    " + "  /  ".join(counts)

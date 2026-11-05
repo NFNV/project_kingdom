@@ -99,6 +99,8 @@ func _run() -> void:
 	game.player.sprite.heading_angle = 0
 	var left = game.dogs[0]
 	var right = game.dogs[1]
+	left.health = 3
+	right.health = 3
 	left.position = center-Vector2(75,0)
 	right.position = center+Vector2(75,0)
 	Input.action_press("hub_left")
@@ -117,7 +119,7 @@ func _run() -> void:
 	await ticks(7)
 	right.position = center-Vector2(70,10)
 	await ticks(13)
-	check(right.health==3 and not game.player.combat_art.visible and not game.player.weapon.visible,"Recovery and sheathing cannot hit late arrivals and end with empty hands")
+	check(right.health==3 and not game.player.combat_art.visible and game.player.weapon.visible,"Recovery cannot hit late arrivals and keeps the sword drawn during the combat timer")
 	# Mouse follow-up uses buffered aim; Q has priority over that buffer.
 	game.player.automated = true
 	game.player.cooldown = 0

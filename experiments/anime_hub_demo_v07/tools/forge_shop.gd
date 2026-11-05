@@ -19,8 +19,8 @@ func _ready() -> void:
 	var row := 0
 	for id in hub.state.FORGE_STOCK:
 		var item: Dictionary = hub.state.definitions[id]
-		var card := UI.panel(sheet,Vector2(30,124+row*123),Vector2(850,111))
-		UI.image(card,Art.icon(id,hub.state.definitions),Vector2(13,13),Vector2(83,83))
+		var card := UI.panel(sheet,Vector2(30,124+row*103),Vector2(850,96))
+		UI.image(card,Art.icon(id,hub.state.definitions),Vector2(13,8),Vector2(78,78))
 		UI.text(card,item.name,Vector2(115,15),540,24,UI.INK,true)
 		UI.text(card,hub.state.equipment_summary(id),Vector2(116,57),492,17,UI.MUTED)
 		var button := UI.button(card,"",Vector2(668,33),Vector2(160,46))

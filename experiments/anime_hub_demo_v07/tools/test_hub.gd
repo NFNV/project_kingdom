@@ -135,6 +135,8 @@ func _check_motion() -> void:
 	_check(motion.state=="idle" and is_equal_approx(motion.phase,phase_before),"Holding movement against the fountain cannot treadmill the walk cycle")
 	Input.action_release("hub_up")
 	await _settle(Vector2(430,950))
+	var previous_clock: float = game.clock
+	game.clock = 0.25
 	var before_patrol: Array[Vector2] = []
 	for dog in game.dogs:
 		before_patrol.append(dog.position)
@@ -146,15 +148,38 @@ func _check_motion() -> void:
 		moving_wardens += int(dog.position.distance_to(before_patrol[index])>20)
 		_check(game.is_walkable(dog.position,12),"Warden patrol respects the painted ground footprint")
 		_check(game.interactables[dog.resident_id].at.distance_to(dog.position)<5,"Conversation target follows the moving warden")
-	_check(moving_wardens>=2,"Multiple friendly wardens physically stroll through the square")
-	var dog = game.dogs[0]
-	await _settle(dog.position+Vector2(60,35))
-	await physics_frame
-	var talking_at: Vector2 = dog.position
+	_check(moving_wardens>=2,"Wardens physically walk to their dawn posts")
+	var bram = game.interactables.warden.anchor
+	var fern = game.interactables.guard_east.anchor
+	_check(bram.position.distance_to(bram.routine_goal)<16 and fern.position.distance_to(fern.routine_goal)<16,"Bram and Fern reach the southeast gate")
+	game.dialogue_left = 0
+	await _settle(Vector2(1190,965))
+	_check(game.talk_text.text.contains("Bandits were spotted"),"The dawn briefing can be overheard from the plaza")
+	game.interact("guard_east")
+	game.clock = 1.25
+	var talking_at: Vector2 = fern.position
 	for tick in 30:
 		await physics_frame
-	_check(dog.position.distance_to(talking_at)<3,"Approaching a patrolling warden makes him stop for conversation")
-	_check(game.residents.size()==5,"Every town civilian uses the new animation controller")
+	_check(fern.position.distance_to(talking_at)<3,"Talking to Fern holds her at her post during a shift change")
+	game.dialogue_left = 0
+	for tick in 360:
+		await physics_frame
+	_check(fern.position.distance_to(fern.routine_goal)<16 and bram.position.distance_to(bram.routine_goal)<16,"Wardens resume their routines after conversation")
+	game.clock = 1.25
+	var visitor = game.interactables.linn.anchor
+	var visitor_start: Vector2 = visitor.position
+	for tick in 360:
+		await physics_frame
+	_check(visitor.visible and visitor.position.distance_to(visitor_start)>32 and game.is_walkable(visitor.position,12),"A daytime visitor strolls on the plaza paths")
+	game.clock = 3.0
+	await physics_frame
+	await physics_frame
+	_check(not visitor.visible and game.interactables.courier.anchor.visible,"Late-night visitors leave while the errand courier remains available")
+	var before_dialogue: String = game.talk_text.text
+	game.interact("linn")
+	_check(game.talk_text.text==before_dialogue,"An off-duty visitor cannot be talked to")
+	game.clock = previous_clock
+	_check(game.residents.size()==9,"Every town civilian uses the new animation controller")
 	for resident in game.residents:
 		_check(resident.sprite.sprite_frames.get_frame_count("idle_se")==8 and resident.sprite.sprite_frames.get_frame_count("gesture_se")==4,"Civilian has idle and occupational gesture sequences: "+resident.resident_id)
 	var baker = game.interactables.baker.anchor
@@ -217,7 +242,7 @@ func _check_humans() -> void:
 		_check(actual_height>108.0 and actual_height<118.0 and actual_height>game.player.sprite.display_height,"Smaller human remains proportionally taller than the cat: "+id)
 		_check(human.get_parent()==game.world and game.world.y_sort_enabled,"Human depth sorts from its ground anchor: "+id)
 		_check(item.body.collision_layer==1,"Human has a solid walk-blocking footprint: "+id)
-		var path: PackedVector2Array = game.find_path(game.player.position,human.position)
+		var path: PackedVector2Array = game.find_path(game.player.position,item.at)
 		_check(not path.is_empty(),"Navigation can approach human NPC: "+id)
 		game.player.route = path
 		for tick in 1500:
@@ -227,8 +252,12 @@ func _check_humans() -> void:
 		_check(game.nearest==id,"The cat physically reaches the human's talk prompt: "+id)
 		var greetings_before: int = human.greeting_count
 		game.interact()
-		_check(game.talk_name.text==item.name and game.talk_text.text.length()>60,"E opens the human's named conversation: "+id)
-		speakers[game.talk_name.text] = true
+		if id == "iris":
+			_check(game.ui.merchant.visible and game.ui.shopkeeper.text.contains("Iris"),"E opens the apothecary at Iris's counter")
+			game.close_shop()
+		else:
+			_check(game.talk_name.text==item.name and game.talk_text.text.length()>60,"E opens the human's named conversation: "+id)
+			speakers[game.talk_name.text] = true
 		_check(human.greeting_count==greetings_before+1,"Human acknowledges the conversation: "+id)
 		# Continue into the footprint with actual actor movement, not a path check.
 		game.player.route.clear()
@@ -239,7 +268,7 @@ func _check_humans() -> void:
 		game.player.intent = Vector2.ZERO
 		game.player.automated = false
 		_check(game.is_walkable(game.player.position,12),"The cat cannot walk through the human: "+id)
-	_check(speakers.size()==4,"All four human NPCs have separate named conversations")
+	_check(speakers.size()==3,"The three non-merchant humans have separate named conversations")
 	_check(game.quest_stage==before_quest and game.coins==before_coins and not game.combat_active,"Human conversations preserve errands, money and peaceful play")
 	var smith = game.interactables.tomas.anchor
 	for view in [[Vector2(800,820),"se"],[Vector2(700,800),"sw"],[Vector2(800,700),"ne"],[Vector2(700,700),"nw"]]:
@@ -267,18 +296,62 @@ func _check_humans() -> void:
 	game._update_lighting()
 
 
+func _check_board_and_apothecary() -> void:
+	var board: Dictionary = game.interactables.quest_board
+	_check(board.anchor.position.distance_to(Vector2(1020,476)) < 20,"Quest board is beside the town hall window")
+	_check(board.anchor.get_child(0).flip_h,"Quest board follows the planter's diagonal")
+	var reading_spot: Vector2 = board.at
+	var path: PackedVector2Array = game.find_path(game.player.position,reading_spot)
+	_check(not path.is_empty(),"The north side of the fountain is reachable")
+	game.player.route = path
+	for tick in 600:
+		await physics_frame
+		if game.nearest == "quest_board":
+			break
+	_check(game.nearest == "quest_board","Approaching the board shows its interaction")
+	game.interact()
+	_check(game.journal_open and game.ui.journal_view.board_mode,"The board opens town notices")
+	game.ui.journal_view.cards.emberforge_tools.pressed.emit()
+	game.ui.journal_view.track_button.pressed.emit()
+	_check(game.state.tracked_quest == "emberforge_tools","A board posting can be tracked")
+	game.toggle_journal()
+	game.state.tracked_quest = "briarwood_patrol"
+	await _settle(game.interactables.iris.at)
+	_check(game.nearest == "iris","The potion counter can be approached from the plaza")
+	game.interact()
+	var coins: int = game.coins
+	_check(game.ui.merchant.visible and game.buy(0) and game.buy(1),"Iris sells a healing draught and Windmint Tonic")
+	_check(game.coins == coins - 11 and game.state.count("healing_draught") == 1 and game.state.count("wind_tonic") == 1,"Potion purchases debit coins and fill the satchel")
+	_check(not game.buy(2),"The apothecary exposes only its two stocked potions")
+	game.close_shop()
+	game.player.health = 1
+	game.player.skill_cooldown = 3
+	_check(game.use_item("wind_tonic") and game.player.health == 2 and game.player.skill_cooldown == 0,"Windmint refreshes Wind Slash and restores a heart")
+	var snapshot: Dictionary = game.make_save_document()
+	_check(game.saves.validate(snapshot) and snapshot.state.items.healing_draught == 1,"Potion inventory validates in the save schema")
+	snapshot.version = 3
+	for id in game.saves.POTION_IDS:
+		snapshot.state.items.erase(id)
+	var migrated: Dictionary = game.saves.upgrade(snapshot)
+	_check(game.saves.validate(migrated) and migrated.state.items.healing_draught == 0,"An existing journey loads with empty potion slots")
+	_check(game.use_item("healing_draught") and game.player.health == game.player.maximum_health,"The draught restores up to four hearts")
+	game.coins = coins
+
+
 func _run() -> void:
 	game = load(ROOT+"demo.tscn").instantiate()
 	root.add_child(game)
 	Engine.max_fps = 0
 	game.auto_clock = false
+	game.autosave_enabled = false
 	for tick in 5:
 		await physics_frame
 	_check(root.get_texture().get_size()==Vector2(game.RenderSettings.RENDER_SIZE),"Internal render target is 2560x1440")
 	_check(game.player.controlled,"Cat is controlled")
 	_check(game.player.sprite.sprite_frames.has_animation("walk_nw"),"Registered directional character resources load")
-	_check(game.interactables.size()==13,"Animal residents, four humans, postbox and three peaceful wardens are interactive")
+	_check(game.interactables.size()==18,"Animal residents, four humans, postbox, quest board and three peaceful wardens are interactive")
 	_check(game.quest_stage==0 and not game.combat_active,"Demo starts with an available quest and no combat")
+	await _check_board_and_apothecary()
 	var start := Vector2(800,930)
 	var end := await _walk(start,["hub_right"],30)
 	var walk_distance: float = game.Actor.ground_vector(end-start).length()
@@ -466,6 +539,28 @@ func _run() -> void:
 	_check(is_equal_approx(game.clock,before_clock),"Pause freezes the day/night clock")
 	game.set_paused(false)
 	_check(not game.pause_overlay.visible,"Resume hides pause interface")
+	game.autosave_enabled = false
+	game.state.accept_quest()
+	for index in 3:
+		game.state.forest_defeated["routine_test_%d" % index] = true
+	game.state.add_item("bandit_badge", 3)
+	game.interact("warden")
+	_check(game.state.rewarded,"Bram still accepts the badges and grants the quest reward")
+	game.interact("guard_east")
+	_check(game.talk_text.text.contains("traders are grateful"),"Fern acknowledges the completed Briarwood quest")
+	game.clock = 2.25
+	game.dialogue_left = 0
+	await _settle(Vector2(1190,965))
+	for tick in 700:
+		await physics_frame
+	var bram = game.interactables.warden.anchor
+	_check(bram.position.distance_to(game.WARDEN_POSTS.warden[2])<16,"Bram reaches the southwest road at dusk")
+	game.clock = 0.25
+	game._load_zone("town","start")
+	_check(game.interactables.warden.anchor.position==game.WARDEN_POSTS.warden[0],"Returning to the square places Bram at his current shift")
+	game.dialogue_left = 0
+	await _settle(Vector2(1190,965))
+	_check(game.talk_text.text.contains("brought back the badges"),"The dawn briefing reflects the turned-in badges")
 	for action in InputMap.get_actions():
 		if action.begins_with("hub_"):
 			Input.action_release(action)

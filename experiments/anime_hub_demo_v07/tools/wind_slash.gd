@@ -15,17 +15,17 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if hub.transitioning or hub.zone!="wilds":
+	if hub.transitioning or hub.zone not in ["wilds", "ivykeep"]:
 		queue_free()
 		return
 	if hub.paused:
 		return
 	var step := minf(SPEED*delta,REACH-travelled)
 	var next := position+Vector2(heading.x,heading.y*.65)*step
-	var ray := PhysicsRayQueryParameters2D.create(position,next,1)
+	var ray := PhysicsRayQueryParameters2D.create(get_parent().to_global(position),get_parent().to_global(next),1)
 	var obstruction := get_world_2d().direct_space_state.intersect_ray(ray)
 	if not obstruction.is_empty():
-		next = obstruction.position
+		next = get_parent().to_local(obstruction.position)
 	var end := Vector2(next.x-position.x,(next.y-position.y)/.65)
 	for dog in hub.dogs:
 		if not dog.active or hit_ids.has(dog.get_instance_id()):

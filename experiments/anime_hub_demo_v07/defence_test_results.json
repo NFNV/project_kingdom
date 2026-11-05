@@ -1,0 +1,6 @@
+{
+  "checks": 38,
+  "failures": [],
+  "passed": 38,
+  "scope": "Actual enemy contacts, timed parry and riposte, directional guard and break, stamina economy, real V input, roll startup/middle/recovery/collision/pause, heavy poise, shield inventory/shop/save v3 and v2 migration, peaceful travel."
+}

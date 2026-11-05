@@ -21,6 +21,21 @@
     "max_stack_size": 99,
     "kind": "food"
   },
+  "healing_draught": {
+    "name": "Rosehip Draught",
+    "description": "Iris's rosehip potion restores 4 hearts.",
+    "heal": 4,
+    "max_stack_size": 99,
+    "kind": "food"
+  },
+  "wind_tonic": {
+    "name": "Windmint Tonic",
+    "description": "An herbal potion that restores 1 heart and refreshes Wind Slash.",
+    "heal": 1,
+    "refresh_skill": true,
+    "max_stack_size": 99,
+    "kind": "food"
+  },
   "bandit_badge": {
     "name": "Bandit badge",
     "description": "Recovered from a defeated bandit. Bring three to Bram.",
@@ -123,6 +138,23 @@
     "icon": "swift_charm",
     "haste": 1.5,
     "price": 12,
+    "max_stack_size": 1,
+    "kind": "gear"
+  },
+  "trail_shield": {
+    "name": "Trailwarden buckler",
+    "description": "Oak, brass and a leaf crest. Hold F to guard the direction you face; raise it just before impact to parry.",
+    "slot": "shield",
+    "guard": 1.0,
+    "max_stack_size": 1,
+    "kind": "gear"
+  },
+  "ironleaf_shield": {
+    "name": "Ironleaf shield",
+    "description": "Tomas's reinforced oak shield. Blocking costs thirty percent less stamina. F guards; a well-timed raise parries.",
+    "slot": "shield",
+    "guard": 1.428571,
+    "price": 14,
     "max_stack_size": 1,
     "kind": "gear"
   },
