@@ -65,6 +65,7 @@ func spawn_game(appearance := Creator.Look.DEFAULT) -> void:
 func show_title() -> void:
 	game.backpack_open = false
 	game.journal_open = false
+	game.close_map()
 	game.shopping = false
 	game.ui.satchel.hide()
 	game.ui.journal_view.hide()

@@ -2,7 +2,6 @@ extends RefCounted
 
 const SITE := Vector2(-64, 315)
 const HEALTH := 18
-const HEARTS := 3
 const ATTACKS := [
 	{"name": "Sword sweep", "range": 10.0, "inner": 0.0, "width": 0.0, "damage": 1, "windup": 0.95},
 	{"name": "Shield shockwave", "range": 24.0, "inner": 0.0, "width": 2.6, "damage": 1, "windup": 0.85},

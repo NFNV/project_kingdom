@@ -18,6 +18,7 @@ var arena_fade: ColorRect
 
 const Atmosphere := preload("res://experiments/overworld_2d_v01/atmosphere.gd")
 const RenderSettings := preload("res://experiments/anime_hub_demo_v07/tools/render_settings.gd")
+const FieldMap := preload("res://experiments/anime_hub_demo_v07/tools/field_map.gd")
 const Dressing := preload("res://experiments/overworld_2d_v01/region_dressing.gd")
 const ClockDial := preload("res://experiments/anime_hub_demo_v07/tools/celestial_clock.gd")
 const CYCLE_SECONDS := Atmosphere.CYCLE_SECONDS
@@ -610,14 +611,11 @@ func panel_style(color: Color) -> StyleBoxFlat:
 	return style
 
 func draw_hud() -> void:
-	panel(Rect2(24,22,316,74),Color("203e36"))
-	text(Vector2(40,46),"THE GREENSHIRE  /  MOSSWOOD",12,Color("d1c38d"))
-	text(Vector2(40,77),"A little world to explore",23)
 	if is_instance_valid(journey_loadout) and journey_loadout.tracked_quest == journey_loadout.STONEBACK_QUEST:
 		var stage: int = journey_loadout.stoneback_stage
 		if stage in [journey_loadout.StonebackStage.ACCEPTED, journey_loadout.StonebackStage.RETURN]:
-			panel(Rect2(24,106,450,40))
-			text(Vector2(40,132),journey_loadout.stoneback_text(),15)
+			panel(Rect2(24,24,450,40))
+			text(Vector2(40,50),journey_loadout.stoneback_text(),15)
 	if player.distance_to(Stoneback.SITE)<19 and boss.phase == "idle":
 		panel(Rect2(710,184,500,40))
 		text(Vector2(728,210),"IVYKEEP RUINS  ·  F Accept Stoneback's challenge",16)
@@ -698,29 +696,29 @@ func draw_map_contents(large: bool) -> void:
 			hud.draw_texture_rect(texture,Rect2(marker-Vector2(size.x*.5,28),size),false,Color.WHITE)
 			text(marker+Vector2(8,4),extra[2],13,Color("53694b"))
 	var at := map_point(player,large)
-	hud.draw_circle(at,6 if large else 4,Color("a84738"))
-	hud.draw_arc(at,10 if large else 7,0,TAU,24,Color("fff2c6"),2,true)
+	FieldMap.draw_position(hud,at,9 if large else 6)
 	hud.draw_line(at,map_point(player+camera_forward()*18,large),Color("9e6543"),2,true)
 
 func draw_minimap() -> void:
-	panel(Rect2(1640,22,254,178),Color("e5dbb4"))
+	FieldMap.draw_paper(hud,Rect2(1640,22,254,178))
 	text(Vector2(1654,45),"THE GREENSHIRE",13,Color("335140"))
 	draw_map_contents(false)
 	text(Vector2(1856,45),"N ↑",12,Color("335140"))
-	text(Vector2(1654,185),"M  Regional map",12,Color("586d4c"))
+	text(Vector2(1654,185),("M   "+near_landmark.capitalize()) if not near_landmark.is_empty() else "M   Regional map",12,Color("294538"))
 
 func draw_region_map() -> void:
 	hud.draw_rect(Rect2(0,0,1920,1080),Color(.08,.17,.14,1))
-	panel(Rect2(360,95,1200,860),Color("e9dfbb"))
-	text(Vector2(405,148),"THE GREENSHIRE",30,Color("294c3e"))
-	text(Vector2(405,178),"Mosswood and the northern roads",18,Color("64734e"))
-	text(Vector2(1465,152),"N ↑",24,Color("294c3e"))
+	FieldMap.draw_paper(hud,Rect2(360,95,1200,860))
+	hud.draw_string(FieldMap.UI.heading_font(),Vector2(450,157),"The Greenshire",HORIZONTAL_ALIGNMENT_LEFT,-1,38,Color("294c3e"))
+	FieldMap.draw_position(hud,Vector2(458,183),7)
+	text(Vector2(476,189),"You are here · "+("Greenshire roads" if near_landmark.is_empty() else near_landmark.capitalize()),18,Color("294538"))
+	text(Vector2(1430,157),"N ↑",24,Color("294c3e"))
 	draw_map_contents(true)
 	text(Vector2(1215,270),"PLACES TO ROAM",19,Color("294c3e"))
 	var markers := Map.landmarks()
 	for i in markers.size():
 		text(Vector2(1215,310+i*46),str(i+1)+"  "+markers[i].short,20,Color("53694b"))
-	text(Vector2(405,911),"1–8  Preview a destination     M / Esc  Return to the road",20,Color("294c3e"))
+	text(Vector2(450,902),"1–8  Preview a destination     M / Esc  Return to the road",20,Color("294c3e"))
 
 func visit(index: int) -> void:
 	var marker: Dictionary = Map.landmarks()[clampi(index,0,7)]

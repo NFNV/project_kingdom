@@ -4,6 +4,7 @@ extends Node
 
 signal changed
 const ROOT := "res://experiments/anime_hub_demo_v07/"
+const Hearts := preload("res://experiments/anime_hub_demo_v07/tools/heart_meter.gd")
 const HeroLook := preload("res://experiments/anime_hub_demo_v07/tools/hero_look.gd")
 const QUEST_ID := "briarwood_patrol"
 const STONEBACK_QUEST := "stoneback_trial"
@@ -46,9 +47,9 @@ var pending_loot: Dictionary = {}
 var accepted := false
 var rewarded := false
 var clock := 1.0
-var health := 5
+var health := Hearts.BASE_HEALTH
 var maximum_health: int:
-	get: return int(stats().hearts)
+	get: return int(stats().hearts) * Hearts.UNITS_PER_HEART
 
 func _ready() -> void:
 	# GLoot caches by JSON resource identity. Reuse one resource across fresh
@@ -104,7 +105,7 @@ func owned(id: String) -> int:
 	return total
 
 func stats(replacements: Dictionary = {}) -> Dictionary:
-	var result := {"hearts":5,"attack":0,"recharge":6.0,"speed":1.0,"wind":0,"guard":0.0}
+	var result := {"hearts":Hearts.BASE_HEARTS,"attack":0,"recharge":6.0,"speed":1.0,"wind":0,"guard":0.0}
 	for slot in SLOTS:
 		var id: String = replacements.get(slot,equipped_id(slot))
 		if not definitions.has(id):

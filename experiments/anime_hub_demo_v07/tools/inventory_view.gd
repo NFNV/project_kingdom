@@ -1,5 +1,6 @@
 extends Control
 const UI := preload("res://experiments/anime_hub_demo_v07/tools/rpg_ui.gd")
+const Hearts := preload("res://experiments/anime_hub_demo_v07/tools/heart_meter.gd")
 const Art := preload("res://experiments/anime_hub_demo_v07/tools/equipment_art.gd")
 const Slot := preload("res://experiments/anime_hub_demo_v07/tools/equipment_slot.gd")
 const Motion := preload("res://experiments/anime_hub_demo_v07/tools/motion_sprite.gd")
@@ -128,7 +129,7 @@ func select(id: String, where: String, slot := "") -> void:
 func refresh() -> void:
 	if not is_instance_valid(purse):
 		return
-	purse.text = "%d coins   ·   %d / %d hearts" % [hub.coins,hub.player.health,hub.player.maximum_health]
+	purse.text = "%d coins   ·   %s / %s hearts" % [hub.coins,Hearts.amount(hub.player.health),Hearts.amount(hub.player.maximum_health)]
 	var state = hub.state
 	var appearance: Dictionary = state.appearance
 	name_label.text = appearance.name
@@ -157,7 +158,7 @@ func refresh() -> void:
 	for key in filters:
 		filters[key].add_theme_stylebox_override("normal",UI.style(true,filter==key))
 	var stats: Dictionary = state.stats()
-	stats_label.text = "HEARTS  %d / %d     •     SWORD  %d damage     •     WIND SLASH  %d damage / %.1f s     •     MOVEMENT  %d%%" % [hub.player.health,stats.hearts,stats.attack,stats.wind,stats.recharge,roundi(stats.speed*100)]
+	stats_label.text = "HEARTS  %s / %d     •     SWORD  %d damage     •     WIND SLASH  %d damage / %.1f s     •     MOVEMENT  %d%%" % [Hearts.amount(hub.player.health),stats.hearts,stats.attack,stats.wind,stats.recharge,roundi(stats.speed*100)]
 	refresh_details()
 
 func refresh_details() -> void:

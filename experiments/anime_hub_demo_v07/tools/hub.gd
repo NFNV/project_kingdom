@@ -26,6 +26,7 @@ var saves := SaveStore.new()
 var save_path := SaveStore.DEFAULT_PATH
 var backpack_open := false
 var journal_open := false
+var map_open := false
 var title_active := false
 var autosave_enabled := false
 var autosave_queued := false
@@ -50,6 +51,7 @@ const WARDEN_POSTS := {
 const SIZE := Vector2i(1920,1080)
 const TIMES := ["Dawn","Noon","Dusk","Night"]
 const TINTS := Style.LIGHTING
+const PLAZA_FOUNTAIN := Vector2(970,675)
 var FLOOR := PackedVector2Array([Vector2(760,465),Vector2(1150,460),Vector2(1315,570),Vector2(1590,735),Vector2(1360,835),Vector2(1460,990),Vector2(1270,1060),Vector2(410,1060),Vector2(500,925),Vector2(370,770),Vector2(350,720),Vector2(290,695),Vector2(245,635),Vector2(245,555),Vector2(330,550),Vector2(380,610),Vector2(465,630),Vector2(650,580)])
 var town_floor := FLOOR.duplicate()
 const OBJECTIVES := [
@@ -215,7 +217,7 @@ func _activate_direct_session() -> void:
 
 
 func _install_input() -> void:
-	var bindings := {"left":[KEY_A,KEY_LEFT],"right":[KEY_D,KEY_RIGHT],"up":[KEY_W,KEY_UP],"down":[KEY_S,KEY_DOWN],"run":[KEY_SHIFT],"attack":[KEY_SPACE],"skill":[KEY_Q],"interact":[KEY_E],"time":[KEY_T],"pause":[KEY_ESCAPE],"restart":[KEY_R],"fullscreen":[KEY_F11],"journal":[KEY_J],"debug":[KEY_F3],"mute":[KEY_M],"bag":[KEY_I],"food":[KEY_H],"save":[KEY_F5],"load":[KEY_F9]}
+	var bindings := {"left":[KEY_A,KEY_LEFT],"right":[KEY_D,KEY_RIGHT],"up":[KEY_W,KEY_UP],"down":[KEY_S,KEY_DOWN],"run":[KEY_SHIFT],"attack":[KEY_SPACE],"skill":[KEY_Q],"interact":[KEY_E],"time":[KEY_T],"pause":[KEY_ESCAPE],"restart":[KEY_R],"fullscreen":[KEY_F11],"journal":[KEY_J],"map":[KEY_M],"debug":[KEY_F3],"mute":[KEY_N],"bag":[KEY_I],"food":[KEY_H],"save":[KEY_F5],"load":[KEY_F9]}
 	bindings.guard = [KEY_F]
 	bindings.roll = [KEY_V,KEY_CTRL]
 	for action in bindings:
@@ -589,8 +591,8 @@ func _human_resident(id: String, name_text: String, asset: String, at: Vector2, 
 
 func _build_plaza() -> void:
 	_solid(FLOOR,true)
-	_piece("fountain",Vector2(970,700),235)
-	_solid(_ellipse(Vector2(970,675),Vector2(139,48)))
+	_piece("fountain",PLAZA_FOUNTAIN+Vector2(0,25),235)
+	_solid(_ellipse(PLAZA_FOUNTAIN,Vector2(139,48)))
 	_piece("bakery_stall",Vector2(560,625),205)
 	_solid(_ellipse(Vector2(560,604),Vector2(90,28)))
 	var counter_at := Vector2(1350,641)
@@ -881,6 +883,7 @@ func return_to_title() -> void:
 func toggle_journal(board := false) -> void:
 	if transitioning or shopping or title_active or not player.active:
 		return
+	close_map()
 	if backpack_open:
 		backpack_open = false
 		ui.satchel.hide()
@@ -891,6 +894,27 @@ func toggle_journal(board := false) -> void:
 	if journal_open:
 		player.stop_motion()
 		ui.journal_view.open(board)
+
+func close_map() -> void:
+	map_open = false
+	ui.area_map.hide()
+
+func toggle_map() -> void:
+	if transitioning or shopping or title_active or not player.active:
+		return
+	if map_open:
+		close_map()
+		set_paused(false)
+		return
+	backpack_open = false
+	journal_open = false
+	ui.satchel.hide()
+	ui.journal_view.hide()
+	map_open = true
+	set_paused(true)
+	player.stop_motion()
+	pause_overlay.hide()
+	ui.area_map.show()
 
 func _add_loot(id: String) -> void:
 	var key := "loot:"+id
@@ -926,6 +950,7 @@ func collect_loot(id: String) -> bool:
 func toggle_backpack() -> void:
 	if transitioning or shopping or title_active or not player.active:
 		return
+	close_map()
 	if journal_open:
 		journal_open = false
 		ui.journal_view.hide()
@@ -951,10 +976,10 @@ func use_item(id: String) -> bool:
 		return false
 	if not state.remove_item(id):
 		return false
-	player.health = mini(player.maximum_health,player.health+int(item.heal))
+	player.health = mini(player.maximum_health,player.health+int(item.heal)*GameState.Hearts.UNITS_PER_HEART)
 	if refresh:
 		player.skill_cooldown = 0
-	ui.show_notice("%s  ·  %d / %d hearts" % [item.name,player.health,player.maximum_health])
+	ui.show_notice("%s  ·  %s / %s hearts" % [item.name,GameState.Hearts.amount(player.health),GameState.Hearts.amount(player.maximum_health)])
 	audio.play_event("ui_confirm",player.position,-8)
 	ui.refresh_satchel()
 	_update_hud()
@@ -1001,6 +1026,7 @@ func load_game() -> bool:
 		return false
 	backpack_open = false
 	journal_open = false
+	close_map()
 	autosave_queued = false
 	ui.satchel.hide()
 	ui.journal_view.hide()
@@ -1517,6 +1543,10 @@ func _input(event: InputEvent) -> void:
 		return
 	if event.is_echo() or title_active:
 		return
+	if event.is_action_pressed("hub_map") or (map_open and event.is_action_pressed("hub_pause")):
+		toggle_map()
+		get_viewport().set_input_as_handled()
+		return
 	if event.is_action_released("hub_guard"):
 		player.set_guard(false)
 	if event.is_action_pressed("hub_guard"):
@@ -1578,8 +1608,6 @@ func _unhandled_input(event: InputEvent) -> void:
 		return_to_title()
 	elif event.is_action_pressed("hub_fullscreen"):
 		get_window().mode = Window.MODE_WINDOWED if get_window().mode==Window.MODE_FULLSCREEN else Window.MODE_FULLSCREEN
-	elif event.is_action_pressed("hub_journal"):
-		ui.journal_panel.visible = not ui.journal_panel.visible
 	elif event.is_action_pressed("hub_debug"):
 		ui.debug_visible = not ui.debug_visible
 	elif not paused and not transitioning:

@@ -1,0 +1,14 @@
+{
+  "tool": "Built-in ImageGen",
+  "assets": {
+    "atlas_paper.png": {
+      "prompt": "Create a landscape 3:2 UI background for a hand-painted storybook anime fantasy RPG regional map. It is a flat overhead scan of warm ivory vellum, softly textured, with a thin elegant antique ink-and-brass cartographic border, small leaves in the corners, and very faint washed sage hills and blue-gray mountain contours near the far left and bottom edges. Keep the middle 80 percent largely clear, bright and low contrast, for the game to draw its own routes, pins and labels. Elegant artisan atlas, restrained aged paper, crisp clean edges and no perspective. No text, no lettering, no numbers, no route lines, no pins, no labels, no legend. No blank outside margin, artwork reaches the full image edges."
+    },
+    "journal_cover.png": {
+      "prompt": "Create one closed leather travel journal for the inventory interface of a hand-painted anime fantasy RPG, true alpha transparency. Directly overhead view, front cover facing up and perfectly rectangular, portrait proportions. Dark moss-green leather cover, raised honey-brass corner fittings, subtle hand stitching and a small embossed gold botanical wreath centered around a simple windmill motif. Visible tan page edges at right and bottom, a wine-red ribbon bookmark and a simple clasp on the right. Warm handmade material detail, clean legible edges, graphic storybook RPG art. One book, centered in canvas, entirely visible. No lettering, no title or symbols that resemble words, no environment, no hands, no table. Transparent background outside the book."
+    },
+    "journal_pages.png": {
+      "prompt": "Create an OPEN blank travel journal as a directly overhead 3:2 interface background for a painterly storybook anime RPG. Wide landscape spread, full book fills the canvas almost to the edges, near-perfect rectangle, facing camera straight on with no tilt. Two very broad, pale warm ivory pages, flat and blank enough for legible dark game text, a clearly defined narrow central gutter, soft shading only along gutter and page edges. Moss-green stitched leather cover visible along the edge, gold corner fittings and a single small dark red ribbon at the bottom of the center gutter. Refined hand-painted parchment texture, subtle thin border ornament along the outer margins only. Equal-width pages. No text, handwriting, ruled lines, drawings, objects, hands, table, floor, or scenery. Actual alpha transparency outside the book."
+    }
+  }
+}

@@ -1,6 +1,6 @@
 extends RefCounted
 ## Whitelisted, versioned JSON. Validate everything before touching live state.
-const VERSION := 5
+const VERSION := 6
 const POTION_IDS := ["healing_draught","wind_tonic"]
 const Legacy := preload("res://experiments/anime_hub_demo_v07/tools/save_v1.gd")
 const State := preload("res://experiments/anime_hub_demo_v07/tools/game_state.gd")
@@ -74,7 +74,7 @@ func validate(doc: Variant) -> bool:
 	if equipment.size()!=State.SLOTS.size():
 		return false
 	var owned: Dictionary = items.duplicate()
-	var maximum_health := 5
+	var maximum_hearts := State.Hearts.BASE_HEARTS
 	for slot in State.SLOTS:
 		var id: Variant = equipment.get(slot)
 		if not id is String:
@@ -83,7 +83,7 @@ func validate(doc: Variant) -> bool:
 			if not definitions.has(id) or definitions[id].get("slot")!=slot:
 				return false
 			owned[id] += 1
-			maximum_health += int(definitions[id].get("hearts",0))
+			maximum_hearts += int(definitions[id].get("hearts",0))
 	for id in definitions:
 		if definitions[id].has("slot") and owned[id]>1:
 			return false
@@ -135,7 +135,7 @@ func validate(doc: Variant) -> bool:
 		# Unmarked room saves retain the original 1920x1080 validation above.
 		if player.mill_room_layout!=2: return false
 		dimensions = Vector2(1280,720)
-	if not pair_valid(player.get("position"),dimensions.x,dimensions.y) or not whole(player.get("health"),1,maximum_health):
+	if not pair_valid(player.get("position"),dimensions.x,dimensions.y) or not whole(player.get("health"),1,maximum_hearts * State.Hearts.UNITS_PER_HEART):
 		return false
 	var facing: Variant = player.get("facing")
 	if not facing is Array or facing.size()!=2 or not number(facing[0],-1,1) or not number(facing[1],-1,1) or Vector2(facing[0],facing[1]).length_squared()<.01 or not number(player.get("skill_cooldown"),0,6):
@@ -155,7 +155,6 @@ func upgrade(source: Variant) -> Dictionary:
 			last_error = legacy.last_error
 			return {}
 		var result: Dictionary = source.duplicate(true)
-		result.version = VERSION
 		for id in definitions:
 			if not result.state.items.has(id):
 				result.state.items[id] = 0
@@ -167,8 +166,7 @@ func upgrade(source: Variant) -> Dictionary:
 		result.state.items.smith_tools = 1 if recovered else 0
 		result.state.tracked_quest = "briarwood_patrol"
 		result.state.stoneback_stage = State.StonebackStage.AVAILABLE
-		migrated = true
-		return result
+		return upgrade_health(result)
 	if source.get("version")==2 or source.get("version")==3 or source.get("version")==4:
 		# Add only items introduced since the saved version.
 		var needs_shields: bool = source.version == 2
@@ -194,10 +192,30 @@ func upgrade(source: Variant) -> Dictionary:
 				return {}
 			data.equipment.shield = "trail_shield"
 		data.stoneback_stage = State.StonebackStage.AVAILABLE
-		result.version = VERSION
-		migrated = true
-		return result
+		return upgrade_health(result)
+	if source.get("version")==5:
+		return upgrade_health(source.duplicate(true))
 	return source
+
+func upgrade_health(doc: Dictionary) -> Dictionary:
+	var player: Variant = doc.get("player")
+	var data: Variant = doc.get("state")
+	if not player is Dictionary or not data is Dictionary or not data.get("equipment") is Dictionary:
+		return {}
+	var bonus := 0
+	for slot in State.SLOTS:
+		var id: Variant = data.equipment.get(slot)
+		if not id is String:
+			return {}
+		bonus += int(definitions.get(id,{}).get("hearts",0))
+	var old_capacity := 5 + bonus
+	if not whole(player.get("health"),1,old_capacity):
+		return {}
+	var capacity := (State.Hearts.BASE_HEARTS + bonus) * State.Hearts.UNITS_PER_HEART
+	player.health = ceili(float(player.health) * capacity / old_capacity)
+	doc.version = VERSION
+	migrated = true
+	return doc
 
 func has_journey(path := DEFAULT_PATH) -> bool:
 	return FileAccess.file_exists(path) or FileAccess.file_exists(path+".bak") or FileAccess.file_exists(path+".auto") or FileAccess.file_exists(path+".auto.bak")

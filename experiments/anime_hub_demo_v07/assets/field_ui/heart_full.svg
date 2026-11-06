@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="96" height="96">
+  <defs><linearGradient id="glass" x2=".25" y2="1" gradientUnits="objectBoundingBox"><stop stop-color="#ff9f84"/><stop offset=".47" stop-color="#cf514b"/><stop offset="1" stop-color="#8b283b"/></linearGradient></defs>
+  <path d="M24 39C18 34 7 27 7 17 7 9 17 6 24 16 31 6 41 9 41 17 41 27 30 34 24 39Z" fill="url(#glass)" stroke="#f5a277" stroke-width=".75"/>
+  <path d="M11 17q2-6 7-4" fill="none" stroke="#ffe4ba" stroke-width="2.2" stroke-linecap="round" opacity=".85"/>
+  <path d="M29 33q6-5 8-9" fill="none" stroke="#fd8c7c" stroke-width="1.1" stroke-linecap="round" opacity=".65"/>
+</svg>

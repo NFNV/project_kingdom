@@ -4,6 +4,7 @@ signal return_requested
 signal loot_claimed
 
 const Boss := preload("res://experiments/overworld_2d_v01/stoneback.gd")
+const Hearts := preload("res://experiments/anime_hub_demo_v07/tools/heart_meter.gd")
 const Fighter := preload("res://experiments/anime_hub_demo_v07/tools/actor.gd")
 const RenderSettings := preload("res://experiments/anime_hub_demo_v07/tools/render_settings.gd")
 const TreasureChest := preload("res://experiments/anime_hub_demo_v07/assets/loot/treasure_chest.tscn")
@@ -17,8 +18,8 @@ const CHEST_REACH := 104.0
 
 class DuelState extends RefCounted:
 	var appearance := Fighter.HeroLook.DEFAULT.duplicate()
-	var maximum_health := Boss.HEARTS
-	var health := Boss.HEARTS
+	var maximum_health := Hearts.BASE_HEALTH
+	var health := Hearts.BASE_HEALTH
 	var gear := {"weapon": "travel_sword", "shield": "trail_shield"}
 	var attributes := {"attack": 1, "wind": 3, "guard": 1.0, "speed": 1.0, "recharge": 6.0}
 
@@ -250,7 +251,7 @@ func draw_hud() -> void:
 		hud.draw_string(font, Vector2(620, 504), "Stoneback defeated you", HORIZONTAL_ALIGNMENT_CENTER, 680, 34, Color("f6edcf"))
 		hud.draw_string(font, Vector2(620, 553), "R  Retry the duel     ·     F or Esc  Return to the Greenshire", HORIZONTAL_ALIGNMENT_CENTER, 680, 21, Color("f6edcf"))
 		return
-	var title := "IVYKEEP RUINS   /   STONEBACK"
+	var title := "STONEBACK"
 	if boss.fighting() and boss.enraged(): title += "   ·   ENRAGED"
 	if boss.phase == "defeated": title += "   ·   VICTORY"
 	var cue: String = {
@@ -272,7 +273,8 @@ func draw_hud() -> void:
 		hud.draw_string(font, Vector2(625, 153), guardian.hit_feedback, HORIZONTAL_ALIGNMENT_CENTER, 670, 19, Color("fff1c6"))
 	hud.draw_rect(Rect2(395, 992, 1130, 65), Color("203e36"))
 	var wind := "ready" if player.skill_cooldown <= 0 else "%.1fs" % player.skill_cooldown
-	hud.draw_string(font, Vector2(419, 1017), "Hearts %d / %d    ·    Stamina %d    ·    Wind Slash %s" % [player.health, player.maximum_health, int(player.stamina), wind], HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color("f6edcf"))
+	Hearts.draw_on(hud,Vector2(416,997),player.health,player.maximum_health,25)
+	hud.draw_string(font, Vector2(521, 1017), "Stamina %d    ·    Wind Slash %s" % [int(player.stamina), wind], HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color("f6edcf"))
 	var controls := "WASD Move   ·   Space Strike   ·   F Guard / Parry   ·   V Roll   ·   Q Wind Slash   ·   Esc Leave"
 	if boss.phase == "defeated":
 		controls = "WASD Move" + ("" if chest.opened else "   ·   E Open chest")
