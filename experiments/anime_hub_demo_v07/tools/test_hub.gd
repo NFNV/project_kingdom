@@ -330,6 +330,8 @@ func _check_board_and_apothecary() -> void:
 	var snapshot: Dictionary = game.make_save_document()
 	_check(game.saves.validate(snapshot) and snapshot.state.items.healing_draught == 1,"Potion inventory validates in the save schema")
 	snapshot.version = 3
+	snapshot.state.erase("stoneback_stage")
+	snapshot.state.items.erase(game.GameState.STONEBACK_RELIC)
 	for id in game.saves.POTION_IDS:
 		snapshot.state.items.erase(id)
 	var migrated: Dictionary = game.saves.upgrade(snapshot)

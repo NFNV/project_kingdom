@@ -209,6 +209,8 @@ func run() -> void:
  check(store.write_document(document,SLOT) and store.load_document(SLOT).state.equipment.shield=="trail_shield","New shield equipment survives an actual current-version disk save")
  var old: Dictionary = document.duplicate(true)
  old.version = 2
+ old.state.erase("stoneback_stage")
+ old.state.items.erase(store.State.STONEBACK_RELIC)
  old.state.equipment.erase("shield")
  old.state.items.erase("trail_shield")
  old.state.items.erase("ironleaf_shield")

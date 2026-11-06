@@ -42,6 +42,12 @@
     "max_stack_size": 99,
     "kind": "quest"
   },
+  "ivykeep_seal": {
+    "name": "Ivykeep Seal",
+    "description": "The bronze seal from Stoneback's chest. Bring it to Rowan at Windsong Mill.",
+    "max_stack_size": 1,
+    "kind": "quest"
+  },
   "travel_sword": {
     "name": "Traveller’s sword",
     "description": "Your trusty blade. Space to strike; Q for Wind Slash.",

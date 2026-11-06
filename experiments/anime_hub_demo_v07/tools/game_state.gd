@@ -5,6 +5,10 @@ extends Node
 signal changed
 const ROOT := "res://experiments/anime_hub_demo_v07/"
 const QUEST_ID := "briarwood_patrol"
+const STONEBACK_QUEST := "stoneback_trial"
+const STONEBACK_RELIC := "ivykeep_seal"
+const STONEBACK_REWARD := 25
+enum StonebackStage { AVAILABLE, ACCEPTED, RETURN, COMPLETE }
 const QUEST_PATH := ROOT+"data/briarwood_patrol.tres"
 const SMITH_PATH := ROOT+"data/emberforge_tools.tres"
 const CAPTAIN_ID := "wild_dog_3_2"
@@ -25,6 +29,7 @@ var smith_accepted := false
 var smith_rewarded := false
 var tools_recovered := false
 var tracked_quest := "briarwood_patrol"
+var stoneback_stage: int = StonebackStage.AVAILABLE
 var coins := 12
 var delivery_stage := 0
 var discoveries: Dictionary = {}
@@ -302,11 +307,47 @@ func smith_text() -> String:
 		return "Collect Tomas's tools from Rook's fallen pouch."
 	return "Defeat Rook, the club captain in Briarwood's southeast clearing."
 
+func accept_stoneback_quest() -> bool:
+	if stoneback_stage != StonebackStage.AVAILABLE:
+		return false
+	stoneback_stage = StonebackStage.ACCEPTED
+	tracked_quest = STONEBACK_QUEST
+	changed.emit()
+	return true
+
+func collect_stoneback_relic() -> bool:
+	if stoneback_stage != StonebackStage.ACCEPTED:
+		return false
+	stoneback_stage = StonebackStage.RETURN
+	if add_item(STONEBACK_RELIC):
+		return true
+	stoneback_stage = StonebackStage.ACCEPTED
+	return false
+
+func claim_stoneback_reward() -> bool:
+	if stoneback_stage != StonebackStage.RETURN or count(STONEBACK_RELIC) != 1:
+		return false
+	stoneback_stage = StonebackStage.COMPLETE
+	coins += STONEBACK_REWARD
+	remove_item(STONEBACK_RELIC)
+	return true
+
+func stoneback_text() -> String:
+	match stoneback_stage:
+		StonebackStage.ACCEPTED:
+			return "Defeat Stoneback at Ivykeep Ruins and open his chest."
+		StonebackStage.RETURN:
+			return "Bring the Ivykeep Seal to Rowan at Windsong Mill."
+		StonebackStage.COMPLETE:
+			return "Complete. Rowan has the Ivykeep Seal."
+	return "Speak to Rowan behind the counter at Windsong Mill."
+
 func journal_entries() -> Array[Dictionary]:
 	return [
 		{"id":"morning_rounds","title":"Morning rounds","status":"Completed" if delivery_stage>=5 else ("Active" if delivery_stage>0 else "Available"),"giver":"Pippa · Garden Square","summary":"Help the square wake up: warm bread, a fruit basket and a letter connect the neighbours.","route":"Garden Square: bakery cart → Elder Mallow → Moss → Pip → red postbox.","reward":"The neighbours' thanks, and a town full of familiar faces.","objectives":[{"text":"Collect Pippa's warm loaf","done":delivery_stage>=1},{"text":"Deliver the loaf to Elder Mallow","done":delivery_stage>=2},{"text":"Collect Moss's fruit basket","done":delivery_stage>=3},{"text":"Bring the basket to Pip","done":delivery_stage>=4},{"text":"Post Pip's letter","done":delivery_stage>=5}]},
 		{"id":QUEST_ID,"title":"Badges from Briarwood","status":"Completed" if rewarded else ("Active" if accepted else "Available"),"giver":"Bram · Garden Square","summary":"Bram needs help keeping the woodland paths safe. Recover three bandit badges and bring them home.","route":"Garden Square southeast gate → Mosswood → Riverbend bridge → Briarwood. Return to Bram.","reward":"10 coins + Warden's charm (+1 maximum heart).","objectives":[{"text":"Defeat three bandits (%d / 3)" % mini(forest_defeated.size(),3),"done":forest_defeated.size()>=3},{"text":"Collect three fallen badges","done":rewarded or count("bandit_badge")>=3},{"text":"Return the badges to Bram","done":rewarded}]},
-		{"id":"emberforge_tools","title":"The stolen tools","status":"Completed" if smith_rewarded else ("Active" if smith_accepted else "Available"),"giver":"Tomas · Emberforge, Northgate Market Lane","summary":"Rook stole Tomas's favourite hammer and tongs. Recover them and the smith will forge a better sword for you.","route":"Northgate Emberforge → Briarwood's southeast clearing → collect Rook's pouch → return to Tomas.","reward":"12 coins + Embersteel sword (2 sword damage, 4 Wind Slash damage).","objectives":[{"text":"Defeat Rook, the club captain","done":forest_defeated.has(CAPTAIN_ID)},{"text":"Collect the stolen hammer and tongs","done":tools_recovered},{"text":"Return the tools to Tomas","done":smith_rewarded}]}
+		{"id":"emberforge_tools","title":"The stolen tools","status":"Completed" if smith_rewarded else ("Active" if smith_accepted else "Available"),"giver":"Tomas · Emberforge, Northgate Market Lane","summary":"Rook stole Tomas's favourite hammer and tongs. Recover them and the smith will forge a better sword for you.","route":"Northgate Emberforge → Briarwood's southeast clearing → collect Rook's pouch → return to Tomas.","reward":"12 coins + Embersteel sword (2 sword damage, 4 Wind Slash damage).","objectives":[{"text":"Defeat Rook, the club captain","done":forest_defeated.has(CAPTAIN_ID)},{"text":"Collect the stolen hammer and tongs","done":tools_recovered},{"text":"Return the tools to Tomas","done":smith_rewarded}]},
+		{"id":STONEBACK_QUEST,"title":"The Seal of Ivykeep","status":"Completed" if stoneback_stage == StonebackStage.COMPLETE else ("Active" if stoneback_stage >= StonebackStage.ACCEPTED else "Available"),"giver":"Rowan · Windsong Mill","summary":"Rowan wants to bring Ivykeep's old wayfarer's seal back to the inn. Win it from Stoneback, the guardian of the ruins.","route":"Windsong Mill → Ivykeep Ruins (M on the Greenshire map) → return to Rowan.","reward":"%d coins" % STONEBACK_REWARD,"objectives":[{"text":"Speak to Rowan at the mill counter","done":stoneback_stage >= StonebackStage.ACCEPTED},{"text":"Defeat Stoneback and collect the seal from his chest","done":stoneback_stage >= StonebackStage.RETURN},{"text":"Give Rowan the Ivykeep Seal","done":stoneback_stage == StonebackStage.COMPLETE}]}
 	]
 
 func can_claim() -> bool:
@@ -379,6 +420,7 @@ func snapshot() -> Dictionary:
 		"forest_patrol_defeated":forest_patrol_defeated.keys(),
 		"loot":pending_loot.duplicate(true),"items":item_counts(),
 		"equipment":equipped_ids(),"tracked_quest":tracked_quest,
+		"stoneback_stage":stoneback_stage,
 		"smith":{"accepted":smith_accepted,"rewarded":smith_rewarded,"tools_recovered":tools_recovered},
 		"quest":{"accepted":accepted,"rewarded":rewarded}}
 
@@ -410,6 +452,7 @@ func restore(data: Dictionary, player_health: int) -> void:
 	smith_rewarded = bool(data.smith.rewarded)
 	tools_recovered = bool(data.smith.tools_recovered)
 	tracked_quest = data.tracked_quest
+	stoneback_stage = int(data.stoneback_stage)
 	for id in data.items:
 		if int(data.items[id])>0:
 			add_item(id,int(data.items[id]))

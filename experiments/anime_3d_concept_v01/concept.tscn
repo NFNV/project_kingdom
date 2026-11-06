@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bqvhyfxh28564"]
+
+[ext_resource type="Script" uid="uid://b2p84v7r2bhws" path="res://experiments/anime_3d_concept_v01/concept.gd" id="1"]
+
+[node name="WaysideDiorama" type="Node3D" unique_id=1151722843]
+script = ExtResource("1")

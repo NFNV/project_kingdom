@@ -5,8 +5,8 @@ const HEALTH := 18
 const HEARTS := 3
 const ATTACKS := [
 	{"name": "Sword sweep", "range": 10.0, "inner": 0.0, "width": 0.0, "damage": 1, "windup": 0.95},
-	{"name": "Shield shockwave", "range": 24.0, "inner": 0.0, "width": 2.6, "damage": 2, "windup": 0.85},
-	{"name": "Quake ring", "range": 22.0, "inner": 5.5, "width": 0.0, "damage": 2, "windup": 1.15},
+	{"name": "Shield shockwave", "range": 24.0, "inner": 0.0, "width": 2.6, "damage": 1, "windup": 0.85},
+	{"name": "Quake ring", "range": 22.0, "inner": 5.5, "width": 0.0, "damage": 1, "windup": 1.15},
 ]
 const ENRAGED_ORDER := [1, 0, 2, 1]
 const RECOVERY := 2.2

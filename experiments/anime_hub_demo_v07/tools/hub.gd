@@ -1220,6 +1220,25 @@ func interact(id := "") -> void:
 	if zone=="mill_loft" and Map.Inn.BEDS.has(id):
 		bakery_room.open_bed(id)
 		return
+	if zone=="mill_room" and id=="mill_keeper":
+		var speaker: String = interactables[id].name
+		if state.stoneback_stage == GameState.StonebackStage.AVAILABLE:
+			if conversation_actor == id and dialogue_left > 0 and state.accept_stoneback_quest():
+				queue_autosave()
+				_say(speaker,"Thank you, friend. Find Ivykeep Ruins on your Greenshire map. Open Stoneback's chest once you've won.")
+			else:
+				_say(speaker,"The kettle is on, friend. Stoneback guards the old wayfarer's seal at Ivykeep Ruins. Bring it back from his chest and I'll pay you %d coins. Press E again to accept." % GameState.STONEBACK_REWARD)
+				conversation_actor = id
+				dialogue_left = 15.0
+		elif state.claim_stoneback_reward():
+			queue_autosave()
+			audio.play_event("victory",player.position,-5)
+			_say(speaker,"You brought back the Ivykeep Seal! This used to hang by our door to welcome travellers. Here are your %d coins. Stay by the fire as long as you like." % GameState.STONEBACK_REWARD)
+		elif state.stoneback_stage == GameState.StonebackStage.ACCEPTED:
+			_say(speaker,"Look for Ivykeep Ruins on your Greenshire map. Stoneback's chest holds the seal. Mind that shield of his.")
+		else:
+			_say(speaker,interactables[id].text)
+		return
 	if zone in ["mill_garden","mill_room","mill_loft"]:
 		_say(interactables[id].name,interactables[id].text)
 		return
@@ -1433,6 +1452,11 @@ func _update_prompt() -> void:
 		var offset_y := -165.0 if dialogue_left>0 else 25.0
 		prompt.position = (ui.world_to_ui(player.global_position)+Vector2(-140,offset_y)).clamp(Vector2(15,170),Vector2(1620,940))
 		prompt_text.text = "E   "+("Enter bakery" if near_exit=="bakery" else ("Go to "+exits[near_exit].get("sign","the next path") if near_exit!="" else interactables[nearest]["name"]))
+		if near_exit.is_empty() and nearest=="mill_keeper":
+			if state.stoneback_stage==GameState.StonebackStage.RETURN:
+				prompt_text.text = "E   Return the Ivykeep Seal"
+			elif state.stoneback_stage==GameState.StonebackStage.AVAILABLE and conversation_actor==nearest and dialogue_left>0:
+				prompt_text.text = "E   Accept quest"
 	var target: Dictionary = {}
 	if state.tracked_quest=="morning_rounds" and zone=="town" and quest_stage<5:
 		target = interactables[QUEST_TARGETS[quest_stage]]
@@ -1444,6 +1468,8 @@ func _update_prompt() -> void:
 			target.at = target.anchor.position
 		elif zone=="district" and (not state.smith_accepted or state.can_claim_smith()):
 			target = {"at":exits.forge.at,"height":40.0}
+	if zone=="mill_room" and (state.stoneback_stage == GameState.StonebackStage.AVAILABLE or state.stoneback_stage == GameState.StonebackStage.RETURN):
+		target = interactables.mill_keeper
 	quest_marker.visible = not target.is_empty() and not transitioning and not paused
 	if quest_marker.visible:
 		var at: Vector2 = target.anchor.position if target.has("anchor") else target.at

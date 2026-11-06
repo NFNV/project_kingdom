@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://experiments/anime_hub_demo_v07/assets/loot/treasure_chest.gd" id="1"]
+[ext_resource type="Texture2D" path="res://experiments/anime_hub_demo_v07/assets/loot/oak_chest.png" id="2"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_closed"]
+atlas = ExtResource("2")
+region = Rect2(363, 108, 440, 504)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_opened"]
+atlas = ExtResource("2")
+region = Rect2(1367, 108, 440, 504)
+filter_clip = true
+
+[node name="TreasureChest" type="Node2D"]
+texture_filter = 2
+script = ExtResource("1")
+closed_texture = SubResource("AtlasTexture_closed")
+opened_texture = SubResource("AtlasTexture_opened")
+
+[node name="Sprite" type="Sprite2D" parent="."]

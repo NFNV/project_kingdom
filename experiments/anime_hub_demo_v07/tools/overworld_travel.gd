@@ -70,6 +70,7 @@ func begin(from_zone := "town") -> void:
 	overworld.return_requested.connect(return_to_town,CONNECT_DEFERRED)
 	overworld.mill_requested.connect(visit_mill,CONNECT_DEFERRED)
 	overworld.save_requested.connect(save_from_overworld)
+	overworld.journey_loot_claimed.connect(save_arena_loot)
 	get_tree().root.add_child(overworld)
 	if from_zone=="mill_garden": overworld.enter_from_mill()
 	else: overworld.enter_from_town()
@@ -97,6 +98,10 @@ func save_from_overworld() -> void:
 	var saved := save_checkpoint()
 	overworld.notice = ("Journey saved · Continue returns to Windsong Mill's garden." if hub.zone in ["mill_garden","mill_room","mill_loft"] else "Journey saved · Continue returns to Garden Square's southwest gate.") if saved else hub.saves.last_error
 	overworld.notice_left = 6
+
+func save_arena_loot() -> void:
+	if hub.autosave_enabled and not save_checkpoint(true):
+		overworld.arena.loot_message = "Ivykeep Seal collected · Autosave failed"
 
 func _process(_delta: float) -> void:
 	if is_instance_valid(overworld) and not regional_visit:

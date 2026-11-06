@@ -3,6 +3,7 @@ signal return_requested
 signal mill_requested
 signal save_requested
 signal journey_clock_changed(phase: float)
+signal journey_loot_claimed
 var linked_journey := false
 var transitioning := false
 var gate_cooldown := .25
@@ -610,9 +611,14 @@ func draw_hud() -> void:
 	panel(Rect2(24,22,316,74),Color("203e36"))
 	text(Vector2(40,46),"THE GREENSHIRE  /  MOSSWOOD",12,Color("d1c38d"))
 	text(Vector2(40,77),"A little world to explore",23)
-	if player.distance_to(Stoneback.SITE)<19 and boss.phase in ["idle", "defeated"]:
+	if is_instance_valid(journey_loadout) and journey_loadout.tracked_quest == journey_loadout.STONEBACK_QUEST:
+		var stage: int = journey_loadout.stoneback_stage
+		if stage in [journey_loadout.StonebackStage.ACCEPTED, journey_loadout.StonebackStage.RETURN]:
+			panel(Rect2(24,106,450,40))
+			text(Vector2(40,132),journey_loadout.stoneback_text(),15)
+	if player.distance_to(Stoneback.SITE)<19 and boss.phase == "idle":
 		panel(Rect2(710,184,500,40))
-		text(Vector2(728,210),"IVYKEEP RUINS  ·  F Rematch Stoneback" if boss.phase == "defeated" else "IVYKEEP RUINS  ·  F Accept Stoneback's challenge",16)
+		text(Vector2(728,210),"IVYKEEP RUINS  ·  F Accept Stoneback's challenge",16)
 	elif near_landmark!="":
 		panel(Rect2(710,184,500,40))
 		text(Vector2(728,210),near_landmark+("  ·  F Enter Garden Square" if can_enter_town() else ("  ·  F Visit Windsong Mill" if can_enter_mill() else "  ·  F Inspect")),16)
@@ -758,7 +764,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				save_requested.emit()
 				get_viewport().set_input_as_handled()
 		KEY_F:
-			if not paused and not region_map and boss.phase in ["idle", "defeated"] and player.distance_to(Stoneback.SITE)<19:
+			if not paused and not region_map and boss.phase == "idle" and player.distance_to(Stoneback.SITE)<19:
 				transitioning = true
 				velocity = Vector2.ZERO
 				enter_ivykeep.call_deferred()
@@ -799,11 +805,13 @@ func enter_ivykeep() -> void:
 	arena.boss = boss
 	arena.actor_tint = light_tint
 	if is_instance_valid(journey_loadout):
+		arena.journey_state = journey_loadout
 		arena.state.gear = journey_loadout.equipped_ids()
 		arena.state.attributes = journey_loadout.stats()
 	if is_instance_valid(journey_audio):
 		arena.audio = journey_audio
 	arena.return_requested.connect(leave_ivykeep, CONNECT_DEFERRED)
+	arena.loot_claimed.connect(journey_loot_claimed.emit)
 	hide()
 	get_tree().root.add_child(arena)
 	get_window().title = "Project Kingdom — Ivykeep Ruins"
@@ -814,7 +822,8 @@ func enter_ivykeep() -> void:
 func leave_ivykeep() -> void:
 	await fade_ivykeep(1)
 	var won := boss.phase == "defeated"
-	if not won: boss.phase = "idle"
+	boss.set_phase("idle", 0)
+	boss.health = Stoneback.HEALTH
 	arena.hide()
 	arena.queue_free()
 	arena = null
@@ -822,7 +831,7 @@ func leave_ivykeep() -> void:
 	update_camera()
 	update_visible()
 	get_window().title = "Project Kingdom — The Greenshire"
-	notice = "Stoneback yields Ivykeep Ruins." if won else "You returned from Ivykeep Ruins."
+	notice = "Stoneback is ready for another duel." if won else "You returned from Ivykeep Ruins."
 	notice_left = 5
 	await fade_ivykeep(0)
 	transitioning = false

@@ -1,6 +1,6 @@
 extends RefCounted
 ## Whitelisted, versioned JSON. Validate everything before touching live state.
-const VERSION := 4
+const VERSION := 5
 const POTION_IDS := ["healing_draught","wind_tonic"]
 const Legacy := preload("res://experiments/anime_hub_demo_v07/tools/save_v1.gd")
 const State := preload("res://experiments/anime_hub_demo_v07/tools/game_state.gd")
@@ -101,7 +101,12 @@ func validate(doc: Variant) -> bool:
 		return false
 	if smith.rewarded and (not smith.accepted or not smith.tools_recovered):
 		return false
-	if data.get("tracked_quest") not in ["morning_rounds","briarwood_patrol","emberforge_tools"]:
+	if data.get("tracked_quest") not in ["morning_rounds","briarwood_patrol","emberforge_tools",State.STONEBACK_QUEST]:
+		return false
+	var stoneback_stage: Variant = data.get("stoneback_stage")
+	if not whole(stoneback_stage,State.StonebackStage.AVAILABLE,State.StonebackStage.COMPLETE):
+		return false
+	if int(items[State.STONEBACK_RELIC]) != (1 if stoneback_stage == State.StonebackStage.RETURN else 0):
 		return false
 	var loot: Variant = data.get("loot")
 	if not loot is Dictionary or loot.size()>12:
@@ -159,17 +164,22 @@ func upgrade(source: Variant) -> Dictionary:
 		result.state.smith = {"accepted":false,"rewarded":false,"tools_recovered":recovered}
 		result.state.items.smith_tools = 1 if recovered else 0
 		result.state.tracked_quest = "briarwood_patrol"
+		result.state.stoneback_stage = State.StonebackStage.AVAILABLE
 		migrated = true
 		return result
-	if source.get("version")==2 or source.get("version")==3:
+	if source.get("version")==2 or source.get("version")==3 or source.get("version")==4:
 		# Add only items introduced since the saved version.
 		var needs_shields: bool = source.version == 2
-		var new_items := POTION_IDS.duplicate()
+		var new_items := [State.STONEBACK_RELIC]
+		if source.version < 4:
+			new_items.append_array(POTION_IDS)
 		if needs_shields:
 			new_items.append_array(["trail_shield","ironleaf_shield"])
 		var result: Dictionary = source.duplicate(true)
 		var data: Variant = result.get("state")
 		if not data is Dictionary or not data.get("items") is Dictionary or not data.get("equipment") is Dictionary:
+			return {}
+		if data.has("stoneback_stage"):
 			return {}
 		if data.items.size()!=definitions.size()-new_items.size() or data.equipment.size()!=State.SLOTS.size()-int(needs_shields):
 			return {}
@@ -181,6 +191,7 @@ func upgrade(source: Variant) -> Dictionary:
 			if data.equipment.has("shield"):
 				return {}
 			data.equipment.shield = "trail_shield"
+		data.stoneback_stage = State.StonebackStage.AVAILABLE
 		result.version = VERSION
 		migrated = true
 		return result
