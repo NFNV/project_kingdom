@@ -52,6 +52,8 @@ func validate(doc: Variant) -> bool:
 	var player: Variant = doc.get("player")
 	if not data is Dictionary or not player is Dictionary:
 		return false
+	if data.has("appearance") and not State.HeroLook.valid(data.appearance):
+		return false
 	if not whole(data.get("coins"),0,999999) or not whole(data.get("delivery_stage"),0,5) or not number(data.get("clock"),0,3.99999999) or not whole(data.get("forest_recoveries"),0,999999):
 		return false
 	if not ids_valid(data.get("discoveries"),MEMORIES) or not ids_valid(data.get("district_places"),PLACES) or not ids_valid(data.get("forest_defeated"),enemy_ids()):
@@ -246,6 +248,8 @@ func _read(path: String) -> Dictionary:
 	var document := upgrade(parser.data)
 	if document.is_empty() or not validate(document):
 		return {}
+	if document.state.has("appearance"):
+		document.state.appearance = State.HeroLook.normalized(document.state.appearance)
 	return document
 
 func load_document(path := DEFAULT_PATH) -> Dictionary:

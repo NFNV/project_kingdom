@@ -2,6 +2,9 @@ extends AnimatedSprite2D
 
 # Drawn cycles advance by travelled distance. No timer-driven stepping into walls.
 const ROOT := "res://experiments/anime_hub_demo_v07/assets/motion/"
+const HeroLook := preload("res://experiments/anime_hub_demo_v07/tools/hero_look.gd")
+const DogArt := preload("res://experiments/anime_hub_demo_v07/tools/dog_art.gd")
+const Art := preload("res://experiments/anime_hub_demo_v07/tools/art_style.gd")
 const DIRECTIONS := ["e","se","s","sw","w","nw","n","ne"]
 const DIAGONALS := ["se","sw","nw","ne"]
 var actor_id := "cat"
@@ -19,11 +22,13 @@ var gesture_count := 0
 var body_origin := Vector2.ZERO
 var registered := false
 var heading_angle := PI/4.0
+var appearance: Dictionary = {}
+var dog_cel: Dictionary = {}
 const TURN_SPEED := 24.0
 
 
 func configure(id: String, height: float, phase_offset := 0.0) -> void:
-	material = preload("res://experiments/anime_hub_demo_v07/tools/art_style.gd").character_material()
+	material = Art.character_material()
 	actor_id = id
 	display_height = height
 	idle_clock = phase_offset
@@ -35,6 +40,25 @@ func configure(id: String, height: float, phase_offset := 0.0) -> void:
 	eight_directions = id=="cat"
 	set_pose("idle","se",0)
 
+func set_appearance(look: Dictionary) -> void:
+	if appearance == look:
+		return
+	appearance = look.duplicate()
+	material = HeroLook.palette(look) if HeroLook.uses_palette(look) else Art.character_material()
+	var previous_frame := frame
+	sprite_frames = DogArt.motion_frames() if is_dog() else load(ROOT+actor_id+"_frames.tres")
+	flip_h = false
+	dog_cel = {}
+	registered = false
+	set_pose(state,facing_direction,previous_frame)
+
+func is_dog() -> bool:
+	return appearance.get("species")=="dog"
+
+func dog_anchor(key: String) -> Vector2:
+	var point := DogArt.point(dog_cel,key,flip_h)
+	point.y += offset.y+float(dog_cel.anchor[1])
+	return transform*point
 
 func direction_for(vector: Vector2) -> String:
 	if vector.length_squared()<.001:
@@ -109,6 +133,19 @@ func set_pose(next_state: String, direction_name: String, frame_index: int, tran
 	animation = key
 	speed_scale = 0
 	frame = mini(frame_index,sprite_frames.get_frame_count(key)-1)
+	if is_dog():
+		dog_cel = DogArt.motion_cel(next_state,direction_name,frame)
+		flip_h = HeroLook.MIRRORED.has(direction_name)
+		base_scale = display_height/float(dog_cel.height)
+		scale = Vector2.ONE*base_scale
+		var bob := -absf(sin(phase*TAU))*display_height*.012
+		if next_state=="run":
+			# Rise only between contacts so the extended landing boot meets the ground.
+			var half_stride := fposmod(phase*2.0,1.0)
+			bob = -sin(PI*clampf((half_stride-.5)*2.0,0.0,1.0))*display_height*.05
+		offset = DogArt.offset(dog_cel,flip_h)+Vector2(0,bob/base_scale if next_state!="idle" else 0.0)
+		DogArt.color_pose(material,dog_cel)
+		return
 	base_scale = display_height/float(metadata[direction_name]["height"])
 	scale = Vector2.ONE*base_scale
 	if metadata[direction_name].has("body_registration"):
@@ -127,3 +164,11 @@ func set_pose(next_state: String, direction_name: String, frame_index: int, tran
 		# Texture-space offset leaves the actor/preview placement and physics foot
 		# origin untouched, including when a caller positions this sprite directly.
 		offset = Vector2(-256,-256)+(body_origin+Vector2(0,bob))/scale
+		if not appearance.is_empty() and HeroLook.uses_palette(appearance):
+			var atlas: AtlasTexture = sprite_frames.get_frame_texture(key,frame)
+			var center := Vector2(pose.head_center[0],pose.head_center[1])
+			var width: float = pose.head_width
+			var bottom := center.y*2.0+5
+			var box := Rect2(atlas.region.position+Vector2(center.x-width*.75,-1),Vector2(width*1.5,bottom+1))
+			HeroLook.set_head_box(material,box,atlas.atlas.get_size())
+			material.set_shader_parameter("eye_points",HeroLook.eye_points(direction_name))

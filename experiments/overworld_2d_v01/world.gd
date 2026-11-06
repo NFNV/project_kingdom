@@ -94,6 +94,8 @@ func _ready() -> void:
 	font = ThemeDB.fallback_font
 	ground_contacts = JSON.parse_string(FileAccess.get_file_as_string(ROOT+"art/ground_contacts.json")).assets
 	mounted_rider = Rider.new()
+	if is_instance_valid(journey_loadout):
+		mounted_rider.set_appearance(journey_loadout.appearance)
 	moon_texture = cache_texture(ROOT+"art/sky/moon_full_v1.png")
 	sun_texture = cache_texture(ROOT+"art/sky/sun_painted_v1.png")
 	var sky := TextureRect.new()
@@ -808,6 +810,7 @@ func enter_ivykeep() -> void:
 		arena.journey_state = journey_loadout
 		arena.state.gear = journey_loadout.equipped_ids()
 		arena.state.attributes = journey_loadout.stats()
+		arena.state.appearance = journey_loadout.appearance.duplicate()
 	if is_instance_valid(journey_audio):
 		arena.audio = journey_audio
 	arena.return_requested.connect(leave_ivykeep, CONNECT_DEFERRED)

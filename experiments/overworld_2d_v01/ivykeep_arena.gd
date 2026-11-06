@@ -16,6 +16,7 @@ const START := Vector2(960, 820)
 const CHEST_REACH := 104.0
 
 class DuelState extends RefCounted:
+	var appearance := Fighter.HeroLook.DEFAULT.duplicate()
 	var maximum_health := Boss.HEARTS
 	var health := Boss.HEARTS
 	var gear := {"weapon": "travel_sword", "shield": "trail_shield"}

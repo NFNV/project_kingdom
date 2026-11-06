@@ -372,6 +372,8 @@ func verify_title_and_autosave() -> void:
 	flow.begin_new()
 	check(flow.confirmation.visible and flow.game.state.smith_rewarded,"New Journey asks before replacing an existing autosave")
 	flow.begin_new(true)
+	check(flow.creator.visible and flow.game.state.smith_rewarded,"Creator opens before the existing journey is replaced")
+	flow.creator.submit()
 	game = flow.game
 	Engine.max_fps = 0
 	game.auto_clock = false

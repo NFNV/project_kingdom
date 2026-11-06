@@ -149,6 +149,8 @@ const POTIONS := [
 ]
 
 
+var starting_appearance := GameState.HeroLook.DEFAULT.duplicate()
+
 func _ready() -> void:
 	get_window().title = "Project Kingdom — Garden Square"
 	RenderSettings.configure(get_window())
@@ -161,6 +163,7 @@ func _ready() -> void:
 	Engine.physics_ticks_per_second = 60
 	get_tree().physics_interpolation = true
 	state = GameState.new()
+	state.appearance = starting_appearance.duplicate()
 	state.name = "Journey"
 	add_child(state)
 	audio = Soundscape.new()
@@ -1004,6 +1007,7 @@ func load_game() -> bool:
 	set_paused(false)
 	state.restore(document.state,int(document.player.health))
 	_load_zone(document.player.zone,"start")
+	player.set_appearance(state.appearance)
 	var coords: Array = document.player.position
 	var at := Vector2(coords[0],coords[1])
 	if zone=="mill_garden" and not document.player.has("mill_garden_layout"):

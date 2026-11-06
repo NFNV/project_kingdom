@@ -1,6 +1,8 @@
 extends RefCounted
 # Eight-direction cutout rig. Every view shares timing, scale and ground anchor.
 const ART := "res://experiments/overworld_2d_v01/art/rider/"
+const HeroLook := preload("res://experiments/anime_hub_demo_v07/tools/hero_look.gd")
+const DogArt := preload("res://experiments/anime_hub_demo_v07/tools/dog_art.gd")
 const ANCHOR := Vector2(128,225)
 const HOP_DISTANCE := 6.0
 # phase, elevation, body width/height, hind angle, foot lift, rider lag, pitch
@@ -27,7 +29,13 @@ var light_tint := Color.WHITE
 var direction_index := 0
 var mirror_view := false
 static var hero_heads: Dictionary = {}
+static var mounted_dog_image: Image
+static var mounted_dog_mask: Image
 var textures: Dictionary = {}
+var appearance := HeroLook.DEFAULT.duplicate()
+var painted_heads: Dictionary = {}
+var painted_dogs: Dictionary = {}
+var painted_parts: Dictionary = {}
 var phase := 0.0
 var clock := 0.0
 var active := false
@@ -57,6 +65,85 @@ func _init() -> void:
 			var id: String = view+"_"+layer
 			textures[id] = load(ART+id+".svg")
 	textures.s_fore = load(ART+"s_fore.svg")
+
+func set_appearance(look: Dictionary) -> void:
+	if appearance == look:
+		return
+	appearance = look.duplicate()
+	painted_heads.clear()
+	painted_dogs.clear()
+	painted_parts.clear()
+
+func painted(texture: Texture2D, direction := "", is_scarf := false, dog_pose: Dictionary = {}) -> Texture2D:
+	# The rider is drawn into the overworld's shared, depth-sorted canvas. Cache
+	# these small cutouts per look so other scenery can retain its own material.
+	var palette_color: Color = HeroLook.SCARF_COLORS[int(appearance.scarf)] if is_scarf else HeroLook.COAT_COLORS[int(appearance.coat)]
+	var eye_color: Color = HeroLook.EYE_COLORS[int(appearance.eyes)]
+	var is_head := not direction.is_empty()
+	var dog := not dog_pose.is_empty()
+	var marks := int(appearance.markings) if is_head else 0
+	var eyes := DogArt.eyes(dog_pose) if dog else HeroLook.eye_points(direction)
+	var scarf_color: Color = HeroLook.SCARF_COLORS[int(appearance.scarf)]
+	if palette_color==Color.WHITE and marks==0 and (eyes.x<0 or eye_color==Color.WHITE) and (not dog or scarf_color==Color.WHITE):
+		return texture
+	var image: Image
+	var mask: Image
+	var head := Rect2(0,0,1,1)
+	if dog:
+		var atlas := texture as AtlasTexture
+		if mounted_dog_image==null:
+			mounted_dog_image = atlas.atlas.get_image()
+			mounted_dog_mask = dog_pose.palette_mask.get_image()
+		image = mounted_dog_image.get_region(Rect2i(atlas.region))
+		mask = mounted_dog_mask.get_region(Rect2i(atlas.region))
+		var raw := DogArt.head_box(dog_pose)
+		var original := Vector2(image.get_size())
+		head = Rect2(raw.position/original,raw.size/original)
+	else:
+		image = texture.get_image()
+	if is_head and image.get_width()>192:
+		image.resize(192,roundi(image.get_height()*192.0/image.get_width()),Image.INTERPOLATE_LANCZOS)
+		if dog:
+			mask.resize(image.get_width(),image.get_height(),Image.INTERPOLATE_BILINEAR)
+	image.convert(Image.FORMAT_RGBA8)
+	var area := image.get_used_rect()
+	for y in range(area.position.y,area.end.y):
+		for x in range(area.position.x,area.end.x):
+			var pixel := image.get_pixel(x,y)
+			if pixel.a==0:
+				continue
+			var luma := pixel.get_luminance()
+			var warm := smoothstep(.06,.22,pixel.r-pixel.g)*smoothstep(.09,.20,pixel.g-pixel.b)
+			var fur := warm*smoothstep(.44,.70,pixel.r)
+			var point := (Vector2(x,y)/Vector2(image.get_size())-head.position)/head.size
+			var on_head := Rect2(0,0,1,1).has_point(point)
+			var material_weights := Color.BLACK
+			if dog:
+				material_weights = mask.get_pixel(x,y)
+				fur = material_weights.r
+			var iris := 0.0
+			if eyes.x>=0:
+				var distance := ((point-Vector2(eyes.x,eyes.y))/Vector2(.044,.077)).length()
+				distance = minf(distance,((point-Vector2(eyes.z,eyes.w))/Vector2(.044,.077)).length())
+				iris = (1.0-smoothstep(.68,1.28,distance))*smoothstep(.075,.22,pixel.r-pixel.b)*smoothstep(.18,.4,pixel.r)
+			var ink := pixel
+			if is_scarf:
+				ink = palette_color*(.30+1.45*luma)
+			elif palette_color!=Color.WHITE:
+				ink = ink.lerp(palette_color*(.37+.84*luma),fur*(1.0-iris))
+			if marks==1 and on_head:
+				ink = ink.lerp(ink+Color(.10,.07,.045,0),fur*(1.0-smoothstep(.40,.70,point.y)))
+			elif marks==2 and on_head:
+				var blaze := (1.0-smoothstep(.045,.105,absf(point.x-.5)))*smoothstep(.10,.28,point.y)*(1.0-smoothstep(.49,.70,point.y))
+				ink = ink.lerp(Color(.95,.87,.72)*(.65+.38*luma),fur*blaze*.9)
+			if eye_color!=Color.WHITE:
+				ink = ink.lerp(eye_color*(.30+1.4*luma),iris)
+			if dog and scarf_color!=Color.WHITE:
+				ink = ink.lerp(scarf_color*(.30+1.45*luma),material_weights.g)
+			ink.a = pixel.a
+			image.set_pixel(x,y,ink)
+	image.generate_mipmaps()
+	return ImageTexture.create_from_image(image)
 
 func set_direction(direction: Vector2) -> void:
 	if direction.length_squared()<.01:
@@ -142,7 +229,12 @@ func part(canvas: Node2D, id: String, origin: Vector2, scale: float, pivot: Vect
 	var xaxis := Vector2(cos(rotation),sin(rotation))*scale*stretch.x*flip
 	var yaxis := Vector2(-sin(rotation),cos(rotation))*scale*stretch.y
 	canvas.draw_set_transform_matrix(Transform2D(xaxis,yaxis,origin+(joint-ANCHOR+offset)*scale))
-	canvas.draw_texture_rect(textures[id],Rect2(-pivot,Vector2(256,256)),false,light_tint)
+	var texture: Texture2D = textures[id]
+	if id in ["scarf","scarf_tail","cat_tail"]:
+		if not painted_parts.has(id):
+			painted_parts[id] = painted(texture,"",id!="cat_tail")
+		texture = painted_parts[id]
+	canvas.draw_texture_rect(texture,Rect2(-pivot,Vector2(256,256)),false,light_tint)
 	canvas.draw_set_transform(Vector2.ZERO)
 
 func oval(canvas: Node2D, at: Vector2, size: Vector2, color: Color) -> void:
@@ -174,18 +266,21 @@ func draw(canvas: Node2D, at: Vector2, scale: float) -> void:
 		part(canvas,"hind_foot",at,scale,Vector2(83,214),foot_offset,p.hind*.6,Vector2.ONE,mirrored)
 	part(canvas,"frog_body",at,scale,Vector2(128,185),body_offset,0,body_scale)
 	part(canvas,"saddle",at,scale,Vector2(128,173),body_offset,p.pitch*.5)
-	for mirrored in [false,true]:
-		part(canvas,"cat_boot",at,scale,Vector2(109,148),body_offset,p.pitch,Vector2.ONE,mirrored)
-	part(canvas,"cat_tail",at,scale,Vector2(113,168),body_offset+Vector2(0,p.rider_lag*.4),sin(clock*3.2)*.045+p.pitch*2)
-	var rider := body_offset+Vector2(0,p.rider_lag)
-	part(canvas,"cat_torso",at,scale,Vector2(128,154),rider,p.pitch)
-	part(canvas,"n_hero_vest",at,scale,Vector2(128,154),rider,p.pitch)
-	for mirrored in [false,true]:
-		part(canvas,"cat_arm",at,scale,Vector2(109,115),rider,p.pitch*.7,Vector2.ONE,mirrored)
-	part(canvas,"backpack",at,scale,Vector2(128,150),rider,p.pitch*.6)
-	draw_hero_head(canvas,at,scale,rider+Vector2(0,p.rider_lag*.35),p.pitch*.5)
-	part(canvas,"scarf_tail",at,scale,Vector2(115,115),rider,p.pitch+sin(clock*6.5)*.07+air*.13)
-	part(canvas,"scarf",at,scale,Vector2(128,113),rider,p.pitch*.5)
+	if appearance.species=="dog":
+		draw_dog(canvas,at,scale,body_offset+Vector2(0,p.rider_lag),p.pitch)
+	else:
+		for mirrored in [false,true]:
+			part(canvas,"cat_boot",at,scale,Vector2(109,148),body_offset,p.pitch,Vector2.ONE,mirrored)
+		part(canvas,"cat_tail",at,scale,Vector2(113,168),body_offset+Vector2(0,p.rider_lag*.4),sin(clock*3.2)*.045+p.pitch*2)
+		var rider := body_offset+Vector2(0,p.rider_lag)
+		part(canvas,"cat_torso",at,scale,Vector2(128,154),rider,p.pitch)
+		part(canvas,"n_hero_vest",at,scale,Vector2(128,154),rider,p.pitch)
+		for mirrored in [false,true]:
+			part(canvas,"cat_arm",at,scale,Vector2(109,115),rider,p.pitch*.7,Vector2.ONE,mirrored)
+		part(canvas,"backpack",at,scale,Vector2(128,150),rider,p.pitch*.6)
+		draw_hero_head(canvas,at,scale,rider+Vector2(0,p.rider_lag*.35),p.pitch*.5)
+		part(canvas,"scarf_tail",at,scale,Vector2(115,115),rider,p.pitch+sin(clock*6.5)*.07+air*.13)
+		part(canvas,"scarf",at,scale,Vector2(128,113),rider,p.pitch*.5)
 
 func draw_directional(canvas: Node2D, at: Vector2, scale: float) -> void:
 	var p := pose()
@@ -210,21 +305,25 @@ func draw_directional(canvas: Node2D, at: Vector2, scale: float) -> void:
 		draw_profile_fore(canvas,at,scale,p,joints[1],Vector2.ONE)
 	else:
 		draw_profile_fore(canvas,at,scale,p,joints[3],Vector2(.82,.88))
-	part(canvas,view+"_boot",at,scale,Vector2(130,150),body_offset+Vector2(15,-5),p.pitch,Vector2(.9,.97))
+	if appearance.species=="cat":
+		part(canvas,view+"_boot",at,scale,Vector2(130,150),body_offset+Vector2(15,-5),p.pitch,Vector2(.9,.97))
 	part(canvas,view+"_body",at,scale,Vector2(128,185),body_offset,0,Vector2(p.width,p.height))
 	part(canvas,"saddle",at,scale,Vector2(128,173),body_offset,p.pitch*.5,Vector2(.93,1))
-	part(canvas,"cat_tail",at,scale,Vector2(113,168),body_offset+Vector2(-4,p.rider_lag*.4),sin(clock*3.2)*.045+p.pitch*2)
-	if view in ["s","se","e"]:
-		part(canvas,view+"_pack",at,scale,Vector2(104,139),rider,p.pitch*.5)
-	part(canvas,view+"_torso",at,scale,Vector2(128,154),rider,p.pitch)
-	part(canvas,view+"_hero_vest",at,scale,Vector2(128,154),rider,p.pitch)
-	part(canvas,view+"_arm",at,scale,Vector2(139,117),rider,p.pitch*.7)
-	if view=="ne":
-		part(canvas,view+"_pack",at,scale,Vector2(128,150),rider,p.pitch*.6)
-	draw_hero_head(canvas,at,scale,rider+Vector2(0,p.rider_lag*.35),p.pitch*.5)
-	part(canvas,"scarf_tail",at,scale,Vector2(115,115),rider,p.pitch+sin(clock*6.5)*.07+air*.13)
-	part(canvas,"scarf",at,scale,Vector2(128,113),rider,p.pitch*.5)
-	part(canvas,view+"_boot",at,scale,Vector2(130,150),body_offset,p.pitch)
+	if appearance.species=="dog":
+		draw_dog(canvas,at,scale,rider,p.pitch)
+	else:
+		part(canvas,"cat_tail",at,scale,Vector2(113,168),body_offset+Vector2(-4,p.rider_lag*.4),sin(clock*3.2)*.045+p.pitch*2)
+		if view in ["se","e"]:
+			part(canvas,view+"_pack",at,scale,Vector2(104,139),rider,p.pitch*.5)
+		part(canvas,view+"_torso",at,scale,Vector2(128,154),rider,p.pitch)
+		part(canvas,view+"_hero_vest",at,scale,Vector2(128,154),rider,p.pitch)
+		part(canvas,view+"_arm",at,scale,Vector2(139,117),rider,p.pitch*.7)
+		if view=="ne":
+			part(canvas,view+"_pack",at,scale,Vector2(128,150),rider,p.pitch*.6)
+		draw_hero_head(canvas,at,scale,rider+Vector2(0,p.rider_lag*.35),p.pitch*.5)
+		part(canvas,"scarf_tail",at,scale,Vector2(115,115),rider,p.pitch+sin(clock*6.5)*.07+air*.13)
+		part(canvas,"scarf",at,scale,Vector2(128,113),rider,p.pitch*.5)
+		part(canvas,view+"_boot",at,scale,Vector2(130,150),body_offset,p.pitch)
 	draw_profile_hind(canvas,at,scale,p,joints[0],Vector2.ONE)
 	if not rear_diagonal:
 		draw_profile_fore(canvas,at,scale,p,joints[1],Vector2.ONE)
@@ -258,22 +357,27 @@ func draw_front_layers(canvas: Node2D, at: Vector2, scale: float, p: Dictionary,
 		part(canvas,"hind_foot",at,scale,Vector2(83,214),Vector2(0,-maxf(p.elevation,0)+p.foot_lift),p.hind*.6,Vector2.ONE,side)
 	part(canvas,"s_body",at,scale,Vector2(128,185),body_offset,0,Vector2(p.width,p.height))
 	part(canvas,"saddle",at,scale,Vector2(128,173),body_offset,p.pitch*.5,Vector2(.93,1))
-	part(canvas,"cat_tail",at,scale,Vector2(113,168),body_offset+Vector2(-4,p.rider_lag*.4),sin(clock*3.2)*.045+p.pitch*2)
-	part(canvas,"s_torso",at,scale,Vector2(128,154),rider,p.pitch)
-	part(canvas,"s_hero_vest",at,scale,Vector2(128,154),rider,p.pitch)
-	for side in [false,true]:
-		part(canvas,"cat_arm",at,scale,Vector2(109,115),rider,p.pitch*.7,Vector2.ONE,side)
-		part(canvas,"cat_boot",at,scale,Vector2(109,148),body_offset,p.pitch,Vector2.ONE,side)
-	draw_hero_head(canvas,at,scale,rider+Vector2(0,p.rider_lag*.35),p.pitch*.5)
-	part(canvas,"scarf_tail",at,scale,Vector2(115,115),rider,p.pitch+sin(clock*6.5)*.07+air*.13)
-	part(canvas,"scarf",at,scale,Vector2(128,113),rider,p.pitch*.5)
+	if appearance.species=="dog":
+		draw_dog(canvas,at,scale,rider,p.pitch)
+	else:
+		part(canvas,"cat_tail",at,scale,Vector2(113,168),body_offset+Vector2(-4,p.rider_lag*.4),sin(clock*3.2)*.045+p.pitch*2)
+		part(canvas,"s_torso",at,scale,Vector2(128,154),rider,p.pitch)
+		part(canvas,"s_hero_vest",at,scale,Vector2(128,154),rider,p.pitch)
+		for side in [false,true]:
+			part(canvas,"cat_arm",at,scale,Vector2(109,115),rider,p.pitch*.7,Vector2.ONE,side)
+			part(canvas,"cat_boot",at,scale,Vector2(109,148),body_offset,p.pitch,Vector2.ONE,side)
+		draw_hero_head(canvas,at,scale,rider+Vector2(0,p.rider_lag*.35),p.pitch*.5)
+		part(canvas,"scarf_tail",at,scale,Vector2(115,115),rider,p.pitch+sin(clock*6.5)*.07+air*.13)
+		part(canvas,"scarf",at,scale,Vector2(128,113),rider,p.pitch*.5)
 	for side in [false,true]:
 		part(canvas,"s_fore",at,scale,Vector2(95,216),fore_offset(p),p.hind*.22,Vector2(1,p.height),side)
 	part(canvas,"s_face",at,scale,Vector2(128,173),body_offset)
 
 func draw_hero_head(canvas: Node2D, at: Vector2, scale: float, offset: Vector2, angle: float) -> void:
-	# Actual protagonist art in each view, including the separately drawn west views.
-	var texture: Texture2D = hero_heads[direction_name().to_lower()]
+	var direction := direction_name().to_lower()
+	if not painted_heads.has(direction):
+		painted_heads[direction] = painted(hero_heads[direction],direction)
+	var texture: Texture2D = painted_heads[direction]
 	var width := 70.0
 	var height := width*texture.get_height()/texture.get_width()
 	var shift: float = {"n":0.0,"ne":8.0,"e":10.0,"se":6.0,"s":0.0}[view_name()]
@@ -283,4 +387,18 @@ func draw_hero_head(canvas: Node2D, at: Vector2, scale: float, offset: Vector2, 
 	var anchor := at+(Vector2(shift,110-ANCHOR.y)+offset)*scale
 	canvas.draw_set_transform(anchor,angle,Vector2.ONE*scale)
 	canvas.draw_texture_rect(texture,Rect2(-width*.5,-height,width,height),false,light_tint)
+	canvas.draw_set_transform(Vector2.ZERO)
+
+func draw_dog(canvas: Node2D, at: Vector2, scale: float, offset: Vector2, angle: float) -> void:
+	var view := view_name()
+	var entry := DogArt.cel("mounted",view)
+	if not painted_dogs.has(view):
+		painted_dogs[view] = painted(entry.texture,view,false,entry)
+	var texture: Texture2D = painted_dogs[view]
+	var draw_scale := 126.0/float(entry.height)
+	var size := Vector2(entry.region[2],entry.region[3])*draw_scale
+	var anchor := at+(Vector2(0,153-ANCHOR.y)+offset)*scale
+	var turn := -1.0 if mirror_view else 1.0
+	canvas.draw_set_transform_matrix(Transform2D(angle*turn,Vector2(turn*scale,scale),0,anchor))
+	canvas.draw_texture_rect(texture,Rect2(-DogArt.vector(entry.anchor)*draw_scale,size),false,light_tint)
 	canvas.draw_set_transform(Vector2.ZERO)

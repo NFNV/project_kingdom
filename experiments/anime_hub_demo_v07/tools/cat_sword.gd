@@ -13,7 +13,9 @@ var pose_key := ""
 func sync_pose() -> void:
 	var facing: String = actor.sprite.facing_direction
 	var was_visible := visible
-	visible = actor.is_in_combat() and actor.hub.state.equipped_id("weapon")!="" and actor.swing<=0 and actor.roll_left<=0
+	var dog: bool = actor.sprite.is_dog()
+	var dog_attack: bool = dog and actor.swing>0
+	visible = actor.is_in_combat() and actor.hub.state.equipped_id("weapon")!="" and (actor.swing<=0 or dog_attack) and actor.roll_left<=0
 	if not visible: return
 	# A relaxed low carry keeps the blade outside the face as an arm swings
 	# across the chest. The separate attack art raises it for an actual strike.
@@ -22,12 +24,19 @@ func sync_pose() -> void:
 		# Keep the grip behind the far arm and show the blade above the tail.
 		rotation = 1.35
 	scale = Vector2.ONE*actor.sprite.display_height/73.0*.82
-	hand_anchor = Pose.hand(actor,"weapon")
+	hand_anchor = actor.combat_art.dog_grip if dog_attack else Pose.hand(actor,"weapon")
+	if dog_attack:
+		rotation = actor.combat_art.dog_blade_angle
 	position = hand_anchor-Vector2(0,-2).rotated(rotation)*scale
-	near_hand = facing in ["e","se","s","ne"] and Pose.measured(actor,"weapon")
-	Pose.order(actor,self,not near_hand)
+	near_hand = not dog and facing in ["e","se","s","ne"] and Pose.measured(actor,"weapon")
+	var in_front: bool = actor.combat_art.dog_weapon_in_front if dog_attack else (facing not in ["n","nw"] if dog else near_hand)
+	if dog_attack and not in_front:
+		if get_index()>actor.combat_art.get_index():
+			actor.move_child(self,actor.combat_art.get_index())
+	else:
+		Pose.order(actor,self,not in_front)
 	modulate = actor.sprite.modulate
-	var key: String = actor.sprite.animation+"/"+str(actor.sprite.frame)
+	var key: String = "attack/"+actor.combat_art.current_direction+"/"+str(actor.combat_art.current_pose) if dog_attack else actor.sprite.animation+"/"+str(actor.sprite.frame)
 	if not was_visible or key!=pose_key: reset_physics_interpolation()
 	pose_key = key
 	queue_redraw()

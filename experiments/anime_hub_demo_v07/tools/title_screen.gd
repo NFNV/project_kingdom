@@ -1,10 +1,12 @@
 extends Node
 const ROOT := "res://experiments/anime_hub_demo_v07/"
 const UI := preload("res://experiments/anime_hub_demo_v07/tools/rpg_ui.gd")
+const Creator := preload("res://experiments/anime_hub_demo_v07/tools/character_creator.gd")
 var game: Node2D
 var save_path := "user://kingdom_journey.json"
 var menu: Control
 var confirmation: Control
+var creator: Control
 var continue_button: Button
 var summary: Label
 
@@ -46,12 +48,17 @@ func _ready() -> void:
 	var back := UI.button(prompt,"Back",Vector2(346,220),Vector2(280,48))
 	back.pressed.connect(func(): confirmation.hide())
 	confirmation.hide()
+	creator = Creator.new()
+	layer.add_child(creator)
+	creator.accepted.connect(start_created_journey)
+	creator.cancelled.connect(close_creator)
 	show_title()
 	if "--continue" in OS.get_cmdline_user_args():
 		continue_journey.call_deferred()
 
-func spawn_game() -> void:
+func spawn_game(appearance := Creator.Look.DEFAULT) -> void:
 	game = load(ROOT+"demo.tscn").instantiate()
+	game.starting_appearance = appearance
 	add_child(game)
 	game.save_path = save_path
 
@@ -70,21 +77,32 @@ func show_title() -> void:
 	game.ui.hide()
 	game.player.stop_motion()
 	menu.show()
+	creator.hide()
 	var document: Dictionary = game.saves.latest_document(save_path)
 	continue_button.disabled = document.is_empty()
 	if document.is_empty():
 		summary.text = "A fresh start in Garden Square. Meet the neighbours and find your own path." if not game.saves.has_journey(save_path) else game.saves.last_error
 	else:
-		summary.text = "%s\n%d coins · %d bandits defeated\nYour equipment and quest progress are waiting." % [game.Map.NAMES[document.player.zone],int(document.state.coins),document.state.forest_defeated.size()]
+		var appearance: Dictionary = document.state.get("appearance",Creator.Look.DEFAULT)
+		summary.text = "%s · %s\n%d coins · %d bandits defeated\nYour equipment and quest progress are waiting." % [appearance.name,game.Map.NAMES[document.player.zone],int(document.state.coins),document.state.forest_defeated.size()]
 		continue_button.grab_focus()
 
 func begin_new(confirmed := false) -> void:
 	if game.saves.has_journey(save_path) and not confirmed:
 		confirmation.show()
 		return
+	confirmation.hide()
+	menu.hide()
+	creator.open()
+
+func close_creator() -> void:
+	creator.hide()
+	menu.show()
+
+func start_created_journey(appearance: Dictionary) -> void:
 	remove_child(game)
 	game.free()
-	spawn_game()
+	spawn_game(appearance)
 	finish_menu()
 	game.queue_autosave()
 
@@ -98,6 +116,7 @@ func continue_journey() -> bool:
 func finish_menu() -> void:
 	menu.hide()
 	confirmation.hide()
+	creator.hide()
 	game.title_active = false
 	game.autosave_enabled = true
 	game.ui.show()
@@ -115,9 +134,11 @@ func return_to_title() -> bool:
 	return true
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not is_instance_valid(menu) or not menu.visible:
+	if not is_instance_valid(menu) or (not menu.visible and not creator.visible):
 		return
-	if event.is_action_pressed("hub_load") and not continue_button.disabled:
+	if event.is_action_pressed("hub_pause") and creator.visible:
+		close_creator()
+	elif event.is_action_pressed("hub_load") and not confirmation.visible and not creator.visible and not continue_button.disabled:
 		continue_journey()
 	elif event.is_action_pressed("hub_pause") and confirmation.visible:
 		confirmation.hide()

@@ -4,6 +4,7 @@ extends Node
 
 signal changed
 const ROOT := "res://experiments/anime_hub_demo_v07/"
+const HeroLook := preload("res://experiments/anime_hub_demo_v07/tools/hero_look.gd")
 const QUEST_ID := "briarwood_patrol"
 const STONEBACK_QUEST := "stoneback_trial"
 const STONEBACK_RELIC := "ivykeep_seal"
@@ -29,6 +30,9 @@ var smith_accepted := false
 var smith_rewarded := false
 var tools_recovered := false
 var tracked_quest := "briarwood_patrol"
+var appearance: Dictionary = HeroLook.DEFAULT.duplicate():
+	set(value):
+		appearance = HeroLook.normalized(value)
 var stoneback_stage: int = StonebackStage.AVAILABLE
 var coins := 12
 var delivery_stage := 0
@@ -420,6 +424,7 @@ func snapshot() -> Dictionary:
 		"forest_patrol_defeated":forest_patrol_defeated.keys(),
 		"loot":pending_loot.duplicate(true),"items":item_counts(),
 		"equipment":equipped_ids(),"tracked_quest":tracked_quest,
+		"appearance":appearance.duplicate(),
 		"stoneback_stage":stoneback_stage,
 		"smith":{"accepted":smith_accepted,"rewarded":smith_rewarded,"tools_recovered":tools_recovered},
 		"quest":{"accepted":accepted,"rewarded":rewarded}}
@@ -452,6 +457,7 @@ func restore(data: Dictionary, player_health: int) -> void:
 	smith_rewarded = bool(data.smith.rewarded)
 	tools_recovered = bool(data.smith.tools_recovered)
 	tracked_quest = data.tracked_quest
+	appearance = data.get("appearance",HeroLook.DEFAULT).duplicate()
 	stoneback_stage = int(data.stoneback_stage)
 	for id in data.items:
 		if int(data.items[id])>0:
