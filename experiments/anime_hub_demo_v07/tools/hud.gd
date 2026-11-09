@@ -345,6 +345,9 @@ func refresh() -> void:
 	if hub.state.tracked_quest==hub.GameState.STONEBACK_QUEST and hub.zone!="mill_loft":
 		objective.text = hub.state.stoneback_text()
 		status_label.text = "%d coins  ·  J journal  ·  I satchel" % hub.coins
+	elif hub.state.tracked_quest==hub.GameState.LIGHTHOUSE_QUEST:
+		objective.text = hub.state.lighthouse_text()
+		status_label.text = "%d coins  ·  M atlas  ·  J journal" % hub.coins
 	debug_label.visible = debug_visible
 	debug_label.text = "%d FPS  ·  %d × %d  ·  %s  ·  F3 debug" % [Engine.get_frames_per_second(),RenderSettings.RENDER_SIZE.x,RenderSettings.RENDER_SIZE.y,hub.zone]
 	var suffix := ""

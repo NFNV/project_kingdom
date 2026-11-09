@@ -43,6 +43,27 @@
       ]
     },
     {
+      "id": "lighthouse_unlit",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-3647c8f6-96fb-4c2f-9f75-d9cdb3d9121d.png",
+      "workspace": "art/region/lighthouse_unlit.png",
+      "reference": "art/region/lighthouse_v1.png",
+      "prompt": "Use case: precise-object-edit. Make the main lighthouse beacon in the supplied transparent Project Kingdom overworld sprite look switched off. Change only the small gold glowing lantern behind the dark teal mullions near the top of the tower and its reflections on the panes. Replace that warm emitted light with cool blue slate glass and a dark recognizable lantern mechanism. Keep the porch light lit. Keep the silhouette, teal door, roof, brass rail, limestone blocks, flowers, stones and exact painted framing and alpha background aligned to the original. Same aspect ratio and placement. Preserve all outside details with no redraw or movement. A genuine transparent background, no ground beyond original contact, no checkerboard, text or watermark.",
+      "transparent": true,
+      "size": [
+        1351,
+        1164
+      ],
+      "mode": "RGBA",
+      "sha256": "976346d0075682e58af3c68be6d596333b7d4f4401c0ad8d06794312b1df375b",
+      "alpha_bbox": [
+        0,
+        21,
+        1337,
+        1164
+      ],
+      "transparent_fraction": 0.6234
+    },
+    {
       "id": "sky_day_v1",
       "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-0bf3809d-789f-47cf-9007-204cb2dfbab7.png",
       "workspace": "art/sky/sky_day_v1.png",

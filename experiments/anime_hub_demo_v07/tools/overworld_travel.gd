@@ -68,12 +68,12 @@ func begin(from_zone := "town") -> void:
 	overworld.clock_target = hub.clock_target
 	overworld.journey_clock_changed.connect(sync_journey_clock)
 	overworld.return_requested.connect(return_to_town,CONNECT_DEFERRED)
-	overworld.mill_requested.connect(visit_mill,CONNECT_DEFERRED)
+	overworld.mill_requested.connect(visit_area.bind("mill_garden"),CONNECT_DEFERRED)
+	overworld.coast_requested.connect(visit_area.bind(hub.Lighthouse.COAST),CONNECT_DEFERRED)
 	overworld.save_requested.connect(save_from_overworld)
 	overworld.journey_loot_claimed.connect(save_arena_loot)
 	get_tree().root.add_child(overworld)
-	if from_zone=="mill_garden": overworld.enter_from_mill()
-	else: overworld.enter_from_town()
+	place_at_region_gate(from_zone)
 	if not saved: overworld.notice = "The journey is still active, but autosaving failed: "+hub.saves.last_error
 	overworld.transitioning = true
 	await fade_to(0)
@@ -83,9 +83,13 @@ func sync_journey_clock(phase: float) -> void:
 	hub.clock = phase
 	if is_instance_valid(overworld): hub.clock_target = overworld.clock_target
 
+func checkpoint_zone() -> String:
+	if hub.zone in hub.Lighthouse.ZONES: return hub.Lighthouse.COAST
+	return "mill_garden" if hub.zone in ["mill_garden","mill_room","mill_loft"] else "town"
+
 func save_checkpoint(automatic := false) -> bool:
 	var document: Dictionary = hub.make_save_document()
-	var zone := "mill_garden" if hub.zone in ["mill_garden","mill_room","mill_loft"] else "town"
+	var zone := checkpoint_zone()
 	var at: Vector2 = hub.Map.arrival(zone,"overworld")
 	document.player.zone = zone
 	document.player.erase("mill_room_layout")
@@ -96,7 +100,7 @@ func save_checkpoint(automatic := false) -> bool:
 func save_from_overworld() -> void:
 	if not is_instance_valid(overworld) or overworld.transitioning: return
 	var saved := save_checkpoint()
-	overworld.notice = ("Journey saved · Continue returns to Windsong Mill's garden." if hub.zone in ["mill_garden","mill_room","mill_loft"] else "Journey saved · Continue returns to Garden Square's southwest gate.") if saved else hub.saves.last_error
+	overworld.notice = "Journey saved · Continue returns to %s." % hub.Map.NAMES[checkpoint_zone()] if saved else hub.saves.last_error
 	overworld.notice_left = 6
 
 func save_arena_loot() -> void:
@@ -115,7 +119,7 @@ func restore_window() -> void:
 	window.content_scale_aspect = window_state.aspect
 	window.title = window_state.title
 
-func visit_mill() -> void:
+func visit_area(destination: String) -> void:
 	if returning or regional_visit or not is_instance_valid(overworld): return
 	regional_visit = true
 	overworld.transitioning = true
@@ -123,7 +127,7 @@ func visit_mill() -> void:
 	overworld.hide()
 	overworld.process_mode = Node.PROCESS_MODE_DISABLED
 	restore_window()
-	hub._load_zone("mill_garden","overworld")
+	hub._load_zone(destination,"overworld")
 	hub.show()
 	hub.ui.show()
 	hub.process_mode = hub_process_mode
@@ -137,7 +141,16 @@ func visit_mill() -> void:
 	await fade_to(0)
 	hub.transitioning = false
 	hub.queue_autosave()
-	hub.ui.show_notice("Windsong Mill · E to talk or enter · South gate returns to the Greenshire.")
+	var hint := "Windsong Mill · E to talk or enter · South gate returns to the Greenshire."
+	if destination==hub.Lighthouse.COAST:
+		hint = "Palestone Coast · Follow the path to the keeper's door. E to enter."
+	hub.ui.show_notice(hint)
+
+func place_at_region_gate(from_zone: String) -> void:
+	match from_zone:
+		"mill_garden": overworld.enter_from_mill()
+		hub.Lighthouse.COAST: overworld.enter_from_coast()
+		_: overworld.enter_from_town()
 
 func resume_from_region(from_zone: String) -> void:
 	settle_player()
@@ -157,8 +170,7 @@ func resume_from_region(from_zone: String) -> void:
 	overworld.auto_clock = hub.auto_clock
 	overworld.show()
 	overworld.process_mode = Node.PROCESS_MODE_INHERIT
-	if from_zone=="mill_garden": overworld.enter_from_mill()
-	else: overworld.enter_from_town()
+	place_at_region_gate(from_zone)
 	regional_visit = false
 	await fade_to(0)
 	overworld.transitioning = false

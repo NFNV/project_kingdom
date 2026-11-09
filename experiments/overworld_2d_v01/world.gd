@@ -1,6 +1,7 @@
 extends Node2D
 signal return_requested
 signal mill_requested
+signal coast_requested
 signal save_requested
 signal journey_clock_changed(phase: float)
 signal journey_loot_claimed
@@ -128,6 +129,9 @@ func _ready() -> void:
 		textures[pair[0]] = cache_texture(pair[1])
 	for id in Dressing.CATALOG:
 		textures[id] = cache_texture(Dressing.CATALOG[id])
+	if linked_journey:
+		var crop: Rect2i = texture_crops[textures.lighthouse.get_instance_id()]
+		textures["lighthouse_unlit"] = cache_texture(ROOT+"art/region/lighthouse_unlit.png",crop)
 	light_emitters = Dressing.EMITTERS.duplicate(true)
 	for kind in Dressing.EMITTER_PIXELS:
 		var crop: Rect2i = texture_crops[textures[kind].get_instance_id()]
@@ -153,11 +157,11 @@ func _ready() -> void:
 	if "--city" in OS.get_cmdline_user_args():
 		visit(3)
 
-func cache_texture(path: String) -> Texture2D:
+func cache_texture(path: String, source_rect := Rect2i()) -> Texture2D:
 	if texture_cache.has(path): return texture_cache[path]
 	var source: Texture2D = load(path)
 	var image := source.get_image()
-	var crop := image.get_used_rect()
+	var crop := source_rect if source_rect.has_area() else image.get_used_rect()
 	image = image.get_region(crop)
 	if image.get_height()>768:
 		image.resize(roundi(image.get_width()*768.0/image.get_height()),768,Image.INTERPOLATE_LANCZOS)
@@ -383,6 +387,31 @@ func enter_from_mill() -> void:
 	notice_left = 7
 	get_window().title = "Project Kingdom — The Greenshire"
 
+func enter_from_coast() -> void:
+	player = Map.COAST
+	velocity = Vector2.ZERO
+	facing = Vector2(0,-1)
+	mounted_rider.reset()
+	mounted_rider.set_direction(view_vector(facing))
+	gate_cooldown = 1.0
+	update_camera()
+	update_visible()
+	get_window().title = "Project Kingdom — The Greenshire"
+	notice = "Palestone Coast · Press F near the lighthouse to return."
+	notice_left = 6
+
+func can_enter_coast() -> bool:
+	return linked_journey and not paused and not region_map and not transitioning and gate_cooldown<=0 and player.distance_to(Map.COAST)<18
+
+func request_coast_entry() -> void:
+	if not can_enter_coast(): return
+	transitioning = true
+	velocity = Vector2.ZERO
+	coast_requested.emit()
+
+func beacon_restored() -> bool:
+	return not is_instance_valid(journey_loadout) or journey_loadout.lighthouse_stage>=journey_loadout.LighthouseStage.RESTORED
+
 func request_town_entry() -> void:
 	if not can_enter_town(): return
 	transitioning = true
@@ -513,6 +542,8 @@ func draw_scene() -> void:
 		# SVG foot anchor is (80,152). Rotate about that foot, including wind,
 		# so crowns and roofs lean with the terrain without sliding the base.
 		var texture: Texture2D = textures[item.kind]
+		if item.kind=="lighthouse" and not beacon_restored():
+			texture = textures.lighthouse_unlit
 		var dimensions := texture.get_size()
 		var foot: Vector2 = dimensions*foot_uv(item)
 		if item.kind=="city_illustration":
@@ -572,15 +603,17 @@ func draw_prop_details(item: Dictionary, at: Vector2, size: float, dimensions: V
 	var rotation := surface_rotation(item.p)
 	if lamp_weight>.005 and light_emitters.has(item.kind):
 		for uv in light_emitters[item.kind]:
+			if item.kind=="lighthouse" and uv.y<.4 and not beacon_restored():
+				continue
 			var point: Vector2 = at+((uv*dimensions-foot)*size/dimensions.y).rotated(rotation)
 			var flicker := .92+.08*sin(clock*1.7+float(item.phase))
 			var radius := clampf(size*(.16 if item.kind=="lamp" else (.019 if item.kind=="city_illustration" else .065)),2.5,20 if item.kind=="lamp" else 14)
 			Atmosphere.glow(scenery,point,radius,lamp_weight*flicker*opacity)
 			if item.kind=="lighthouse" and uv.y<.4:
-				var aim := Vector2(cos(clock*.28),sin(clock*.28)*.2).rotated(rotation)
-				var end := point+aim*minf(180,size*1.4)
+				var aim := Vector2(1,sin(clock*.65)*.24).rotated(rotation)
+				var end := point+aim*minf(220,size*1.7)
 				var spread := aim.orthogonal()*size*.1
-				scenery.draw_colored_polygon(PackedVector2Array([point,end+spread,end-spread]),Color(1,.87,.54,lamp_weight*.07*opacity))
+				scenery.draw_polygon(PackedVector2Array([point,end+spread,end-spread]),PackedColorArray([Color(1,.87,.54,lamp_weight*.32*opacity),Color(1,.87,.54,0),Color(1,.87,.54,0)]))
 	if item.kind in ["oak","willow","pine"] and posmod(hash(item.p),5)==0 and night_weight>.05:
 		for i in 2:
 			var drift := Vector2(sin(clock*.6+item.phase+i)*11,-8-cos(clock*.4+item.phase+i)*7)
@@ -619,6 +652,9 @@ func draw_hud() -> void:
 	if player.distance_to(Stoneback.SITE)<19 and boss.phase == "idle":
 		panel(Rect2(710,184,500,40))
 		text(Vector2(728,210),"IVYKEEP RUINS  ·  F Accept Stoneback's challenge",16)
+	elif can_enter_coast():
+		panel(Rect2(710,184,500,40))
+		text(Vector2(728,210),"PALESTONE COAST  ·  F Visit the lighthouse",16)
 	elif near_landmark!="":
 		panel(Rect2(710,184,500,40))
 		text(Vector2(728,210),near_landmark+("  ·  F Enter Garden Square" if can_enter_town() else ("  ·  F Visit Windsong Mill" if can_enter_mill() else "  ·  F Inspect")),16)
@@ -695,9 +731,15 @@ func draw_map_contents(large: bool) -> void:
 			var size := Vector2(texture.get_width()*28.0/texture.get_height(),28)
 			hud.draw_texture_rect(texture,Rect2(marker-Vector2(size.x*.5,28),size),false,Color.WHITE)
 			text(marker+Vector2(8,4),extra[2],13,Color("53694b"))
+	if lighthouse_quest_tracked():
+		var target: Vector2 = Map.TOWN if journey_loadout.lighthouse_stage==journey_loadout.LighthouseStage.AVAILABLE else Map.COAST
+		FieldMap.draw_quest_pin(hud,map_point(target,large)+Vector2(0,-14 if large else -8),9 if large else 5)
 	var at := map_point(player,large)
 	FieldMap.draw_position(hud,at,9 if large else 6)
 	hud.draw_line(at,map_point(player+camera_forward()*18,large),Color("9e6543"),2,true)
+
+func lighthouse_quest_tracked() -> bool:
+	return is_instance_valid(journey_loadout) and journey_loadout.tracked_quest==journey_loadout.LIGHTHOUSE_QUEST and journey_loadout.lighthouse_stage!=journey_loadout.LighthouseStage.COMPLETE
 
 func draw_minimap() -> void:
 	FieldMap.draw_paper(hud,Rect2(1640,22,254,178))
@@ -718,6 +760,9 @@ func draw_region_map() -> void:
 	var markers := Map.landmarks()
 	for i in markers.size():
 		text(Vector2(1215,310+i*46),str(i+1)+"  "+markers[i].short,20,Color("53694b"))
+	if lighthouse_quest_tracked():
+		FieldMap.draw_quest_pin(hud,Vector2(1224,670),9)
+		text(Vector2(1241,676),"Tracked objective",17,Color("294c3e"))
 	text(Vector2(450,902),"1–8  Preview a destination     M / Esc  Return to the road",20,Color("294c3e"))
 
 func visit(index: int) -> void:
@@ -772,6 +817,10 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				return
 			if can_enter_mill():
 				request_mill_entry()
+				get_viewport().set_input_as_handled()
+				return
+			if can_enter_coast():
+				request_coast_entry()
 				get_viewport().set_input_as_handled()
 				return
 			if can_enter_town():

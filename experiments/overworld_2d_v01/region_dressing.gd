@@ -41,6 +41,7 @@ const EMITTER_PIXELS := {
  "balcony_cottage":OCHRE_WINDOWS,"country_hall":OCHRE_WINDOWS,
  "bakery":SHOP_WINDOWS,"grocer_shop":SHOP_WINDOWS,
  "lamp":[Vector2(508,373)],
+ "lighthouse":[Vector2(564,320),Vector2(798,888)],
  "city_illustration":[Vector2(345,335),Vector2(373,350),Vector2(475,291),Vector2(439,347),Vector2(496,340),Vector2(530,413),Vector2(596,375),Vector2(651,441),Vector2(699,284),Vector2(850,282),Vector2(690,348),Vector2(859,350),Vector2(1020,332),Vector2(1067,339),Vector2(1126,288),Vector2(951,438),Vector2(1023,449),Vector2(1097,458),Vector2(1210,438),Vector2(1247,453),Vector2(1311,438),Vector2(1355,433),Vector2(355,542),Vector2(247,580),Vector2(450,545),Vector2(516,690),Vector2(545,626),Vector2(677,664),Vector2(1060,648),Vector2(1090,588),Vector2(1205,617),Vector2(1165,687),Vector2(1228,678),Vector2(632,533),Vector2(925,573),Vector2(675,855),Vector2(966,839)]
 }
 

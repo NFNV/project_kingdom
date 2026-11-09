@@ -31,11 +31,11 @@ func _ready() -> void:
 	tally = UI.text(sheet,"",Vector2(112,164),480,17,UI.MUTED)
 	var row := 0
 	for entry in hub.state.journal_entries():
-		var card := UI.button(sheet,"",Vector2(112,206+row*103),Vector2(466,90))
+		var card := UI.button(sheet,"",Vector2(112,206+row*82),Vector2(466,72))
 		card.pressed.connect(func(): selected=entry.id; refresh())
 		cards[entry.id] = card
-		names[entry.id] = UI.text(card,entry.title,Vector2(19,14),424,24,Color("f7e8c5"),true)
-		statuses[entry.id] = UI.text(card,"",Vector2(20,57),424,14,Color("d7c392"))
+		names[entry.id] = UI.text(card,entry.title,Vector2(19,9),424,24,Color("f7e8c5"),true)
+		statuses[entry.id] = UI.text(card,"",Vector2(20,43),424,14,Color("d7c392"))
 		row += 1
 	guidance = UI.text(sheet,"",Vector2(114,635),462,20,UI.INK,true)
 	guidance.max_lines_visible = 3
@@ -49,7 +49,10 @@ func _ready() -> void:
 	reward = UI.text(sheet,"",Vector2(728,632),465,20,UI.GREEN,true)
 	track_button = UI.button(sheet,"Track this quest",Vector2(728,711),Vector2(218,44))
 	track_button.pressed.connect(func():
-		hub.state.tracked_quest = selected
+		if can_accept_notice():
+			hub.state.accept_lighthouse_quest()
+		else:
+			hub.state.tracked_quest = selected
 		hub.queue_autosave()
 		hub._update_hud()
 		refresh()
@@ -63,7 +66,7 @@ func open(from_board := false) -> void:
 	banner.text = "GARDEN SQUARE QUEST BOARD" if board_mode else "THE TRAVELLER'S JOURNAL"
 	heading.text = "Town notices and requests" if board_mode else "Stories along the road"
 	close_button.text = "Close   ·   E / Esc" if board_mode else "Close   ·   J / Esc"
-	selected = hub.state.tracked_quest
+	selected = hub.GameState.LIGHTHOUSE_QUEST if board_mode and hub.state.lighthouse_stage==hub.GameState.LighthouseStage.AVAILABLE else hub.state.tracked_quest
 	refresh()
 	show()
 
@@ -85,6 +88,10 @@ func refresh() -> void:
 		objectives.text = "\n".join(lines)
 		route.text = "Route: "+entry.route
 		reward.text = "Reward: "+entry.reward
-		track_button.disabled = hub.state.tracked_quest==entry.id
-		track_button.text = "Currently tracked" if track_button.disabled else "Track this quest"
+		var accept := can_accept_notice()
+		track_button.disabled = not accept and hub.state.tracked_quest==entry.id
+		track_button.text = "Accept quest" if accept else ("Currently tracked" if track_button.disabled else "Track this quest")
 	tally.text = "%d / %d stories completed" % [complete,entries.size()]
+
+func can_accept_notice() -> bool:
+	return board_mode and selected==hub.GameState.LIGHTHOUSE_QUEST and hub.state.lighthouse_stage==hub.GameState.LighthouseStage.AVAILABLE

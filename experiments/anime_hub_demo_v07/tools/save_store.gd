@@ -1,11 +1,12 @@
 extends RefCounted
 ## Whitelisted, versioned JSON. Validate everything before touching live state.
-const VERSION := 6
+const VERSION := 7
 const POTION_IDS := ["healing_draught","wind_tonic"]
 const Legacy := preload("res://experiments/anime_hub_demo_v07/tools/save_v1.gd")
 const State := preload("res://experiments/anime_hub_demo_v07/tools/game_state.gd")
 const DEFAULT_PATH := "user://kingdom_journey.json"
-const ZONES := ["town","bakery","district","trail","river","wilds","forge","mill_garden","mill_room","mill_loft"]
+const Lighthouse := preload("res://experiments/anime_hub_demo_v07/tools/palestone_lighthouse.gd")
+const ZONES := ["town","bakery","district","trail","river","wilds","forge","mill_garden","mill_room","mill_loft"] + Lighthouse.ZONES
 const MEMORIES := ["old_elm","meadow","river_view"]
 const PLACES := ["north_place_plaza","north_place_park","north_place_civic"]
 var definitions: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://experiments/anime_hub_demo_v07/data/items.json"))
@@ -103,7 +104,9 @@ func validate(doc: Variant) -> bool:
 		return false
 	if smith.rewarded and (not smith.accepted or not smith.tools_recovered):
 		return false
-	if data.get("tracked_quest") not in ["morning_rounds","briarwood_patrol","emberforge_tools",State.STONEBACK_QUEST]:
+	if data.get("tracked_quest") not in ["morning_rounds","briarwood_patrol","emberforge_tools",State.STONEBACK_QUEST,State.LIGHTHOUSE_QUEST]:
+		return false
+	if not whole(data.get("lighthouse_stage"),State.LighthouseStage.AVAILABLE,State.LighthouseStage.COMPLETE):
 		return false
 	var stoneback_stage: Variant = data.get("stoneback_stage")
 	if not whole(stoneback_stage,State.StonebackStage.AVAILABLE,State.StonebackStage.COMPLETE):
@@ -127,7 +130,7 @@ func validate(doc: Variant) -> bool:
 	var sizes := {"town":Vector2(1920,1080),"bakery":Vector2(1920,1080),"district":Vector2(6400,3840),"trail":Vector2(1920,1080),"river":Vector2(1920,1080),"wilds":Vector2(4608,2592),"forge":Vector2(1920,1080),"mill_garden":Vector2(2400,1600),"mill_room":Vector2(1920,1080),"mill_loft":Vector2(1280,720)}
 	if player.get("zone") not in ZONES:
 		return false
-	var dimensions: Vector2 = sizes[player.zone]
+	var dimensions := Vector2(Lighthouse.size_for(player.zone)) if player.zone in Lighthouse.ZONES else Vector2(sizes[player.zone])
 	if player.zone=="mill_garden" and player.has("mill_garden_layout"):
 		if player.mill_garden_layout!=2: return false
 		dimensions = Vector2(1920,1280)
@@ -195,6 +198,8 @@ func upgrade(source: Variant) -> Dictionary:
 		return upgrade_health(result)
 	if source.get("version")==5:
 		return upgrade_health(source.duplicate(true))
+	if source.get("version")==6:
+		return upgrade_lighthouse(source.duplicate(true))
 	return source
 
 func upgrade_health(doc: Dictionary) -> Dictionary:
@@ -213,6 +218,12 @@ func upgrade_health(doc: Dictionary) -> Dictionary:
 		return {}
 	var capacity := (State.Hearts.BASE_HEARTS + bonus) * State.Hearts.UNITS_PER_HEART
 	player.health = ceili(float(player.health) * capacity / old_capacity)
+	return upgrade_lighthouse(doc)
+
+func upgrade_lighthouse(doc: Dictionary) -> Dictionary:
+	if not doc.get("state") is Dictionary:
+		return {}
+	doc.state.lighthouse_stage = State.LighthouseStage.AVAILABLE
 	doc.version = VERSION
 	migrated = true
 	return doc

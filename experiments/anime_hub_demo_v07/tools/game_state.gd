@@ -11,6 +11,9 @@ const STONEBACK_QUEST := "stoneback_trial"
 const STONEBACK_RELIC := "ivykeep_seal"
 const STONEBACK_REWARD := 25
 enum StonebackStage { AVAILABLE, ACCEPTED, RETURN, COMPLETE }
+const LIGHTHOUSE_QUEST := "lighthouse_keeper"
+const LIGHTHOUSE_REWARD := 18
+enum LighthouseStage { AVAILABLE, ACCEPTED, BRIEFED, RESTORED, COMPLETE }
 const QUEST_PATH := ROOT+"data/briarwood_patrol.tres"
 const SMITH_PATH := ROOT+"data/emberforge_tools.tres"
 const CAPTAIN_ID := "wild_dog_3_2"
@@ -35,6 +38,7 @@ var appearance: Dictionary = HeroLook.DEFAULT.duplicate():
 	set(value):
 		appearance = HeroLook.normalized(value)
 var stoneback_stage: int = StonebackStage.AVAILABLE
+var lighthouse_stage: int = LighthouseStage.AVAILABLE
 var coins := 12
 var delivery_stage := 0
 var discoveries: Dictionary = {}
@@ -347,12 +351,39 @@ func stoneback_text() -> String:
 			return "Complete. Rowan has the Ivykeep Seal."
 	return "Speak to Rowan behind the counter at Windsong Mill."
 
+func accept_lighthouse_quest() -> bool:
+	if lighthouse_stage!=LighthouseStage.AVAILABLE:
+		return false
+	lighthouse_stage = LighthouseStage.ACCEPTED
+	tracked_quest = LIGHTHOUSE_QUEST
+	changed.emit()
+	return true
+
+func advance_lighthouse_quest(expected_stage: LighthouseStage) -> bool:
+	if lighthouse_stage!=expected_stage or expected_stage not in [LighthouseStage.ACCEPTED,LighthouseStage.BRIEFED,LighthouseStage.RESTORED]:
+		return false
+	lighthouse_stage += 1
+	if lighthouse_stage==LighthouseStage.COMPLETE:
+		coins += LIGHTHOUSE_REWARD
+	changed.emit()
+	return true
+
+func lighthouse_text() -> String:
+	return [
+		"Accept the Lighthouse Keeper notice in Garden Square.",
+		"Ride to Palestone Coast and speak with Iona.",
+		"Go upstairs and restart the beacon at its controls.",
+		"Return downstairs to Iona.",
+		"The beacon guides boats into Palestone Coast again.",
+	][lighthouse_stage]
+
 func journal_entries() -> Array[Dictionary]:
 	return [
 		{"id":"morning_rounds","title":"Morning rounds","status":"Completed" if delivery_stage>=5 else ("Active" if delivery_stage>0 else "Available"),"giver":"Pippa · Garden Square","summary":"Help the square wake up: warm bread, a fruit basket and a letter connect the neighbours.","route":"Garden Square: bakery cart → Elder Mallow → Moss → Pip → red postbox.","reward":"The neighbours' thanks, and a town full of familiar faces.","objectives":[{"text":"Collect Pippa's warm loaf","done":delivery_stage>=1},{"text":"Deliver the loaf to Elder Mallow","done":delivery_stage>=2},{"text":"Collect Moss's fruit basket","done":delivery_stage>=3},{"text":"Bring the basket to Pip","done":delivery_stage>=4},{"text":"Post Pip's letter","done":delivery_stage>=5}]},
 		{"id":QUEST_ID,"title":"Badges from Briarwood","status":"Completed" if rewarded else ("Active" if accepted else "Available"),"giver":"Bram · Garden Square","summary":"Bram needs help keeping the woodland paths safe. Recover three bandit badges and bring them home.","route":"Garden Square southeast gate → Mosswood → Riverbend bridge → Briarwood. Return to Bram.","reward":"10 coins + Warden's charm (+1 maximum heart).","objectives":[{"text":"Defeat three bandits (%d / 3)" % mini(forest_defeated.size(),3),"done":forest_defeated.size()>=3},{"text":"Collect three fallen badges","done":rewarded or count("bandit_badge")>=3},{"text":"Return the badges to Bram","done":rewarded}]},
 		{"id":"emberforge_tools","title":"The stolen tools","status":"Completed" if smith_rewarded else ("Active" if smith_accepted else "Available"),"giver":"Tomas · Emberforge, Northgate Market Lane","summary":"Rook stole Tomas's favourite hammer and tongs. Recover them and the smith will forge a better sword for you.","route":"Northgate Emberforge → Briarwood's southeast clearing → collect Rook's pouch → return to Tomas.","reward":"12 coins + Embersteel sword (2 sword damage, 4 Wind Slash damage).","objectives":[{"text":"Defeat Rook, the club captain","done":forest_defeated.has(CAPTAIN_ID)},{"text":"Collect the stolen hammer and tongs","done":tools_recovered},{"text":"Return the tools to Tomas","done":smith_rewarded}]},
-		{"id":STONEBACK_QUEST,"title":"The Seal of Ivykeep","status":"Completed" if stoneback_stage == StonebackStage.COMPLETE else ("Active" if stoneback_stage >= StonebackStage.ACCEPTED else "Available"),"giver":"Rowan · Windsong Mill","summary":"Rowan wants to bring Ivykeep's old wayfarer's seal back to the inn. Win it from Stoneback, the guardian of the ruins.","route":"Windsong Mill → Ivykeep Ruins (M on the Greenshire map) → return to Rowan.","reward":"%d coins" % STONEBACK_REWARD,"objectives":[{"text":"Speak to Rowan at the mill counter","done":stoneback_stage >= StonebackStage.ACCEPTED},{"text":"Defeat Stoneback and collect the seal from his chest","done":stoneback_stage >= StonebackStage.RETURN},{"text":"Give Rowan the Ivykeep Seal","done":stoneback_stage == StonebackStage.COMPLETE}]}
+		{"id":STONEBACK_QUEST,"title":"The Seal of Ivykeep","status":"Completed" if stoneback_stage == StonebackStage.COMPLETE else ("Active" if stoneback_stage >= StonebackStage.ACCEPTED else "Available"),"giver":"Rowan · Windsong Mill","summary":"Rowan wants to bring Ivykeep's old wayfarer's seal back to the inn. Win it from Stoneback, the guardian of the ruins.","route":"Windsong Mill → Ivykeep Ruins (M on the Greenshire map) → return to Rowan.","reward":"%d coins" % STONEBACK_REWARD,"objectives":[{"text":"Speak to Rowan at the mill counter","done":stoneback_stage >= StonebackStage.ACCEPTED},{"text":"Defeat Stoneback and collect the seal from his chest","done":stoneback_stage >= StonebackStage.RETURN},{"text":"Give Rowan the Ivykeep Seal","done":stoneback_stage == StonebackStage.COMPLETE}]},
+		{"id":LIGHTHOUSE_QUEST,"title":"The Lighthouse Keeper","status":"Completed" if lighthouse_stage==LighthouseStage.COMPLETE else ("Active" if lighthouse_stage>LighthouseStage.AVAILABLE else "Available"),"giver":"Quest board · Garden Square","summary":"The beacon at Palestone Coast has gone dark. Keeper Iona needs help getting it back before the boats come in.","route":"Garden Square southwest gate → Greenshire → Palestone Coast → lighthouse.","reward":"%d coins and a restored beacon" % LIGHTHOUSE_REWARD,"objectives":[{"text":"Accept the notice in Garden Square","done":lighthouse_stage>=LighthouseStage.ACCEPTED},{"text":"Talk to Iona at the lighthouse","done":lighthouse_stage>=LighthouseStage.BRIEFED},{"text":"Restart the beacon upstairs","done":lighthouse_stage>=LighthouseStage.RESTORED},{"text":"Return to Iona","done":lighthouse_stage==LighthouseStage.COMPLETE}]}
 	]
 
 func can_claim() -> bool:
@@ -427,6 +458,7 @@ func snapshot() -> Dictionary:
 		"equipment":equipped_ids(),"tracked_quest":tracked_quest,
 		"appearance":appearance.duplicate(),
 		"stoneback_stage":stoneback_stage,
+		"lighthouse_stage":lighthouse_stage,
 		"smith":{"accepted":smith_accepted,"rewarded":smith_rewarded,"tools_recovered":tools_recovered},
 		"quest":{"accepted":accepted,"rewarded":rewarded}}
 
@@ -460,6 +492,7 @@ func restore(data: Dictionary, player_health: int) -> void:
 	tracked_quest = data.tracked_quest
 	appearance = data.get("appearance",HeroLook.DEFAULT).duplicate()
 	stoneback_stage = int(data.stoneback_stage)
+	lighthouse_stage = int(data.lighthouse_stage)
 	for id in data.items:
 		if int(data.items[id])>0:
 			add_item(id,int(data.items[id]))

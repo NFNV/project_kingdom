@@ -44,6 +44,12 @@ static func draw_position(canvas: CanvasItem, at: Vector2, radius: float) -> voi
 	diamond.append(diamond[0])
 	canvas.draw_polyline(diamond,Color("fff4d7"),1.8,true)
 
+static func draw_quest_pin(canvas: CanvasItem, at: Vector2, radius: float) -> void:
+	canvas.draw_circle(at,radius,INK,true,-1,true)
+	canvas.draw_circle(at,radius-1.4,Color("edbc58"),true,-1,true)
+	canvas.draw_line(at-Vector2(0,radius*.51),at+Vector2(0,radius*.12),INK,1.5,true)
+	canvas.draw_circle(at+Vector2(0,radius*.48),1,INK,true,-1,true)
+
 func _draw() -> void:
 	if not is_instance_valid(hub.player):
 		return
@@ -61,6 +67,9 @@ func _draw() -> void:
 			draw_string(font,Vector2(1250,y),"%d   %s" % [index,exit.get("sign",exit.label)],HORIZONTAL_ALIGNMENT_LEFT,290,19,INK)
 			y += 38
 			index += 1
+		if not hub.lighthouse_quest_target().is_empty():
+			draw_quest_pin(self,Vector2(1260,y+19),9)
+			draw_string(font,Vector2(1277,y+25),"Tracked objective",HORIZONTAL_ALIGNMENT_LEFT,-1,18,INK)
 		draw_line(Vector2(1223,298),Vector2(1223,764),Color("b99c63"),1,true)
 		draw_area(Rect2(412,296,773,514))
 	else:
@@ -119,4 +128,8 @@ func draw_area(rect: Rect2) -> void:
 		if detailed:
 			draw_string(font,at+Vector2(-9,5),str(index),HORIZONTAL_ALIGNMENT_CENTER,18,14,Color("fff4d7"))
 		index += 1
+	var quest: Dictionary = hub.lighthouse_quest_target()
+	if not quest.is_empty():
+		var pin_size := 9.0 if detailed else 5.0
+		draw_quest_pin(self,origin+quest.at*ratio+Vector2.UP*(pin_size+3),pin_size)
 	draw_position(self,origin+hub.player.position*ratio,10 if detailed else 5)
