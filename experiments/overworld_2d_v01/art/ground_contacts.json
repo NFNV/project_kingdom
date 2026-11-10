@@ -289,6 +289,74 @@
         989
       ],
       "sha256": "2c16ad1475dd2ce9ac908938acec3755e281c8c30084962a628464863a78aa3c"
+    },
+    "res://experiments/overworld_2d_v01/art/palestone_kit/coastal_pine.png": {
+      "contact_pixel": [
+        478,
+        846
+      ],
+      "source_size": [
+        1536,
+        1024
+      ],
+      "solid_bounds": [
+        148,
+        84,
+        1455,
+        932
+      ],
+      "sha256": "875be4061714fc720ff796a070442c70fb83e54eb7564ba90f250261fe008d26"
+    },
+    "res://experiments/overworld_2d_v01/art/palestone_kit/lakeside_alder.png": {
+      "contact_pixel": [
+        536,
+        1182
+      ],
+      "source_size": [
+        1142,
+        1378
+      ],
+      "solid_bounds": [
+        118,
+        40,
+        1020,
+        1243
+      ],
+      "sha256": "edd107eb0bb6dfc47427e3acad799291b2bdaa94824c4ae08b2af18a22593d90"
+    },
+    "res://experiments/overworld_2d_v01/art/palestone_kit/coastal_lantern.png": {
+      "contact_pixel": [
+        519,
+        1163
+      ],
+      "source_size": [
+        1199,
+        1312
+      ],
+      "solid_bounds": [
+        290,
+        88,
+        890,
+        1199
+      ],
+      "sha256": "0eded600e4c6334509414a000125e29c12a071debab6ad275b5ae4bea2e2a77f"
+    },
+    "res://experiments/overworld_2d_v01/art/palestone_kit/palestone_cottage.png": {
+      "contact_pixel": [
+        763,
+        858
+      ],
+      "source_size": [
+        1536,
+        1024
+      ],
+      "solid_bounds": [
+        294,
+        105,
+        1244,
+        924
+      ],
+      "sha256": "a608abbbac45cc5d276a7c9fe8463e70afb18ce359f77bafe9e26a1d2802da96"
     }
   }
 }

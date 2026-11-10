@@ -21,6 +21,7 @@ const Atmosphere := preload("res://experiments/overworld_2d_v01/atmosphere.gd")
 const RenderSettings := preload("res://experiments/anime_hub_demo_v07/tools/render_settings.gd")
 const FieldMap := preload("res://experiments/anime_hub_demo_v07/tools/field_map.gd")
 const Dressing := preload("res://experiments/overworld_2d_v01/region_dressing.gd")
+const PalestoneScene := preload("res://experiments/overworld_2d_v01/palestone_layout.tscn")
 const ClockDial := preload("res://experiments/anime_hub_demo_v07/tools/celestial_clock.gd")
 const CYCLE_SECONDS := Atmosphere.CYCLE_SECONDS
 var day_phase := 1.0
@@ -67,6 +68,7 @@ var show_map := true
 var region_map := false
 var prop_grid: Dictionary = {}
 var region_segments: Array[Vector4] = []
+var palestone: Node2D
 var shader_segment_key := Vector3i(-9999,-9999,-9999)
 var near_landmark := ""
 var notice := "Explore Mosswood and the northern routes. M opens your region map."
@@ -122,6 +124,17 @@ func _ready() -> void:
 	shader.shader = load(ROOT+"ground.gdshader")
 	terrain.material = shader
 	add_child(terrain)
+	palestone = PalestoneScene.instantiate()
+	palestone.hide()
+	add_child(palestone)
+	palestone.bake()
+	var bounds: Rect2 = palestone.MASK_BOUNDS
+	palestone.mask.generate_mipmaps()
+	shader.set_shader_parameter("palestone_bounds",Vector4(bounds.position.x,bounds.position.y,bounds.size.x,bounds.size.y))
+	shader.set_shader_parameter("palestone_mask",ImageTexture.create_from_image(palestone.mask))
+	shader.set_shader_parameter("packed_earth",load(Dressing.PALESTONE_ART+"road_packed_earth.png"))
+	shader.set_shader_parameter("shell_gravel",load(Dressing.PALESTONE_ART+"path_shell_gravel.png"))
+	shader.set_shader_parameter("limestone",load(Dressing.PALESTONE_ART+"plaza_limestone_paving.png"))
 	for id in ["oak","pine","rock","bush","house","clocktower"]:
 		textures[id] = load(ROOT+"art/"+id+".svg")
 	# Cache modest gameplay textures with mipmaps; keep original PNGs untouched.
@@ -241,6 +254,10 @@ func build_region() -> void:
 	props.clear()
 	prop_grid.clear()
 	dressed_props = Dressing.props()
+	var placed: Array[Dictionary] = []
+	for item in palestone.props:
+		if Map.safe_ground(item.at):
+			placed.append(Dressing.make_prop(item.kind,item.at,item.height,item.radius))
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 27102026
 	var landmarks := Map.landmarks()
@@ -260,7 +277,13 @@ func build_region() -> void:
 			kind = "rock" if rng.randf()<.4 else "bush"
 		var height := rng.randf_range(4.0,6.5) if kind in ["oak","pine","willow"] else rng.randf_range(1.0,2.6)
 		props.append({"p":p,"kind":kind,"height":height,"radius":1.1 if kind in ["oak","pine","willow"] else .75,"tint":Color.from_hsv(rng.randf_range(.0,.04),rng.randf_range(.0,.05),rng.randf_range(.93,1.0)),"phase":rng.randf()*TAU})
-	props = props.filter(func(item: Dictionary): return item.p.distance_to(Stoneback.SITE) >= 23)
+	props = props.filter(func(item: Dictionary):
+		return item.p.distance_to(Stoneback.SITE)>=23 and not palestone.reserved(item.p) and not placed.any(func(prop): return item.p.distance_to(prop.p)<prop.radius+2.0)
+	)
+	dressed_props = dressed_props.filter(func(item: Dictionary):
+		return item.kind=="lighthouse" or (not item.get("retired",false) and not palestone.reserved(item.p))
+	)
+	dressed_props.append_array(placed)
 	for item in [["windmill",Map.WINDMILL,11.0,3.0],["ruins",Map.RUINS,8.0,3.0]]:
 		props.append({"p":item[1],"kind":item[0],"height":item[2],"radius":item[3],"tint":Color.WHITE,"phase":0.0})
 	# Small stone outcrops make the coastline readable from the approach.
@@ -484,7 +507,7 @@ func foot_uv(item: Dictionary) -> Vector2:
 func ground_clearance(item: Dictionary) -> float:
 	# A wide foundation must stay in front of the dome's tangent, not just its
 	# center point; otherwise its outer edge hangs over the sky near the rim.
-	var broad: bool = item.kind in Dressing.HOUSE_KINDS or item.kind in ["city_illustration","windmill","watermill","lighthouse","ruins","rock","pine"]
+	var broad: bool = item.kind in Dressing.HOUSE_KINDS or item.kind in ["city_illustration","windmill","watermill","lighthouse","ruins","rock","pine","coastal_pine"]
 	# The painted floor is seen from above. Its rear corners cover considerably
 	# more ground depth than a vertical billboard's center-point collider.
 	return maxf(.8,item.height*1.6) if broad else .8
@@ -493,7 +516,7 @@ func include_visible(item: Dictionary, limit: float) -> void:
 	if item.get("city_geometry",false): return
 	var depth: float = view_point(item.p).y
 	if depth<4 or depth>355 or (bend()>0 and (item.p-camera_ground).length()+ground_clearance(item)>limit): return
-	if not curved and item.kind in ["oak","pine","willow","rock","bush"]:
+	if not curved and (item.kind in Dressing.TREE_KINDS or item.kind in ["rock","bush"]):
 		var lod: int = item.get("lod",0)
 		if (lod>1 and depth>110) or (lod==1 and depth>185): return
 	var at := project(item.p)
@@ -525,7 +548,7 @@ func draw_scene() -> void:
 			draw_rider(at)
 			continue
 		var size: float = sprite_height(item,depth)
-		var sway := sin(clock*1.35+item.phase)*.004 if item.kind in ["oak","pine","willow"] else 0.0
+		var sway := sin(clock*1.35+item.phase)*.004 if item.kind in Dressing.TREE_KINDS else 0.0
 		var tint: Color = item.tint*light_tint
 		# A little reflected window light keeps inhabited buildings readable,
 		# while trees, terrain and the sky retain their existing moonlit palette.
@@ -549,7 +572,7 @@ func draw_scene() -> void:
 		if item.kind=="city_illustration":
 			draw_city_grounding(at,size,dimensions.x/dimensions.y,surface_rotation(p),shade.a,false)
 		elif texture_feet.has(texture.get_instance_id()):
-			var tree: bool = item.kind in ["oak","pine","willow"]
+			var tree: bool = item.kind in Dressing.TREE_KINDS
 			var contact_width := size*(.16 if tree else .42)*dimensions.x/dimensions.y
 			scenery.draw_set_transform(at,surface_rotation(p),Vector2(contact_width,size*(.025 if tree else .055)))
 			Atmosphere.glow(scenery,Vector2.ZERO,1,shade.a*.28,Color("293b25"),false)
@@ -557,7 +580,7 @@ func draw_scene() -> void:
 		if lamp_weight>.01:
 			var pool := 0.0
 			var strength := .0
-			if item.kind=="lamp":
+			if item.kind in Dressing.LAMP_KINDS:
 				pool = minf(115,FOCAL*4.6/depth)
 				strength = .48
 			elif item.kind in Dressing.HOUSE_KINDS or item.kind in ["windmill","watermill","lighthouse","city_illustration"]:
@@ -607,14 +630,15 @@ func draw_prop_details(item: Dictionary, at: Vector2, size: float, dimensions: V
 				continue
 			var point: Vector2 = at+((uv*dimensions-foot)*size/dimensions.y).rotated(rotation)
 			var flicker := .92+.08*sin(clock*1.7+float(item.phase))
-			var radius := clampf(size*(.16 if item.kind=="lamp" else (.019 if item.kind=="city_illustration" else .065)),2.5,20 if item.kind=="lamp" else 14)
+			var is_lamp: bool = item.kind in Dressing.LAMP_KINDS
+			var radius := clampf(size*(.16 if is_lamp else (.019 if item.kind=="city_illustration" else .065)),2.5,20 if is_lamp else 14)
 			Atmosphere.glow(scenery,point,radius,lamp_weight*flicker*opacity)
 			if item.kind=="lighthouse" and uv.y<.4:
 				var aim := Vector2(1,sin(clock*.65)*.24).rotated(rotation)
 				var end := point+aim*minf(220,size*1.7)
 				var spread := aim.orthogonal()*size*.1
 				scenery.draw_polygon(PackedVector2Array([point,end+spread,end-spread]),PackedColorArray([Color(1,.87,.54,lamp_weight*.32*opacity),Color(1,.87,.54,0),Color(1,.87,.54,0)]))
-	if item.kind in ["oak","willow","pine"] and posmod(hash(item.p),5)==0 and night_weight>.05:
+	if item.kind in Dressing.TREE_KINDS and posmod(hash(item.p),5)==0 and night_weight>.05:
 		for i in 2:
 			var drift := Vector2(sin(clock*.6+item.phase+i)*11,-8-cos(clock*.4+item.phase+i)*7)
 			Atmosphere.glow(scenery,at+drift,minf(3,size*.04),night_weight*opacity*.55,Color("d9ee8f"))
@@ -709,10 +733,19 @@ func draw_map_contents(large: bool) -> void:
 	var road := PackedVector2Array()
 	for z in range(-75,476,5): road.append(map_point(Vector2(Map.road_x(z),z),large))
 	hud.draw_polyline(road,Color("b29b68"),maxf(2,3*scale),true)
-	for route in Map.ROUTES:
+	for route in Map.drawn_routes():
 		var points := PackedVector2Array()
 		for p in route: points.append(map_point(p,large))
 		hud.draw_polyline(points,Color("b29b68"),maxf(1.5,2.7*scale),true)
+	for route in palestone.routes:
+		var points := PackedVector2Array()
+		for p in route.points: points.append(map_point(p,large))
+		hud.draw_polyline(points,Color("b29b68") if route.surface==0 else Color("bdab82"),maxf(1.5,route.width*.4*scale),true)
+	for square in palestone.squares:
+		if square.size()<3: continue
+		var points := PackedVector2Array()
+		for p in square: points.append(map_point(p,large))
+		hud.draw_colored_polygon(points,Color("c2a675"))
 	var markers := Map.landmarks()
 	for i in markers.size():
 		var at := map_point(markers[i].get("location",markers[i].p),large)

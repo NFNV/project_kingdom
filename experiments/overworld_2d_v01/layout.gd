@@ -18,15 +18,22 @@ const RIVER_WAVE := 8.0
 const RIVER_RATE := .03
 const RIVER_HALF := 4.8
 const BRIDGE_HALF := 5.5
+const PREVIOUS_COAST_ROAD := [LAKESIDE,Vector2(100,260),Vector2(130,320),COAST]
+const PREVIOUS_LIGHTHOUSE_PATH := [COAST,Vector2(169,363),Vector2(174,363)]
 const ROUTES := [
  [Vector2(18,105),Vector2(-25,120),Vector2(-95,135),WINDMILL],
  [Vector2(3,173),Vector2(60,170),Vector2(100,180),LAKESIDE],
- [LAKESIDE,Vector2(100,260),Vector2(130,320),COAST],
+ PREVIOUS_COAST_ROAD,
  [WINDMILL,Vector2(-115,220),RUINS,Vector2(-18,295)],
  [Vector2(-47,24),Vector2(-47,15),Vector2(4,15)],
  [Vector2(-47,15),Vector2(-92,30),Vector2(-98,56),Vector2(-88,62)],
- [COAST,Vector2(169,363),Vector2(174,363)]
+ PREVIOUS_LIGHTHOUSE_PATH
 ]
+
+# Keep the previous segments for the seeded scenery pass so rebuilding
+# Palestone does not reshuffle procedural vegetation elsewhere.
+static func drawn_routes() -> Array:
+ return ROUTES.filter(func(route): return route not in [PREVIOUS_COAST_ROAD,PREVIOUS_LIGHTHOUSE_PATH])
 
 static func landmarks() -> Array[Dictionary]:
  return [
@@ -42,7 +49,7 @@ static func landmarks() -> Array[Dictionary]:
 
 static func branch_segments() -> Array[Vector4]:
  var result: Array[Vector4] = []
- for route in ROUTES:
+ for route in drawn_routes():
   for i in range(1,route.size()):
    result.append(Vector4(route[i-1].x,route[i-1].y,route[i].x,route[i].y))
  return result

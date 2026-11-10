@@ -30,7 +30,7 @@ func run() -> void:
  var dressed: Array = world.dressed_props
  print("DRESSED REGION: ",dressed.size()," additions / ",world.props.size()," total scenery")
  check(dressed.size()>80,"More than eighty carefully placed painted buildings, stalls, flowers, benches and lamps populate the region")
- for kind in ["ivy_cottage","balcony_cottage","bakery","bookshop","grocer_shop","country_hall","bakery_stall","produce_stall","flowers","lamp","bench","watermill","lighthouse"]:
+ for kind in ["ivy_cottage","balcony_cottage","bakery","bookshop","grocer_shop","country_hall","bakery_stall","produce_stall","flowers","lamp","bench","watermill","lighthouse","palestone_cottage","coastal_lantern","coastal_pine","lakeside_alder"]:
   check(dressed.any(func(item: Dictionary): return item.kind==kind),"Map displays painted asset: "+kind)
  check(dressed.all(func(item: Dictionary): return not world.can_stand(item.p)),"Added scenery has collision at its foot")
  check(world.textures.size()>=22,"All reused and generated scenery textures are cached")
@@ -55,7 +55,7 @@ func run() -> void:
  var contacts_fit := true
  for texture_id in world.texture_feet:
   contacts_fit = contacts_fit and Rect2(0,0,1,1).has_point(world.texture_feet[texture_id])
- check(world.ground_contacts.size()==17 and contacts_fit,"Seventeen calibrated contact points lie inside their cropped textures")
+ check(world.ground_contacts.size()==21 and contacts_fit,"Calibrated scenery contact points lie inside their cropped textures")
  check(world.foot_uv({"kind":"willow"}).x>.6,"Willow is rooted at its off-center trunk, not at the center of its leaves")
  check(world.foot_uv({"kind":"watermill"}).y<.9,"Watermill is anchored at its structural foundation, excluding the lower garden skirt")
  var roots_match := true

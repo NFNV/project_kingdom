@@ -1,0 +1,196 @@
+{
+  "tool": "Built-in imagegen",
+  "placement": "Anchors use source image pixels from the upper left. Place scenery by its ground contact and join a lane to the cottage's front step. Surface files are square swatches to sample in ground coordinates. The editor layout will define the route shape and plaza outline.",
+  "assets": [
+    {
+      "file": "road_packed_earth.png",
+      "kind": "surface",
+      "use": "Fill the broad main-road spline.",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-61e5e376-e7b9-4e1a-9f7f-f77fd0346715.png",
+      "references": [
+        "experiments/anime_hub_demo_v07/assets/lighthouse/palestone_approach_day.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: repeatable ground material for the curved 2D overworld terrain shader of Project Kingdom. Reference image 1 is palette and hand-painted style only. Produce a square full-bleed opaque material texture, strictly vertical top-down orthographic view, flat neutral diffuse light, seamless on all four opposite edges. Paint coherent pattern continuing across the wrap on both axes, uniform distribution and no major localized features that reveal repetition. Readable painted gouache strokes with soft variation and distinct material shapes at game scale. Only the requested material filling the image, no outlines around the tile, grass borders, side walls, path edges, vignettes, single isolated objects, gradients across the whole tile, interface, letters or watermark. Material: warm golden-brown compacted countryside soil, fine sandy grains, subtle tiny ochre and gray pebbles pressed into the ground, gently irregular areas of lighter and darker earth like a well-traveled main lane. Few pale grains and occasional finer brush scuffs. Warm and readable; no literal tire tracks or large rocks.",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "sha256": "24d1f471bd3ff0523fd18e9b8787d08e37b9ad37dbb91a2e8571d1a62fcefcdf"
+    },
+    {
+      "file": "path_shell_gravel.png",
+      "kind": "surface",
+      "use": "Fill narrow walking branches and the lighthouse approach.",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-d9875969-d483-4c91-b99e-3ac6a3607351.png",
+      "references": [
+        "experiments/anime_hub_demo_v07/assets/lighthouse/palestone_approach_day.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: repeatable ground material for the curved 2D overworld terrain shader of Project Kingdom. Reference image 1 is palette and hand-painted style only. Produce a square full-bleed opaque material texture, strictly vertical top-down orthographic view, flat neutral diffuse light, seamless on all four opposite edges. Paint coherent pattern continuing across the wrap on both axes, uniform distribution and no major localized features that reveal repetition. Readable painted gouache strokes with soft variation and distinct material shapes at game scale. Only the requested material filling the image, no outlines around the tile, grass borders, side walls, path edges, vignettes, single isolated objects, gradients across the whole tile, interface, letters or watermark. Material: pale honey limestone grit and crushed shell gravel for narrow seaside footpaths. Tiny broken ivory shell flecks and occasional muted blue-gray chips set into a compact sand-colored base, fine granular pattern gently hand-painted. Clearly paler and coarser than normal dirt. No intact prominent shells, no large repeated motifs, no big rocks or directional grooves.",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "sha256": "fce707762f8ce77e985cf60d6939fdd779352fc371cb54068dd03ef4727c578d"
+    },
+    {
+      "file": "plaza_limestone_paving.png",
+      "kind": "surface",
+      "use": "Fill a plaza polygon or the wider mouth of a lane.",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-0abeb90d-38e7-43c0-82de-6a6f329e6f07.png",
+      "references": [
+        "experiments/anime_hub_demo_v07/assets/lighthouse/palestone_approach_day.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: repeatable ground material for the curved 2D overworld terrain shader of Project Kingdom. Reference image 1 is palette and hand-painted style only. Produce a square full-bleed opaque material texture, strictly vertical top-down orthographic view, flat neutral diffuse light, seamless on all four opposite edges. Paint coherent pattern continuing across the wrap on both axes, uniform distribution and no major localized features that reveal repetition. Readable painted gouache strokes with soft variation and distinct material shapes at game scale. Only the requested material filling the image, no outlines around the tile, grass borders, side walls, path edges, vignettes, single isolated objects, gradients across the whole tile, interface, letters or watermark. Material: level cream limestone plaza floor. A continuous hand-laid field of softly irregular flat stone pavers in warm beige, straw, and occasional muted gray, medium-sized readable stone shapes with thin recessed joints and a little dark olive moss confined to scattered joints. Flat surfaces, no high-relief bevels, no curbs, no central medallion and no directional shadow. Suitable for filling irregular authored plaza polygons.",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "sha256": "aaa906311518c69fa19ea8c29461377dff123065125d99dcfc700b971c85468e"
+    },
+    {
+      "file": "coastal_pine.png",
+      "kind": "scenery",
+      "use": "Place in small groups on exposed coastal ground.",
+      "anchors": {
+        "ground_contact": [
+          478,
+          846
+        ]
+      },
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-3068d4b5-f3c7-49e1-8701-de128c32c296.png",
+      "references": [
+        "experiments/overworld_2d_v01/art/region/pine_grove.png",
+        "experiments/anime_hub_demo_v07/assets/lighthouse/palestone_approach_day.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: isolated transparent fixed-camera scenery sprite for the curved 2D overworld of Project Kingdom. View at an elevated 20–25-degree three-quarter angle, slightly from front right, near-orthographic with straight vertical architecture. The reference images establish the painted gouache detail, palette and angle. Upper-left neutral daylight with warm highlights and green-blue shaded areas; strong readable silhouette at about 100–180 pixels on screen. Keep the entire single asset on true transparent alpha, with blank padding all around, a compact base, and a clear grounding point. No big landscape patch, cast shadow on a backdrop, vignette, UI, text, photorealism or watermark. Subject: one salt-wind-shaped coastal maritime pine, a low broad asymmetric umbrella crown swept to the right, several distinct dense blue-green needle cushions, exposed twisting ochre-gray trunk rooted securely in a small tuft of coastal grass and a tiny pale stone. A clear visual break from the tall triangular inland conifers in reference 1. Keep the trunk rooted vertically at the base before bending naturally up toward the crown. No second tree.",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "sha256": "875be4061714fc720ff796a070442c70fb83e54eb7564ba90f250261fe008d26",
+      "solid_bounds": [
+        148,
+        84,
+        1455,
+        932
+      ],
+      "transparent_fraction": 0.6513
+    },
+    {
+      "file": "lakeside_alder.png",
+      "kind": "scenery",
+      "use": "Place along the sheltered lake edge and near wet meadows.",
+      "anchors": {
+        "ground_contact": [
+          536,
+          1182
+        ]
+      },
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-98304508-2378-48a8-b285-d2d6eb285d92.png",
+      "references": [
+        "experiments/overworld_2d_v01/art/region/pine_grove.png",
+        "experiments/anime_hub_demo_v07/assets/lighthouse/palestone_approach_day.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: isolated transparent fixed-camera scenery sprite for the curved 2D overworld of Project Kingdom. View at an elevated 20–25-degree three-quarter angle, slightly from front right, near-orthographic with straight vertical architecture. The reference images establish the painted gouache detail, palette and angle. Upper-left neutral daylight with warm highlights and green-blue shaded areas; strong readable silhouette at about 100–180 pixels on screen. Keep the entire single asset on true transparent alpha, with blank padding all around, a compact base, and a clear grounding point. No big landscape patch, cast shadow on a backdrop, vignette, UI, text, photorealism or watermark. Subject: one waterside alder for Willowmere Lake, two slim gently diverging trunks emerging from a shared root, a tall oval crown of rounded bright soft green leaves, airy gaps between branching boughs, muted olive shaded leaves, very small tuft of sedge at the exposed root. Distinct from an evergreen or broad orange oak, no weeping willow drapery. No water or second tree.",
+      "size": [
+        1142,
+        1378
+      ],
+      "mode": "RGBA",
+      "sha256": "edd107eb0bb6dfc47427e3acad799291b2bdaa94824c4ae08b2af18a22593d90",
+      "solid_bounds": [
+        118,
+        40,
+        1020,
+        1243
+      ],
+      "transparent_fraction": 0.5092
+    },
+    {
+      "file": "coastal_lantern.png",
+      "kind": "scenery",
+      "use": "Place at junctions, doorways, and plaza entrances.",
+      "anchors": {
+        "ground_contact": [
+          519,
+          1163
+        ],
+        "light_emitter": [
+          767,
+          586
+        ]
+      },
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-70bb31b8-b7c8-4c8f-9fd4-c25cda76a1a5.png",
+      "references": [
+        "experiments/anime_hub_assets_v06/scenery/street_lamp.png",
+        "experiments/overworld_2d_v01/art/region/lighthouse_v1.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: isolated transparent fixed-camera scenery sprite for the curved 2D overworld of Project Kingdom. View at an elevated 20–25-degree three-quarter angle, slightly from front right, near-orthographic with straight vertical architecture. The reference images establish the painted gouache detail, palette and angle. Upper-left neutral daylight with warm highlights and green-blue shaded areas; strong readable silhouette at about 100–180 pixels on screen. Keep the entire single asset on true transparent alpha, with blank padding all around, a compact base, and a clear grounding point. No big landscape patch, cast shadow on a backdrop, vignette, UI, text, photorealism or watermark. Subject: one short coastal path lantern for a fork or small stone square, distinct from the tall ornate urban lamp in reference 1. A straight squat sea-weathered oak post with brass collars, small heavy cream-stone footing, and a little dark teal square lantern held from a compact curved bracket to the right. The glass is clear cool gray with a visible small wick, unlit in daylight; no baked glow or bloom because the game will light it at night. Strong shape and sturdy vertical shaft, one post only.",
+      "size": [
+        1199,
+        1312
+      ],
+      "mode": "RGBA",
+      "sha256": "0eded600e4c6334509414a000125e29c12a071debab6ad275b5ae4bea2e2a77f",
+      "solid_bounds": [
+        290,
+        88,
+        890,
+        1199
+      ],
+      "transparent_fraction": 0.806
+    },
+    {
+      "file": "palestone_cottage.png",
+      "kind": "scenery",
+      "use": "Place along a lane with a path meeting its front step.",
+      "anchors": {
+        "ground_contact": [
+          763,
+          858
+        ],
+        "door_approach": [
+          653,
+          891
+        ],
+        "porch_light_emitter": [
+          811,
+          593
+        ],
+        "window_emitters": [
+          [
+            487,
+            636
+          ],
+          [
+            1094,
+            611
+          ]
+        ]
+      },
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-5fb666ae-0352-4ea1-9e1b-6b8737a9db94.png",
+      "references": [
+        "experiments/overworld_2d_v01/art/region/lighthouse_v1.png",
+        "experiments/anime_hub_demo_v07/assets/lighthouse/palestone_approach_day.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: isolated transparent fixed-camera scenery sprite for the curved 2D overworld of Project Kingdom. View at an elevated 20–25-degree three-quarter angle, slightly from front right, near-orthographic with straight vertical architecture. The reference images establish the painted gouache detail, palette and angle. Upper-left neutral daylight with warm highlights and green-blue shaded areas; strong readable silhouette at about 100–180 pixels on screen. Keep the entire single asset on true transparent alpha, with blank padding all around, a compact base, and a clear grounding point. No big landscape patch, cast shadow on a backdrop, vignette, UI, text, photorealism or watermark. Subject: one small one-storey Palestone fishing cottage, shorter and broader than the lighthouse cottage, with cream limestone walls, slate blue pitched roof, short squared chimney, one weathered sea-green shutter and one clearly visible teal front door at the front center facing the player, with a short stone threshold for a lane to meet. A small modest red-orange accent on a folded fishing float next to the door, one tidy climbing plant, little or no vegetation at the base. Readable simple outline, level foundations and parallel straight walls, no tower, no leaning, no large garden, no street or scenery behind it.",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "sha256": "a608abbbac45cc5d276a7c9fe8463e70afb18ce359f77bafe9e26a1d2802da96",
+      "solid_bounds": [
+        294,
+        105,
+        1244,
+        924
+      ],
+      "transparent_fraction": 0.6239
+    }
+  ]
+}
