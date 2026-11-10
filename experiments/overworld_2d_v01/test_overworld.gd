@@ -331,7 +331,7 @@ func run() -> void:
 	var grid_correct := true
 	for sample in 600:
 		var point := Vector2(rng.randf_range(-240,240),rng.randf_range(-80,480))
-		var brute: bool = Map.safe_ground(point,world.bridge_center.x) and not Map.bridge_rail_blocks(point,world.bridge_center.x) and point.distance_to(world.Stoneback.SITE)>=2.7
+		var brute: bool = Map.safe_ground(point,world.bridge_center.x) and not Map.bridge_rail_blocks(point,world.bridge_center.x) and point.distance_to(world.Stoneback.SITE)>=2.7 and not world.fortifications.blocks(point)
 		for item in world.props:
 			if item.kind=="city_building": brute = brute and not world.City.blocks(item,point)
 			else: brute = brute and point.distance_squared_to(item.p)>=pow(item.radius+.65,2)

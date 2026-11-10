@@ -40,6 +40,11 @@ these are development shortcuts, not unlocked fast travel.
 5. Drag **Crossings → RiverbendBridge** along the river. Its footprint and
    approach shortcut follow it. Adjust the road points to meet the new
    bridge ends.
+6. Edit the rampart lines and gatehouses under **Fortifications**. The lines
+   set the wall positions and thickness. Move the adjoining wall endpoints
+   with a gatehouse so the stonework meets its towers. Reuse
+   [gatehouse.tscn](gatehouse.tscn) or the separate paintings under
+   [art/fortifications](art/fortifications).
 
 Save the layout and run the project normally. For a quick overworld-only
 preview, open [world.tscn](world.tscn) and use **Run Current Scene**. The game

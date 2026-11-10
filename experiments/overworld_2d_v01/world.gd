@@ -69,6 +69,7 @@ var show_map := true
 var region_map := false
 var prop_grid: Dictionary = {}
 var region_layout: Node2D
+var fortifications: Node2D
 var bridge_center := Map.bridge_center()
 var near_landmark := ""
 var notice := "Explore Mosswood and the northern routes. M opens your region map."
@@ -248,6 +249,8 @@ func inverse_ground(screen: Vector2) -> Vector2:
 
 func build_region() -> void:
 	region_layout.bake()
+	fortifications = region_layout.get_node("Fortifications")
+	fortifications.bake(region_layout)
 	bridge_center = region_layout.bridge_site()
 	bridge_pieces = RiverbendBridge.pieces(bridge_center)
 	var shader := terrain.material as ShaderMaterial
@@ -260,7 +263,7 @@ func build_region() -> void:
 	prop_grid.clear()
 	dressed_props.clear()
 	for item in region_layout.woodland:
-		if Map.safe_ground(item.at,bridge_center.x) and not region_layout.reserved(item.at):
+		if Map.safe_ground(item.at,bridge_center.x) and not region_layout.reserved(item.at) and not fortifications.blocks(item.at,item.radius):
 			props.append(Dressing.make_prop(item.kind,item.at,item.height,item.radius,item.tint))
 	for item in region_layout.props:
 		if item.kind!="city_illustration" and Map.safe_ground(item.at,bridge_center.x):
@@ -278,6 +281,7 @@ func grid_cell(p: Vector2) -> Vector2i:
 
 func can_stand(p: Vector2) -> bool:
 	if not Map.safe_ground(p,bridge_center.x) or Map.bridge_rail_blocks(p,bridge_center.x): return false
+	if fortifications.blocks(p): return false
 	if p.distance_to(Stoneback.SITE)<2.7: return false
 	var cell := grid_cell(p)
 	for x in range(cell.x-1,cell.x+2):
@@ -308,6 +312,8 @@ func move_player(direction: Vector2, delta: float, running := false) -> void:
 		mounted_rider.set_direction(view_vector(facing))
 	if target.length()>0 and travelled<.0001 and bound_hint<=0:
 		notice = "Find the bridge to cross the river." if absf(player.y-Map.river_z(player.x))<7 else "Scenery blocks the way. Walk around it."
+		if fortifications.blocks(player+direction,1.0):
+			notice = "The Greenshire rampart blocks the road."
 		notice_left = 2
 		bound_hint = 3
 
@@ -511,6 +517,7 @@ func update_visible() -> void:
 	var limit := horizon_radius()
 	for item in props: include_visible(item,limit)
 	for item in bridge_pieces: include_visible(item,limit)
+	fortifications.append_visible(self,visible_props,limit)
 	include_visible(City.illustration_prop(),limit)
 	if view_point(Stoneback.SITE).y > 1 and camera_ground.distance_to(Stoneback.SITE) < limit - 4:
 		visible_props.append({"p":Stoneback.SITE,"kind":"stoneback"})
@@ -518,6 +525,7 @@ func update_visible() -> void:
 	visible_props.sort_custom(func(a: Dictionary,b: Dictionary): return view_point(a.p).y>view_point(b.p).y)
 
 func draw_scene() -> void:
+	var limit := horizon_radius()
 	# Paint the road beneath the rider. Near parapets remain in the depth sort.
 	for item in visible_props:
 		if item.kind=="bridge_section":
@@ -538,6 +546,9 @@ func draw_scene() -> void:
 		if item.kind=="bridge_section":
 			if item.p.y<=player.y:
 				RiverbendBridge.draw_piece(self,scenery,item,bridge_shade(item),RiverbendBridge.Layer.PARAPETS)
+			continue
+		if item.kind=="fortification":
+			fortifications.draw_piece(self,scenery,item,limit)
 			continue
 		var size: float = sprite_height(item,depth)
 		var sway := sin(clock*1.35+item.phase)*.004 if item.kind in Dressing.TREE_KINDS else 0.0

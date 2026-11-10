@@ -1,0 +1,76 @@
+{
+  "mode": "Built-in imagegen",
+  "style_reference": "../architecture/mosswood_painted_v1.png",
+  "assets": [
+    {
+      "id": "boundary_gate",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-1cab4183-b489-4f37-bd2a-31aec42fcb65.png",
+      "prompt": "Use case: stylized-concept. Reusable 2D transparent game sprite for the hand-painted anime fantasy overworld shown in the supplied Mosswood style reference. Paint ONE medieval gatehouse with huge CLOSED arched double doors of rich dark oak, hand forged iron straps and round handles. Two matching stout limestone turret pillars capped in slate blue, with a low crenellated connecting parapet, a modest blue heraldic banner on each tower and small clusters of ivy and white wildflowers only at the feet. Soft cream and warm gray stone, warm neutral diffuse sunlight, carefully painted gouache-like texture, miniature storybook countryside architecture. Perfectly straight-on, orthographic front elevation, centered and symmetric, with a single perfectly straight common horizontal foundation; closed doors down to the foundation. Aspect ratio about 3:2 overall. The outer towers have flat sides that can meet the adjacent curtain wall at roughly half the gatehouse height. Crop closely around the entire intact structure with a small transparent margin. Real transparent alpha background. No adjoining wall wings, no floor or garden skirt, no horizon or sky, no shadows outside the subject, no people, no letters or text.",
+      "workspace": "boundary_gate.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "solid_bounds": [
+        176,
+        13,
+        1360,
+        992
+      ],
+      "sha256": "f995a7b9f56a0b22225fccefd4c03df36a40d7f4ee02f6624ce63e2d9606a511"
+    },
+    {
+      "id": "boundary_wall",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-5842f67e-2922-434a-9152-9c8c76e098ab.png",
+      "prompt": "Use case: stylized-concept. Reusable modular 2D hand-painted sprite for a continuous medieval curtain wall in the cream limestone and gouache-like storybook anime style of the supplied Mosswood town reference. One exact flat straight-on orthographic front elevation of a low medieval crenellated wall panel. Wide landscape 3:2 image, wall reaches all the way to both left and right image edges. Several broad pale warm ivory and gray limestone masonry courses, hand-hewn block joints, small patches of soft moss, a narrow continuous carved coping ledge, and four evenly spaced square stone merlons above. Cut the panel at the center of a full-height merlon on both left and right so that repeated copies join into one continuous battlement with matching heights. One perfectly flat base and one straight level wall. Use the same neutral softly lit pale honey limestone and subtle blue-gray shadows as the town walls. Isolated reusable tile with real alpha in the sky between the battlements and outside the silhouette. A small transparent top and bottom margin is fine, the wall MUST touch both side edges. No ends or pillars, no doors, no separate foreground dirt, no plants protruding past the base, no perspective, no floor, no other objects, no text, no watermark.",
+      "workspace": "boundary_wall.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "solid_bounds": [
+        0,
+        234,
+        1536,
+        822
+      ],
+      "sha256": "3b63ab5118a4c6a1720be5a18833bcca879e3246958ac329fa15e9e1fc80ebd6"
+    },
+    {
+      "id": "lateral_masonry",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-00be89fc-0813-4c0d-9e76-0b4f223d5163.png",
+      "prompt": "Use case: stylized-concept. Game texture for the LONG SIDE of a limestone medieval rampart, for an anime storybook fantasy overworld, using the supplied wall as palette and painted craft reference. Exactly orthographic elevation facing the flat wall surface square on. Wide landscape 3:2 canvas filled edge to edge. The upper 10% is a narrow but prominent horizontal weathered projecting limestone coping lip, and the rest is three courses of cream, warm gray and pale honey hand-cut stone blocks with subtle staggered joints, warm ambient gouache shading, sparse small moss flecks along the bottom and joints. The courses stay perfectly horizontal. Balanced small/large blocks and painterly texture. Light diffuse neutral daylight. The pattern must join horizontally across its left and right edges, so it can repeat along a long wall. The base and top reach the image edges. No perspective, no baked shadow outside the material, no merlons or parapet silhouette, no side face, no transparent padding, sky, grass, illustrations or text. Only flat reusable masonry material.",
+      "workspace": "lateral_masonry.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "solid_bounds": [
+        0,
+        0,
+        1536,
+        1024
+      ],
+      "sha256": "eb951a9fa363f763c1968a2de657ab0155e6a8e1ceec0aed7723fe6b9a32e1c9",
+      "style_reference": "boundary_wall.png"
+    },
+    {
+      "id": "lateral_capstone",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-4c0cfbd4-e246-4f43-bf42-13aca47596c7.png",
+      "prompt": "Use case: stylized-concept. A reusable TOP surface texture for a medieval limestone rampart viewed along its length, matching the supplied anime storybook wall's cream honey and warm gray hand-painted limestone. Exact top-down orthographic view. Fill a wide 3:2 canvas edge to edge with a single continuous strip of broad, weathered rectangular limestone coping slabs. Large staggered stone tops, thin quiet seams, cream highlights, gray ochre variation, hand-chipped edges and sparse tiny moss in joints. Keep both long edges solid stone all the way to the image border. Near the center include an uninterrupted flat smooth worn stone patch that can also be sampled for one small crenel cap. Soft neutral daylight, readable painterly brushwork. No vertical faces, no perspective, no scenery, no extra objects, no margins, no transparencies, no text. This is reusable stone material to be projected onto actual wall tops and returns in a game.",
+      "workspace": "lateral_capstone.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "solid_bounds": [
+        0,
+        0,
+        1536,
+        1024
+      ],
+      "sha256": "00cbfd29215bc8fb9a316f6ae28fe8980daf5f9db69d0fb32716846b13bb316d",
+      "style_reference": "boundary_wall.png"
+    }
+  ]
+}

@@ -5,6 +5,7 @@
 [ext_resource type="Script" path="res://experiments/overworld_2d_v01/palestone_prop.gd" id="3"]
 [ext_resource type="Script" path="res://experiments/overworld_2d_v01/greenshire_crossing.gd" id="4"]
 [ext_resource type="PackedScene" path="res://experiments/overworld_2d_v01/palestone_layout.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://experiments/overworld_2d_v01/greenshire_fortifications.tscn" id="6"]
 
 [sub_resource type="Curve2D" id="Curve_NorthRoad"]
 bake_interval = 2.0
@@ -13738,4 +13739,7 @@ modulate = Color(0.9607843137, 0.9529411765, 0.9529411765, 1)
 [node name="Palestone" parent="." instance=ExtResource("5")]
 show_district_background = false
 
+[node name="Fortifications" parent="." instance=ExtResource("6")]
+
 [editable path="Palestone"]
+[editable path="Fortifications"]
