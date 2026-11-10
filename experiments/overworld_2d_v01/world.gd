@@ -40,6 +40,7 @@ var dressed_props: Array[Dictionary] = []
 const City := preload("res://experiments/overworld_2d_v01/city.gd")
 const Rider := preload("res://experiments/overworld_2d_v01/mounted_rider.gd")
 const Map := preload("res://experiments/overworld_2d_v01/layout.gd")
+const RiverbendBridge := preload("res://experiments/overworld_2d_v01/riverbend_bridge.gd")
 const ROOT := "res://experiments/overworld_2d_v01/"
 const FOCAL := 900.0
 const CAMERA_HEIGHT := 14.0
@@ -75,6 +76,7 @@ var notice := "Explore Mosswood and the northern routes. M opens your region map
 var notice_left := 6.0
 var props: Array[Dictionary] = []
 var visible_props: Array[Dictionary] = []
+var bridge_pieces := RiverbendBridge.pieces()
 var textures: Dictionary = {}
 var texture_cache: Dictionary = {}
 var ground_contacts: Dictionary = {}
@@ -135,6 +137,9 @@ func _ready() -> void:
 	shader.set_shader_parameter("packed_earth",load(Dressing.PALESTONE_ART+"road_packed_earth.png"))
 	shader.set_shader_parameter("shell_gravel",load(Dressing.PALESTONE_ART+"path_shell_gravel.png"))
 	shader.set_shader_parameter("limestone",load(Dressing.PALESTONE_ART+"plaza_limestone_paving.png"))
+	shader.set_shader_parameter("bridge_center",Map.bridge_center())
+	shader.set_shader_parameter("bridge_half",Map.BRIDGE_HALF)
+	shader.set_shader_parameter("bridge_half_length",Map.BRIDGE_HALF_LENGTH)
 	for id in ["oak","pine","rock","bush","house","clocktower"]:
 		textures[id] = load(ROOT+"art/"+id+".svg")
 	# Cache modest gameplay textures with mipmaps; keep original PNGs untouched.
@@ -302,7 +307,7 @@ func grid_cell(p: Vector2) -> Vector2i:
 	return Vector2i(floori(p.x/16),floori(p.y/16))
 
 func can_stand(p: Vector2) -> bool:
-	if not Map.safe_ground(p): return false
+	if not Map.safe_ground(p) or Map.bridge_rail_blocks(p): return false
 	if p.distance_to(Stoneback.SITE)<2.7: return false
 	var cell := grid_cell(p)
 	for x in range(cell.x-1,cell.x+2):
@@ -468,7 +473,7 @@ func update_shader() -> void:
 	material.set_shader_parameter("terrain_tint",light_tint)
 	material.set_shader_parameter("haze_color",lighting.haze)
 	material.set_shader_parameter("night_weight",night_weight)
-	var values := {"city_center":Map.TOWN,"camera_ground":camera_ground,"camera_right":camera_right(),"camera_forward":camera_forward(),"focal":FOCAL,"camera_height":CAMERA_HEIGHT,"horizon":HORIZON,"bend":bend(),"camera_lead":CAMERA_LEAD,"world_time":clock,"grid":grid,"river_z":Map.RIVER_Z,"river_wave":Map.RIVER_WAVE,"river_rate":Map.RIVER_RATE,"river_half":Map.RIVER_HALF,"bridge_x":Map.BRIDGE_X,"bridge_half":Map.BRIDGE_HALF}
+	var values := {"city_center":Map.TOWN,"camera_ground":camera_ground,"camera_right":camera_right(),"camera_forward":camera_forward(),"focal":FOCAL,"camera_height":CAMERA_HEIGHT,"horizon":HORIZON,"bend":bend(),"camera_lead":CAMERA_LEAD,"world_time":clock,"grid":grid,"river_z":Map.RIVER_Z,"river_wave":Map.RIVER_WAVE,"river_rate":Map.RIVER_RATE,"river_half":Map.RIVER_HALF}
 	for key in values:
 		material.set_shader_parameter(key,values[key])
 	# Only road segments within the visible ground disc are evaluated per pixel.
@@ -505,6 +510,7 @@ func foot_uv(item: Dictionary) -> Vector2:
 	return texture_feet.get(texture.get_instance_id(),item.get("anchor_uv",Vector2(.5,.95 if item.kind=="bush" else .98)))
 
 func ground_clearance(item: Dictionary) -> float:
+	if item.kind=="bridge_section": return Map.BRIDGE_HALF+.2
 	# A wide foundation must stay in front of the dome's tangent, not just its
 	# center point; otherwise its outer edge hangs over the sky near the rim.
 	var broad: bool = item.kind in Dressing.HOUSE_KINDS or item.kind in ["city_illustration","windmill","watermill","lighthouse","ruins","rock","pine","coastal_pine"]
@@ -530,6 +536,7 @@ func update_visible() -> void:
 	visible_props.clear()
 	var limit := horizon_radius()
 	for item in props: include_visible(item,limit)
+	for item in bridge_pieces: include_visible(item,limit)
 	include_visible(City.illustration_prop(),limit)
 	if view_point(Stoneback.SITE).y > 1 and camera_ground.distance_to(Stoneback.SITE) < limit - 4:
 		visible_props.append({"p":Stoneback.SITE,"kind":"stoneback"})
@@ -537,6 +544,13 @@ func update_visible() -> void:
 	visible_props.sort_custom(func(a: Dictionary,b: Dictionary): return view_point(a.p).y>view_point(b.p).y)
 
 func draw_scene() -> void:
+	# Paint the road beneath the rider. Near parapets remain in the depth sort.
+	for item in visible_props:
+		if item.kind=="bridge_section":
+			var shade := bridge_shade(item)
+			RiverbendBridge.draw_piece(self,scenery,item,shade,RiverbendBridge.Layer.DECK_AND_ARCH)
+			if item.p.y>player.y:
+				RiverbendBridge.draw_piece(self,scenery,item,shade,RiverbendBridge.Layer.PARAPETS)
 	for item in visible_props:
 		var p: Vector2 = item.p
 		var at := project(p)
@@ -545,7 +559,11 @@ func draw_scene() -> void:
 			boss.draw_sprite(scenery, at, depth, light_tint)
 			continue
 		if item.kind=="rider":
-			draw_rider(at)
+			draw_rider(project(p,RiverbendBridge.deck_height(p)))
+			continue
+		if item.kind=="bridge_section":
+			if item.p.y<=player.y:
+				RiverbendBridge.draw_piece(self,scenery,item,bridge_shade(item),RiverbendBridge.Layer.PARAPETS)
 			continue
 		var size: float = sprite_height(item,depth)
 		var sway := sin(clock*1.35+item.phase)*.004 if item.kind in Dressing.TREE_KINDS else 0.0
@@ -597,9 +615,17 @@ func draw_scene() -> void:
 			draw_city_grounding(at,size,dimensions.x/dimensions.y,surface_rotation(p),shade.a,true)
 		draw_prop_details(item,at,size,dimensions,foot,shade.a)
 	if grid:
-		var at := project(player)
+		var at := project(player,RiverbendBridge.deck_height(player))
 		scenery.draw_line(at-Vector2(15,0),at+Vector2(15,0),Color("f4d386"),2)
 		scenery.draw_line(at-Vector2(0,10),at+Vector2(0,10),Color("f4d386"),2)
+
+func bridge_shade(item: Dictionary) -> Color:
+	var p: Vector2 = item.p
+	var shade := light_tint.lerp(lighting.haze,smoothstep(80,330,view_point(p).y)*.7)
+	if bend()>0:
+		var rim := horizon_radius()-ground_clearance(item)
+		shade.a = 1.0-smoothstep(rim-3,rim,p.distance_to(camera_ground))
+	return shade
 
 func draw_city_grounding(at: Vector2, size: float, aspect: float, rotation: float, opacity: float, foreground: bool) -> void:
 	# Keep the ground contact attached to the painting's foundation, not a

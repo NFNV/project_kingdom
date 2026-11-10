@@ -18,6 +18,8 @@ const RIVER_WAVE := 8.0
 const RIVER_RATE := .03
 const RIVER_HALF := 4.8
 const BRIDGE_HALF := 5.5
+const BRIDGE_HALF_LENGTH := 7.6
+const BRIDGE_RAIL_X := BRIDGE_HALF-.30
 const PREVIOUS_COAST_ROAD := [LAKESIDE,Vector2(100,260),Vector2(130,320),COAST]
 const PREVIOUS_LIGHTHOUSE_PATH := [COAST,Vector2(169,363),Vector2(174,363)]
 const ROUTES := [
@@ -76,8 +78,16 @@ static func coast_x(z: float) -> float:
 static func lake_distance(p: Vector2) -> float:
  return ((p-LAKE)/LAKE_SIZE).length()
 
+static func bridge_center() -> Vector2:
+ return Vector2(BRIDGE_X,river_z(BRIDGE_X))
+
 static func on_bridge(p: Vector2) -> bool:
- return absf(p.x-BRIDGE_X)<BRIDGE_HALF
+ var offset := (p-bridge_center()).abs()
+ return offset.x<BRIDGE_HALF and offset.y<BRIDGE_HALF_LENGTH
+
+static func bridge_rail_blocks(p: Vector2) -> bool:
+ var offset := (p-bridge_center()).abs()
+ return absf(offset.x-BRIDGE_RAIL_X)<.40 and offset.y<BRIDGE_HALF_LENGTH
 
 static func safe_ground(p: Vector2) -> bool:
  return BOUNDS.has_point(p) and lake_distance(p)>1.04 and (p.y<110 or p.x<coast_x(p.y)-1) and (absf(p.y-river_z(p.x))>RIVER_HALF+.7 or on_bridge(p))

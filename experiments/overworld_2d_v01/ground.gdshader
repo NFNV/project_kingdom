@@ -15,8 +15,9 @@ uniform float river_z = 85.0;
 uniform float river_wave = 8.0;
 uniform float river_rate = 0.03;
 uniform float river_half = 4.8;
-uniform float bridge_x = 18.0;
+uniform vec2 bridge_center;
 uniform float bridge_half = 5.5;
+uniform float bridge_half_length = 7.6;
 uniform vec4 routes[32];
 uniform int route_count = 0;
 uniform vec4 palestone_bounds;
@@ -94,10 +95,12 @@ void fragment(){
    col=mix(col,blue*vec3(.78,.98,1.06),sea);
    float foam=(1.0-smoothstep(0.0,1.0,abs(shore-1.4-sin(p.y*.45+world_time)*.4)))*coast_region;
    col=mix(col,vec3(.85,.91,.80),foam*.6);
-   if(abs(p.x-bridge_x)<bridge_half && waterline<river_half+2.0){
-    col=mix(vec3(.46,.35,.22),vec3(.69,.53,.32),step(.08,fract(p.y*1.3)));
-    float rail=step(bridge_half-.35,abs(p.x-bridge_x));
-    col=mix(col,vec3(.28,.25,.16),rail);
+   vec2 bridge_offset=p-bridge_center;
+   vec2 bridge_extents=vec2(bridge_half,bridge_half_length);
+   if(max(abs(bridge_offset).x-bridge_half,abs(bridge_offset).y-bridge_half_length)<1.3){
+    vec2 shadow_edge=abs(bridge_offset-vec2(.25,-.12))-bridge_extents;
+    float shadow=1.0-smoothstep(-.15,1.0,max(shadow_edge.x,shadow_edge.y));
+    col=mix(col,col*vec3(.56,.63,.61),shadow*mix(.42,.73,water));
    }
    vec2 tuft=fract(p*3.0)-.5;
    float speck=step(.95,hash(floor(p*3.0)))*(1.0-smoothstep(.1,.34,length(tuft*vec2(1.2,.8))))*(1.0-smoothstep(45.0,110.0,depth));
