@@ -3,6 +3,7 @@ const ART := "res://experiments/anime_hub_assets_v06/"
 const PAINTED := "res://experiments/overworld_2d_v01/art/architecture/"
 const PALESTONE_ART := "res://experiments/overworld_2d_v01/art/palestone_kit/"
 const HOUSE_KINDS := ["ivy_cottage","balcony_cottage","bakery","grocer_shop","bookshop","country_hall","palestone_cottage"]
+const BUILDING_KINDS := HOUSE_KINDS+["city_illustration","windmill","watermill","lighthouse","ruins"]
 const TREE_KINDS := ["oak","pine","willow","coastal_pine","lakeside_alder"]
 const LAMP_KINDS := ["lamp","coastal_lantern"]
 const CATALOG := {

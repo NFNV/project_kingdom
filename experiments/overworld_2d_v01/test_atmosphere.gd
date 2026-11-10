@@ -99,6 +99,17 @@ func run() -> void:
  for item in world.dressed_props:
   if item.kind in world.Dressing.HOUSE_KINDS:
    check(world.sprite_height(item,5)<=180,"Nearby house stays within map-icon scale: "+item.kind)
+   var start: Vector2 = world.player
+   for building in [item,world.City.illustration_prop()]:
+    world.player = building.p+Vector2(35,-20)
+    world.update_camera()
+    var far_size: float = world.sprite_height(building,world.view_point(building.p).y)
+    world.player = building.p+Vector2(9,-27)
+    world.update_camera()
+    var near_size: float = world.sprite_height(building,world.view_point(building.p).y)
+    check(near_size>far_size,"Painted building grows when approaching from the side: "+building.kind)
+   world.player = start
+   world.update_camera()
    break
  world.day_phase = 1
  world.auto_clock = true

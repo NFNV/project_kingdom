@@ -456,12 +456,24 @@ func surface_rotation(p: Vector2) -> float:
 	return atan(2.0*bend()*view_point(p).x)
 
 func sprite_height(item: Dictionary, depth: float) -> float:
-	var size: float = FOCAL*item.height/depth
+	var projected_height: float = FOCAL*item.height
 	var texture: Texture2D = textures.get(item.kind)
-	size = minf(size,item.get("max_height",INF))
+	var size_limit: float = item.get("max_height",INF)
 	if texture!=null:
-		size = minf(size,item.get("max_width",INF)*texture.get_height()/texture.get_width())
-	return size
+		size_limit = minf(size_limit,item.get("max_width",INF)*texture.get_height()/texture.get_width())
+	if item.kind in Dressing.BUILDING_KINDS:
+		# Forward depth can increase while the rider closes in from the side.
+		# Use rider distance for painted buildings, easing into the size limit.
+		var distance := player.distance_to(item.p)
+		var clearance := maxf(0.0,projected_height/size_limit-CAMERA_LEAD)
+		depth = CAMERA_LEAD+distance
+		if clearance>0.0:
+			depth += clearance*clearance/(clearance+distance)
+	return minf(projected_height/depth,size_limit)
+
+func sprite_scale(item: Dictionary, height: float, dimensions: Vector2) -> Vector2:
+	var proportions := City.ART_PROPORTIONS if item.kind=="city_illustration" else Vector2.ONE
+	return proportions*(height/dimensions.y)
 
 func foot_uv(item: Dictionary) -> Vector2:
 	var texture: Texture2D = textures[item.kind]
@@ -471,7 +483,7 @@ func ground_clearance(item: Dictionary) -> float:
 	if item.kind=="bridge_section": return Map.BRIDGE_HALF+.2
 	# A wide foundation must stay in front of the dome's tangent, not just its
 	# center point; otherwise its outer edge hangs over the sky near the rim.
-	var broad: bool = item.kind in Dressing.HOUSE_KINDS or item.kind in ["city_illustration","windmill","watermill","lighthouse","ruins","rock","pine","coastal_pine"]
+	var broad: bool = item.kind in Dressing.BUILDING_KINDS or item.kind in ["rock","pine","coastal_pine"]
 	# The painted floor is seen from above. Its rear corners cover considerably
 	# more ground depth than a vertical billboard's center-point collider.
 	return maxf(.8,item.height*1.6) if broad else .8
@@ -486,8 +498,12 @@ func include_visible(item: Dictionary, limit: float) -> void:
 	var at := project(item.p)
 	var height := sprite_height(item,depth)
 	var texture: Texture2D = textures.get(item.kind)
-	var half_width := height*(texture.get_width()/float(texture.get_height()))*.5 if texture!=null else height
-	if at.x < -half_width or at.x>1920+half_width or at.y-height>1080: return
+	var screen_size := Vector2(height*2.0,height)
+	if texture!=null:
+		var dimensions := texture.get_size()
+		screen_size = dimensions*sprite_scale(item,height,dimensions)
+	var half_width := screen_size.x*.5
+	if at.x < -half_width or at.x>1920+half_width or at.y-screen_size.y>1080: return
 	visible_props.append(item)
 
 func update_visible() -> void:
@@ -545,8 +561,11 @@ func draw_scene() -> void:
 			texture = textures.lighthouse_unlit
 		var dimensions := texture.get_size()
 		var foot: Vector2 = dimensions*foot_uv(item)
+		var art_scale := sprite_scale(item,size,dimensions)
+		var rotation := surface_rotation(p)
+		var art_transform := Transform2D(rotation+sway,art_scale,0.0,at)
 		if item.kind=="city_illustration":
-			draw_city_grounding(at,size,dimensions.x/dimensions.y,surface_rotation(p),shade.a,false)
+			draw_city_grounding(at,dimensions*art_scale,rotation,shade.a,false)
 		elif texture_feet.has(texture.get_instance_id()):
 			var tree: bool = item.kind in Dressing.TREE_KINDS
 			var contact_width := size*(.16 if tree else .42)*dimensions.x/dimensions.y
@@ -566,12 +585,12 @@ func draw_scene() -> void:
 				scenery.draw_set_transform(at+Vector2(0,size*.015),surface_rotation(p),Vector2(1,.32))
 				Atmosphere.glow(scenery,Vector2.ZERO,pool,lamp_weight*strength*shade.a,Color("ffd292"),false)
 				scenery.draw_set_transform(Vector2.ZERO)
-		scenery.draw_set_transform(at,surface_rotation(p)+sway,Vector2.ONE*(size/dimensions.y))
+		scenery.draw_set_transform_matrix(art_transform)
 		scenery.draw_texture_rect(texture,Rect2(-foot,dimensions),false,shade)
 		scenery.draw_set_transform(Vector2.ZERO)
 		if item.kind=="city_illustration":
-			draw_city_grounding(at,size,dimensions.x/dimensions.y,surface_rotation(p),shade.a,true)
-		draw_prop_details(item,at,size,dimensions,foot,shade.a)
+			draw_city_grounding(at,dimensions*art_scale,rotation,shade.a,true)
+		draw_prop_details(item,art_transform,size,dimensions,foot,shade.a)
 	if grid:
 		var at := project(player,RiverbendBridge.deck_height(player,bridge_center))
 		scenery.draw_line(at-Vector2(15,0),at+Vector2(15,0),Color("f4d386"),2)
@@ -585,10 +604,11 @@ func bridge_shade(item: Dictionary) -> Color:
 		shade.a = 1.0-smoothstep(rim-3,rim,p.distance_to(camera_ground))
 	return shade
 
-func draw_city_grounding(at: Vector2, size: float, aspect: float, rotation: float, opacity: float, foreground: bool) -> void:
+func draw_city_grounding(at: Vector2, screen_size: Vector2, rotation: float, opacity: float, foreground: bool) -> void:
 	# Keep the ground contact attached to the painting's foundation, not a
 	# separately projected plaza behind the billboard. The gate path stays clear.
-	var width := size*aspect
+	var width := screen_size.x
+	var size := screen_size.y
 	if not foreground:
 		scenery.draw_set_transform(at+Vector2(0,-size*.07).rotated(rotation),rotation,Vector2(width*.34,size*.11))
 		Atmosphere.glow(scenery,Vector2.ZERO,1,opacity*.30,Color("334020"),false)
@@ -606,13 +626,12 @@ func draw_city_grounding(at: Vector2, size: float, aspect: float, rotation: floa
 				var tip := point+Vector2(blade*length*.65,-length*(1.0-absf(blade)*.25)).rotated(rotation)
 				scenery.draw_line(point,tip,grass,clampf(size*.004,1.0,1.5),true)
 
-func draw_prop_details(item: Dictionary, at: Vector2, size: float, dimensions: Vector2, foot: Vector2, opacity: float) -> void:
-	var rotation := surface_rotation(item.p)
+func draw_prop_details(item: Dictionary, art_transform: Transform2D, size: float, dimensions: Vector2, foot: Vector2, opacity: float) -> void:
 	if lamp_weight>.005 and light_emitters.has(item.kind):
 		for uv in light_emitters[item.kind]:
 			if item.kind=="lighthouse" and uv.y<.4 and not beacon_restored():
 				continue
-			var point: Vector2 = at+((uv*dimensions-foot)*size/dimensions.y).rotated(rotation)
+			var point: Vector2 = art_transform*(uv*dimensions-foot)
 			var flicker := .92+.08*sin(clock*1.7+float(item.phase))
 			var is_lamp: bool = item.kind in Dressing.LAMP_KINDS
 			var radius := clampf(size*(.16 if is_lamp else (.019 if item.kind=="city_illustration" else .065)),2.5,20 if is_lamp else 14)
@@ -625,10 +644,10 @@ func draw_prop_details(item: Dictionary, at: Vector2, size: float, dimensions: V
 	if item.kind in Dressing.TREE_KINDS and posmod(hash(item.p),5)==0 and night_weight>.05:
 		for i in 2:
 			var drift := Vector2(sin(clock*.6+item.phase+i)*11,-8-cos(clock*.4+item.phase+i)*7)
-			Atmosphere.glow(scenery,at+drift,minf(3,size*.04),night_weight*opacity*.55,Color("d9ee8f"))
+			Atmosphere.glow(scenery,art_transform.origin+drift,minf(3,size*.04),night_weight*opacity*.55,Color("d9ee8f"))
 	if item.kind in ["ivy_cottage","balcony_cottage","bakery","watermill"]:
 		var uv := Vector2(.73,.07) if item.kind!="watermill" else Vector2(.29,.02)
-		var chimney: Vector2 = at+((uv*dimensions-foot)*size/dimensions.y).rotated(rotation)
+		var chimney: Vector2 = art_transform*(uv*dimensions-foot)
 		for i in 3:
 			var age := fposmod(clock*.22+i*.33,1)
 			var point := chimney+Vector2(sin(clock*.35+i)*size*.04+age*size*.09,-age*size*.22)

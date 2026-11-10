@@ -4,6 +4,7 @@ const CENTER := Vector2(-47,39)
 const SCALE := .38
 const HEIGHT_SCALE := .5
 const GATE := CENTER+Vector2(0,-13)
+const ART_PROPORTIONS := Vector2(1.0,.86)
 const CREAM := Color("e6d7ad")
 const SLATE := Color("426780")
 
