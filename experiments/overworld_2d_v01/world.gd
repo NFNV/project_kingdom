@@ -21,7 +21,7 @@ const Atmosphere := preload("res://experiments/overworld_2d_v01/atmosphere.gd")
 const RenderSettings := preload("res://experiments/anime_hub_demo_v07/tools/render_settings.gd")
 const FieldMap := preload("res://experiments/anime_hub_demo_v07/tools/field_map.gd")
 const Dressing := preload("res://experiments/overworld_2d_v01/region_dressing.gd")
-const PalestoneScene := preload("res://experiments/overworld_2d_v01/palestone_layout.tscn")
+const GreenshireScene := preload("res://experiments/overworld_2d_v01/greenshire_layout.tscn")
 const ClockDial := preload("res://experiments/anime_hub_demo_v07/tools/celestial_clock.gd")
 const CYCLE_SECONDS := Atmosphere.CYCLE_SECONDS
 var day_phase := 1.0
@@ -68,15 +68,14 @@ var automated := false
 var show_map := true
 var region_map := false
 var prop_grid: Dictionary = {}
-var region_segments: Array[Vector4] = []
-var palestone: Node2D
-var shader_segment_key := Vector3i(-9999,-9999,-9999)
+var region_layout: Node2D
+var bridge_center := Map.bridge_center()
 var near_landmark := ""
 var notice := "Explore Mosswood and the northern routes. M opens your region map."
 var notice_left := 6.0
 var props: Array[Dictionary] = []
 var visible_props: Array[Dictionary] = []
-var bridge_pieces := RiverbendBridge.pieces()
+var bridge_pieces: Array[Dictionary] = []
 var textures: Dictionary = {}
 var texture_cache: Dictionary = {}
 var ground_contacts: Dictionary = {}
@@ -126,27 +125,20 @@ func _ready() -> void:
 	shader.shader = load(ROOT+"ground.gdshader")
 	terrain.material = shader
 	add_child(terrain)
-	palestone = PalestoneScene.instantiate()
-	palestone.hide()
-	add_child(palestone)
-	palestone.bake()
-	var bounds: Rect2 = palestone.MASK_BOUNDS
-	palestone.mask.generate_mipmaps()
-	shader.set_shader_parameter("palestone_bounds",Vector4(bounds.position.x,bounds.position.y,bounds.size.x,bounds.size.y))
-	shader.set_shader_parameter("palestone_mask",ImageTexture.create_from_image(palestone.mask))
+	region_layout = GreenshireScene.instantiate()
+	region_layout.hide()
+	add_child(region_layout)
 	shader.set_shader_parameter("packed_earth",load(Dressing.PALESTONE_ART+"road_packed_earth.png"))
 	shader.set_shader_parameter("shell_gravel",load(Dressing.PALESTONE_ART+"path_shell_gravel.png"))
 	shader.set_shader_parameter("limestone",load(Dressing.PALESTONE_ART+"plaza_limestone_paving.png"))
-	shader.set_shader_parameter("bridge_center",Map.bridge_center())
 	shader.set_shader_parameter("bridge_half",Map.BRIDGE_HALF)
 	shader.set_shader_parameter("bridge_half_length",Map.BRIDGE_HALF_LENGTH)
-	for id in ["oak","pine","rock","bush","house","clocktower"]:
+	for id in ["bush","house","clocktower"]:
 		textures[id] = load(ROOT+"art/"+id+".svg")
 	# Cache modest gameplay textures with mipmaps; keep original PNGs untouched.
-	for pair in [["oak","res://experiments/anime_hub_assets_v06/scenery/elm_tree.png"],["willow","res://experiments/anime_hub_assets_v06/scenery/willow_tree.png"],["pine",ROOT+"art/region/pine_grove.png"],["rock",ROOT+"art/region/coastal_rocks.png"],["windmill",ROOT+"art/region/windmill.png"],["ruins",ROOT+"art/region/ruins.png"]]:
-		textures[pair[0]] = cache_texture(pair[1])
 	for id in Dressing.CATALOG:
-		textures[id] = cache_texture(Dressing.CATALOG[id])
+		if not textures.has(id):
+			textures[id] = cache_texture(Dressing.CATALOG[id])
 	if linked_journey:
 		var crop: Rect2i = texture_crops[textures.lighthouse.get_instance_id()]
 		textures["lighthouse_unlit"] = cache_texture(ROOT+"art/region/lighthouse_unlit.png",crop)
@@ -157,7 +149,6 @@ func _ready() -> void:
 		for pixel in Dressing.EMITTER_PIXELS[kind]:
 			points.append((pixel-Vector2(crop.position))/Vector2(crop.size))
 		light_emitters[kind] = points
-	region_segments = Map.branch_segments()
 	build_region()
 	scenery = Node2D.new()
 	scenery.draw.connect(draw_scene)
@@ -256,45 +247,24 @@ func inverse_ground(screen: Vector2) -> Vector2:
 	return camera_ground+world_vector(Vector2((screen.x-960)*depth/FOCAL,depth))
 
 func build_region() -> void:
+	region_layout.bake()
+	bridge_center = region_layout.bridge_site()
+	bridge_pieces = RiverbendBridge.pieces(bridge_center)
+	var shader := terrain.material as ShaderMaterial
+	var bounds: Rect2 = region_layout.mask_bounds
+	shader.set_shader_parameter("layout_bounds",Vector4(bounds.position.x,bounds.position.y,bounds.size.x,bounds.size.y))
+	region_layout.mask.generate_mipmaps()
+	shader.set_shader_parameter("layout_mask",ImageTexture.create_from_image(region_layout.mask))
+	shader.set_shader_parameter("bridge_center",bridge_center)
 	props.clear()
 	prop_grid.clear()
-	dressed_props = Dressing.props()
-	var placed: Array[Dictionary] = []
-	for item in palestone.props:
-		if Map.safe_ground(item.at):
-			placed.append(Dressing.make_prop(item.kind,item.at,item.height,item.radius))
-	var rng := RandomNumberGenerator.new()
-	rng.seed = 27102026
-	var landmarks := Map.landmarks()
-	for i in 1800:
-		var p := Vector2(rng.randf_range(-238,238),rng.randf_range(-78,478))
-		if not Map.safe_ground(p) or Map.road_distance(p)<7 or absf(p.y-Map.river_z(p.x))<10 or p.distance_to(Map.TOWN)<22:
-			continue
-		if landmarks.any(func(marker: Dictionary): return p.distance_to(marker.p)<12):
-			continue
-		if p.distance_to(Map.WINDMILL)<18 or p.distance_to(Map.RUINS)<16:
-			continue
-		if dressed_props.any(func(item: Dictionary): return p.distance_squared_to(item.p)<pow(item.radius+4.5,2)): continue
-		var kind := "pine" if p.y>155 and p.x<65 else "oak"
-		if absf(p.y-Map.river_z(p.x))<24 or absf(Map.lake_distance(p)-1)<.35:
-			kind = "willow"
-		if rng.randf()<(.55 if p.y<120 or p.x>140 else .22):
-			kind = "rock" if rng.randf()<.4 else "bush"
-		var height := rng.randf_range(4.0,6.5) if kind in ["oak","pine","willow"] else rng.randf_range(1.0,2.6)
-		props.append({"p":p,"kind":kind,"height":height,"radius":1.1 if kind in ["oak","pine","willow"] else .75,"tint":Color.from_hsv(rng.randf_range(.0,.04),rng.randf_range(.0,.05),rng.randf_range(.93,1.0)),"phase":rng.randf()*TAU})
-	props = props.filter(func(item: Dictionary):
-		return item.p.distance_to(Stoneback.SITE)>=23 and not palestone.reserved(item.p) and not placed.any(func(prop): return item.p.distance_to(prop.p)<prop.radius+2.0)
-	)
-	dressed_props = dressed_props.filter(func(item: Dictionary):
-		return item.kind=="lighthouse" or (not item.get("retired",false) and not palestone.reserved(item.p))
-	)
-	dressed_props.append_array(placed)
-	for item in [["windmill",Map.WINDMILL,11.0,3.0],["ruins",Map.RUINS,8.0,3.0]]:
-		props.append({"p":item[1],"kind":item[0],"height":item[2],"radius":item[3],"tint":Color.WHITE,"phase":0.0})
-	# Small stone outcrops make the coastline readable from the approach.
-	for i in 12:
-		var p := Vector2(Map.coast_x(285+i*12)-9,285+i*12)
-		props.append({"p":p,"kind":"rock","height":2.6,"radius":1.0,"tint":Color.WHITE,"phase":0.0})
+	dressed_props.clear()
+	for item in region_layout.woodland:
+		if Map.safe_ground(item.at,bridge_center.x) and not region_layout.reserved(item.at):
+			props.append(Dressing.make_prop(item.kind,item.at,item.height,item.radius,item.tint))
+	for item in region_layout.props:
+		if item.kind!="city_illustration" and Map.safe_ground(item.at,bridge_center.x):
+			dressed_props.append(Dressing.make_prop(item.kind,item.at,item.height,item.radius,item.tint))
 	props.append_array(dressed_props)
 	props.append_array(City.props())
 	for item in props:
@@ -307,7 +277,7 @@ func grid_cell(p: Vector2) -> Vector2i:
 	return Vector2i(floori(p.x/16),floori(p.y/16))
 
 func can_stand(p: Vector2) -> bool:
-	if not Map.safe_ground(p) or Map.bridge_rail_blocks(p): return false
+	if not Map.safe_ground(p,bridge_center.x) or Map.bridge_rail_blocks(p,bridge_center.x): return false
 	if p.distance_to(Stoneback.SITE)<2.7: return false
 	var cell := grid_cell(p)
 	for x in range(cell.x-1,cell.x+2):
@@ -357,7 +327,7 @@ func _physics_process(delta: float) -> void:
 	move_player(direction,delta,Input.is_physical_key_pressed(KEY_SHIFT) and not automated)
 	update_camera()
 	near_landmark = ""
-	for marker in Map.landmarks():
+	for marker in Map.landmarks(bridge_center.x):
 		if minf(player.distance_to(marker.p),player.distance_to(marker.get("location",marker.p)))<19:
 			near_landmark = marker.name
 			break
@@ -476,18 +446,6 @@ func update_shader() -> void:
 	var values := {"city_center":Map.TOWN,"camera_ground":camera_ground,"camera_right":camera_right(),"camera_forward":camera_forward(),"focal":FOCAL,"camera_height":CAMERA_HEIGHT,"horizon":HORIZON,"bend":bend(),"camera_lead":CAMERA_LEAD,"world_time":clock,"grid":grid,"river_z":Map.RIVER_Z,"river_wave":Map.RIVER_WAVE,"river_rate":Map.RIVER_RATE,"river_half":Map.RIVER_HALF}
 	for key in values:
 		material.set_shader_parameter(key,values[key])
-	# Only road segments within the visible ground disc are evaluated per pixel.
-	var cell := grid_cell(camera_ground)
-	var key := Vector3i(cell.x,cell.y,roundi(horizon_radius()))
-	if key!=shader_segment_key:
-		shader_segment_key = key
-		var segments: Array[Vector4] = []
-		for segment in region_segments:
-			if Map.segment_distance(camera_ground,Vector2(segment.x,segment.y),Vector2(segment.z,segment.w))<horizon_radius()+24:
-				segments.append(segment)
-		material.set_shader_parameter("route_count",segments.size())
-		while segments.size()<32: segments.append(Vector4.ZERO)
-		material.set_shader_parameter("routes",segments)
 
 func horizon_radius() -> float:
 	return minf(355.0,sqrt((CAMERA_HEIGHT-bend()*CAMERA_LEAD*CAMERA_LEAD)/bend())) if bend()>0 else 355.0
@@ -559,7 +517,7 @@ func draw_scene() -> void:
 			boss.draw_sprite(scenery, at, depth, light_tint)
 			continue
 		if item.kind=="rider":
-			draw_rider(project(p,RiverbendBridge.deck_height(p)))
+			draw_rider(project(p,RiverbendBridge.deck_height(p,bridge_center)))
 			continue
 		if item.kind=="bridge_section":
 			if item.p.y<=player.y:
@@ -615,7 +573,7 @@ func draw_scene() -> void:
 			draw_city_grounding(at,size,dimensions.x/dimensions.y,surface_rotation(p),shade.a,true)
 		draw_prop_details(item,at,size,dimensions,foot,shade.a)
 	if grid:
-		var at := project(player,RiverbendBridge.deck_height(player))
+		var at := project(player,RiverbendBridge.deck_height(player,bridge_center))
 		scenery.draw_line(at-Vector2(15,0),at+Vector2(15,0),Color("f4d386"),2)
 		scenery.draw_line(at-Vector2(0,10),at+Vector2(0,10),Color("f4d386"),2)
 
@@ -756,23 +714,16 @@ func draw_map_contents(large: bool) -> void:
 	hud.draw_set_transform(map_point(Map.LAKE,large),0,Map.LAKE_SIZE*scale)
 	hud.draw_circle(Vector2.ZERO,1,Color("78aaa5"))
 	hud.draw_set_transform(Vector2.ZERO)
-	var road := PackedVector2Array()
-	for z in range(-75,476,5): road.append(map_point(Vector2(Map.road_x(z),z),large))
-	hud.draw_polyline(road,Color("b29b68"),maxf(2,3*scale),true)
-	for route in Map.drawn_routes():
-		var points := PackedVector2Array()
-		for p in route: points.append(map_point(p,large))
-		hud.draw_polyline(points,Color("b29b68"),maxf(1.5,2.7*scale),true)
-	for route in palestone.routes:
+	for route in region_layout.routes:
 		var points := PackedVector2Array()
 		for p in route.points: points.append(map_point(p,large))
-		hud.draw_polyline(points,Color("b29b68") if route.surface==0 else Color("bdab82"),maxf(1.5,route.width*.4*scale),true)
-	for square in palestone.squares:
+		hud.draw_polyline(points,Color("bdab82") if route.surface==1 else Color("b29b68"),maxf(1.5,route.width*.4*scale),true)
+	for square in region_layout.squares:
 		if square.size()<3: continue
 		var points := PackedVector2Array()
 		for p in square: points.append(map_point(p,large))
 		hud.draw_colored_polygon(points,Color("c2a675"))
-	var markers := Map.landmarks()
+	var markers := Map.landmarks(bridge_center.x)
 	for i in markers.size():
 		var at := map_point(markers[i].get("location",markers[i].p),large)
 		hud.draw_circle(at,7 if large else 3,Color("496b48"))
@@ -816,7 +767,7 @@ func draw_region_map() -> void:
 	text(Vector2(1430,157),"N ↑",24,Color("294c3e"))
 	draw_map_contents(true)
 	text(Vector2(1215,270),"PLACES TO ROAM",19,Color("294c3e"))
-	var markers := Map.landmarks()
+	var markers := Map.landmarks(bridge_center.x)
 	for i in markers.size():
 		text(Vector2(1215,310+i*46),str(i+1)+"  "+markers[i].short,20,Color("53694b"))
 	if lighthouse_quest_tracked():
@@ -825,7 +776,7 @@ func draw_region_map() -> void:
 	text(Vector2(450,902),"1–8  Preview a destination     M / Esc  Return to the road",20,Color("294c3e"))
 
 func visit(index: int) -> void:
-	var marker: Dictionary = Map.landmarks()[clampi(index,0,7)]
+	var marker: Dictionary = Map.landmarks(bridge_center.x)[clampi(index,0,7)]
 	player = marker.p
 	update_camera()
 	velocity = Vector2.ZERO
@@ -887,7 +838,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				get_viewport().set_input_as_handled()
 				return
 			notice = "Explore the northern roads. M shows the connected region and its landmarks."
-			for marker in Map.landmarks():
+			for marker in Map.landmarks(bridge_center.x):
 				if marker.name==near_landmark: notice = marker.description
 			notice_left = 5
 		KEY_F11: get_window().mode = Window.MODE_WINDOWED if get_window().mode==Window.MODE_FULLSCREEN else Window.MODE_FULLSCREEN

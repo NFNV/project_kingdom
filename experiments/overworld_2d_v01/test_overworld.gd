@@ -305,7 +305,8 @@ func run() -> void:
 	check(not world.can_stand(Vector2(Map.coast_x(350)+4,350)),"Open sea blocks walking")
 	var route_clear := true
 	var route_samples := 0
-	var rendered_routes: Array = Map.drawn_routes() + world.palestone.routes.map(func(route): return route.points)
+	var branch_routes: Array = world.region_layout.routes.filter(func(route): return route.name!="NorthRoad")
+	var rendered_routes: Array = branch_routes.map(func(route): return route.points)
 	for route in rendered_routes:
 		for i in range(1,route.size()):
 			var length: float = route[i-1].distance_to(route[i])
@@ -330,7 +331,7 @@ func run() -> void:
 	var grid_correct := true
 	for sample in 600:
 		var point := Vector2(rng.randf_range(-240,240),rng.randf_range(-80,480))
-		var brute: bool = Map.safe_ground(point)
+		var brute: bool = Map.safe_ground(point,world.bridge_center.x) and not Map.bridge_rail_blocks(point,world.bridge_center.x) and point.distance_to(world.Stoneback.SITE)>=2.7
 		for item in world.props:
 			if item.kind=="city_building": brute = brute and not world.City.blocks(item,point)
 			else: brute = brute and point.distance_squared_to(item.p)>=pow(item.radius+.65,2)
