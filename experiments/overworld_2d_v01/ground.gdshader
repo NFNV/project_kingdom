@@ -15,10 +15,16 @@ uniform float river_z = 85.0;
 uniform float river_wave = 8.0;
 uniform float river_rate = 0.03;
 uniform float river_half = 4.8;
-uniform float bridge_x = 18.0;
+uniform vec2 bridge_center;
 uniform float bridge_half = 5.5;
+uniform float bridge_half_length = 7.6;
 uniform vec4 routes[32];
 uniform int route_count = 0;
+uniform vec4 palestone_bounds;
+uniform sampler2D palestone_mask : filter_linear_mipmap, repeat_disable;
+uniform sampler2D packed_earth : source_color, filter_linear_mipmap, repeat_enable;
+uniform sampler2D shell_gravel : source_color, filter_linear_mipmap, repeat_enable;
+uniform sampler2D limestone : source_color, filter_linear_mipmap, repeat_enable;
 uniform vec4 terrain_tint = vec4(1.0);
 uniform vec4 haze_color = vec4(.66,.79,.67,1.0);
 uniform float night_weight = 0.0;
@@ -58,6 +64,20 @@ void fragment(){
    grass=mix(grass,vec3(.86,.80,.58)+n*.04,smoothstep(-22.0,-4.0,shore)*coast_region);
    vec3 soil=mix(vec3(.66,.53,.33),vec3(.88,.77,.51),n);
    vec3 col=mix(grass,soil,1.0-smoothstep(2.6,4.2,path));
+   vec2 layout_uv=(p-palestone_bounds.xy)/palestone_bounds.zw;
+   vec3 surfaces=vec3(0.0);
+   if(all(greaterThanEqual(layout_uv,vec2(0.0))) && all(lessThan(layout_uv,vec2(1.0)))){
+    surfaces=texture(palestone_mask,layout_uv).rgb;
+    // Irregular shoulders follow the authored curves in ground space.
+    float grain=noise(p*2.3)-.5;
+    vec2 tracks=smoothstep(vec2(.02),vec2(.98),surfaces.rg+grain*.28*surfaces.rg*(1.0-surfaces.rg));
+    if(tracks.r>.002){
+     vec3 packed_color=mix(soil,texture(packed_earth,p/12.0).rgb*(.78+n*.22),.84);
+     col=mix(col,packed_color,tracks.r);
+    }
+    if(tracks.g>.002){col=mix(col,texture(shell_gravel,p/8.0).rgb*(.8+n*.2),tracks.g);}
+    if(surfaces.b>.002){col=mix(col,texture(limestone,p/11.0).rgb*(.87+n*.13),surfaces.b);}
+   }
    // The city painting already contains its plaza. A second projected circle
    // appeared outside the cutout as the player moved past the town.
    float waterline=abs(p.y-(river_z+sin(p.x*river_rate)*river_wave));
@@ -75,14 +95,16 @@ void fragment(){
    col=mix(col,blue*vec3(.78,.98,1.06),sea);
    float foam=(1.0-smoothstep(0.0,1.0,abs(shore-1.4-sin(p.y*.45+world_time)*.4)))*coast_region;
    col=mix(col,vec3(.85,.91,.80),foam*.6);
-   if(abs(p.x-bridge_x)<bridge_half && waterline<river_half+2.0){
-    col=mix(vec3(.46,.35,.22),vec3(.69,.53,.32),step(.08,fract(p.y*1.3)));
-    float rail=step(bridge_half-.35,abs(p.x-bridge_x));
-    col=mix(col,vec3(.28,.25,.16),rail);
+   vec2 bridge_offset=p-bridge_center;
+   vec2 bridge_extents=vec2(bridge_half,bridge_half_length);
+   if(max(abs(bridge_offset).x-bridge_half,abs(bridge_offset).y-bridge_half_length)<1.3){
+    vec2 shadow_edge=abs(bridge_offset-vec2(.25,-.12))-bridge_extents;
+    float shadow=1.0-smoothstep(-.15,1.0,max(shadow_edge.x,shadow_edge.y));
+    col=mix(col,col*vec3(.56,.63,.61),shadow*mix(.42,.73,water));
    }
    vec2 tuft=fract(p*3.0)-.5;
    float speck=step(.95,hash(floor(p*3.0)))*(1.0-smoothstep(.1,.34,length(tuft*vec2(1.2,.8))))*(1.0-smoothstep(45.0,110.0,depth));
-   col=mix(col,vec3(.94,.87,.55),speck*(1.0-max(water,max(lake_water,sea)))*smoothstep(3.5,5.0,path)*.5);
+   col=mix(col,vec3(.94,.87,.55),speck*(1.0-max(water,max(lake_water,sea)))*smoothstep(3.5,5.0,path)*(1.0-max(surfaces.r,max(surfaces.g,surfaces.b)))*.5);
    if(grid){
     vec2 cell=abs(fract(p/10.0-.5)-.5)*10.0;
     float line=1.0-smoothstep(.03,.12,min(cell.x,cell.y));

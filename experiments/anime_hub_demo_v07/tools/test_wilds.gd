@@ -62,7 +62,7 @@ func _run() -> void:
 	check(game.camera.limit_right==4608 and game.camera.limit_bottom==2592,"Follow camera can explore beyond the old scene bounds")
 	check(game.occluders.size()>100,"Forest has independently layered animated trees")
 	check(game.dogs.size()==12 and game.combat_active and not game.peaceful_mode,"Four packs of three hostile dogs inhabit only Briarwood")
-	check(game.player.health==5 and game.is_walkable(game.player.position,14),"The sheltered entrance is a healthy safe spawn")
+	check(game.player.health==game.player.maximum_health and game.is_walkable(game.player.position,14),"The sheltered entrance is a healthy safe spawn")
 	await ticks(60)
 	check(game.dogs.all(func(dog): return not dog.alerted),"Distant packs do not chase the player from the entrance")
 	for dog in game.dogs:
@@ -138,7 +138,7 @@ func _run() -> void:
 	game.player.grace = 0
 	game.player.receive_hit(Vector2.LEFT)
 	await ticks(120)
-	check(game.forest_recoveries==1 and game.player.active and game.player.health==5 and not game.transitioning,"Defeat recovers at the sheltered entrance with full health")
+	check(game.forest_recoveries==1 and game.player.active and game.player.health==game.player.maximum_health and not game.transitioning,"Defeat recovers at the sheltered entrance with full health")
 	check(game.player.position.distance_to(game.Map.Wilds.ENTRY)<5 and game.dogs.size()==11,"Recovery removes the defeated bandit without moving the entrance")
 	check(game.coins==coins+2 and game.quest_stage==3 and game.discoveries.has("old_elm") and is_equal_approx(game.clock,1.4),"Recovery preserves coins, town errands, memories and the shared clock")
 	# Actual retreat and reentry exercise combat isolation and population persistence.
@@ -162,7 +162,7 @@ func _run() -> void:
 	game._load_zone("town","forest")
 	await ticks(5)
 	check(game.peaceful_mode and game.dogs.size()==3 and game.dogs.all(func(warden): return not warden.enemy),"Town wardens stay friendly after forest combat")
-	check(not game.player.try_attack() and game.player.health==5,"Home restores health and rejects attacks")
+	check(not game.player.try_attack() and game.player.health==game.player.maximum_health,"Home restores health and rejects attacks")
 	var report := {"checks":checks,"passed":checks-failures.size(),"failures":failures,"scope":"Physical bridge entry, large-map navigation and camera, all four clearings, local hostile packs, telegraphed attacks and movement dodge, actual Space melee damage, unique coin rewards, pause, checkpoint recovery, physical retreat and reentry, persistent clears and friendly town regression."}
 	FileAccess.open(ProjectSettings.globalize_path(ROOT+"wilds_test_results.json"),FileAccess.WRITE).store_string(JSON.stringify(report,"  ")+"\n")
 	print("Briarwood: ",checks-failures.size(),"/",checks," checks passed.")

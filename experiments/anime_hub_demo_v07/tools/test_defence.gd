@@ -79,7 +79,7 @@ func run() -> void:
  await process_frame
  check(hero.guarding,"An actual F press raises the equipped shield")
  contact(raider)
- check(hero.health==5 and hero.parries==1 and raider.stagger>1 and raider.swing==0,"A real contact inside the raise window parries and cancels the enemy's strike")
+ check(hero.health==hero.maximum_health and hero.parries==1 and raider.stagger>1 and raider.swing==0,"A real contact inside the raise window parries and cancels the enemy's strike")
  check(hero.riposte_left>0 and hero.stamina==100,"Parrying opens a bonus-damage counter window and restores stamina")
  guard_key = InputEventKey.new()
  guard_key.physical_keycode = KEY_F
@@ -94,7 +94,7 @@ func run() -> void:
  hero.set_guard(true)
  await ticks(14)
  contact(raider)
- check(hero.health==5 and hero.stamina<80 and hero.blocks==1,"A late shield raise blocks real damage but spends stamina")
+ check(hero.health==hero.maximum_health and hero.stamina<80 and hero.blocks==1,"A late shield raise blocks real damage but spends stamina")
  var before: float = hero.guard_age
  hero.set_guard(false)
  hero.set_guard(true)
@@ -108,13 +108,13 @@ func run() -> void:
  raider.try_attack()
  raider.swing = raider.attack_duration-.12
  raider.resolve_hits()
- check(hero.health==4,"A shield facing away from the attacker cannot block a rear hit")
+ check(hero.health==hero.maximum_health-1,"A shield facing away from the attacker cannot block a rear hit")
  reset()
  hero.stamina = 10
  hero.set_guard(true)
  await ticks(14)
  contact(heavy,"sweep")
- check(hero.health==3 and hero.stamina==0 and hero.guard_break>0 and not hero.guarding,"A heavy hit exhausts a weak guard, breaks it and deals two hearts")
+ check(hero.health==hero.maximum_health-2 and hero.stamina==0 and hero.guard_break>0 and not hero.guarding,"A heavy hit exhausts a weak guard, breaks it and deals one heart")
  check(not hero.try_roll() and not hero.try_attack() and not hero.set_guard(true),"Guard break prevents immediate roll, attack and reblocking")
  await ticks(100)
  check(hero.guard_break==0 and hero.stamina>0,"A broken guard recovers and stamina regenerates after its delay")
@@ -134,7 +134,7 @@ func run() -> void:
  await ticks(6)
  var at: Vector2 = hero.position
  contact(raider)
- check(hero.health==5 and hero.dodges>0 and hero.roll_invulnerable(),"A real enemy contact during the middle of a roll misses")
+ check(hero.health==hero.maximum_health and hero.dodges>0 and hero.roll_invulnerable(),"A real enemy contact during the middle of a roll misses")
  check(at.x-center.x>25,"Rolling moves the real physics body, not just the drawing")
  game.set_paused(true)
  var left: float = hero.roll_left
@@ -144,12 +144,12 @@ func run() -> void:
  game.set_paused(false)
  await ticks(18)
  contact(raider)
- check(hero.health==4,"Roll recovery is vulnerable instead of granting protection through the whole animation")
+ check(hero.health==hero.maximum_health-1,"Roll recovery is vulnerable instead of granting protection through the whole animation")
  reset()
  hero.intent = Vector2.RIGHT
  hero.try_roll()
  contact(raider)
- check(hero.health==4 and hero.roll_left==0,"A mistimed roll can be hit during startup and is interrupted")
+ check(hero.health==hero.maximum_health-1 and hero.roll_left==0,"A mistimed roll can be hit during startup and is interrupted")
  reset()
  hero.stamina = 20
  check(not hero.try_roll(),"Insufficient stamina cannot create a free roll")
@@ -196,7 +196,7 @@ func run() -> void:
  hero.set_guard(true)
  await ticks(14)
  contact(raider)
- check(hero.health==5 and absf(hero.stamina-83.9)<.1,"Ironleaf reduces actual incoming block stamina cost by thirty percent")
+ check(hero.health==hero.maximum_health and absf(hero.stamina-83.9)<.1,"Ironleaf reduces actual incoming block stamina cost by thirty percent")
  hero.set_guard(false)
  check(game.state.unequip_item("shield") and not hero.set_guard(true),"An empty shield slot disables guard and parry")
  hero.stamina = 100
@@ -209,6 +209,9 @@ func run() -> void:
  check(store.write_document(document,SLOT) and store.load_document(SLOT).state.equipment.shield=="trail_shield","New shield equipment survives an actual current-version disk save")
  var old: Dictionary = document.duplicate(true)
  old.version = 2
+ old.player.health = 5
+ old.state.erase("stoneback_stage")
+ old.state.items.erase(store.State.STONEBACK_RELIC)
  old.state.equipment.erase("shield")
  old.state.items.erase("trail_shield")
  old.state.items.erase("ironleaf_shield")

@@ -19,6 +19,7 @@ const Loot := preload("res://experiments/anime_hub_demo_v07/tools/loot_drop.gd")
 const Forge := preload("res://experiments/anime_hub_demo_v07/tools/forge_room.gd")
 const OverworldTravel := preload("res://experiments/anime_hub_demo_v07/tools/overworld_travel.gd")
 const Mill := preload("res://experiments/anime_hub_demo_v07/tools/windsong_mill.gd")
+const Lighthouse := Map.Lighthouse
 const RenderSettings := preload("res://experiments/anime_hub_demo_v07/tools/render_settings.gd")
 var overworld_travel: Node
 var state: Node
@@ -26,6 +27,7 @@ var saves := SaveStore.new()
 var save_path := SaveStore.DEFAULT_PATH
 var backpack_open := false
 var journal_open := false
+var map_open := false
 var title_active := false
 var autosave_enabled := false
 var autosave_queued := false
@@ -50,6 +52,7 @@ const WARDEN_POSTS := {
 const SIZE := Vector2i(1920,1080)
 const TIMES := ["Dawn","Noon","Dusk","Night"]
 const TINTS := Style.LIGHTING
+const PLAZA_FOUNTAIN := Vector2(970,675)
 var FLOOR := PackedVector2Array([Vector2(760,465),Vector2(1150,460),Vector2(1315,570),Vector2(1590,735),Vector2(1360,835),Vector2(1460,990),Vector2(1270,1060),Vector2(410,1060),Vector2(500,925),Vector2(370,770),Vector2(350,720),Vector2(290,695),Vector2(245,635),Vector2(245,555),Vector2(330,550),Vector2(380,610),Vector2(465,630),Vector2(650,580)])
 var town_floor := FLOOR.duplicate()
 const OBJECTIVES := [
@@ -65,6 +68,7 @@ var zone := "town"
 var zone_root: Node2D
 var exits: Dictionary = {}
 var near_exit := ""
+var lighthouse_glow: Sprite2D
 var discoveries: Dictionary:
 	get: return state.discoveries
 var transitioning := false
@@ -149,6 +153,8 @@ const POTIONS := [
 ]
 
 
+var starting_appearance := GameState.HeroLook.DEFAULT.duplicate()
+
 func _ready() -> void:
 	get_window().title = "Project Kingdom — Garden Square"
 	RenderSettings.configure(get_window())
@@ -161,6 +167,7 @@ func _ready() -> void:
 	Engine.physics_ticks_per_second = 60
 	get_tree().physics_interpolation = true
 	state = GameState.new()
+	state.appearance = starting_appearance.duplicate()
 	state.name = "Journey"
 	add_child(state)
 	audio = Soundscape.new()
@@ -212,7 +219,7 @@ func _activate_direct_session() -> void:
 
 
 func _install_input() -> void:
-	var bindings := {"left":[KEY_A,KEY_LEFT],"right":[KEY_D,KEY_RIGHT],"up":[KEY_W,KEY_UP],"down":[KEY_S,KEY_DOWN],"run":[KEY_SHIFT],"attack":[KEY_SPACE],"skill":[KEY_Q],"interact":[KEY_E],"time":[KEY_T],"pause":[KEY_ESCAPE],"restart":[KEY_R],"fullscreen":[KEY_F11],"journal":[KEY_J],"debug":[KEY_F3],"mute":[KEY_M],"bag":[KEY_I],"food":[KEY_H],"save":[KEY_F5],"load":[KEY_F9]}
+	var bindings := {"left":[KEY_A,KEY_LEFT],"right":[KEY_D,KEY_RIGHT],"up":[KEY_W,KEY_UP],"down":[KEY_S,KEY_DOWN],"run":[KEY_SHIFT],"attack":[KEY_SPACE],"skill":[KEY_Q],"interact":[KEY_E],"time":[KEY_T],"pause":[KEY_ESCAPE],"restart":[KEY_R],"fullscreen":[KEY_F11],"journal":[KEY_J],"map":[KEY_M],"debug":[KEY_F3],"mute":[KEY_N],"bag":[KEY_I],"food":[KEY_H],"save":[KEY_F5],"load":[KEY_F9]}
 	bindings.guard = [KEY_F]
 	bindings.roll = [KEY_V,KEY_CTRL]
 	for action in bindings:
@@ -256,6 +263,7 @@ func _load_zone(destination: String, entry: String) -> void:
 	ripples = null
 	trail_effects = null
 	bakery_room = null
+	lighthouse_glow = null
 	nearest = ""
 	near_exit = ""
 	conversation_actor = ""
@@ -274,6 +282,9 @@ func _load_zone(destination: String, entry: String) -> void:
 	elif zone in ["mill_garden","mill_room"]:
 		FLOOR = Mill.floor_for(zone=="mill_room")
 		files = [Mill.ROOT+("mill_interior_v2.png" if zone=="mill_room" else "mill_garden_v2.png")]
+	elif zone in Lighthouse.ZONES:
+		FLOOR = Map.floor_for(zone)
+		files = Lighthouse.files_for(zone)
 	elif zone=="district":
 		FLOOR = Map.District.floor_polygon()
 	elif zone=="wilds":
@@ -308,6 +319,8 @@ func _load_zone(destination: String, entry: String) -> void:
 		bakery_room = Map.Inn.build(self)
 	elif zone in ["mill_garden","mill_room"]:
 		bakery_room = Mill.build(self,zone=="mill_room")
+	elif zone in Lighthouse.ZONES:
+		lighthouse_glow = Lighthouse.build(self)
 	elif zone=="district":
 		Map.District.build(self)
 	elif zone=="wilds":
@@ -366,7 +379,7 @@ func _load_zone(destination: String, entry: String) -> void:
 		camera.limit_right = SIZE.x
 		camera.limit_bottom = SIZE.y
 		player.add_child(camera)
-	camera.zoom = Vector2.ONE*(1.0 if zone=="mill_garden" else 1.5)*RenderSettings.SCALE
+	camera.zoom = Vector2.ONE*(1.0 if zone in ["mill_garden",Lighthouse.COAST] else 1.5)*RenderSettings.SCALE
 	camera.position = Vector2(0,-220 if zone=="mill_garden" else -55)
 	camera.limit_right = world_size.x
 	camera.limit_bottom = world_size.y
@@ -426,6 +439,8 @@ func _draw_exit_marks(node: Node2D) -> void:
 			arrow = Vector2(-1,-.5).normalized() if id=="forge" else Vector2(0,1)
 		elif zone in ["bakery","forge"]:
 			arrow = Vector2(0,1)
+		elif zone in Lighthouse.ZONES:
+			arrow = Vector2.RIGHT if id==Lighthouse.LANTERN else (Vector2.UP if zone==Lighthouse.COAST and id==Lighthouse.KEEPER else Vector2.DOWN)
 		node.draw_line(at-arrow*14,at+arrow*16,Color("ffedb6"),3,true)
 		node.draw_line(at+arrow*16,at+arrow.rotated(2.6)*13,Color("ffedb6"),3,true)
 		node.draw_line(at+arrow*16,at+arrow.rotated(-2.6)*13,Color("ffedb6"),3,true)
@@ -458,7 +473,7 @@ func _draw_forest_air() -> void:
 func request_travel(exit_id: String) -> void:
 	if paused or shopping or transitioning or not exits.has(exit_id):
 		return
-	if exit_id in ["bakery","forge","mill_room","mill_loft"] or zone in ["bakery","forge","mill_room","mill_loft"]:
+	if exit_id in ["bakery","forge","mill_room","mill_loft",Lighthouse.KEEPER] or zone in ["bakery","forge","mill_room","mill_loft",Lighthouse.KEEPER,Lighthouse.LANTERN]:
 		audio.play_event("door",player.position,-5)
 	transitioning = true
 	var target: Dictionary = exits[exit_id]
@@ -586,8 +601,8 @@ func _human_resident(id: String, name_text: String, asset: String, at: Vector2, 
 
 func _build_plaza() -> void:
 	_solid(FLOOR,true)
-	_piece("fountain",Vector2(970,700),235)
-	_solid(_ellipse(Vector2(970,675),Vector2(139,48)))
+	_piece("fountain",PLAZA_FOUNTAIN+Vector2(0,25),235)
+	_solid(_ellipse(PLAZA_FOUNTAIN,Vector2(139,48)))
 	_piece("bakery_stall",Vector2(560,625),205)
 	_solid(_ellipse(Vector2(560,604),Vector2(90,28)))
 	var counter_at := Vector2(1350,641)
@@ -878,6 +893,7 @@ func return_to_title() -> void:
 func toggle_journal(board := false) -> void:
 	if transitioning or shopping or title_active or not player.active:
 		return
+	close_map()
 	if backpack_open:
 		backpack_open = false
 		ui.satchel.hide()
@@ -888,6 +904,27 @@ func toggle_journal(board := false) -> void:
 	if journal_open:
 		player.stop_motion()
 		ui.journal_view.open(board)
+
+func close_map() -> void:
+	map_open = false
+	ui.area_map.hide()
+
+func toggle_map() -> void:
+	if transitioning or shopping or title_active or not player.active:
+		return
+	if map_open:
+		close_map()
+		set_paused(false)
+		return
+	backpack_open = false
+	journal_open = false
+	ui.satchel.hide()
+	ui.journal_view.hide()
+	map_open = true
+	set_paused(true)
+	player.stop_motion()
+	pause_overlay.hide()
+	ui.area_map.show()
 
 func _add_loot(id: String) -> void:
 	var key := "loot:"+id
@@ -923,6 +960,7 @@ func collect_loot(id: String) -> bool:
 func toggle_backpack() -> void:
 	if transitioning or shopping or title_active or not player.active:
 		return
+	close_map()
 	if journal_open:
 		journal_open = false
 		ui.journal_view.hide()
@@ -948,10 +986,10 @@ func use_item(id: String) -> bool:
 		return false
 	if not state.remove_item(id):
 		return false
-	player.health = mini(player.maximum_health,player.health+int(item.heal))
+	player.health = mini(player.maximum_health,player.health+int(item.heal)*GameState.Hearts.UNITS_PER_HEART)
 	if refresh:
 		player.skill_cooldown = 0
-	ui.show_notice("%s  ·  %d / %d hearts" % [item.name,player.health,player.maximum_health])
+	ui.show_notice("%s  ·  %s / %s hearts" % [item.name,GameState.Hearts.amount(player.health),GameState.Hearts.amount(player.maximum_health)])
 	audio.play_event("ui_confirm",player.position,-8)
 	ui.refresh_satchel()
 	_update_hud()
@@ -998,12 +1036,14 @@ func load_game() -> bool:
 		return false
 	backpack_open = false
 	journal_open = false
+	close_map()
 	autosave_queued = false
 	ui.satchel.hide()
 	ui.journal_view.hide()
 	set_paused(false)
 	state.restore(document.state,int(document.player.health))
 	_load_zone(document.player.zone,"start")
+	player.set_appearance(state.appearance)
 	var coords: Array = document.player.position
 	var at := Vector2(coords[0],coords[1])
 	if zone=="mill_garden" and not document.player.has("mill_garden_layout"):
@@ -1046,7 +1086,7 @@ func is_walkable(point: Vector2, padding := 20.0) -> bool:
 
 
 func _build_navigation() -> void:
-	var cell_size := 8.0 if zone=="mill_loft" else (16.0 if zone in ["mill_garden","mill_room"] else 32.0)
+	var cell_size := 8.0 if zone=="mill_loft" else (16.0 if zone in ["mill_garden","mill_room"] + Lighthouse.ZONES else 32.0)
 	var grid_size := Vector2i(ceili(world_size.x/cell_size),ceili(world_size.y/cell_size))
 	navigation.region = Rect2i(Vector2i.ZERO,grid_size)
 	navigation.cell_size = Vector2.ONE*cell_size
@@ -1183,6 +1223,9 @@ func interact(id := "") -> void:
 	if zone == "town" and id == "quest_board":
 		toggle_journal(true)
 		return
+	if zone in Lighthouse.ZONES:
+		interact_lighthouse(id)
+		return
 	if zone == "town" and id == "iris":
 		open_shop()
 		return
@@ -1219,6 +1262,25 @@ func interact(id := "") -> void:
 		return
 	if zone=="mill_loft" and Map.Inn.BEDS.has(id):
 		bakery_room.open_bed(id)
+		return
+	if zone=="mill_room" and id=="mill_keeper":
+		var speaker: String = interactables[id].name
+		if state.stoneback_stage == GameState.StonebackStage.AVAILABLE:
+			if conversation_actor == id and dialogue_left > 0 and state.accept_stoneback_quest():
+				queue_autosave()
+				_say(speaker,"Thank you, friend. Find Ivykeep Ruins on your Greenshire map. Open Stoneback's chest once you've won.")
+			else:
+				_say(speaker,"The kettle is on, friend. Stoneback guards the old wayfarer's seal at Ivykeep Ruins. Bring it back from his chest and I'll pay you %d coins. Press E again to accept." % GameState.STONEBACK_REWARD)
+				conversation_actor = id
+				dialogue_left = 15.0
+		elif state.claim_stoneback_reward():
+			queue_autosave()
+			audio.play_event("victory",player.position,-5)
+			_say(speaker,"You brought back the Ivykeep Seal! This used to hang by our door to welcome travellers. Here are your %d coins. Stay by the fire as long as you like." % GameState.STONEBACK_REWARD)
+		elif state.stoneback_stage == GameState.StonebackStage.ACCEPTED:
+			_say(speaker,"Look for Ivykeep Ruins on your Greenshire map. Stoneback's chest holds the seal. Mind that shield of his.")
+		else:
+			_say(speaker,interactables[id].text)
 		return
 	if zone in ["mill_garden","mill_room","mill_loft"]:
 		_say(interactables[id].name,interactables[id].text)
@@ -1265,6 +1327,63 @@ func interact(id := "") -> void:
 	_update_hud()
 	_say(interactables[id]["name"],text)
 	conversation_actor = id
+
+
+func interact_lighthouse(id: String) -> void:
+	var stages := GameState.LighthouseStage
+	var speaker: String = interactables[id].name
+	var reply := ""
+	match id:
+		Lighthouse.KEEPER_ID:
+			if state.advance_lighthouse_quest(stages.ACCEPTED):
+				reply = "You came about the notice! I cleaned the lens, but the old drive is stuck. Take the stairs and pull the brass lever beneath the lens. Come back and tell me when it catches."
+			elif state.advance_lighthouse_quest(stages.RESTORED):
+				reply = "Look at that light! The boats have a bearing again. Here are your %d coins, and my thanks." % GameState.LIGHTHOUSE_REWARD
+				audio.play_event("victory",player.position,-5)
+			elif state.lighthouse_stage==stages.AVAILABLE:
+				reply = "The lamp has gone out. I put a notice on the board in Garden Square. Take the job there if you have time to help."
+			elif state.lighthouse_stage==stages.BRIEFED:
+				reply = "Upstairs, pull the brass lever beneath the lens."
+			else:
+				reply = "Even on a moonless night, the boats can find their way home now."
+		Lighthouse.BEACON_ID:
+			if state.advance_lighthouse_quest(stages.BRIEFED):
+				audio.play_event("victory",player.position,-5)
+				_update_lighting()
+				reply = "The gears turn, and gold light fills the glass. Tell Iona the beacon is working."
+			elif state.lighthouse_stage>=stages.RESTORED:
+				reply = "The lens turns steadily. Its light reaches far out to sea."
+			else:
+				reply = "The mechanism is still. Speak to Iona downstairs before working the controls."
+		_:
+			reply = "Waves break on the pale rocks below. From here you can watch boats come in along the coast."
+	_say(speaker,reply)
+	queue_autosave()
+	_update_hud()
+
+
+func lighthouse_quest_target() -> Dictionary:
+	if state.tracked_quest!=GameState.LIGHTHOUSE_QUEST:
+		return {}
+	var stages := GameState.LighthouseStage
+	var stage: int = state.lighthouse_stage
+	if stage==stages.COMPLETE:
+		return {}
+	if zone=="town" and stage==stages.AVAILABLE:
+		return interactables.quest_board
+	if stage==stages.AVAILABLE:
+		return {}
+	if zone==Lighthouse.KEEPER and stage!=stages.BRIEFED:
+		return interactables[Lighthouse.KEEPER_ID]
+	if zone==Lighthouse.LANTERN and stage==stages.BRIEFED:
+		return interactables[Lighthouse.BEACON_ID]
+	var exit_id: String = {
+		"town":"southwest",
+		Lighthouse.COAST:Lighthouse.KEEPER,
+		Lighthouse.KEEPER:Lighthouse.LANTERN,
+		Lighthouse.LANTERN:Lighthouse.KEEPER
+	}.get(zone,"")
+	return {"at":exits[exit_id].at,"height":40.0} if exits.has(exit_id) else {}
 
 
 func start_challenge() -> void:
@@ -1357,16 +1476,20 @@ func _process(delta: float) -> void:
 		_update_hud()
 
 
+func _blend_phase_backgrounds(base: int, next: int, weight: float) -> void:
+	for i in backgrounds.size():
+		backgrounds[i].visible = i==base or (i==next and weight>0)
+		backgrounds[i].modulate.a = weight if i==next else 1.0
+		backgrounds[i].z_index = -9 if i==next else -10
+
+
 func _update_lighting() -> void:
 	var base := int(floorf(clock))%4
 	var next := (base+1)%4
 	var weight := smoothstep(0.35,1.0,fposmod(clock,1.0))
 	actor_tint = TINTS[base].lerp(TINTS[next],weight)
 	if zone=="town":
-		for i in 4:
-			backgrounds[i].visible = i==base or (i==next and weight>0)
-			backgrounds[i].modulate.a = weight if i==next else 1.0
-			backgrounds[i].z_index = -9 if i==next else -10
+		_blend_phase_backgrounds(base,next,weight)
 	elif zone in ["bakery","forge"]:
 		actor_tint = Color("fff1db").lerp(Color("c7b99e"),clampf(1.0-actor_tint.g,0,1)*.6)
 		if is_instance_valid(bakery_room):
@@ -1378,6 +1501,19 @@ func _update_lighting() -> void:
 			if is_instance_valid(bakery_room): bakery_room.update_lighting(clock)
 		else:
 			backgrounds[0].modulate = actor_tint
+	elif zone in Lighthouse.ZONES:
+		var night := Mill.night_weight(clock)
+		if zone==Lighthouse.LANTERN:
+			_blend_phase_backgrounds(base,next,weight)
+			actor_tint = Lighthouse.LANTERN_TINTS[base].lerp(Lighthouse.LANTERN_TINTS[next],weight)
+		else:
+			backgrounds[1].modulate.a = night
+			if zone==Lighthouse.KEEPER:
+				actor_tint = Color("fff1db").lerp(Color("c6c4d2"),night)
+		if is_instance_valid(lighthouse_glow):
+			lighthouse_glow.visible = state.lighthouse_stage>=GameState.LighthouseStage.RESTORED
+			var intensity := .88 if zone==Lighthouse.COAST else .62
+			lighthouse_glow.modulate.a = intensity*lerpf(.4,1.0,night)*(.96+.04*sin(elapsed*2.3))
 	elif zone=="district":
 		pass
 	elif zone=="wilds":
@@ -1433,6 +1569,11 @@ func _update_prompt() -> void:
 		var offset_y := -165.0 if dialogue_left>0 else 25.0
 		prompt.position = (ui.world_to_ui(player.global_position)+Vector2(-140,offset_y)).clamp(Vector2(15,170),Vector2(1620,940))
 		prompt_text.text = "E   "+("Enter bakery" if near_exit=="bakery" else ("Go to "+exits[near_exit].get("sign","the next path") if near_exit!="" else interactables[nearest]["name"]))
+		if near_exit.is_empty() and nearest=="mill_keeper":
+			if state.stoneback_stage==GameState.StonebackStage.RETURN:
+				prompt_text.text = "E   Return the Ivykeep Seal"
+			elif state.stoneback_stage==GameState.StonebackStage.AVAILABLE and conversation_actor==nearest and dialogue_left>0:
+				prompt_text.text = "E   Accept quest"
 	var target: Dictionary = {}
 	if state.tracked_quest=="morning_rounds" and zone=="town" and quest_stage<5:
 		target = interactables[QUEST_TARGETS[quest_stage]]
@@ -1444,6 +1585,10 @@ func _update_prompt() -> void:
 			target.at = target.anchor.position
 		elif zone=="district" and (not state.smith_accepted or state.can_claim_smith()):
 			target = {"at":exits.forge.at,"height":40.0}
+	if zone=="mill_room" and (state.stoneback_stage == GameState.StonebackStage.AVAILABLE or state.stoneback_stage == GameState.StonebackStage.RETURN):
+		target = interactables.mill_keeper
+	if state.tracked_quest==GameState.LIGHTHOUSE_QUEST:
+		target = lighthouse_quest_target()
 	quest_marker.visible = not target.is_empty() and not transitioning and not paused
 	if quest_marker.visible:
 		var at: Vector2 = target.anchor.position if target.has("anchor") else target.at
@@ -1486,6 +1631,10 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 		return
 	if event.is_echo() or title_active:
+		return
+	if event.is_action_pressed("hub_map") or (map_open and event.is_action_pressed("hub_pause")):
+		toggle_map()
+		get_viewport().set_input_as_handled()
 		return
 	if event.is_action_released("hub_guard"):
 		player.set_guard(false)
@@ -1548,8 +1697,6 @@ func _unhandled_input(event: InputEvent) -> void:
 		return_to_title()
 	elif event.is_action_pressed("hub_fullscreen"):
 		get_window().mode = Window.MODE_WINDOWED if get_window().mode==Window.MODE_FULLSCREEN else Window.MODE_FULLSCREEN
-	elif event.is_action_pressed("hub_journal"):
-		ui.journal_panel.visible = not ui.journal_panel.visible
 	elif event.is_action_pressed("hub_debug"):
 		ui.debug_visible = not ui.debug_visible
 	elif not paused and not transitioning:

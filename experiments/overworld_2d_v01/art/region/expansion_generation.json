@@ -43,6 +43,27 @@
       ]
     },
     {
+      "id": "lighthouse_unlit",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-3647c8f6-96fb-4c2f-9f75-d9cdb3d9121d.png",
+      "workspace": "art/region/lighthouse_unlit.png",
+      "reference": "art/region/lighthouse_v1.png",
+      "prompt": "Use case: precise-object-edit. Make the main lighthouse beacon in the supplied transparent Project Kingdom overworld sprite look switched off. Change only the small gold glowing lantern behind the dark teal mullions near the top of the tower and its reflections on the panes. Replace that warm emitted light with cool blue slate glass and a dark recognizable lantern mechanism. Keep the porch light lit. Keep the silhouette, teal door, roof, brass rail, limestone blocks, flowers, stones and exact painted framing and alpha background aligned to the original. Same aspect ratio and placement. Preserve all outside details with no redraw or movement. A genuine transparent background, no ground beyond original contact, no checkerboard, text or watermark.",
+      "transparent": true,
+      "size": [
+        1351,
+        1164
+      ],
+      "mode": "RGBA",
+      "sha256": "976346d0075682e58af3c68be6d596333b7d4f4401c0ad8d06794312b1df375b",
+      "alpha_bbox": [
+        0,
+        21,
+        1337,
+        1164
+      ],
+      "transparent_fraction": 0.6234
+    },
+    {
       "id": "sky_day_v1",
       "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-0bf3809d-789f-47cf-9007-204cb2dfbab7.png",
       "workspace": "art/sky/sky_day_v1.png",
@@ -67,6 +88,39 @@
       ],
       "sha256": "4365714d315d44c38730be67fafa7af9a0686562c7a216731f17b7970cf55c8b",
       "mode": "RGB"
+    },
+    {
+      "id": "riverbend_deck",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-59572302-62b3-499e-ab74-0913fa93c921.png",
+      "workspace": "art/region/riverbend_deck.png",
+      "prompt": "Use case: stylized-concept. Paint a texture for a playable timber bridge deck in a hand-painted anime fantasy RPG, seen from a perfectly vertical top-down orthographic camera. Output one portrait 2:3 rectangular texture, opaque and filled edge to edge by the deck surface so the game can project it over its own river. The crossing runs vertically in the image. The worn oak boards run horizontally across the full bridge width, about 22 rows, with an occasional staggered joint. Paint restrained warm brown and honey oak with visible hand-painted grain, faint age cracks, broad brushwork, a few tiny dark forged nail heads, and two slim slightly darker lengthwise trim beams running along the left and right edges. Ends are clean straight thresholds. Use neutral soft daylight and darker narrow seams so the planks read at small overworld scale. The full frame is flat plank material. No railings, posts, outside ground, water, grass, signage, gaps through the deck, cast shadows, perspective, bevel sides, text, watermark, or UI.",
+      "transparent": false,
+      "size": [
+        1024,
+        1536
+      ]
+    },
+    {
+      "id": "riverbend_stone_deck",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-1a570acf-6873-46fb-a555-fc9f4ed3134e.png",
+      "workspace": "art/region/riverbend_stone_deck.png",
+      "prompt": "Use case: stylized-concept. Paint a top-down texture for a playable old limestone bridge in a cozy hand-painted anime fantasy RPG. Portrait 2:3 image, exactly orthographic overhead, filled completely edge to edge with walkable weathered flat paving, to project onto a bridge across a river. Warm pale honey-gray limestone flags, large long staggered roughly rectangular hand-hewn stones with narrow muted joints, variation from warm taupe to gentle blue gray, gently chipped rounded corners and fine painterly texture. Small bits of muted green moss confined to the left/right edges, no dark moss in the center path. Soft neutral daylight, readable shapes in miniature, warm subtle paper-gouache feel. The entire image is flat stone paving. No rails, curbs, steps, backdrop, cast shadows, water, symbols, outlines around the whole texture, text, perspective, border or margins.",
+      "transparent": false,
+      "size": [
+        1024,
+        1536
+      ]
+    },
+    {
+      "id": "riverbend_stone_elevation",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-c8c1fc85-4b43-4189-a7c6-b95e5c391f0d.png",
+      "workspace": "art/region/riverbend_stone_elevation.png",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent painterly 2D game elevation cutout. Exact side elevation of a small old single arch limestone footbridge, left bank to right bank, wide 3:2 canvas. Softly hand-painted anime countryside gouache with warm cream-gray limestone, subtle warm/cool variations, little moss and ivy clinging to a few blocks at the ends and around the arch, weathered rounded cut stone and painterly strokes. Elevation requirements: camera absolutely perpendicular to the long side, perfectly flat head-on orthographic side view, no top plane visible and no perspective, no second railing visible. The upper third of the silhouette is ONE continuous low, solid parapet of one course of warm ashlar with individual overlapping pale capstones running from left to right. Its top is approximately level. At both ends only, a slightly raised square capstone finishes the low wall. A thin continuous horizontal seam right at the bottom of this parapet clearly marks the walkway height, perfectly horizontal the entire span. Below that seam a shallow wide single arch over a river, carefully laid pale wedge stones around a wide semi-elliptic opening, blockwork shoulders and two short flared footings. The arch opening and all outside the silhouette are real transparent alpha. No inside-the-bridge illustration, no scenery, no water, sky, ground, railings, shadows, extra objects, or text. Composition tightly framed, full bridge silhouette clear, fairly even diffuse daylight; the upper parapet is a straight low wall and the bottom semicircular arch is large and clearly open.",
+      "transparent": true,
+      "size": [
+        1536,
+        1024
+      ]
     }
   ]
 }

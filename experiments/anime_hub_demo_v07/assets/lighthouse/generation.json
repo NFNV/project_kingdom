@@ -1,0 +1,229 @@
+{
+  "tool": "Built-in imagegen",
+  "placement": "Approximate anchor points in source pixels, measured from the upper-left corner. Draw the day and night exteriors into the same world rectangle. The beacon glow is a separate centered sprite for the exterior lantern and upstairs lens.",
+  "assets": [
+    {
+      "file": "palestone_approach_day.png",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-53cb02e6-b6f8-463b-aa5f-c68356efc5cf.png",
+      "references": [
+        "experiments/overworld_2d_v01/art/region/lighthouse_v1.png",
+        "experiments/anime_hub_demo_v07/assets/mill/mill_garden_v2.png"
+      ],
+      "prompt": "Use case: stylized-concept. Paint the final game background plate for Palestone Coast in Project Kingdom, a cozy hand-painted anime RPG. Reference image 1 is the exact lighthouse design to carry into a walkable close-up; image 2 is the reference for fixed elevated gameplay camera, hand-painted brushwork and walkable scale. Landscape 16:9, 2560×1440 if possible, with a fixed elevated three-quarter camera looking down about 35 degrees and straight upright architecture. Place the familiar cream limestone cylindrical tower, blue slate cap, dark teal and brass lantern gallery, and blue-roofed attached keeper cottage in the upper half at center-left. The sea beacon is switched off, with neutral dark blue-gray glazing and no warm reflection inside. Ground the whole building naturally on the same pale stone and grass terrain as its surroundings, with contact shadows and no cutout/diorama edge. The attached cottage has one clearly visible player entrance, an arched teal front door roughly 10% of the picture height, facing the foreground. Stone steps descend onto a clear flat forecourt that occupies the central and bottom portions of the image; a dirt-and-flagstone path enters from the bottom edge, goes to the teal door and bends right to a small fenced lookout. Sea foam, muted turquoise water and pale coastal rock shelves occupy the upper-right and right edge, with sea thrift and wind-combed grasses clustered at boundaries. Keep the front-middle broad, navigable and legible for sprites. Painted cream stone, rich slate-blue roof tiles, weathered wood and a few wildflowers. Late morning light from upper left, warm subtle shade and sea air, cohesive with the garden reference. One single full-bleed game background, clear top-down floor geometry, no characters, no signs or text, no UI, no frames, no photoreal rendering.",
+      "transparent": false,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB",
+      "sha256": "8de329b0828e5546d005c85eb5a5ec38ad5931981c4bc2eb4fabe989c8f872b9",
+      "anchors": {
+        "road_entry": [
+          729,
+          913
+        ],
+        "keeper_door_threshold": [
+          740,
+          492
+        ],
+        "keeper_door_approach": [
+          727,
+          571
+        ],
+        "lookout": [
+          1285,
+          455
+        ],
+        "beacon_center": [
+          614,
+          153
+        ]
+      }
+    },
+    {
+      "file": "keeper_room.png",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-2808f3e4-200a-4cd6-a1c5-8eddd31e2e7c.png",
+      "references": [
+        "experiments/overworld_2d_v01/art/region/lighthouse_v1.png",
+        "experiments/anime_hub_demo_v07/assets/mill/mill_interior_v2.png"
+      ],
+      "prompt": "Use case: stylized-concept. Paint a game-ready fixed-camera interior background for the keeper’s cottage attached to the Palestone Coast lighthouse. Reference image 1 gives the exterior’s cream limestone, teal joinery and compact coastal character; image 2 gives the elevated three-quarter dollhouse camera, hand-painted anime finish, and cutaway presentation for this game. 16:9 landscape, 2560×1440 if possible, upright straight walls, no perspective convergence. A snug one-room keeper’s workshop for small anthropomorphic RPG characters, approximately six door widths across, with a generous walkable plank floor in the middle. At bottom center an open ground-level entry threshold with a worn blue runner leads inward. On the rear-left wall put a seaworn chart desk with rolled charts and a logbook and a clearly empty stand-space behind one exposed counter end for a keeper sprite. A low window at rear center shows hazy turquoise ocean. Along the rear-right wall, a narrow sturdy wooden stair ascends toward the lantern room, with its bottom landing clearly visible and accessible. A spare oil flask, rope coils, brass tools and folded blue oilskins belong on the edges only. Low cutaway foreground walls, taller limestone rear walls, simple dark navy-green fill surrounding the complete room. Neutral daylight through the window plus small warm shaded wall lamps, slight gouache texture, broad shapes and lovingly painted edges. No characters, no captions, no text on papers, no UI, no extra doors or staircases. Keep the desk, entry and stair easy to identify and floor accessible from the front.",
+      "transparent": false,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB",
+      "sha256": "89c758161eea472e0b16f0f3718c0f151e8586ef4fd17feb6f934032b3b30dee",
+      "anchors": {
+        "exit_mat": [
+          822,
+          797
+        ],
+        "chart_desk_approach": [
+          628,
+          480
+        ],
+        "stair_approach": [
+          1501,
+          560
+        ]
+      }
+    },
+    {
+      "file": "lantern_room.png",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-81bec4fd-312d-4ef6-b239-a67af15ba099.png",
+      "references": [
+        "experiments/overworld_2d_v01/art/region/lighthouse_v1.png",
+        "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-2808f3e4-200a-4cd6-a1c5-8eddd31e2e7c.png"
+      ],
+      "prompt": "Use case: stylized-concept. Create the finished fixed-camera 2D background for the compact upper lantern room inside the Palestone Coast lighthouse in Project Kingdom. Reference image 1 is the outside lantern gallery, with tall blue glass panes, dark teal iron mullions, brass railings, and cream stone. Reference image 2 is its keeper's workshop below and sets the exact visual language, elevated three-quarter camera and cutaway game presentation. Landscape 16:9, full room visible with margins on all sides against a dark navy-green fill. Intimate circular tower chamber, about five door-widths across. A single clearly accessible stair opening at the near edge with blue runner, matching the lower workshop's stair. Open plank floor leads to a large brass-and-glass Fresnel-style lens assembly at the back center, on a sturdy round plinth with a single easy-to-see brass control handle on its front. Lens is switched off, cool sea-green glass with visible concentric ridges and no light emission; small wall service lamps and sea daylight illuminate the walkable floor. Curved tall lantern windows around the rear half look out on soft coastal water, low cutaway stone curb across the foreground, no roof blocking the view. A few neat tools on a side shelf. Use painted gouache texture, warm timber, muted teal and bronze. Clear walkable route from front stairs to the front of the lens with a generous interaction space, strong distinct silhouette for lens, no characters, no UI, no text, no watermark, no second staircase, no photographic realism.",
+      "transparent": false,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB",
+      "sha256": "363df5fbe02187f3989038f9fbe35ac293c2b722f6efea458a6729cb53f6cd80",
+      "anchors": {
+        "stair_landing": [
+          833,
+          797
+        ],
+        "beacon_control_approach": [
+          843,
+          578
+        ],
+        "lens_center": [
+          845,
+          273
+        ]
+      }
+    },
+    {
+      "file": "palestone_approach_night.png",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-bc18454a-a650-452f-b93a-51f1ff9205c2.png",
+      "references": [
+        "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-53cb02e6-b6f8-463b-aa5f-c68356efc5cf.png"
+      ],
+      "prompt": "Use case: lighting-weather. This is an exact-registration relighting edit of the supplied Palestone Coast gameplay background, to serve as the night variant in a 2D game. Treat the supplied pixels as the fixed framing and layout. Change only the illumination from midday to a clear moonlit night. Keep the 16:9 canvas, crop, camera and every silhouette in exactly the same pixel positions. Especially lock the tower roof finial, lantern glass center, teal entrance, stone steps and path intersection, right bench, fence and cliff edge. Keep path and pale steps readable under cool blue moonlight, preserve the subtle brushwork, render the sea dark blue-teal with soft pearl foam. The lighthouse's main lantern remains unlit and dark blue-gray, with no glow or beam, so a separate sprite can switch it on. The small porch lamp may make a warm accent and tiny pool by the unchanged door. No new stars, moon disc, sky, buildings, trees, objects, weather, text or added decorations. Exact alignment matters more than restyling. Make it feel like the original shot seen at night.",
+      "transparent": false,
+      "size": [
+        1671,
+        941
+      ],
+      "mode": "RGB",
+      "sha256": "2db05a0c924a081b8ed3d7c3d046b342d5ae72c646dcf147ff112d5f5600be54",
+      "anchors": {
+        "road_entry": [
+          729,
+          913
+        ],
+        "keeper_door_threshold": [
+          739,
+          492
+        ],
+        "keeper_door_approach": [
+          726,
+          572
+        ],
+        "lookout": [
+          1284,
+          456
+        ],
+        "beacon_center": [
+          613,
+          153
+        ]
+      }
+    },
+    {
+      "file": "beacon_glow.png",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-42a4163a-6378-474c-953c-1e8b14a6d45b.png",
+      "references": [
+        "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-a089bfcd-0ca1-420d-909f-463d50a2d489.png"
+      ],
+      "prompt": "Use case: precise-object-edit. Refine the supplied golden beacon bloom into a padded transparent game VFX sprite. Keep the painterly golden-white flare, but make it substantially smaller in the square canvas: the whole luminous haze must be confined to the inner 55% of the canvas width and height. Give it a genuinely clear empty alpha border at least 20% of the canvas width on every side; treat the edges and all four corners as entirely blank and zero alpha. There must be a smooth fade to zero before that border. Center the glow exactly. Use the warm gold and ivory hues from the reference, with a narrow delicate horizontal glint. No background color, large fog, rays touching the edges, lens hardware, text, or watermark.",
+      "transparent": true,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "sha256": "48d81e7ec64f644b7e561b15fc7bc423e83e5296b1d2741f2ec39a5300ea8380",
+      "alpha_bbox": [
+        41,
+        19,
+        1192,
+        1230
+      ],
+      "transparent_fraction": 0.7459,
+      "anchors": {
+        "center": [
+          627,
+          627
+        ]
+      }
+    },
+    {
+      "file": "keeper_room_night.png",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-02551e23-2ba2-4fc4-8fc1-5aee0e8fd787.png",
+      "references": [
+        "keeper_room.png"
+      ],
+      "prompt": "Use case: lighting-weather. Relight the supplied fixed-camera Project Kingdom gameplay plate for nighttime. Preserve pixel registration, resolution, canvas framing, every object, silhouette, floorboard, threshold and perspective exactly so it can crossfade on existing game collision. The ocean window shows deep midnight blue water with a little pale sea foam. Darken and cool the window light, remove the daylight beam beneath the window, keep the oil lamps on and paint small warm amber pools around them. Keep the floor and navigation legible, preserve the hand-painted style and restrained warm highlights. Change illumination and the view through existing window panes only. No new geometry, characters, writing, UI or watermark.",
+      "transparent": false,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB",
+      "sha256": "3590ac8abc9e5c4a0fc3f8cf652eac632394b39bf4c25f603ba38e371a349b92"
+    },
+    {
+      "file": "lantern_room_night.png",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-560d5873-6443-4622-b4ac-204f6e5f5a3d.png",
+      "references": [
+        "lantern_room.png"
+      ],
+      "prompt": "Use case: lighting-weather. Relight the supplied fixed-camera Project Kingdom gameplay plate for nighttime. Preserve pixel registration, resolution, canvas framing, every object, silhouette, floorboard, threshold and perspective exactly so it can crossfade on existing game collision. Tall rear windows show a deep navy moonlit ocean and muted star reflections. Cool and dim the daylight through the windows. The main Fresnel lens stays dark translucent teal with no glow. Warm wall service lamps and one small table lantern give the planks a gentle amber warmth. Keep the floor and navigation legible, preserve the hand-painted style and restrained warm highlights. Change illumination and the view through existing window panes only. No new geometry, characters, writing, UI or watermark.",
+      "transparent": false,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB",
+      "sha256": "f988c11347411413b0596265c606c84f33c266005f8027de88645bc4bb331b82"
+    },
+    {
+      "file": "lantern_room_dawn.png",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-e0f37727-b5b5-40d3-8830-260f92d0a69a.png",
+      "references": [
+        "lantern_room.png"
+      ],
+      "prompt": "Use case: lighting-weather. Edit the supplied fixed-camera lantern-room gameplay background from Project Kingdom. Match its 1672×941 landscape composition and pixel registration exactly. Lock the camera, crop, staircase landing, floorboards, walls, tools, fixtures, window mullions, sea horizon, cliff silhouettes, rocks, and the brass Fresnel lens in their exact positions. Change only time-of-day lighting and the painted atmosphere outside the existing glass panes. Keep the main beacon visibly off with clear unlit teal glass; the small service lamps may stay warm. Preserve the empty walkable floor and dark background around the cutaway room. Hand-painted anime gouache consistent with the source. No people, lettering, UI, watermark, new props or geometry. Paint early dawn just after 06:00. Outside the windows show a clearly visible pale peach and lemon sunrise band low at the left, soft pearl pink cloud wisps, cool luminous blue-green ocean and a light veil of morning sea mist at the horizon. Let delicate golden morning light fall softly onto the left window frame and boards with cool lilac shadows. Use fresh quiet pastel colors. The sky and sea must unmistakably be morning. No moon, stars or defined sun disk.",
+      "transparent": false,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB",
+      "sha256": "7a1e9c4e3274f129b35bf8c69bdea19a5480ce085e220036fc44f359192197fa"
+    },
+    {
+      "file": "lantern_room_dusk.png",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-e730375b-0618-4f43-8d75-fc9196e517b1.png",
+      "references": [
+        "lantern_room.png"
+      ],
+      "prompt": "Use case: lighting-weather. Edit the supplied fixed-camera lantern-room gameplay background from Project Kingdom. Match its 1672×941 landscape composition and pixel registration exactly. Lock the camera, crop, staircase landing, floorboards, walls, tools, fixtures, window mullions, sea horizon, cliff silhouettes, rocks, and the brass Fresnel lens in their exact positions. Change only time-of-day lighting and the painted atmosphere outside the existing glass panes. Keep the main beacon visibly off with clear unlit teal glass; the small service lamps may stay warm. Preserve the empty walkable floor and dark background around the cutaway room. Hand-painted anime gouache consistent with the source. No people, lettering, UI, watermark, new props or geometry. Paint colorful sunset just after 18:30. Outside the windows show a rich coral-orange afterglow strongest on the right horizon with rose and plum cloud bands, mauve-blue upper sky, and dark teal water catching a broken streak of copper near the right side. Cool violet shadows across the stone and floor, with warm amber wall lamps and soft sunset edge light from the right. The sky must unmistakably be sunset, with a visible bright orange horizon. No moon, stars or defined sun disk.",
+      "transparent": false,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB",
+      "sha256": "002ac1fd9e5a9ef6b662ba8918693472ebf9d4c7b639552eac5d2e745e1f1cab"
+    }
+  ]
+}

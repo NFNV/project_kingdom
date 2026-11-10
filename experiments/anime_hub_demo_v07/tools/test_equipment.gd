@@ -106,7 +106,7 @@ func run() -> void:
 	await ticks(3)
 	check(game.state.equipment.size()==8,"Eight real GLoot slots represent clothing, weapon, charm and shield")
 	check(game.state.equipped_id("chest")=="traveller_tunic" and game.state.equipped_id("legs")=="field_trousers","The cat starts with clothing in the correct body slots")
-	check(game.state.maximum_health==5 and game.state.stats().attack==1,"Starting clothing preserves the original health and sword balance")
+	check(game.state.maximum_health==6 and game.state.stats().attack==1,"Starting clothing gives three hearts and preserves the sword balance")
 	await key(KEY_I)
 	check(game.backpack_open and game.ui.satchel.visible and game.paused,"I opens the paper-doll inventory and pauses play")
 	check(game.ui.satchel.slots.size()==8 and game.ui.satchel.grid.size()==24,"The actual equipment screen contains eight body targets and a 24-cell backpack")
@@ -144,7 +144,7 @@ func run() -> void:
 	game.ui.satchel.select("leather_cap","bag")
 	check(game.ui.satchel.primary_button.text.contains("Helmet") and game.ui.satchel.comparison.text.contains("(+1)"),"Selecting the helmet shows its target slot and real stat comparison")
 	game.ui.satchel.primary_button.pressed.emit()
-	check(game.state.equipped_id("head")=="leather_cap" and game.player.maximum_health==6,"The actual Equip button places the helmet and raises maximum health")
+	check(game.state.equipped_id("head")=="leather_cap" and game.player.maximum_health==8,"The actual Equip button places the helmet and raises maximum health")
 	check(game.state.count("leather_cap")==0,"An equipped piece is removed from the backpack")
 	await key(KEY_I)
 	for pair in [["district","district"],["south","town"],["southeast","trail"],["river","river"],["wilds","wilds"]]:
@@ -174,7 +174,7 @@ func run() -> void:
 	await ticks(5)
 	check(captain.windup>.6,"The stronger captain gives a readable committed sweep warning")
 	await ticks(60)
-	check(game.player.health==3,"Rook's committed sweep deals three actual hearts of damage")
+	check(game.player.health==5,"Rook's committed sweep deals one and a half hearts of damage")
 	captain.set_physics_process(false)
 	captain.windup = 0
 	captain.swing = 0
@@ -260,12 +260,12 @@ func run() -> void:
 	view.primary_button.pressed.emit()
 	view.select("hunter_boots","bag")
 	view.primary_button.pressed.emit()
-	check(game.player.maximum_health==9 and game.state.stats().attack==2 and game.state.stats().speed>1.09,"Helmet, chest, charm, boots and sword all affect the real derived stats")
+	check(game.player.maximum_health==14 and game.state.stats().attack==2 and game.state.stats().speed>1.09,"Helmet, chest, charm, boots and sword all affect the real derived stats")
 	view.select("swift_charm","bag")
 	check(view.comparison.text.contains("(-1)") and view.comparison.text.contains("4.5"),"Charm comparison shows the heart-versus-recharge tradeoff")
-	game.player.health = 9
+	game.player.health = 14
 	view.primary_button.pressed.emit()
-	check(game.player.maximum_health==8 and game.player.health==8 and game.state.count("warden_charm")==1,"Swapping charms clamps health and returns the previous charm")
+	check(game.player.maximum_health==12 and game.player.health==12 and game.state.count("warden_charm")==1,"Swapping charms clamps health and returns the previous charm")
 	check(is_equal_approx(game.state.stats().recharge,4.5),"The wind charm shortens actual skill recharge")
 	var head = view.slots.head
 	var backpack = view.grid[-1]
@@ -372,6 +372,8 @@ func verify_title_and_autosave() -> void:
 	flow.begin_new()
 	check(flow.confirmation.visible and flow.game.state.smith_rewarded,"New Journey asks before replacing an existing autosave")
 	flow.begin_new(true)
+	check(flow.creator.visible and flow.game.state.smith_rewarded,"Creator opens before the existing journey is replaced")
+	flow.creator.submit()
 	game = flow.game
 	Engine.max_fps = 0
 	game.auto_clock = false
@@ -417,8 +419,8 @@ func verify_legacy_migration() -> void:
 		return
 	check(upgraded.state.equipment.charm=="warden_charm" and upgraded.state.equipment.chest=="traveller_tunic","Migration keeps old equipment and supplies the new clothing slots")
 	game.save_path = path
-	check(game.load_game() and game.coins==23 and game.quest_stage==2 and game.player.health==4,"The migrated save restores the player's real progress and health")
-	check(game.state.count("bread")==1 and game.state.quest.completed and game.state.maximum_health==6,"Old inventory, completed quests and charm benefits survive migration")
+	check(game.load_game() and game.coins==23 and game.quest_stage==2 and game.player.health==6,"The migrated save restores the player's real progress and health")
+	check(game.state.count("bread")==1 and game.state.quest.completed and game.state.maximum_health==8,"Old inventory, completed quests and charm benefits survive migration")
 	legacy.state.forest_defeated.append(game.GameState.CAPTAIN_ID)
 	legacy.state.items.bandit_badge = 1
 	var cleared := store.upgrade(legacy)

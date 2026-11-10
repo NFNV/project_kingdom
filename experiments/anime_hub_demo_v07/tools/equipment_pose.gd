@@ -4,6 +4,8 @@ const PATH := "res://experiments/anime_hub_demo_v07/assets/motion/equipment_grip
 static var poses: Dictionary = {}
 
 static func hand(actor: CharacterBody2D, slot: String) -> Vector2:
+	if actor.sprite.is_dog():
+		return actor.sprite.dog_anchor(slot)
 	if poses.is_empty():
 		poses = JSON.parse_string(FileAccess.get_file_as_string(PATH)).directions
 	var sprite: AnimatedSprite2D = actor.sprite
@@ -26,10 +28,14 @@ static func order(actor: CharacterBody2D, item: Node2D, behind: bool) -> void:
 		actor.move_child(item,-1)
 
 static func measured(actor: CharacterBody2D, slot: String) -> bool:
+	if actor.sprite.is_dog():
+		return actor.sprite.facing_direction not in ["n","ne","e"]
 	return poses[actor.sprite.facing_direction][actor.sprite.state][actor.sprite.frame][slot].measured
 
 static func face_bottom(actor: CharacterBody2D) -> float:
 	var sprite: AnimatedSprite2D = actor.sprite
+	if sprite.is_dog():
+		return sprite.dog_anchor("chin").y
 	var registration: Dictionary = sprite.metadata[sprite.facing_direction].body_registration[sprite.state]
 	var width: float = registration.poses[sprite.frame].head_width*sprite.scale.x
 	return sprite.body_origin.y+width*.62

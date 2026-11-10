@@ -4,6 +4,7 @@ const ART := "res://experiments/anime_hub_assets_v06/"
 const GROUND_Y := 0.65
 const ANIMAL_SCALE := 0.675
 const Motion := preload("res://experiments/anime_hub_demo_v07/tools/motion_sprite.gd")
+const HeroLook := Motion.HeroLook
 const Sword := preload("res://experiments/anime_hub_demo_v07/tools/cat_sword.gd")
 const SKILL_COOLDOWN := 6.0
 const WindSlash := preload("res://experiments/anime_hub_demo_v07/tools/wind_slash.gd")
@@ -108,8 +109,13 @@ func _ready() -> void:
 		shield = Shield.new()
 		shield.actor = self
 		add_child(shield)
+		set_appearance(hub.state.appearance)
 	physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_ON
 	queue_redraw()
+
+func set_appearance(look: Dictionary) -> void:
+	sprite.set_appearance(look)
+	combat_art.set_appearance(look)
 
 
 static func ground_vector(vector: Vector2) -> Vector2:
@@ -201,7 +207,6 @@ func _physics_process(delta: float) -> void:
 	if grace>0 and controlled:
 		sprite.modulate.a = 0.55 if int(grace*14)%2==0 else 1.0
 	if is_instance_valid(weapon):
-		weapon.sync_pose()
 		_update_combat_art()
 	if is_instance_valid(shield): shield.sync_pose()
 	queue_redraw()
@@ -326,10 +331,10 @@ func _update_combat_art() -> void:
 	var attacking := swing>0
 	sprite.visible = not attacking
 	combat_art.visible = attacking and active
-	weapon.sync_pose()
 	if attacking:
 		combat_art.pose(facing,1.0-swing/attack_duration,attack_kind=="wind")
 		combat_art.modulate = sprite.modulate
+	weapon.sync_pose()
 
 
 func resolve_hits() -> void:
@@ -487,7 +492,6 @@ func stop_motion() -> void:
 	route.clear()
 	sprite.set_pose("idle",direction,0)
 	if is_instance_valid(weapon):
-		weapon.sync_pose()
 		_update_combat_art()
 	if is_instance_valid(shield): shield.sync_pose()
 

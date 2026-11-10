@@ -1,8 +1,10 @@
 extends Node2D
 signal return_requested
 signal mill_requested
+signal coast_requested
 signal save_requested
 signal journey_clock_changed(phase: float)
+signal journey_loot_claimed
 var linked_journey := false
 var transitioning := false
 var gate_cooldown := .25
@@ -17,7 +19,9 @@ var arena_fade: ColorRect
 
 const Atmosphere := preload("res://experiments/overworld_2d_v01/atmosphere.gd")
 const RenderSettings := preload("res://experiments/anime_hub_demo_v07/tools/render_settings.gd")
+const FieldMap := preload("res://experiments/anime_hub_demo_v07/tools/field_map.gd")
 const Dressing := preload("res://experiments/overworld_2d_v01/region_dressing.gd")
+const PalestoneScene := preload("res://experiments/overworld_2d_v01/palestone_layout.tscn")
 const ClockDial := preload("res://experiments/anime_hub_demo_v07/tools/celestial_clock.gd")
 const CYCLE_SECONDS := Atmosphere.CYCLE_SECONDS
 var day_phase := 1.0
@@ -36,6 +40,7 @@ var dressed_props: Array[Dictionary] = []
 const City := preload("res://experiments/overworld_2d_v01/city.gd")
 const Rider := preload("res://experiments/overworld_2d_v01/mounted_rider.gd")
 const Map := preload("res://experiments/overworld_2d_v01/layout.gd")
+const RiverbendBridge := preload("res://experiments/overworld_2d_v01/riverbend_bridge.gd")
 const ROOT := "res://experiments/overworld_2d_v01/"
 const FOCAL := 900.0
 const CAMERA_HEIGHT := 14.0
@@ -64,12 +69,14 @@ var show_map := true
 var region_map := false
 var prop_grid: Dictionary = {}
 var region_segments: Array[Vector4] = []
+var palestone: Node2D
 var shader_segment_key := Vector3i(-9999,-9999,-9999)
 var near_landmark := ""
 var notice := "Explore Mosswood and the northern routes. M opens your region map."
 var notice_left := 6.0
 var props: Array[Dictionary] = []
 var visible_props: Array[Dictionary] = []
+var bridge_pieces := RiverbendBridge.pieces()
 var textures: Dictionary = {}
 var texture_cache: Dictionary = {}
 var ground_contacts: Dictionary = {}
@@ -93,6 +100,8 @@ func _ready() -> void:
 	font = ThemeDB.fallback_font
 	ground_contacts = JSON.parse_string(FileAccess.get_file_as_string(ROOT+"art/ground_contacts.json")).assets
 	mounted_rider = Rider.new()
+	if is_instance_valid(journey_loadout):
+		mounted_rider.set_appearance(journey_loadout.appearance)
 	moon_texture = cache_texture(ROOT+"art/sky/moon_full_v1.png")
 	sun_texture = cache_texture(ROOT+"art/sky/sun_painted_v1.png")
 	var sky := TextureRect.new()
@@ -117,6 +126,20 @@ func _ready() -> void:
 	shader.shader = load(ROOT+"ground.gdshader")
 	terrain.material = shader
 	add_child(terrain)
+	palestone = PalestoneScene.instantiate()
+	palestone.hide()
+	add_child(palestone)
+	palestone.bake()
+	var bounds: Rect2 = palestone.MASK_BOUNDS
+	palestone.mask.generate_mipmaps()
+	shader.set_shader_parameter("palestone_bounds",Vector4(bounds.position.x,bounds.position.y,bounds.size.x,bounds.size.y))
+	shader.set_shader_parameter("palestone_mask",ImageTexture.create_from_image(palestone.mask))
+	shader.set_shader_parameter("packed_earth",load(Dressing.PALESTONE_ART+"road_packed_earth.png"))
+	shader.set_shader_parameter("shell_gravel",load(Dressing.PALESTONE_ART+"path_shell_gravel.png"))
+	shader.set_shader_parameter("limestone",load(Dressing.PALESTONE_ART+"plaza_limestone_paving.png"))
+	shader.set_shader_parameter("bridge_center",Map.bridge_center())
+	shader.set_shader_parameter("bridge_half",Map.BRIDGE_HALF)
+	shader.set_shader_parameter("bridge_half_length",Map.BRIDGE_HALF_LENGTH)
 	for id in ["oak","pine","rock","bush","house","clocktower"]:
 		textures[id] = load(ROOT+"art/"+id+".svg")
 	# Cache modest gameplay textures with mipmaps; keep original PNGs untouched.
@@ -124,6 +147,9 @@ func _ready() -> void:
 		textures[pair[0]] = cache_texture(pair[1])
 	for id in Dressing.CATALOG:
 		textures[id] = cache_texture(Dressing.CATALOG[id])
+	if linked_journey:
+		var crop: Rect2i = texture_crops[textures.lighthouse.get_instance_id()]
+		textures["lighthouse_unlit"] = cache_texture(ROOT+"art/region/lighthouse_unlit.png",crop)
 	light_emitters = Dressing.EMITTERS.duplicate(true)
 	for kind in Dressing.EMITTER_PIXELS:
 		var crop: Rect2i = texture_crops[textures[kind].get_instance_id()]
@@ -149,11 +175,11 @@ func _ready() -> void:
 	if "--city" in OS.get_cmdline_user_args():
 		visit(3)
 
-func cache_texture(path: String) -> Texture2D:
+func cache_texture(path: String, source_rect := Rect2i()) -> Texture2D:
 	if texture_cache.has(path): return texture_cache[path]
 	var source: Texture2D = load(path)
 	var image := source.get_image()
-	var crop := image.get_used_rect()
+	var crop := source_rect if source_rect.has_area() else image.get_used_rect()
 	image = image.get_region(crop)
 	if image.get_height()>768:
 		image.resize(roundi(image.get_width()*768.0/image.get_height()),768,Image.INTERPOLATE_LANCZOS)
@@ -233,6 +259,10 @@ func build_region() -> void:
 	props.clear()
 	prop_grid.clear()
 	dressed_props = Dressing.props()
+	var placed: Array[Dictionary] = []
+	for item in palestone.props:
+		if Map.safe_ground(item.at):
+			placed.append(Dressing.make_prop(item.kind,item.at,item.height,item.radius))
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 27102026
 	var landmarks := Map.landmarks()
@@ -252,7 +282,13 @@ func build_region() -> void:
 			kind = "rock" if rng.randf()<.4 else "bush"
 		var height := rng.randf_range(4.0,6.5) if kind in ["oak","pine","willow"] else rng.randf_range(1.0,2.6)
 		props.append({"p":p,"kind":kind,"height":height,"radius":1.1 if kind in ["oak","pine","willow"] else .75,"tint":Color.from_hsv(rng.randf_range(.0,.04),rng.randf_range(.0,.05),rng.randf_range(.93,1.0)),"phase":rng.randf()*TAU})
-	props = props.filter(func(item: Dictionary): return item.p.distance_to(Stoneback.SITE) >= 23)
+	props = props.filter(func(item: Dictionary):
+		return item.p.distance_to(Stoneback.SITE)>=23 and not palestone.reserved(item.p) and not placed.any(func(prop): return item.p.distance_to(prop.p)<prop.radius+2.0)
+	)
+	dressed_props = dressed_props.filter(func(item: Dictionary):
+		return item.kind=="lighthouse" or (not item.get("retired",false) and not palestone.reserved(item.p))
+	)
+	dressed_props.append_array(placed)
 	for item in [["windmill",Map.WINDMILL,11.0,3.0],["ruins",Map.RUINS,8.0,3.0]]:
 		props.append({"p":item[1],"kind":item[0],"height":item[2],"radius":item[3],"tint":Color.WHITE,"phase":0.0})
 	# Small stone outcrops make the coastline readable from the approach.
@@ -271,7 +307,7 @@ func grid_cell(p: Vector2) -> Vector2i:
 	return Vector2i(floori(p.x/16),floori(p.y/16))
 
 func can_stand(p: Vector2) -> bool:
-	if not Map.safe_ground(p): return false
+	if not Map.safe_ground(p) or Map.bridge_rail_blocks(p): return false
 	if p.distance_to(Stoneback.SITE)<2.7: return false
 	var cell := grid_cell(p)
 	for x in range(cell.x-1,cell.x+2):
@@ -379,6 +415,31 @@ func enter_from_mill() -> void:
 	notice_left = 7
 	get_window().title = "Project Kingdom — The Greenshire"
 
+func enter_from_coast() -> void:
+	player = Map.COAST
+	velocity = Vector2.ZERO
+	facing = Vector2(0,-1)
+	mounted_rider.reset()
+	mounted_rider.set_direction(view_vector(facing))
+	gate_cooldown = 1.0
+	update_camera()
+	update_visible()
+	get_window().title = "Project Kingdom — The Greenshire"
+	notice = "Palestone Coast · Press F near the lighthouse to return."
+	notice_left = 6
+
+func can_enter_coast() -> bool:
+	return linked_journey and not paused and not region_map and not transitioning and gate_cooldown<=0 and player.distance_to(Map.COAST)<18
+
+func request_coast_entry() -> void:
+	if not can_enter_coast(): return
+	transitioning = true
+	velocity = Vector2.ZERO
+	coast_requested.emit()
+
+func beacon_restored() -> bool:
+	return not is_instance_valid(journey_loadout) or journey_loadout.lighthouse_stage>=journey_loadout.LighthouseStage.RESTORED
+
 func request_town_entry() -> void:
 	if not can_enter_town(): return
 	transitioning = true
@@ -412,7 +473,7 @@ func update_shader() -> void:
 	material.set_shader_parameter("terrain_tint",light_tint)
 	material.set_shader_parameter("haze_color",lighting.haze)
 	material.set_shader_parameter("night_weight",night_weight)
-	var values := {"city_center":Map.TOWN,"camera_ground":camera_ground,"camera_right":camera_right(),"camera_forward":camera_forward(),"focal":FOCAL,"camera_height":CAMERA_HEIGHT,"horizon":HORIZON,"bend":bend(),"camera_lead":CAMERA_LEAD,"world_time":clock,"grid":grid,"river_z":Map.RIVER_Z,"river_wave":Map.RIVER_WAVE,"river_rate":Map.RIVER_RATE,"river_half":Map.RIVER_HALF,"bridge_x":Map.BRIDGE_X,"bridge_half":Map.BRIDGE_HALF}
+	var values := {"city_center":Map.TOWN,"camera_ground":camera_ground,"camera_right":camera_right(),"camera_forward":camera_forward(),"focal":FOCAL,"camera_height":CAMERA_HEIGHT,"horizon":HORIZON,"bend":bend(),"camera_lead":CAMERA_LEAD,"world_time":clock,"grid":grid,"river_z":Map.RIVER_Z,"river_wave":Map.RIVER_WAVE,"river_rate":Map.RIVER_RATE,"river_half":Map.RIVER_HALF}
 	for key in values:
 		material.set_shader_parameter(key,values[key])
 	# Only road segments within the visible ground disc are evaluated per pixel.
@@ -449,9 +510,10 @@ func foot_uv(item: Dictionary) -> Vector2:
 	return texture_feet.get(texture.get_instance_id(),item.get("anchor_uv",Vector2(.5,.95 if item.kind=="bush" else .98)))
 
 func ground_clearance(item: Dictionary) -> float:
+	if item.kind=="bridge_section": return Map.BRIDGE_HALF+.2
 	# A wide foundation must stay in front of the dome's tangent, not just its
 	# center point; otherwise its outer edge hangs over the sky near the rim.
-	var broad: bool = item.kind in Dressing.HOUSE_KINDS or item.kind in ["city_illustration","windmill","watermill","lighthouse","ruins","rock","pine"]
+	var broad: bool = item.kind in Dressing.HOUSE_KINDS or item.kind in ["city_illustration","windmill","watermill","lighthouse","ruins","rock","pine","coastal_pine"]
 	# The painted floor is seen from above. Its rear corners cover considerably
 	# more ground depth than a vertical billboard's center-point collider.
 	return maxf(.8,item.height*1.6) if broad else .8
@@ -460,7 +522,7 @@ func include_visible(item: Dictionary, limit: float) -> void:
 	if item.get("city_geometry",false): return
 	var depth: float = view_point(item.p).y
 	if depth<4 or depth>355 or (bend()>0 and (item.p-camera_ground).length()+ground_clearance(item)>limit): return
-	if not curved and item.kind in ["oak","pine","willow","rock","bush"]:
+	if not curved and (item.kind in Dressing.TREE_KINDS or item.kind in ["rock","bush"]):
 		var lod: int = item.get("lod",0)
 		if (lod>1 and depth>110) or (lod==1 and depth>185): return
 	var at := project(item.p)
@@ -474,6 +536,7 @@ func update_visible() -> void:
 	visible_props.clear()
 	var limit := horizon_radius()
 	for item in props: include_visible(item,limit)
+	for item in bridge_pieces: include_visible(item,limit)
 	include_visible(City.illustration_prop(),limit)
 	if view_point(Stoneback.SITE).y > 1 and camera_ground.distance_to(Stoneback.SITE) < limit - 4:
 		visible_props.append({"p":Stoneback.SITE,"kind":"stoneback"})
@@ -481,6 +544,13 @@ func update_visible() -> void:
 	visible_props.sort_custom(func(a: Dictionary,b: Dictionary): return view_point(a.p).y>view_point(b.p).y)
 
 func draw_scene() -> void:
+	# Paint the road beneath the rider. Near parapets remain in the depth sort.
+	for item in visible_props:
+		if item.kind=="bridge_section":
+			var shade := bridge_shade(item)
+			RiverbendBridge.draw_piece(self,scenery,item,shade,RiverbendBridge.Layer.DECK_AND_ARCH)
+			if item.p.y>player.y:
+				RiverbendBridge.draw_piece(self,scenery,item,shade,RiverbendBridge.Layer.PARAPETS)
 	for item in visible_props:
 		var p: Vector2 = item.p
 		var at := project(p)
@@ -489,10 +559,14 @@ func draw_scene() -> void:
 			boss.draw_sprite(scenery, at, depth, light_tint)
 			continue
 		if item.kind=="rider":
-			draw_rider(at)
+			draw_rider(project(p,RiverbendBridge.deck_height(p)))
+			continue
+		if item.kind=="bridge_section":
+			if item.p.y<=player.y:
+				RiverbendBridge.draw_piece(self,scenery,item,bridge_shade(item),RiverbendBridge.Layer.PARAPETS)
 			continue
 		var size: float = sprite_height(item,depth)
-		var sway := sin(clock*1.35+item.phase)*.004 if item.kind in ["oak","pine","willow"] else 0.0
+		var sway := sin(clock*1.35+item.phase)*.004 if item.kind in Dressing.TREE_KINDS else 0.0
 		var tint: Color = item.tint*light_tint
 		# A little reflected window light keeps inhabited buildings readable,
 		# while trees, terrain and the sky retain their existing moonlit palette.
@@ -509,12 +583,14 @@ func draw_scene() -> void:
 		# SVG foot anchor is (80,152). Rotate about that foot, including wind,
 		# so crowns and roofs lean with the terrain without sliding the base.
 		var texture: Texture2D = textures[item.kind]
+		if item.kind=="lighthouse" and not beacon_restored():
+			texture = textures.lighthouse_unlit
 		var dimensions := texture.get_size()
 		var foot: Vector2 = dimensions*foot_uv(item)
 		if item.kind=="city_illustration":
 			draw_city_grounding(at,size,dimensions.x/dimensions.y,surface_rotation(p),shade.a,false)
 		elif texture_feet.has(texture.get_instance_id()):
-			var tree: bool = item.kind in ["oak","pine","willow"]
+			var tree: bool = item.kind in Dressing.TREE_KINDS
 			var contact_width := size*(.16 if tree else .42)*dimensions.x/dimensions.y
 			scenery.draw_set_transform(at,surface_rotation(p),Vector2(contact_width,size*(.025 if tree else .055)))
 			Atmosphere.glow(scenery,Vector2.ZERO,1,shade.a*.28,Color("293b25"),false)
@@ -522,7 +598,7 @@ func draw_scene() -> void:
 		if lamp_weight>.01:
 			var pool := 0.0
 			var strength := .0
-			if item.kind=="lamp":
+			if item.kind in Dressing.LAMP_KINDS:
 				pool = minf(115,FOCAL*4.6/depth)
 				strength = .48
 			elif item.kind in Dressing.HOUSE_KINDS or item.kind in ["windmill","watermill","lighthouse","city_illustration"]:
@@ -539,9 +615,17 @@ func draw_scene() -> void:
 			draw_city_grounding(at,size,dimensions.x/dimensions.y,surface_rotation(p),shade.a,true)
 		draw_prop_details(item,at,size,dimensions,foot,shade.a)
 	if grid:
-		var at := project(player)
+		var at := project(player,RiverbendBridge.deck_height(player))
 		scenery.draw_line(at-Vector2(15,0),at+Vector2(15,0),Color("f4d386"),2)
 		scenery.draw_line(at-Vector2(0,10),at+Vector2(0,10),Color("f4d386"),2)
+
+func bridge_shade(item: Dictionary) -> Color:
+	var p: Vector2 = item.p
+	var shade := light_tint.lerp(lighting.haze,smoothstep(80,330,view_point(p).y)*.7)
+	if bend()>0:
+		var rim := horizon_radius()-ground_clearance(item)
+		shade.a = 1.0-smoothstep(rim-3,rim,p.distance_to(camera_ground))
+	return shade
 
 func draw_city_grounding(at: Vector2, size: float, aspect: float, rotation: float, opacity: float, foreground: bool) -> void:
 	# Keep the ground contact attached to the painting's foundation, not a
@@ -568,16 +652,19 @@ func draw_prop_details(item: Dictionary, at: Vector2, size: float, dimensions: V
 	var rotation := surface_rotation(item.p)
 	if lamp_weight>.005 and light_emitters.has(item.kind):
 		for uv in light_emitters[item.kind]:
+			if item.kind=="lighthouse" and uv.y<.4 and not beacon_restored():
+				continue
 			var point: Vector2 = at+((uv*dimensions-foot)*size/dimensions.y).rotated(rotation)
 			var flicker := .92+.08*sin(clock*1.7+float(item.phase))
-			var radius := clampf(size*(.16 if item.kind=="lamp" else (.019 if item.kind=="city_illustration" else .065)),2.5,20 if item.kind=="lamp" else 14)
+			var is_lamp: bool = item.kind in Dressing.LAMP_KINDS
+			var radius := clampf(size*(.16 if is_lamp else (.019 if item.kind=="city_illustration" else .065)),2.5,20 if is_lamp else 14)
 			Atmosphere.glow(scenery,point,radius,lamp_weight*flicker*opacity)
 			if item.kind=="lighthouse" and uv.y<.4:
-				var aim := Vector2(cos(clock*.28),sin(clock*.28)*.2).rotated(rotation)
-				var end := point+aim*minf(180,size*1.4)
+				var aim := Vector2(1,sin(clock*.65)*.24).rotated(rotation)
+				var end := point+aim*minf(220,size*1.7)
 				var spread := aim.orthogonal()*size*.1
-				scenery.draw_colored_polygon(PackedVector2Array([point,end+spread,end-spread]),Color(1,.87,.54,lamp_weight*.07*opacity))
-	if item.kind in ["oak","willow","pine"] and posmod(hash(item.p),5)==0 and night_weight>.05:
+				scenery.draw_polygon(PackedVector2Array([point,end+spread,end-spread]),PackedColorArray([Color(1,.87,.54,lamp_weight*.32*opacity),Color(1,.87,.54,0),Color(1,.87,.54,0)]))
+	if item.kind in Dressing.TREE_KINDS and posmod(hash(item.p),5)==0 and night_weight>.05:
 		for i in 2:
 			var drift := Vector2(sin(clock*.6+item.phase+i)*11,-8-cos(clock*.4+item.phase+i)*7)
 			Atmosphere.glow(scenery,at+drift,minf(3,size*.04),night_weight*opacity*.55,Color("d9ee8f"))
@@ -607,12 +694,17 @@ func panel_style(color: Color) -> StyleBoxFlat:
 	return style
 
 func draw_hud() -> void:
-	panel(Rect2(24,22,316,74),Color("203e36"))
-	text(Vector2(40,46),"THE GREENSHIRE  /  MOSSWOOD",12,Color("d1c38d"))
-	text(Vector2(40,77),"A little world to explore",23)
-	if player.distance_to(Stoneback.SITE)<19 and boss.phase in ["idle", "defeated"]:
+	if is_instance_valid(journey_loadout) and journey_loadout.tracked_quest == journey_loadout.STONEBACK_QUEST:
+		var stage: int = journey_loadout.stoneback_stage
+		if stage in [journey_loadout.StonebackStage.ACCEPTED, journey_loadout.StonebackStage.RETURN]:
+			panel(Rect2(24,24,450,40))
+			text(Vector2(40,50),journey_loadout.stoneback_text(),15)
+	if player.distance_to(Stoneback.SITE)<19 and boss.phase == "idle":
 		panel(Rect2(710,184,500,40))
-		text(Vector2(728,210),"IVYKEEP RUINS  ·  F Rematch Stoneback" if boss.phase == "defeated" else "IVYKEEP RUINS  ·  F Accept Stoneback's challenge",16)
+		text(Vector2(728,210),"IVYKEEP RUINS  ·  F Accept Stoneback's challenge",16)
+	elif can_enter_coast():
+		panel(Rect2(710,184,500,40))
+		text(Vector2(728,210),"PALESTONE COAST  ·  F Visit the lighthouse",16)
 	elif near_landmark!="":
 		panel(Rect2(710,184,500,40))
 		text(Vector2(728,210),near_landmark+("  ·  F Enter Garden Square" if can_enter_town() else ("  ·  F Visit Windsong Mill" if can_enter_mill() else "  ·  F Inspect")),16)
@@ -667,10 +759,19 @@ func draw_map_contents(large: bool) -> void:
 	var road := PackedVector2Array()
 	for z in range(-75,476,5): road.append(map_point(Vector2(Map.road_x(z),z),large))
 	hud.draw_polyline(road,Color("b29b68"),maxf(2,3*scale),true)
-	for route in Map.ROUTES:
+	for route in Map.drawn_routes():
 		var points := PackedVector2Array()
 		for p in route: points.append(map_point(p,large))
 		hud.draw_polyline(points,Color("b29b68"),maxf(1.5,2.7*scale),true)
+	for route in palestone.routes:
+		var points := PackedVector2Array()
+		for p in route.points: points.append(map_point(p,large))
+		hud.draw_polyline(points,Color("b29b68") if route.surface==0 else Color("bdab82"),maxf(1.5,route.width*.4*scale),true)
+	for square in palestone.squares:
+		if square.size()<3: continue
+		var points := PackedVector2Array()
+		for p in square: points.append(map_point(p,large))
+		hud.draw_colored_polygon(points,Color("c2a675"))
 	var markers := Map.landmarks()
 	for i in markers.size():
 		var at := map_point(markers[i].get("location",markers[i].p),large)
@@ -689,30 +790,39 @@ func draw_map_contents(large: bool) -> void:
 			var size := Vector2(texture.get_width()*28.0/texture.get_height(),28)
 			hud.draw_texture_rect(texture,Rect2(marker-Vector2(size.x*.5,28),size),false,Color.WHITE)
 			text(marker+Vector2(8,4),extra[2],13,Color("53694b"))
+	if lighthouse_quest_tracked():
+		var target: Vector2 = Map.TOWN if journey_loadout.lighthouse_stage==journey_loadout.LighthouseStage.AVAILABLE else Map.COAST
+		FieldMap.draw_quest_pin(hud,map_point(target,large)+Vector2(0,-14 if large else -8),9 if large else 5)
 	var at := map_point(player,large)
-	hud.draw_circle(at,6 if large else 4,Color("a84738"))
-	hud.draw_arc(at,10 if large else 7,0,TAU,24,Color("fff2c6"),2,true)
+	FieldMap.draw_position(hud,at,9 if large else 6)
 	hud.draw_line(at,map_point(player+camera_forward()*18,large),Color("9e6543"),2,true)
 
+func lighthouse_quest_tracked() -> bool:
+	return is_instance_valid(journey_loadout) and journey_loadout.tracked_quest==journey_loadout.LIGHTHOUSE_QUEST and journey_loadout.lighthouse_stage!=journey_loadout.LighthouseStage.COMPLETE
+
 func draw_minimap() -> void:
-	panel(Rect2(1640,22,254,178),Color("e5dbb4"))
+	FieldMap.draw_paper(hud,Rect2(1640,22,254,178))
 	text(Vector2(1654,45),"THE GREENSHIRE",13,Color("335140"))
 	draw_map_contents(false)
 	text(Vector2(1856,45),"N ↑",12,Color("335140"))
-	text(Vector2(1654,185),"M  Regional map",12,Color("586d4c"))
+	text(Vector2(1654,185),("M   "+near_landmark.capitalize()) if not near_landmark.is_empty() else "M   Regional map",12,Color("294538"))
 
 func draw_region_map() -> void:
 	hud.draw_rect(Rect2(0,0,1920,1080),Color(.08,.17,.14,1))
-	panel(Rect2(360,95,1200,860),Color("e9dfbb"))
-	text(Vector2(405,148),"THE GREENSHIRE",30,Color("294c3e"))
-	text(Vector2(405,178),"Mosswood and the northern roads",18,Color("64734e"))
-	text(Vector2(1465,152),"N ↑",24,Color("294c3e"))
+	FieldMap.draw_paper(hud,Rect2(360,95,1200,860))
+	hud.draw_string(FieldMap.UI.heading_font(),Vector2(450,157),"The Greenshire",HORIZONTAL_ALIGNMENT_LEFT,-1,38,Color("294c3e"))
+	FieldMap.draw_position(hud,Vector2(458,183),7)
+	text(Vector2(476,189),"You are here · "+("Greenshire roads" if near_landmark.is_empty() else near_landmark.capitalize()),18,Color("294538"))
+	text(Vector2(1430,157),"N ↑",24,Color("294c3e"))
 	draw_map_contents(true)
 	text(Vector2(1215,270),"PLACES TO ROAM",19,Color("294c3e"))
 	var markers := Map.landmarks()
 	for i in markers.size():
 		text(Vector2(1215,310+i*46),str(i+1)+"  "+markers[i].short,20,Color("53694b"))
-	text(Vector2(405,911),"1–8  Preview a destination     M / Esc  Return to the road",20,Color("294c3e"))
+	if lighthouse_quest_tracked():
+		FieldMap.draw_quest_pin(hud,Vector2(1224,670),9)
+		text(Vector2(1241,676),"Tracked objective",17,Color("294c3e"))
+	text(Vector2(450,902),"1–8  Preview a destination     M / Esc  Return to the road",20,Color("294c3e"))
 
 func visit(index: int) -> void:
 	var marker: Dictionary = Map.landmarks()[clampi(index,0,7)]
@@ -758,7 +868,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				save_requested.emit()
 				get_viewport().set_input_as_handled()
 		KEY_F:
-			if not paused and not region_map and boss.phase in ["idle", "defeated"] and player.distance_to(Stoneback.SITE)<19:
+			if not paused and not region_map and boss.phase == "idle" and player.distance_to(Stoneback.SITE)<19:
 				transitioning = true
 				velocity = Vector2.ZERO
 				enter_ivykeep.call_deferred()
@@ -766,6 +876,10 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				return
 			if can_enter_mill():
 				request_mill_entry()
+				get_viewport().set_input_as_handled()
+				return
+			if can_enter_coast():
+				request_coast_entry()
 				get_viewport().set_input_as_handled()
 				return
 			if can_enter_town():
@@ -799,11 +913,14 @@ func enter_ivykeep() -> void:
 	arena.boss = boss
 	arena.actor_tint = light_tint
 	if is_instance_valid(journey_loadout):
+		arena.journey_state = journey_loadout
 		arena.state.gear = journey_loadout.equipped_ids()
 		arena.state.attributes = journey_loadout.stats()
+		arena.state.appearance = journey_loadout.appearance.duplicate()
 	if is_instance_valid(journey_audio):
 		arena.audio = journey_audio
 	arena.return_requested.connect(leave_ivykeep, CONNECT_DEFERRED)
+	arena.loot_claimed.connect(journey_loot_claimed.emit)
 	hide()
 	get_tree().root.add_child(arena)
 	get_window().title = "Project Kingdom — Ivykeep Ruins"
@@ -814,7 +931,8 @@ func enter_ivykeep() -> void:
 func leave_ivykeep() -> void:
 	await fade_ivykeep(1)
 	var won := boss.phase == "defeated"
-	if not won: boss.phase = "idle"
+	boss.set_phase("idle", 0)
+	boss.health = Stoneback.HEALTH
 	arena.hide()
 	arena.queue_free()
 	arena = null
@@ -822,7 +940,7 @@ func leave_ivykeep() -> void:
 	update_camera()
 	update_visible()
 	get_window().title = "Project Kingdom — The Greenshire"
-	notice = "Stoneback yields Ivykeep Ruins." if won else "You returned from Ivykeep Ruins."
+	notice = "Stoneback is ready for another duel." if won else "You returned from Ivykeep Ruins."
 	notice_left = 5
 	await fade_ivykeep(0)
 	transitioning = false

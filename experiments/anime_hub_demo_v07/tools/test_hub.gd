@@ -326,10 +326,12 @@ func _check_board_and_apothecary() -> void:
 	game.close_shop()
 	game.player.health = 1
 	game.player.skill_cooldown = 3
-	_check(game.use_item("wind_tonic") and game.player.health == 2 and game.player.skill_cooldown == 0,"Windmint refreshes Wind Slash and restores a heart")
+	_check(game.use_item("wind_tonic") and game.player.health == 3 and game.player.skill_cooldown == 0,"Windmint refreshes Wind Slash and restores a heart")
 	var snapshot: Dictionary = game.make_save_document()
 	_check(game.saves.validate(snapshot) and snapshot.state.items.healing_draught == 1,"Potion inventory validates in the save schema")
 	snapshot.version = 3
+	snapshot.state.erase("stoneback_stage")
+	snapshot.state.items.erase(game.GameState.STONEBACK_RELIC)
 	for id in game.saves.POTION_IDS:
 		snapshot.state.items.erase(id)
 	var migrated: Dictionary = game.saves.upgrade(snapshot)

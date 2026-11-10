@@ -2,7 +2,10 @@ extends RefCounted
 const Map := preload("res://experiments/overworld_2d_v01/layout.gd")
 const ART := "res://experiments/anime_hub_assets_v06/"
 const PAINTED := "res://experiments/overworld_2d_v01/art/architecture/"
-const HOUSE_KINDS := ["ivy_cottage","balcony_cottage","bakery","grocer_shop","bookshop","country_hall"]
+const PALESTONE_ART := "res://experiments/overworld_2d_v01/art/palestone_kit/"
+const HOUSE_KINDS := ["ivy_cottage","balcony_cottage","bakery","grocer_shop","bookshop","country_hall","palestone_cottage"]
+const TREE_KINDS := ["oak","pine","willow","coastal_pine","lakeside_alder"]
+const LAMP_KINDS := ["lamp","coastal_lantern"]
 const CATALOG := {
  "city_illustration":PAINTED+"mosswood_painted_v1.png",
  "ivy_cottage":PAINTED+"cottage_sage_drawn_v1.png", "balcony_cottage":PAINTED+"cottage_ochre_drawn_v1.png",
@@ -11,6 +14,10 @@ const CATALOG := {
  "bakery_stall":ART+"vendors/bakery_stall.png", "produce_stall":ART+"vendors/produce_stall.png",
  "flowers":ART+"scenery/flower_planter.png", "bench":ART+"scenery/bench.png",
  "lamp":ART+"scenery/street_lamp.png",
+ "coastal_lantern":PALESTONE_ART+"coastal_lantern.png",
+ "coastal_pine":PALESTONE_ART+"coastal_pine.png",
+ "lakeside_alder":PALESTONE_ART+"lakeside_alder.png",
+ "palestone_cottage":PALESTONE_ART+"palestone_cottage.png",
  "watermill":"res://experiments/overworld_2d_v01/art/region/watermill_v1.png",
  "lighthouse":"res://experiments/overworld_2d_v01/art/region/lighthouse_v1.png"
 }
@@ -41,6 +48,9 @@ const EMITTER_PIXELS := {
  "balcony_cottage":OCHRE_WINDOWS,"country_hall":OCHRE_WINDOWS,
  "bakery":SHOP_WINDOWS,"grocer_shop":SHOP_WINDOWS,
  "lamp":[Vector2(508,373)],
+ "coastal_lantern":[Vector2(767,586)],
+ "palestone_cottage":[Vector2(811,593),Vector2(487,636),Vector2(1094,611)],
+ "lighthouse":[Vector2(564,320),Vector2(798,888)],
  "city_illustration":[Vector2(345,335),Vector2(373,350),Vector2(475,291),Vector2(439,347),Vector2(496,340),Vector2(530,413),Vector2(596,375),Vector2(651,441),Vector2(699,284),Vector2(850,282),Vector2(690,348),Vector2(859,350),Vector2(1020,332),Vector2(1067,339),Vector2(1126,288),Vector2(951,438),Vector2(1023,449),Vector2(1097,458),Vector2(1210,438),Vector2(1247,453),Vector2(1311,438),Vector2(1355,433),Vector2(355,542),Vector2(247,580),Vector2(450,545),Vector2(516,690),Vector2(545,626),Vector2(677,664),Vector2(1060,648),Vector2(1090,588),Vector2(1205,617),Vector2(1165,687),Vector2(1228,678),Vector2(632,533),Vector2(925,573),Vector2(675,855),Vector2(966,839)]
 }
 
@@ -78,7 +88,8 @@ static func props() -> Array[Dictionary]:
    var side := (b-a).normalized().orthogonal()*6.5
    for step in range(1,maxi(2,ceili(a.distance_to(b)/28))):
     var at := a.lerp(b,step/float(maxi(2,ceili(a.distance_to(b)/28))))+side
-    put(result,"lamp",at,3.1,.25)
+    if put(result,"lamp",at,3.1,.25) and route in [Map.PREVIOUS_COAST_ROAD,Map.PREVIOUS_LIGHTHOUSE_PATH]:
+     result.back()["retired"] = true
  # Town gate lamps are outside the wall and do not narrow its passage.
  for side in [-1,1]:
   result.append(make_prop("lamp",Map.TOWN+Vector2(side*4.0,-16),3.0,.25))

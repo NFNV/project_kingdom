@@ -305,7 +305,8 @@ func run() -> void:
 	check(not world.can_stand(Vector2(Map.coast_x(350)+4,350)),"Open sea blocks walking")
 	var route_clear := true
 	var route_samples := 0
-	for route in Map.ROUTES:
+	var rendered_routes: Array = Map.drawn_routes() + world.palestone.routes.map(func(route): return route.points)
+	for route in rendered_routes:
 		for i in range(1,route.size()):
 			var length: float = route[i-1].distance_to(route[i])
 			for step in ceili(length*2)+1:

@@ -2,6 +2,9 @@ extends Polygon2D
 
 const ROOT := "res://experiments/anime_hub_demo_v07/assets/combat/"
 const Timing := preload("res://experiments/anime_hub_demo_v07/tools/combat_timing.gd")
+const HeroLook := preload("res://experiments/anime_hub_demo_v07/tools/hero_look.gd")
+const DogArt := preload("res://experiments/anime_hub_demo_v07/tools/dog_art.gd")
+const Art := preload("res://experiments/anime_hub_demo_v07/tools/art_style.gd")
 static var cached_shapes: Dictionary = {}
 static var cached_parts: Dictionary = {}
 var catalogs: Dictionary = {}
@@ -17,6 +20,12 @@ var active_parts: Array = []
 var active_data: Dictionary = {}
 var display_head_width := 31.5
 var display_head_height := 57.0
+var appearance: Dictionary = {}
+var dog_body: Sprite2D
+var dog_grip := Vector2.ZERO
+var dog_blade_angle := 0.0
+var dog_weapon_in_front := true
+var hero_height := 73.0
 
 static func bounds(points: PackedVector2Array) -> Rect2:
 	var rect := Rect2(points[0],Vector2.ZERO)
@@ -25,7 +34,7 @@ static func bounds(points: PackedVector2Array) -> Rect2:
 	return rect
 
 func _ready() -> void:
-	material = preload("res://experiments/anime_hub_demo_v07/tools/art_style.gd").character_material()
+	material = Art.character_material()
 	layers.append(self)
 	for kind in ["attack","transition"]:
 		var file := "catalog.json" if kind=="attack" else "transitions_catalog.json"
@@ -59,7 +68,29 @@ func _ready() -> void:
 			cached_shapes[kind] = registered
 	poses = catalogs.attack
 
+func set_appearance(look: Dictionary) -> void:
+	if appearance == look:
+		return
+	appearance = look.duplicate()
+	current_key = ""
+	if look.species=="dog":
+		polygon = PackedVector2Array()
+		for layer in layers:
+			if layer!=self:
+				layer.hide()
+		if dog_body==null:
+			dog_body = Sprite2D.new()
+			dog_body.centered = false
+			add_child(dog_body)
+		dog_body.material = HeroLook.palette(look)
+		dog_body.show()
+	else:
+		if dog_body!=null:
+			dog_body.hide()
+		material = HeroLook.palette(look) if HeroLook.uses_palette(look) else Art.character_material()
+
 func configure_reference(metadata: Dictionary, height: float) -> void:
+	hero_height = height
 	for direction in ["se","sw","ne","nw"]:
 		var entry: Dictionary = metadata[direction]
 		var idle: Dictionary = entry.body_registration.idle
@@ -99,6 +130,9 @@ func pose(facing: Vector2, progress: float, power: bool) -> void:
 	var index: int = selection[2]
 	var key := kind+"/"+direction+"/"+str(index)
 	current_phase = selection[3]
+	if appearance.get("species")=="dog":
+		pose_dog(direction,elapsed,power)
+		return
 	if current_key!=key:
 		current_key = key
 		current_pose = index
@@ -136,5 +170,31 @@ func pose(facing: Vector2, progress: float, power: bool) -> void:
 			local_point.y -= extension*weight
 			points.append(local_point)
 		layers[i].polygon = points
+	if not appearance.is_empty() and HeroLook.uses_palette(appearance):
+		var source_width: float = active_data.head_width
+		var head_x: float = active_data.foot_x
+		var head_top := float(active_data.region[1])-1
+		var head_bottom := float(active_data.head_bottom_y)+5
+		HeroLook.set_head_box(material,Rect2(head_x-source_width*.75,head_top,source_width*1.5,head_bottom-head_top),sheets[kind].get_size())
+		material.set_shader_parameter("eye_points",HeroLook.eye_points(direction))
 	scale = Vector2.ONE
 	position = Vector2.ZERO
+
+func pose_dog(direction: String, elapsed: float, power: bool) -> void:
+	var release := Timing.WIND_RELEASE if power else Timing.LIGHT_CONTACT
+	var follow := .39 if power else .32
+	var index := 0 if elapsed<release else (1 if elapsed<follow else 2)
+	var entry := DogArt.cel("combat",direction,index)
+	var mirror := HeroLook.MIRRORED.has(direction)
+	var factor := hero_height/float(entry.height)
+	dog_body.texture = entry.texture
+	dog_body.flip_h = mirror
+	dog_body.offset = DogArt.offset(entry,mirror)
+	dog_body.scale = Vector2.ONE*factor
+	DogArt.color_pose(dog_body.material,entry)
+	dog_grip = DogArt.point(entry,"weapon",mirror)*factor
+	var angle: float = [-.64,1.16,2.04][index]
+	dog_blade_angle = -angle if mirror else angle
+	dog_weapon_in_front = direction in ["se","sw"] or index==1
+	current_pose = index
+	current_direction = direction

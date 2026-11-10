@@ -1,11 +1,12 @@
 extends RefCounted
 ## Whitelisted, versioned JSON. Validate everything before touching live state.
-const VERSION := 4
+const VERSION := 7
 const POTION_IDS := ["healing_draught","wind_tonic"]
 const Legacy := preload("res://experiments/anime_hub_demo_v07/tools/save_v1.gd")
 const State := preload("res://experiments/anime_hub_demo_v07/tools/game_state.gd")
 const DEFAULT_PATH := "user://kingdom_journey.json"
-const ZONES := ["town","bakery","district","trail","river","wilds","forge","mill_garden","mill_room","mill_loft"]
+const Lighthouse := preload("res://experiments/anime_hub_demo_v07/tools/palestone_lighthouse.gd")
+const ZONES := ["town","bakery","district","trail","river","wilds","forge","mill_garden","mill_room","mill_loft"] + Lighthouse.ZONES
 const MEMORIES := ["old_elm","meadow","river_view"]
 const PLACES := ["north_place_plaza","north_place_park","north_place_civic"]
 var definitions: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://experiments/anime_hub_demo_v07/data/items.json"))
@@ -52,6 +53,8 @@ func validate(doc: Variant) -> bool:
 	var player: Variant = doc.get("player")
 	if not data is Dictionary or not player is Dictionary:
 		return false
+	if data.has("appearance") and not State.HeroLook.valid(data.appearance):
+		return false
 	if not whole(data.get("coins"),0,999999) or not whole(data.get("delivery_stage"),0,5) or not number(data.get("clock"),0,3.99999999) or not whole(data.get("forest_recoveries"),0,999999):
 		return false
 	if not ids_valid(data.get("discoveries"),MEMORIES) or not ids_valid(data.get("district_places"),PLACES) or not ids_valid(data.get("forest_defeated"),enemy_ids()):
@@ -72,7 +75,7 @@ func validate(doc: Variant) -> bool:
 	if equipment.size()!=State.SLOTS.size():
 		return false
 	var owned: Dictionary = items.duplicate()
-	var maximum_health := 5
+	var maximum_hearts := State.Hearts.BASE_HEARTS
 	for slot in State.SLOTS:
 		var id: Variant = equipment.get(slot)
 		if not id is String:
@@ -81,7 +84,7 @@ func validate(doc: Variant) -> bool:
 			if not definitions.has(id) or definitions[id].get("slot")!=slot:
 				return false
 			owned[id] += 1
-			maximum_health += int(definitions[id].get("hearts",0))
+			maximum_hearts += int(definitions[id].get("hearts",0))
 	for id in definitions:
 		if definitions[id].has("slot") and owned[id]>1:
 			return false
@@ -101,7 +104,14 @@ func validate(doc: Variant) -> bool:
 		return false
 	if smith.rewarded and (not smith.accepted or not smith.tools_recovered):
 		return false
-	if data.get("tracked_quest") not in ["morning_rounds","briarwood_patrol","emberforge_tools"]:
+	if data.get("tracked_quest") not in ["morning_rounds","briarwood_patrol","emberforge_tools",State.STONEBACK_QUEST,State.LIGHTHOUSE_QUEST]:
+		return false
+	if not whole(data.get("lighthouse_stage"),State.LighthouseStage.AVAILABLE,State.LighthouseStage.COMPLETE):
+		return false
+	var stoneback_stage: Variant = data.get("stoneback_stage")
+	if not whole(stoneback_stage,State.StonebackStage.AVAILABLE,State.StonebackStage.COMPLETE):
+		return false
+	if int(items[State.STONEBACK_RELIC]) != (1 if stoneback_stage == State.StonebackStage.RETURN else 0):
 		return false
 	var loot: Variant = data.get("loot")
 	if not loot is Dictionary or loot.size()>12:
@@ -120,7 +130,7 @@ func validate(doc: Variant) -> bool:
 	var sizes := {"town":Vector2(1920,1080),"bakery":Vector2(1920,1080),"district":Vector2(6400,3840),"trail":Vector2(1920,1080),"river":Vector2(1920,1080),"wilds":Vector2(4608,2592),"forge":Vector2(1920,1080),"mill_garden":Vector2(2400,1600),"mill_room":Vector2(1920,1080),"mill_loft":Vector2(1280,720)}
 	if player.get("zone") not in ZONES:
 		return false
-	var dimensions: Vector2 = sizes[player.zone]
+	var dimensions := Vector2(Lighthouse.size_for(player.zone)) if player.zone in Lighthouse.ZONES else Vector2(sizes[player.zone])
 	if player.zone=="mill_garden" and player.has("mill_garden_layout"):
 		if player.mill_garden_layout!=2: return false
 		dimensions = Vector2(1920,1280)
@@ -128,7 +138,7 @@ func validate(doc: Variant) -> bool:
 		# Unmarked room saves retain the original 1920x1080 validation above.
 		if player.mill_room_layout!=2: return false
 		dimensions = Vector2(1280,720)
-	if not pair_valid(player.get("position"),dimensions.x,dimensions.y) or not whole(player.get("health"),1,maximum_health):
+	if not pair_valid(player.get("position"),dimensions.x,dimensions.y) or not whole(player.get("health"),1,maximum_hearts * State.Hearts.UNITS_PER_HEART):
 		return false
 	var facing: Variant = player.get("facing")
 	if not facing is Array or facing.size()!=2 or not number(facing[0],-1,1) or not number(facing[1],-1,1) or Vector2(facing[0],facing[1]).length_squared()<.01 or not number(player.get("skill_cooldown"),0,6):
@@ -148,7 +158,6 @@ func upgrade(source: Variant) -> Dictionary:
 			last_error = legacy.last_error
 			return {}
 		var result: Dictionary = source.duplicate(true)
-		result.version = VERSION
 		for id in definitions:
 			if not result.state.items.has(id):
 				result.state.items[id] = 0
@@ -159,17 +168,21 @@ func upgrade(source: Variant) -> Dictionary:
 		result.state.smith = {"accepted":false,"rewarded":false,"tools_recovered":recovered}
 		result.state.items.smith_tools = 1 if recovered else 0
 		result.state.tracked_quest = "briarwood_patrol"
-		migrated = true
-		return result
-	if source.get("version")==2 or source.get("version")==3:
+		result.state.stoneback_stage = State.StonebackStage.AVAILABLE
+		return upgrade_health(result)
+	if source.get("version")==2 or source.get("version")==3 or source.get("version")==4:
 		# Add only items introduced since the saved version.
 		var needs_shields: bool = source.version == 2
-		var new_items := POTION_IDS.duplicate()
+		var new_items := [State.STONEBACK_RELIC]
+		if source.version < 4:
+			new_items.append_array(POTION_IDS)
 		if needs_shields:
 			new_items.append_array(["trail_shield","ironleaf_shield"])
 		var result: Dictionary = source.duplicate(true)
 		var data: Variant = result.get("state")
 		if not data is Dictionary or not data.get("items") is Dictionary or not data.get("equipment") is Dictionary:
+			return {}
+		if data.has("stoneback_stage"):
 			return {}
 		if data.items.size()!=definitions.size()-new_items.size() or data.equipment.size()!=State.SLOTS.size()-int(needs_shields):
 			return {}
@@ -181,10 +194,39 @@ func upgrade(source: Variant) -> Dictionary:
 			if data.equipment.has("shield"):
 				return {}
 			data.equipment.shield = "trail_shield"
-		result.version = VERSION
-		migrated = true
-		return result
+		data.stoneback_stage = State.StonebackStage.AVAILABLE
+		return upgrade_health(result)
+	if source.get("version")==5:
+		return upgrade_health(source.duplicate(true))
+	if source.get("version")==6:
+		return upgrade_lighthouse(source.duplicate(true))
 	return source
+
+func upgrade_health(doc: Dictionary) -> Dictionary:
+	var player: Variant = doc.get("player")
+	var data: Variant = doc.get("state")
+	if not player is Dictionary or not data is Dictionary or not data.get("equipment") is Dictionary:
+		return {}
+	var bonus := 0
+	for slot in State.SLOTS:
+		var id: Variant = data.equipment.get(slot)
+		if not id is String:
+			return {}
+		bonus += int(definitions.get(id,{}).get("hearts",0))
+	var old_capacity := 5 + bonus
+	if not whole(player.get("health"),1,old_capacity):
+		return {}
+	var capacity := (State.Hearts.BASE_HEARTS + bonus) * State.Hearts.UNITS_PER_HEART
+	player.health = ceili(float(player.health) * capacity / old_capacity)
+	return upgrade_lighthouse(doc)
+
+func upgrade_lighthouse(doc: Dictionary) -> Dictionary:
+	if not doc.get("state") is Dictionary:
+		return {}
+	doc.state.lighthouse_stage = State.LighthouseStage.AVAILABLE
+	doc.version = VERSION
+	migrated = true
+	return doc
 
 func has_journey(path := DEFAULT_PATH) -> bool:
 	return FileAccess.file_exists(path) or FileAccess.file_exists(path+".bak") or FileAccess.file_exists(path+".auto") or FileAccess.file_exists(path+".auto.bak")
@@ -235,6 +277,8 @@ func _read(path: String) -> Dictionary:
 	var document := upgrade(parser.data)
 	if document.is_empty() or not validate(document):
 		return {}
+	if document.state.has("appearance"):
+		document.state.appearance = State.HeroLook.normalized(document.state.appearance)
 	return document
 
 func load_document(path := DEFAULT_PATH) -> Dictionary:

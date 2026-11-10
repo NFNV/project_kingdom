@@ -1,5 +1,7 @@
 extends Control
 const UI := preload("res://experiments/anime_hub_demo_v07/tools/rpg_ui.gd")
+const PAGES := preload("res://experiments/anime_hub_demo_v07/assets/field_ui/journal_pages.png")
+const COVER := preload("res://experiments/anime_hub_demo_v07/assets/field_ui/journal_cover.png")
 var hub: Node2D
 var board_mode := false
 var banner: Label
@@ -17,37 +19,45 @@ var route: Label
 var reward: Label
 var tally: Label
 var track_button: Button
+var guidance: Label
+var footer: Label
 
 func _ready() -> void:
 	size = Vector2(1920,1080)
 	UI.shade(self)
-	var sheet := UI.panel(self,Vector2(300,145),Vector2(1320,790))
-	banner = UI.text(sheet,"THE TRAVELLER'S JOURNAL",Vector2(32,24),1000,13,UI.GOLD)
-	heading = UI.text(sheet,"Stories along the road",Vector2(32,51),950,36,UI.INK,true)
-	tally = UI.text(sheet,"",Vector2(1000,68),280,17,UI.MUTED)
+	var sheet := UI.image(self,PAGES,Vector2(306,104),Vector2(1308,872))
+	banner = UI.text(sheet,"THE TRAVELLER'S JOURNAL",Vector2(112,79),480,15,Color("8a6237"))
+	heading = UI.text(sheet,"Stories along the road",Vector2(110,105),500,36,UI.INK,true)
+	tally = UI.text(sheet,"",Vector2(112,164),480,17,UI.MUTED)
 	var row := 0
 	for entry in hub.state.journal_entries():
-		var card := UI.button(sheet,"",Vector2(30,133+row*125),Vector2(338,111))
+		var card := UI.button(sheet,"",Vector2(112,206+row*82),Vector2(466,72))
 		card.pressed.connect(func(): selected=entry.id; refresh())
 		cards[entry.id] = card
-		names[entry.id] = UI.text(card,entry.title,Vector2(15,18),305,21,Color("f7e8c5"),true)
-		statuses[entry.id] = UI.text(card,"",Vector2(16,72),300,14,Color("d7c392"))
+		names[entry.id] = UI.text(card,entry.title,Vector2(19,9),424,24,Color("f7e8c5"),true)
+		statuses[entry.id] = UI.text(card,"",Vector2(20,43),424,14,Color("d7c392"))
 		row += 1
-	var page := UI.panel(sheet,Vector2(390,132),Vector2(900,565))
-	title = UI.text(page,"",Vector2(25,22),850,30,UI.INK,true)
-	giver = UI.text(page,"",Vector2(27,72),845,17,UI.GOLD)
-	summary = UI.text(page,"",Vector2(27,112),845,20,UI.MUTED)
-	objectives = UI.text(page,"",Vector2(27,200),845,21,UI.INK)
-	route = UI.text(page,"",Vector2(27,390),845,17,UI.MUTED)
-	reward = UI.text(page,"",Vector2(27,463),845,19,UI.GREEN,true)
-	track_button = UI.button(sheet,"Track this quest",Vector2(390,717),Vector2(360,43))
+	guidance = UI.text(sheet,"",Vector2(114,635),462,20,UI.INK,true)
+	guidance.max_lines_visible = 3
+	guidance.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	footer = UI.text(sheet,"",Vector2(114,708),462,15,UI.MUTED)
+	title = UI.text(sheet,"",Vector2(726,101),465,34,UI.INK,true)
+	giver = UI.text(sheet,"",Vector2(728,161),470,17,Color("8a6237"))
+	summary = UI.text(sheet,"",Vector2(728,220),468,20,UI.MUTED)
+	objectives = UI.text(sheet,"",Vector2(728,333),465,20,UI.INK)
+	route = UI.text(sheet,"",Vector2(728,530),465,18,UI.MUTED)
+	reward = UI.text(sheet,"",Vector2(728,632),465,20,UI.GREEN,true)
+	track_button = UI.button(sheet,"Track this quest",Vector2(728,711),Vector2(218,44))
 	track_button.pressed.connect(func():
-		hub.state.tracked_quest = selected
+		if can_accept_notice():
+			hub.state.accept_lighthouse_quest()
+		else:
+			hub.state.tracked_quest = selected
 		hub.queue_autosave()
 		hub._update_hud()
 		refresh()
 	)
-	close_button = UI.button(sheet,"Return  /  J or Esc",Vector2(930,717),Vector2(360,43))
+	close_button = UI.button(sheet,"Close   ·   J / Esc",Vector2(965,711),Vector2(226,44))
 	close_button.pressed.connect(func(): hub.toggle_journal())
 	hide()
 
@@ -55,8 +65,8 @@ func open(from_board := false) -> void:
 	board_mode = from_board
 	banner.text = "GARDEN SQUARE QUEST BOARD" if board_mode else "THE TRAVELLER'S JOURNAL"
 	heading.text = "Town notices and requests" if board_mode else "Stories along the road"
-	close_button.text = "Return to the square  /  E or Esc" if board_mode else "Return  /  J or Esc"
-	selected = hub.state.tracked_quest
+	close_button.text = "Close   ·   E / Esc" if board_mode else "Close   ·   J / Esc"
+	selected = hub.GameState.LIGHTHOUSE_QUEST if board_mode and hub.state.lighthouse_stage==hub.GameState.LighthouseStage.AVAILABLE else hub.state.tracked_quest
 	refresh()
 	show()
 
@@ -78,6 +88,10 @@ func refresh() -> void:
 		objectives.text = "\n".join(lines)
 		route.text = "Route: "+entry.route
 		reward.text = "Reward: "+entry.reward
-		track_button.disabled = hub.state.tracked_quest==entry.id
-		track_button.text = "Currently tracked" if track_button.disabled else "Track this quest"
+		var accept := can_accept_notice()
+		track_button.disabled = not accept and hub.state.tracked_quest==entry.id
+		track_button.text = "Accept quest" if accept else ("Currently tracked" if track_button.disabled else "Track this quest")
 	tally.text = "%d / %d stories completed" % [complete,entries.size()]
+
+func can_accept_notice() -> bool:
+	return board_mode and selected==hub.GameState.LIGHTHOUSE_QUEST and hub.state.lighthouse_stage==hub.GameState.LighthouseStage.AVAILABLE

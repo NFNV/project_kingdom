@@ -1,7 +1,9 @@
 extends Control
 const UI := preload("res://experiments/anime_hub_demo_v07/tools/rpg_ui.gd")
+const Hearts := preload("res://experiments/anime_hub_demo_v07/tools/heart_meter.gd")
 const Art := preload("res://experiments/anime_hub_demo_v07/tools/equipment_art.gd")
 const Slot := preload("res://experiments/anime_hub_demo_v07/tools/equipment_slot.gd")
+const Motion := preload("res://experiments/anime_hub_demo_v07/tools/motion_sprite.gd")
 const POSITIONS := {"head":Vector2(267,8),"chest":Vector2(32,165),"gloves":Vector2(32,315),"weapon":Vector2(32,465),"charm":Vector2(502,15),"shield":Vector2(502,165),"legs":Vector2(502,315),"boots":Vector2(502,465)}
 var hub: Node2D
 var slots: Dictionary = {}
@@ -20,6 +22,8 @@ var comparison: Label
 var primary_button: Button
 var hint: Label
 var character_image: TextureRect
+var character_preview: AnimatedSprite2D
+var name_label: Label
 
 func _ready() -> void:
 	size = Vector2(1920,1080)
@@ -39,7 +43,11 @@ func _ready() -> void:
 	body.add_child(links)
 	links.draw.connect(func(): draw_links(links))
 	character_image = UI.image(body,Art.icon("adventurer"),Vector2(151,112),Vector2(319,463))
-	var name_label := UI.text(body,"Mosswood wanderer",Vector2(150,590),320,23,UI.INK,true)
+	character_preview = Motion.new()
+	character_preview.position = Vector2(310,556)
+	body.add_child(character_preview)
+	character_preview.configure("cat",385)
+	name_label = UI.text(body,"",Vector2(150,590),320,23,UI.INK,true)
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	for key in hub.state.SLOTS:
 		var button := Slot.new()
@@ -121,8 +129,16 @@ func select(id: String, where: String, slot := "") -> void:
 func refresh() -> void:
 	if not is_instance_valid(purse):
 		return
-	purse.text = "%d coins   ·   %d / %d hearts" % [hub.coins,hub.player.health,hub.player.maximum_health]
+	purse.text = "%d coins   ·   %s / %s hearts" % [hub.coins,Hearts.amount(hub.player.health),Hearts.amount(hub.player.maximum_health)]
 	var state = hub.state
+	var appearance: Dictionary = state.appearance
+	name_label.text = appearance.name
+	var customized := Motion.HeroLook.uses_palette(appearance)
+	character_image.visible = not customized
+	character_preview.visible = customized
+	if customized and character_preview.appearance!=appearance:
+		character_preview.set_appearance(appearance)
+		character_preview.set_pose("idle","s",0)
 	if selected!="" and state.definitions.has(selected) and state.definitions[selected].has("slot"):
 		var key: String = state.definitions[selected].slot
 		source = "equipped" if state.equipped_id(key)==selected else "bag"
@@ -142,7 +158,7 @@ func refresh() -> void:
 	for key in filters:
 		filters[key].add_theme_stylebox_override("normal",UI.style(true,filter==key))
 	var stats: Dictionary = state.stats()
-	stats_label.text = "HEARTS  %d / %d     •     SWORD  %d damage     •     WIND SLASH  %d damage / %.1f s     •     MOVEMENT  %d%%" % [hub.player.health,stats.hearts,stats.attack,stats.wind,stats.recharge,roundi(stats.speed*100)]
+	stats_label.text = "HEARTS  %s / %d     •     SWORD  %d damage     •     WIND SLASH  %d damage / %.1f s     •     MOVEMENT  %d%%" % [Hearts.amount(hub.player.health),stats.hearts,stats.attack,stats.wind,stats.recharge,roundi(stats.speed*100)]
 	refresh_details()
 
 func refresh_details() -> void:
