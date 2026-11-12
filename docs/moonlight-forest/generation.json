@@ -1,0 +1,17 @@
+{
+  "mode": "Built-in ImageGen",
+  "concepts": [
+    {
+      "file": "forest-reveal.png",
+      "style_reference": "../../experiments/overworld_2d_v01/previews/painted_forest_night.png",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-005629eb-bcf9-488a-8c46-3f403acdf1a2.png",
+      "prompt": "Use case: stylized-concept. Design sketch for Moonlight Forest, a playable forest dungeon in a hand-painted 2D storybook anime fantasy RPG. Image 1 is a style reference for the soft painted anime world, moonlit blue greens, and warm practical lights. Create a wide 16:9 gameplay composition study from a fixed elevated three-quarter camera. In the bottom foreground, a very small orange tabby adventurer with a muted red scarf and traveling satchel stands at the near end of a narrow stone footbridge over a dark creek, seen from behind. The path is large and readable, passing through an open oval glade with bluebell clusters, silver pools of moonlight and one split willow. In the upper third, beyond a gap in the old fir canopy, reveal a ruined medieval castle with two broken slate-roof towers, an ivy-covered great arch and warm amber light from a stairwell just inside. The ruined castle is a mid-sized distant destination in the forest, not a giant backdrop. Fog sits low along the creek edges, deep indigo foliage frames the image, cool moonlight clearly reveals the safe walking ground. Keep foreground collision boundaries legible, large clearing, and stepping stones on the opposite creek shore. Warm handcrafted gouache textures, controlled brush edges, delicate nocturnal mood, charming and mysterious. Environment concept with rough brush detail at the edges, no interface, no labels, no text."
+    },
+    {
+      "file": "cistern.png",
+      "style_reference": "../../experiments/overworld_2d_v01/art/boss/ivykeep_courtyard.png",
+      "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-1ea77fc8-e9bb-4a40-9163-67e6d8fdc98d.png",
+      "prompt": "Use case: stylized-concept. Environment sketch for the UNDERGROUND dungeon beneath a ruined castle in a 2D hand-painted anime storybook fantasy RPG. Image 1 is a style reference for painted limestone, moss, and brushwork. Wide 16:9 fixed high three-quarter gameplay camera showing a readable old cistern chamber from above. The foreground has a broad dry limestone walkway with a tiny orange tabby adventurer in a faded red scarf for scale. A rectangular pool of dark still teal water is centered slightly left, contained by a low stone edge. An unbroken dry stone path runs around the east/right edge toward a visible warm-lantern winch alcove and narrow passage, while a closed iron grate in the north wall leads toward a chapel. Broken Gothic arches, enormous roots prying open the vault, thin moonbeams from the collapsed ceiling catching floating dust and pooled water. The walking routes are bright enough to read clearly, with navy and blue-green shadows and restrained golden light at interactable doors and winch. Hand-painted warm-gray stone, blue slate details, lightly sketched composition edges. Moody yet inviting, no combat action, no interface, no writing or labels."
+    }
+  ]
+}

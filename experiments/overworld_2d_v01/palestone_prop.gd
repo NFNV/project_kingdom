@@ -6,7 +6,7 @@ const CONTACTS := "res://experiments/overworld_2d_v01/art/ground_contacts.json"
 static var previews: Dictionary
 static var contacts: Dictionary
 
-@export_enum("palestone_cottage","ivy_cottage","balcony_cottage","bakery","grocer_shop","bookshop","country_hall","lamp","coastal_lantern","oak","willow","pine","coastal_pine","lakeside_alder","bush","rock","produce_stall","bakery_stall","bench","flowers","watermill","windmill","lighthouse","ruins","city_illustration") var kind := "palestone_cottage":
+@export_enum("palestone_cottage","ivy_cottage","balcony_cottage","bakery","grocer_shop","bookshop","country_hall","lamp","coastal_lantern","oak","willow","pine","coastal_pine","lakeside_alder","bush","rock","produce_stall","bakery_stall","bench","flowers","watermill","windmill","lighthouse","ruins","city_illustration","moonlight_entrance") var kind := "palestone_cottage":
 	set(value):
 		kind = value
 		queue_redraw()

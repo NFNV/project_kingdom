@@ -20,6 +20,8 @@ const Forge := preload("res://experiments/anime_hub_demo_v07/tools/forge_room.gd
 const OverworldTravel := preload("res://experiments/anime_hub_demo_v07/tools/overworld_travel.gd")
 const Mill := preload("res://experiments/anime_hub_demo_v07/tools/windsong_mill.gd")
 const Lighthouse := Map.Lighthouse
+const Moonlight := Map.Moonlight
+var moonlight_area: Node2D
 const RenderSettings := preload("res://experiments/anime_hub_demo_v07/tools/render_settings.gd")
 var overworld_travel: Node
 var state: Node
@@ -209,6 +211,10 @@ func _ready() -> void:
 		load_game.call_deferred()
 	if "--forge" in OS.get_cmdline_user_args():
 		_load_zone("forge","district")
+	if "--moonlight" in OS.get_cmdline_user_args():
+		_load_zone(Moonlight.FOREST,"overworld")
+		dialogue_left = 0
+		talk_panel.hide()
 	if "--mill" in OS.get_cmdline_user_args():
 		_load_zone("mill_garden","overworld")
 	_activate_direct_session.call_deferred()
@@ -250,7 +256,7 @@ func _load_zone(destination: String, entry: String) -> void:
 	inn_bed = ""
 	zone = destination
 	world_size = Map.world_size(zone)
-	peaceful_mode = zone!="wilds"
+	peaceful_mode = zone!="wilds" and zone not in Moonlight.ZONES
 	combat_active = false
 	backgrounds.clear()
 	pieces.clear()
@@ -264,6 +270,7 @@ func _load_zone(destination: String, entry: String) -> void:
 	trail_effects = null
 	bakery_room = null
 	lighthouse_glow = null
+	moonlight_area = null
 	nearest = ""
 	near_exit = ""
 	conversation_actor = ""
@@ -282,6 +289,9 @@ func _load_zone(destination: String, entry: String) -> void:
 	elif zone in ["mill_garden","mill_room"]:
 		FLOOR = Mill.floor_for(zone=="mill_room")
 		files = [Mill.ROOT+("mill_interior_v2.png" if zone=="mill_room" else "mill_garden_v2.png")]
+	elif zone in Moonlight.ZONES:
+		FLOOR = Moonlight.floor_for(zone)
+		files = Moonlight.files_for(zone)
 	elif zone in Lighthouse.ZONES:
 		FLOOR = Map.floor_for(zone)
 		files = Lighthouse.files_for(zone)
@@ -319,6 +329,8 @@ func _load_zone(destination: String, entry: String) -> void:
 		bakery_room = Map.Inn.build(self)
 	elif zone in ["mill_garden","mill_room"]:
 		bakery_room = Mill.build(self,zone=="mill_room")
+	elif zone in Moonlight.ZONES:
+		moonlight_area = Moonlight.build(self)
 	elif zone in Lighthouse.ZONES:
 		lighthouse_glow = Lighthouse.build(self)
 	elif zone=="district":
@@ -341,7 +353,7 @@ func _load_zone(destination: String, entry: String) -> void:
 		player.position = Map.arrival(zone,entry)
 	player.active = true
 	player.collision_layer = 2
-	player.grace = 1.5 if zone=="wilds" else 0.0
+	player.grace = 1.5 if not peaceful_mode else 0.0
 	player.cooldown = 0
 	player.swing = 0
 	player.attack_kind = "light"
@@ -366,6 +378,15 @@ func _load_zone(destination: String, entry: String) -> void:
 	player.velocity = Vector2.ZERO
 	player.route.clear()
 	player.stop_motion()
+	if zone==Moonlight.PASSAGE:
+		player.facing = Vector2.DOWN if entry==Moonlight.CISTERN else Vector2.UP
+		player.sprite.tick(0,0,player.facing)
+	elif zone==Moonlight.FOREST and entry==Moonlight.PASSAGE:
+		player.facing = Vector2.DOWN
+		player.sprite.tick(0,0,player.facing)
+	elif zone==Moonlight.CISTERN and entry==Moonlight.PASSAGE:
+		player.facing = Vector2.UP
+		player.sprite.tick(0,0,player.facing)
 	player.reset_physics_interpolation()
 	if not is_instance_valid(camera):
 		camera = Camera2D.new()
@@ -437,6 +458,10 @@ func _draw_exit_marks(node: Node2D) -> void:
 			arrow = Vector2(0,-1)
 		elif zone=="district":
 			arrow = Vector2(-1,-.5).normalized() if id=="forge" else Vector2(0,1)
+		elif zone==Moonlight.PASSAGE:
+			arrow = Vector2.DOWN if id=="castle" else Vector2.UP
+		elif zone==Moonlight.CISTERN and id=="stairs":
+			arrow = Vector2.DOWN
 		elif zone in ["bakery","forge"]:
 			arrow = Vector2(0,1)
 		elif zone in Lighthouse.ZONES:
@@ -473,6 +498,9 @@ func _draw_forest_air() -> void:
 func request_travel(exit_id: String) -> void:
 	if paused or shopping or transitioning or not exits.has(exit_id):
 		return
+	if zone==Moonlight.CISTERN and exit_id=="chapel" and not state.moonlight.winch:
+		_say("The chapel doors", "Turn the winch in the eastern alcove to open this passage.")
+		return
 	if exit_id in ["bakery","forge","mill_room","mill_loft",Lighthouse.KEEPER] or zone in ["bakery","forge","mill_room","mill_loft",Lighthouse.KEEPER,Lighthouse.LANTERN]:
 		audio.play_event("door",player.position,-5)
 	transitioning = true
@@ -497,6 +525,9 @@ func _travel(destination: String, entry: String) -> void:
 	talk_panel.hide()
 	if destination=="wilds":
 		_say("Briarwood Wilds", "Dog bandits guard four woodland clearings. Space or left click to attack; Q fires Wind Slash. Dodge the red warning circles. Follow the western trail to retreat.")
+	if destination in Moonlight.ZONES and entry=="checkpoint":
+		player.grace = 3.0
+		_say("Safe by the lantern", "You return to your checkpoint. Your progress and coins are safe.")
 	await get_tree().physics_frame
 	tween = create_tween()
 	tween.tween_property(ui.fade,"modulate:a",0.0,.28)
@@ -1052,6 +1083,8 @@ func load_game() -> bool:
 		at *= Vector2(Mill.GARDEN_SIZE)/Vector2(2400,1600)
 	if zone=="mill_room" and not document.player.has("mill_room_layout"):
 		at *= Vector2(Mill.ROOM_SIZE)/Vector2(1920,1080)
+	if zone==Moonlight.FOREST and Moonlight.CASTLE_BOUNDS.grow(15).has_point(at):
+		at = Moonlight.arrival(Moonlight.FOREST,Moonlight.CISTERN)
 	if not is_walkable(at,14):
 		# An NPC may now occupy the saved spot, or geometry may have changed.
 		var cell := _nav_cell(at)
@@ -1222,6 +1255,9 @@ func interact(id := "") -> void:
 	audio.play_event("ui_open",player.position,-12)
 	if zone == "town" and id == "quest_board":
 		toggle_journal(true)
+		return
+	if zone in Moonlight.ZONES and id.begins_with("moon_"):
+		moonlight_area.use(id)
 		return
 	if zone in Lighthouse.ZONES:
 		interact_lighthouse(id)
@@ -1398,6 +1434,9 @@ func start_challenge() -> void:
 
 
 func actor_yielded(actor_node) -> void:
+	if zone in Moonlight.ZONES:
+		moonlight_area.yielded(actor_node)
+		return
 	if zone!="wilds":
 		return
 	if actor_node==player:
@@ -1445,7 +1484,7 @@ func _process(delta: float) -> void:
 		return
 	if autosave_queued and not title_active:
 		autosave_delay -= delta
-		var safe := zone!="wilds" or not dogs.any(func(dog): return dog.active and dog.alerted and dog.position.distance_to(player.position)<500)
+		var safe := peaceful_mode or not dogs.any(func(dog): return dog.active and dog.alerted and dog.position.distance_to(player.position)<500)
 		if autosave_delay<=0 and safe and not transitioning and player.active and player.swing<=0:
 			autosave_queued = false
 			save_game(true)
@@ -1501,6 +1540,9 @@ func _update_lighting() -> void:
 			if is_instance_valid(bakery_room): bakery_room.update_lighting(clock)
 		else:
 			backgrounds[0].modulate = actor_tint
+	elif zone in Moonlight.ZONES:
+		actor_tint = Color("d5e6fa") if zone==Moonlight.FOREST else Color("e3dcef")
+		backgrounds[0].modulate = Color.WHITE
 	elif zone in Lighthouse.ZONES:
 		var night := Mill.night_weight(clock)
 		if zone==Lighthouse.LANTERN:

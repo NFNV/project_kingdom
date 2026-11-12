@@ -1,0 +1,450 @@
+[
+  {
+    "name": "forest_ground",
+    "prompt": "Use case: stylized-concept. Production game background plate for a handcrafted anime 2D action RPG, beautiful hand painted gouache storybook rendering, elevated three-quarter orthographic view with no horizon, rectangular 16:9 landscape 3072x1728. Moonlight Forest dungeon, cool luminous blue green clearing, mossy grass, subtle patches of silvery wildflowers, fireflies, violet foliage, rich painted forest soil. Camera looks down at approximately 50 degrees. Keep the whole middle 80 percent broad open level walkable grass, with winding worn dirt trails connecting bottom center campsite to middle left and middle right and an upper center castle approach. Small shallow creek visible only across upper-right corner, stepping stones near its bank. Around outer perimeter only, frame with trunks and large luminous deciduous trees, ferns and roots. NO castle, NO buildings, NO bridge, NO characters, NO baked treasure chests or campfire. Those will be placed as separate game objects. Space in upper center must be open grass to place a ruined castle sprite. Delicate detailed brushwork, atmospheric silver light, soft contact shadows, readable floor with moderate texture detail, restrained glow, no text or UI.",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-e91a1c3a-f46d-41b2-bbbb-0664dec12034.png",
+    "mode": "built-in"
+  },
+  {
+    "name": "undercroft",
+    "prompt": "Use case: stylized-concept. Production traversable background painting for handcrafted anime 2D action RPG. Rectangular landscape 16:9 3072x1728. Elevated three-quarter orthographic view looking down about 55 degrees, no horizon. A ruined castle underground cistern room, ancient moss-covered stone, glowing cyan water, massive roots through arches, warm brass lanterns. Rectangular cutaway floor room extends from x=10% to90%, y=24% to94%. A rectangular water pool ONLY in center from x=34% to64%, y=39% to68%. Broad dry stone floor aisles on all four sides, wide clear dry bottom path and right path. Entry stairs bottom left at (18%,85%), chapel doorway upper center (50%,25%), winch alcove at upper right (81%,35%). Keep those paths open, no raised ledges across walkable aisles, no foreground wall occluding bottom path. Decorative walls only at extreme edges and top, three broken pillars around room sides, roots anchored at top. Readable dry floors, beautifully painted anime watercolor surfaces and hand-drawn edges. No characters, no chests, no winch handle, no grate, no text, no UI. Pale moonlight comes from small cracks above, cozy lantern points mark doorway. Exact framing intended for game collisions.",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-b57c49f9-e6c8-4da5-a45c-ea82e083802d.png",
+    "mode": "built-in"
+  },
+  {
+    "name": "chapel",
+    "prompt": "Use case: stylized-concept. Production traversable background plate for handcrafted anime 2D action RPG, rectangular 16:9 3072x1728. Elevated three-quarter orthographic camera looking down about 55 degrees with no horizon. Ruined underground Root Chapel with broad OPEN flat stone arena in middle from x=15% to85%, y=35% to90%. Huge ancient tree roots wrap rear altar and broken gothic arches along upper edge only. Indigo shadows, soft silver moonlight through shattered ceiling, luminous violet flowers along walls, warm small lanterns. Rear central arch at (50%,25%) opens to sealed vault recess. Entrance at bottom center (50%,90%). Keep full middle and lower floor clear for action combat, detailed but low contrast engraved cobbles, no furniture or columns in arena, no deep holes, no characters, no monsters, no treasure, no text or UI. Hand-painted gouache anime storybook beauty, fine expressive linework, intricate masonry at perimeter, luminous serene mystery.",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-e4c615f1-14e5-4909-967c-54aed2400225.png",
+    "mode": "built-in"
+  },
+  {
+    "name": "castle",
+    "prompt": "Use case: stylized-concept. A reusable isolated transparent-background game scenery asset for a handcrafted anime fantasy RPG. One ruined moonlight castle gatehouse seen in elevated orthographic three-quarter view with the front arch facing viewer, no horizon. Two asymmetrical shattered stone towers, one taller on right, linked by a broken gothic gate arch. Old blue slate fragments on surviving turret, silvery ivy, tiny violet flowers, roots wrapping masonry, warm lantern beside a visibly open dark descending stairway through the front arch. Small grassy contact foundation with a narrow pale path in front. No floating island, no square terrain tile, no surrounding scene. Hand painted gouache, delicate anime ink outlines, charming detailed storybook architecture with believable masonry and straight upright walls. Soft cool blue-green moonlight and warm amber lamp light. Footprint about 1.6 times as wide as tall, the entire asset isolated with generous alpha margin, no characters, no UI, no text. Actual transparency.",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-a855bb2e-a410-452a-81f8-544397d7c082.png",
+    "mode": "built-in"
+  },
+  {
+    "name": "forest_crossing",
+    "prompt": "Edit target: the supplied forest game background. Preserve the exact camera, framing, gouache anime painting style, color palette and surrounding trees and grass. Add a beautiful natural narrow shallow turquoise forest creek flowing horizontally across the ENTIRE clearing from left edge to right edge at y=46.5% to54% of image height. The creek has organic mossy earth banks, smooth scattered rocks, reeds, subtle luminous water ripples. This position is vital for game collision: water occupies the band between y=46.5% and54%, slight bank irregularity allowed. Add one small handcrafted old stone footbridge centered at x=61%, y=50%, crossing vertically from north to south. Its walkable paving spans x=57.6% to64.1%, y=44.3% to56.4%. Delicate mossy low stone parapets on left/right, correctly drawn in the SAME elevated orthographic perspective. Add an alternate crossing of visible gray stepping stones at x=79%, y=50%, from y46% to54%. Keep the rest of composition fixed, main grass path and perimeter trees, no new buildings, no characters, no text, no interface. Fill the full landscape frame. Very fine handcrafted detailed painted brushwork, no geometric flat blocks. This is a production game background, maintain wide dry walkable grass on BOTH sides of creek and open upper center to place a separate castle.",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-d5537dc4-0c3b-4dbb-90d0-eaffd16a3a60.png",
+    "reference": "forest_ground.png",
+    "mode": "built-in edit"
+  },
+  {
+    "name": "winch",
+    "prompt": "Use case: stylized-concept. A single isolated 2D game prop with real transparent background, beautiful hand-painted anime storybook style, elevated three-quarter orthographic view. A medieval wooden winch for raising a portcullis in an abandoned stone castle cistern. A large wooden six-spoke handwheel mounted on a stout upright oak A-frame with iron braces and a round rope spool, bronze axle, aged mossy little stone foundation flush with the ground. Entire object visible with generous transparent margins. Cool muted blue moonlight on aged brown wood with warm brass edges, delicate painted shading and crisp dark outlines, compact believable machinery. No scene, no characters, no ground plane, no labels or UI, no text, no watermark. Should look cozy and handcrafted and usable by a small animal adventurer.",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-862beb7b-4599-47f3-a864-e0d9562955ec.png",
+    "mode": "built-in"
+  },
+  {
+    "name": "forest_entrance",
+    "prompt": "Generate a game-ready transparent scenery sprite depicting Moonlight Forest as a compact miniature woodland entrance on a chibi overworld. One coherent island-like cluster of tall blue-violet ancient trees, layered silver-blue and indigo foliage, intertwined willow and oak branches forming an open welcoming arch over a narrow mossy path in the FRONT CENTER. Two tiny amber lanterns on old stone posts at the path entrance. Deeper trees create a dark mysterious woodland recess. Entire forest cluster visible with organic ground-contact footprint and modest ferns, NO floating island or platform. Handcrafted Japanese anime storybook gouache, delicate ink linework, charming painted brushwork, matches our hand-painted village/castle assets, elevated three-quarter orthographic camera, front door/path facing the viewer. Generous transparent margins, genuinely transparent background, no sky, no distant scenery, no characters, no text/UI. The image must read as one distinct FOREST DESTINATION from a distance rather than separated randomly placed trees.",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-32ffc162-71f1-4cd9-bf0a-dde93c7ee7da.png",
+    "mode": "built-in"
+  },
+  {
+    "name": "panels/0_0",
+    "prompt": "EDIT TARGET: the supplied close-up panel from a hand-painted anime forest game background. Repaint THIS EXACT PANEL at native detail. This is one piece of a continuous stitched game scene. CRITICAL: LOCK all existing geometry, exact framing, creek banks, bridge, path shapes, stones, tree trunks, foliage silhouettes, flower group positions and colors to the reference. Do not zoom out or reconstruct the whole scene. Maintain every feature's exact pixel position and maintain matching colors along all four outer edges. Restore crisp fine brush detail: small individual grass tips, subtle moss, clean stone edges, tiny flowers and fine bark texture. Preserve broad quiet ground patches and vegetation density. Keep soft luminous lighting, delicate gouache surface and anime linework, avoid aggressive sharpening, over-dense grass, ringing and heavy ink outlines. Retain the elevated orthographic view with no horizon, and the existing turquoise, blue-green and violet moonlight palette. Any flat dark blue border strips in the reference remain at their exact size and location. No characters, buildings, new scenery, labels, frames, text or UI. This should read as a carefully restored high-detail version of this crop, with exactly the same composition.",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-662f63b0-534e-49a9-92a0-0b99310037c6.png",
+    "reference": "forest_crossing.png",
+    "world_rect": [
+      -64,
+      -36,
+      1152,
+      648
+    ],
+    "mode": "built-in edit"
+  },
+  {
+    "name": "panels/0_1",
+    "prompt": "EDIT TARGET: the supplied close-up panel from a hand-painted anime forest game background. Repaint THIS EXACT PANEL at native detail. This is one piece of a continuous stitched game scene. CRITICAL: LOCK all existing geometry, exact framing, creek banks, bridge, path shapes, stones, tree trunks, foliage silhouettes, flower group positions and colors to the reference. Do not zoom out or reconstruct the whole scene. Maintain every feature's exact pixel position and maintain matching colors along all four outer edges. Restore crisp fine brush detail: small individual grass tips, subtle moss, clean stone edges, tiny flowers and fine bark texture. Preserve broad quiet ground patches and vegetation density. Keep soft luminous lighting, delicate gouache surface and anime linework, avoid aggressive sharpening, over-dense grass, ringing and heavy ink outlines. Retain the elevated orthographic view with no horizon, and the existing turquoise, blue-green and violet moonlight palette. Any flat dark blue border strips in the reference remain at their exact size and location. No characters, buildings, new scenery, labels, frames, text or UI. This should read as a carefully restored high-detail version of this crop, with exactly the same composition.",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-8ff01753-d2d5-426e-b0c3-33c752c81d49.png",
+    "reference": "forest_crossing.png",
+    "world_rect": [
+      960,
+      -36,
+      1152,
+      648
+    ],
+    "mode": "built-in edit"
+  },
+  {
+    "name": "panels/0_2",
+    "prompt": "EDIT TARGET: the supplied close-up panel from a hand-painted anime forest game background. Repaint THIS EXACT PANEL at native detail. This is one piece of a continuous stitched game scene. CRITICAL: LOCK all existing geometry, exact framing, creek banks, bridge, path shapes, stones, tree trunks, foliage silhouettes, flower group positions and colors to the reference. Do not zoom out or reconstruct the whole scene. Maintain every feature's exact pixel position and maintain matching colors along all four outer edges. Restore crisp fine brush detail: small individual grass tips, subtle moss, clean stone edges, tiny flowers and fine bark texture. Preserve broad quiet ground patches and vegetation density. Keep soft luminous lighting, delicate gouache surface and anime linework, avoid aggressive sharpening, over-dense grass, ringing and heavy ink outlines. Retain the elevated orthographic view with no horizon, and the existing turquoise, blue-green and violet moonlight palette. Any flat dark blue border strips in the reference remain at their exact size and location. No characters, buildings, new scenery, labels, frames, text or UI. This should read as a carefully restored high-detail version of this crop, with exactly the same composition.",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-de60595e-87fa-4c66-b030-368336c5a294.png",
+    "reference": "forest_crossing.png",
+    "world_rect": [
+      1984,
+      -36,
+      1152,
+      648
+    ],
+    "mode": "built-in edit"
+  },
+  {
+    "name": "panels/1_0",
+    "prompt": "EDIT TARGET: the supplied close-up panel from a hand-painted anime forest game background. Repaint THIS EXACT PANEL at native detail. This is one piece of a continuous stitched game scene. CRITICAL: LOCK all existing geometry, exact framing, creek banks, bridge, path shapes, stones, tree trunks, foliage silhouettes, flower group positions and colors to the reference. Do not zoom out or reconstruct the whole scene. Maintain every feature's exact pixel position and maintain matching colors along all four outer edges. Restore crisp fine brush detail: small individual grass tips, subtle moss, clean stone edges, tiny flowers and fine bark texture. Preserve broad quiet ground patches and vegetation density. Keep soft luminous lighting, delicate gouache surface and anime linework, avoid aggressive sharpening, over-dense grass, ringing and heavy ink outlines. Retain the elevated orthographic view with no horizon, and the existing turquoise, blue-green and violet moonlight palette. Any flat dark blue border strips in the reference remain at their exact size and location. No characters, buildings, new scenery, labels, frames, text or UI. This should read as a carefully restored high-detail version of this crop, with exactly the same composition.",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-10a5b358-306e-4112-b523-6013842939e1.png",
+    "reference": "forest_crossing.png",
+    "world_rect": [
+      -64,
+      540,
+      1152,
+      648
+    ],
+    "mode": "built-in edit"
+  },
+  {
+    "name": "panels/1_1",
+    "prompt": "EDIT TARGET: the supplied close-up panel from a hand-painted anime forest game background. Repaint THIS EXACT PANEL at native detail. This is one piece of a continuous stitched game scene. CRITICAL: LOCK all existing geometry, exact framing, creek banks, bridge, path shapes, stones, tree trunks, foliage silhouettes, flower group positions and colors to the reference. Do not zoom out or reconstruct the whole scene. Maintain every feature's exact pixel position and maintain matching colors along all four outer edges. Restore crisp fine brush detail: small individual grass tips, subtle moss, clean stone edges, tiny flowers and fine bark texture. Preserve broad quiet ground patches and vegetation density. Keep soft luminous lighting, delicate gouache surface and anime linework, avoid aggressive sharpening, over-dense grass, ringing and heavy ink outlines. Retain the elevated orthographic view with no horizon, and the existing turquoise, blue-green and violet moonlight palette. Any flat dark blue border strips in the reference remain at their exact size and location. No characters, buildings, new scenery, labels, frames, text or UI. This should read as a carefully restored high-detail version of this crop, with exactly the same composition.",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-5896f91f-fb36-4cad-80af-eeaec9382b3f.png",
+    "reference": "forest_crossing.png",
+    "world_rect": [
+      960,
+      540,
+      1152,
+      648
+    ],
+    "mode": "built-in edit"
+  },
+  {
+    "name": "panels/1_2",
+    "prompt": "EDIT TARGET: the supplied close-up panel from a hand-painted anime forest game background. Repaint THIS EXACT PANEL at native detail. This is one piece of a continuous stitched game scene. CRITICAL: LOCK all existing geometry, exact framing, creek banks, bridge, path shapes, stones, tree trunks, foliage silhouettes, flower group positions and colors to the reference. Do not zoom out or reconstruct the whole scene. Maintain every feature's exact pixel position and maintain matching colors along all four outer edges. Restore crisp fine brush detail: small individual grass tips, subtle moss, clean stone edges, tiny flowers and fine bark texture. Preserve broad quiet ground patches and vegetation density. Keep soft luminous lighting, delicate gouache surface and anime linework, avoid aggressive sharpening, over-dense grass, ringing and heavy ink outlines. Retain the elevated orthographic view with no horizon, and the existing turquoise, blue-green and violet moonlight palette. Any flat dark blue border strips in the reference remain at their exact size and location. No characters, buildings, new scenery, labels, frames, text or UI. This should read as a carefully restored high-detail version of this crop, with exactly the same composition.",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-e8a990fa-6c9c-49a0-acff-52db280cf9ba.png",
+    "reference": "forest_crossing.png",
+    "world_rect": [
+      1984,
+      540,
+      1152,
+      648
+    ],
+    "mode": "built-in edit"
+  },
+  {
+    "name": "panels/2_0",
+    "prompt": "EDIT TARGET: the supplied close-up panel from a hand-painted anime forest game background. Repaint THIS EXACT PANEL at native detail. This is one piece of a continuous stitched game scene. CRITICAL: LOCK all existing geometry, exact framing, creek banks, bridge, path shapes, stones, tree trunks, foliage silhouettes, flower group positions and colors to the reference. Do not zoom out or reconstruct the whole scene. Maintain every feature's exact pixel position and maintain matching colors along all four outer edges. Restore crisp fine brush detail: small individual grass tips, subtle moss, clean stone edges, tiny flowers and fine bark texture. Preserve broad quiet ground patches and vegetation density. Keep soft luminous lighting, delicate gouache surface and anime linework, avoid aggressive sharpening, over-dense grass, ringing and heavy ink outlines. Retain the elevated orthographic view with no horizon, and the existing turquoise, blue-green and violet moonlight palette. Any flat dark blue border strips in the reference remain at their exact size and location. No characters, buildings, new scenery, labels, frames, text or UI. This should read as a carefully restored high-detail version of this crop, with exactly the same composition.",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-aba83aec-c627-402b-9f1b-8c079f607393.png",
+    "reference": "forest_crossing.png",
+    "world_rect": [
+      -64,
+      1116,
+      1152,
+      648
+    ],
+    "mode": "built-in edit"
+  },
+  {
+    "name": "panels/2_1",
+    "prompt": "EDIT TARGET: the supplied close-up panel from a hand-painted anime forest game background. Repaint THIS EXACT PANEL at native detail. This is one piece of a continuous stitched game scene. CRITICAL: LOCK all existing geometry, exact framing, creek banks, bridge, path shapes, stones, tree trunks, foliage silhouettes, flower group positions and colors to the reference. Do not zoom out or reconstruct the whole scene. Maintain every feature's exact pixel position and maintain matching colors along all four outer edges. Restore crisp fine brush detail: small individual grass tips, subtle moss, clean stone edges, tiny flowers and fine bark texture. Preserve broad quiet ground patches and vegetation density. Keep soft luminous lighting, delicate gouache surface and anime linework, avoid aggressive sharpening, over-dense grass, ringing and heavy ink outlines. Retain the elevated orthographic view with no horizon, and the existing turquoise, blue-green and violet moonlight palette. Any flat dark blue border strips in the reference remain at their exact size and location. No characters, buildings, new scenery, labels, frames, text or UI. This should read as a carefully restored high-detail version of this crop, with exactly the same composition.",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-440cc2af-a6b9-475e-ae65-2d8ce5705bc0.png",
+    "reference": "forest_crossing.png",
+    "world_rect": [
+      960,
+      1116,
+      1152,
+      648
+    ],
+    "mode": "built-in edit"
+  },
+  {
+    "name": "panels/2_2",
+    "prompt": "EDIT TARGET: the supplied close-up panel from a hand-painted anime forest game background. Repaint THIS EXACT PANEL at native detail. This is one piece of a continuous stitched game scene. CRITICAL: LOCK all existing geometry, exact framing, creek banks, bridge, path shapes, stones, tree trunks, foliage silhouettes, flower group positions and colors to the reference. Do not zoom out or reconstruct the whole scene. Maintain every feature's exact pixel position and maintain matching colors along all four outer edges. Restore crisp fine brush detail: small individual grass tips, subtle moss, clean stone edges, tiny flowers and fine bark texture. Preserve broad quiet ground patches and vegetation density. Keep soft luminous lighting, delicate gouache surface and anime linework, avoid aggressive sharpening, over-dense grass, ringing and heavy ink outlines. Retain the elevated orthographic view with no horizon, and the existing turquoise, blue-green and violet moonlight palette. Any flat dark blue border strips in the reference remain at their exact size and location. No characters, buildings, new scenery, labels, frames, text or UI. This should read as a carefully restored high-detail version of this crop, with exactly the same composition.",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-ecce4737-2a21-43da-9256-2fcf550b187b.png",
+    "reference": "forest_crossing.png",
+    "world_rect": [
+      1984,
+      1116,
+      1152,
+      648
+    ],
+    "mode": "built-in edit"
+  },
+  {
+    "name": "cistern_panels/0_0",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-0b3577ed-fd22-47f5-b603-1f305c9c81b1.png",
+    "prompt": "Edit this game-background detail panel in place. It is one registered tile of a larger handcrafted anime gouache dungeon background, not a new composition. Preserve EXACT camera, framing, every stone edge, arch, pillar, root, shadow, water boundary and placement, and the solid dark teal border where present. Repaint blurry areas into crisp native-resolution fine hand-painted detail: clean delicate ink edges, individual masonry chips, restrained moss leaves, bark grooves, subtle stone grain, fine caustic lines, luminous cyan water and amber lanterns. Keep the SAME muted colors and brightness, quiet floor texture and original natural painted style. Do not enlarge or move any feature. Keep the outer 10% of all edges particularly faithful for overlap with neighboring panels. No new objects, characters, lettering, UI, no changed architecture, no thick outlines, no photographic textures. Full-frame 16:9 landscape, sharp focus throughout. This image will be viewed close in a game and needs actual newly drawn detail rather than blur or smoothed enlargement.",
+    "mode": "built-in/edit",
+    "reference": "undercroft_detail_ref_0_0.png"
+  },
+  {
+    "name": "cistern_panels/0_1",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-fc338ef1-58de-426c-b9b8-65b272fab95f.png",
+    "prompt": "Edit this game-background detail panel in place. It is one registered tile of a larger handcrafted anime gouache dungeon background, not a new composition. Preserve EXACT camera, framing, every stone edge, arch, pillar, root, shadow, water boundary and placement, and the solid dark teal border where present. Repaint blurry areas into crisp native-resolution fine hand-painted detail: clean delicate ink edges, individual masonry chips, restrained moss leaves, bark grooves, subtle stone grain, fine caustic lines, luminous cyan water and amber lanterns. Keep the SAME muted colors and brightness, quiet floor texture and original natural painted style. Do not enlarge or move any feature. Keep the outer 10% of all edges particularly faithful for overlap with neighboring panels. No new objects, characters, lettering, UI, no changed architecture, no thick outlines, no photographic textures. Full-frame 16:9 landscape, sharp focus throughout. This image will be viewed close in a game and needs actual newly drawn detail rather than blur or smoothed enlargement.",
+    "mode": "built-in/edit",
+    "reference": "undercroft_detail_ref_0_1.png"
+  },
+  {
+    "name": "cistern_panels/0_2",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-48b490fd-f9ba-4adb-a998-db0a66c90d59.png",
+    "prompt": "Edit this game-background detail panel in place. It is one registered tile of a larger handcrafted anime gouache dungeon background, not a new composition. Preserve EXACT camera, framing, every stone edge, arch, pillar, root, shadow, water boundary and placement, and the solid dark teal border where present. Repaint blurry areas into crisp native-resolution fine hand-painted detail: clean delicate ink edges, individual masonry chips, restrained moss leaves, bark grooves, subtle stone grain, fine caustic lines, luminous cyan water and amber lanterns. Keep the SAME muted colors and brightness, quiet floor texture and original natural painted style. Do not enlarge or move any feature. Keep the outer 10% of all edges particularly faithful for overlap with neighboring panels. No new objects, characters, lettering, UI, no changed architecture, no thick outlines, no photographic textures. Full-frame 16:9 landscape, sharp focus throughout. This image will be viewed close in a game and needs actual newly drawn detail rather than blur or smoothed enlargement.",
+    "mode": "built-in/edit",
+    "reference": "undercroft_detail_ref_0_2.png"
+  },
+  {
+    "name": "cistern_panels/1_0",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-8bea8104-2159-47bc-b910-911c306acf3f.png",
+    "prompt": "Edit this game-background detail panel in place. It is one registered tile of a larger handcrafted anime gouache dungeon background, not a new composition. Preserve EXACT camera, framing, every stone edge, arch, pillar, root, shadow, water boundary and placement, and the solid dark teal border where present. Repaint blurry areas into crisp native-resolution fine hand-painted detail: clean delicate ink edges, individual masonry chips, restrained moss leaves, bark grooves, subtle stone grain, fine caustic lines, luminous cyan water and amber lanterns. Keep the SAME muted colors and brightness, quiet floor texture and original natural painted style. Do not enlarge or move any feature. Keep the outer 10% of all edges particularly faithful for overlap with neighboring panels. No new objects, characters, lettering, UI, no changed architecture, no thick outlines, no photographic textures. Full-frame 16:9 landscape, sharp focus throughout. This image will be viewed close in a game and needs actual newly drawn detail rather than blur or smoothed enlargement.",
+    "mode": "built-in/edit",
+    "reference": "undercroft_detail_ref_1_0.png"
+  },
+  {
+    "name": "cistern_panels/1_1",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-2fefa475-f72e-48fe-a49a-f3ce1d14c7d4.png",
+    "prompt": "Edit this game-background detail panel in place. It is one registered tile of a larger handcrafted anime gouache dungeon background, not a new composition. Preserve EXACT camera, framing, every stone edge, arch, pillar, root, shadow, water boundary and placement, and the solid dark teal border where present. Repaint blurry areas into crisp native-resolution fine hand-painted detail: clean delicate ink edges, individual masonry chips, restrained moss leaves, bark grooves, subtle stone grain, fine caustic lines, luminous cyan water and amber lanterns. Keep the SAME muted colors and brightness, quiet floor texture and original natural painted style. Do not enlarge or move any feature. Keep the outer 10% of all edges particularly faithful for overlap with neighboring panels. No new objects, characters, lettering, UI, no changed architecture, no thick outlines, no photographic textures. Full-frame 16:9 landscape, sharp focus throughout. This image will be viewed close in a game and needs actual newly drawn detail rather than blur or smoothed enlargement.",
+    "mode": "built-in/edit",
+    "reference": "undercroft_detail_ref_1_1.png"
+  },
+  {
+    "name": "cistern_panels/1_2",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-16c88a1a-0e63-4be4-87d6-7cdc20e06366.png",
+    "prompt": "Edit this game-background detail panel in place. It is one registered tile of a larger handcrafted anime gouache dungeon background, not a new composition. Preserve EXACT camera, framing, every stone edge, arch, pillar, root, shadow, water boundary and placement, and the solid dark teal border where present. Repaint blurry areas into crisp native-resolution fine hand-painted detail: clean delicate ink edges, individual masonry chips, restrained moss leaves, bark grooves, subtle stone grain, fine caustic lines, luminous cyan water and amber lanterns. Keep the SAME muted colors and brightness, quiet floor texture and original natural painted style. Do not enlarge or move any feature. Keep the outer 10% of all edges particularly faithful for overlap with neighboring panels. No new objects, characters, lettering, UI, no changed architecture, no thick outlines, no photographic textures. Full-frame 16:9 landscape, sharp focus throughout. This image will be viewed close in a game and needs actual newly drawn detail rather than blur or smoothed enlargement.",
+    "mode": "built-in/edit",
+    "reference": "undercroft_detail_ref_1_2.png"
+  },
+  {
+    "name": "cistern_panels/2_0",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-40b5bc09-24cb-4f26-b035-0d61b3016ca3.png",
+    "prompt": "Edit this game-background detail panel in place. It is one registered tile of a larger handcrafted anime gouache dungeon background, not a new composition. Preserve EXACT camera, framing, every stone edge, arch, pillar, root, shadow, water boundary and placement, and the solid dark teal border where present. Repaint blurry areas into crisp native-resolution fine hand-painted detail: clean delicate ink edges, individual masonry chips, restrained moss leaves, bark grooves, subtle stone grain, fine caustic lines, luminous cyan water and amber lanterns. Keep the SAME muted colors and brightness, quiet floor texture and original natural painted style. Do not enlarge or move any feature. Keep the outer 10% of all edges particularly faithful for overlap with neighboring panels. No new objects, characters, lettering, UI, no changed architecture, no thick outlines, no photographic textures. Full-frame 16:9 landscape, sharp focus throughout. This image will be viewed close in a game and needs actual newly drawn detail rather than blur or smoothed enlargement.",
+    "mode": "built-in/edit",
+    "reference": "undercroft_detail_ref_2_0.png"
+  },
+  {
+    "name": "cistern_panels/2_1",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-f85a9247-15e5-4519-b2de-82a9d913d702.png",
+    "prompt": "Edit this game-background detail panel in place. It is one registered tile of a larger handcrafted anime gouache dungeon background, not a new composition. Preserve EXACT camera, framing, every stone edge, arch, pillar, root, shadow, water boundary and placement, and the solid dark teal border where present. Repaint blurry areas into crisp native-resolution fine hand-painted detail: clean delicate ink edges, individual masonry chips, restrained moss leaves, bark grooves, subtle stone grain, fine caustic lines, luminous cyan water and amber lanterns. Keep the SAME muted colors and brightness, quiet floor texture and original natural painted style. Do not enlarge or move any feature. Keep the outer 10% of all edges particularly faithful for overlap with neighboring panels. No new objects, characters, lettering, UI, no changed architecture, no thick outlines, no photographic textures. Full-frame 16:9 landscape, sharp focus throughout. This image will be viewed close in a game and needs actual newly drawn detail rather than blur or smoothed enlargement.",
+    "mode": "built-in/edit",
+    "reference": "undercroft_detail_ref_2_1.png"
+  },
+  {
+    "name": "cistern_panels/2_2",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-abc24d5a-09a5-4532-8be4-7c1b154c4c0b.png",
+    "prompt": "Edit this game-background detail panel in place. It is one registered tile of a larger handcrafted anime gouache dungeon background, not a new composition. Preserve EXACT camera, framing, every stone edge, arch, pillar, root, shadow, water boundary and placement, and the solid dark teal border where present. Repaint blurry areas into crisp native-resolution fine hand-painted detail: clean delicate ink edges, individual masonry chips, restrained moss leaves, bark grooves, subtle stone grain, fine caustic lines, luminous cyan water and amber lanterns. Keep the SAME muted colors and brightness, quiet floor texture and original natural painted style. Do not enlarge or move any feature. Keep the outer 10% of all edges particularly faithful for overlap with neighboring panels. No new objects, characters, lettering, UI, no changed architecture, no thick outlines, no photographic textures. Full-frame 16:9 landscape, sharp focus throughout. This image will be viewed close in a game and needs actual newly drawn detail rather than blur or smoothed enlargement.",
+    "mode": "built-in/edit",
+    "reference": "undercroft_detail_ref_2_2.png"
+  },
+  {
+    "name": "cistern_panels/chapel_closed",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-82e26f6e-d97a-4fda-8013-2303dc7748a2.png",
+    "prompt": "Use case: precise-object-edit. Production game background state variant. In this exact reference, close the pair of oak door leaves that currently stand open at the left and right sides of the central chapel passage. Replace ONLY the corridor view inside that existing central opening with a fully CLOSED, beautiful handcrafted pointed-arch wooden double door: rich aged oak planks, fine hand-carved moon and root motifs, dark wrought-iron vine hinges and two small brass ring pulls. The doors must completely seal the opening down to the SAME stone threshold. Follow the existing arch shape and preserve the delicate upper carved Gothic tracery, visible in front of the closed wood. Preserve the existing door frame, all stonework, vines, lanterns, pillars, roots, shadows, floor, teal top border, camera, perspective, exact framing, colors and native detail without ANY movement or redesign outside the doorway. This must align pixel-for-pixel with the reference as the closed state of the very same door. Same crisp hand-painted gouache anime style and fine linework. No text, UI, characters or added architecture. Full landscape 16:9 frame identical to reference.",
+    "reference": "cistern_panels/0_1.png",
+    "mode": "built-in/edit"
+  },
+  {
+    "name": "chapel_panels/0_0",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-e0eeab26-dd6a-4819-aacb-ee1d5fc46fe8.png",
+    "prompt": "Use case: precise-object-edit. Edit this registered Root Chapel game-background detail panel in place. It is one overlapping tile of a larger handcrafted anime gouache dungeon painting. Preserve EXACT camera, framing, perspective, every stone edge, carved floor motif, Gothic arch, root, flower, lantern, shadow, and their positions, plus the flat dark teal margin where present. Redraw the blurry surfaces at crisp native resolution with delicate hand-drawn edges and fine brush detail: individual masonry chips, subtle stone grain, precise engraved floor lines, bark grooves, tiny moss and violet flower details, amber lantern filigree. Maintain the SAME muted violet-blue and silver moonlight palette and brightness, warm lantern light and restrained magical glow. The floor remains quiet and flat for combat. No rearrangement or changed architecture, no additional stairs, ladders, props, creatures, lettering or UI. Do not zoom or crop. The outer 10% of every edge must remain especially faithful so adjacent panels overlap cleanly. Fine handcrafted anime linework, painterly gouache, no thick outlines, no photographic textures, no blur or mere smoothed enlargement. Full-frame 16:9 landscape matching the input.",
+    "mode": "built-in/edit",
+    "reference": "chapel_detail_ref_0_0.png"
+  },
+  {
+    "name": "chapel_panels/0_1",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-631a7607-3e6b-4970-a5eb-e701d387cbc8.png",
+    "prompt": "Use case: precise-object-edit. Edit this registered Root Chapel game-background detail panel in place. It is one overlapping tile of a larger handcrafted anime gouache dungeon painting. Preserve EXACT camera, framing, perspective, every stone edge, carved floor motif, Gothic arch, root, flower, lantern, shadow, and their positions, plus the flat dark teal margin where present. Redraw the blurry surfaces at crisp native resolution with delicate hand-drawn edges and fine brush detail: individual masonry chips, subtle stone grain, precise engraved floor lines, bark grooves, tiny moss and violet flower details, amber lantern filigree. Maintain the SAME muted violet-blue and silver moonlight palette and brightness, warm lantern light and restrained magical glow. The floor remains quiet and flat for combat. No rearrangement or changed architecture, no additional stairs, ladders, props, creatures, lettering or UI. Do not zoom or crop. The outer 10% of every edge must remain especially faithful so adjacent panels overlap cleanly. Fine handcrafted anime linework, painterly gouache, no thick outlines, no photographic textures, no blur or mere smoothed enlargement. Full-frame 16:9 landscape matching the input.",
+    "mode": "built-in/edit",
+    "reference": "chapel_detail_ref_0_1.png"
+  },
+  {
+    "name": "chapel_panels/0_2",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-87cbee22-1389-4fe7-82f8-ca497df17f8c.png",
+    "prompt": "Use case: precise-object-edit. Edit this registered Root Chapel game-background detail panel in place. It is one overlapping tile of a larger handcrafted anime gouache dungeon painting. Preserve EXACT camera, framing, perspective, every stone edge, carved floor motif, Gothic arch, root, flower, lantern, shadow, and their positions, plus the flat dark teal margin where present. Redraw the blurry surfaces at crisp native resolution with delicate hand-drawn edges and fine brush detail: individual masonry chips, subtle stone grain, precise engraved floor lines, bark grooves, tiny moss and violet flower details, amber lantern filigree. Maintain the SAME muted violet-blue and silver moonlight palette and brightness, warm lantern light and restrained magical glow. The floor remains quiet and flat for combat. No rearrangement or changed architecture, no additional stairs, ladders, props, creatures, lettering or UI. Do not zoom or crop. The outer 10% of every edge must remain especially faithful so adjacent panels overlap cleanly. Fine handcrafted anime linework, painterly gouache, no thick outlines, no photographic textures, no blur or mere smoothed enlargement. Full-frame 16:9 landscape matching the input.",
+    "mode": "built-in/edit",
+    "reference": "chapel_detail_ref_0_2.png"
+  },
+  {
+    "name": "chapel_panels/1_0",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-db82a7b3-f8e0-486b-9cde-0107cbf3e22d.png",
+    "prompt": "Use case: precise-object-edit. Edit this registered Root Chapel game-background detail panel in place. It is one overlapping tile of a larger handcrafted anime gouache dungeon painting. Preserve EXACT camera, framing, perspective, every stone edge, carved floor motif, Gothic arch, root, flower, lantern, shadow, and their positions, plus the flat dark teal margin where present. Redraw the blurry surfaces at crisp native resolution with delicate hand-drawn edges and fine brush detail: individual masonry chips, subtle stone grain, precise engraved floor lines, bark grooves, tiny moss and violet flower details, amber lantern filigree. Maintain the SAME muted violet-blue and silver moonlight palette and brightness, warm lantern light and restrained magical glow. The floor remains quiet and flat for combat. No rearrangement or changed architecture, no additional stairs, ladders, props, creatures, lettering or UI. Do not zoom or crop. The outer 10% of every edge must remain especially faithful so adjacent panels overlap cleanly. Fine handcrafted anime linework, painterly gouache, no thick outlines, no photographic textures, no blur or mere smoothed enlargement. Full-frame 16:9 landscape matching the input.",
+    "mode": "built-in/edit",
+    "reference": "chapel_detail_ref_1_0.png"
+  },
+  {
+    "name": "chapel_panels/1_1",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-cc7c8555-5436-4926-b974-e461b9e08399.png",
+    "prompt": "Use case: precise-object-edit. Edit this registered Root Chapel game-background detail panel in place. It is one overlapping tile of a larger handcrafted anime gouache dungeon painting. Preserve EXACT camera, framing, perspective, every stone edge, carved floor motif, Gothic arch, root, flower, lantern, shadow, and their positions, plus the flat dark teal margin where present. Redraw the blurry surfaces at crisp native resolution with delicate hand-drawn edges and fine brush detail: individual masonry chips, subtle stone grain, precise engraved floor lines, bark grooves, tiny moss and violet flower details, amber lantern filigree. Maintain the SAME muted violet-blue and silver moonlight palette and brightness, warm lantern light and restrained magical glow. The floor remains quiet and flat for combat. No rearrangement or changed architecture, no additional stairs, ladders, props, creatures, lettering or UI. Do not zoom or crop. The outer 10% of every edge must remain especially faithful so adjacent panels overlap cleanly. Fine handcrafted anime linework, painterly gouache, no thick outlines, no photographic textures, no blur or mere smoothed enlargement. Full-frame 16:9 landscape matching the input.",
+    "mode": "built-in/edit",
+    "reference": "chapel_detail_ref_1_1.png"
+  },
+  {
+    "name": "chapel_panels/1_2",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-b0cb0524-a8ad-4cc3-b47d-18a766fe6d3c.png",
+    "prompt": "Use case: precise-object-edit. Edit this registered Root Chapel game-background detail panel in place. It is one overlapping tile of a larger handcrafted anime gouache dungeon painting. Preserve EXACT camera, framing, perspective, every stone edge, carved floor motif, Gothic arch, root, flower, lantern, shadow, and their positions, plus the flat dark teal margin where present. Redraw the blurry surfaces at crisp native resolution with delicate hand-drawn edges and fine brush detail: individual masonry chips, subtle stone grain, precise engraved floor lines, bark grooves, tiny moss and violet flower details, amber lantern filigree. Maintain the SAME muted violet-blue and silver moonlight palette and brightness, warm lantern light and restrained magical glow. The floor remains quiet and flat for combat. No rearrangement or changed architecture, no additional stairs, ladders, props, creatures, lettering or UI. Do not zoom or crop. The outer 10% of every edge must remain especially faithful so adjacent panels overlap cleanly. Fine handcrafted anime linework, painterly gouache, no thick outlines, no photographic textures, no blur or mere smoothed enlargement. Full-frame 16:9 landscape matching the input.",
+    "mode": "built-in/edit",
+    "reference": "chapel_detail_ref_1_2.png"
+  },
+  {
+    "name": "chapel_panels/2_0",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-d779ae08-e4c5-4fe8-876f-ddeff0d10b56.png",
+    "prompt": "Use case: precise-object-edit. Edit this registered Root Chapel game-background detail panel in place. It is one overlapping tile of a larger handcrafted anime gouache dungeon painting. Preserve EXACT camera, framing, perspective, every stone edge, carved floor motif, Gothic arch, root, flower, lantern, shadow, and their positions, plus the flat dark teal margin where present. Redraw the blurry surfaces at crisp native resolution with delicate hand-drawn edges and fine brush detail: individual masonry chips, subtle stone grain, precise engraved floor lines, bark grooves, tiny moss and violet flower details, amber lantern filigree. Maintain the SAME muted violet-blue and silver moonlight palette and brightness, warm lantern light and restrained magical glow. The floor remains quiet and flat for combat. No rearrangement or changed architecture, no additional stairs, ladders, props, creatures, lettering or UI. Do not zoom or crop. The outer 10% of every edge must remain especially faithful so adjacent panels overlap cleanly. Fine handcrafted anime linework, painterly gouache, no thick outlines, no photographic textures, no blur or mere smoothed enlargement. Full-frame 16:9 landscape matching the input.",
+    "mode": "built-in/edit",
+    "reference": "chapel_detail_ref_2_0.png"
+  },
+  {
+    "name": "chapel_panels/2_1",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-80458469-570f-4c90-9c28-024d715b81ff.png",
+    "prompt": "Use case: precise-object-edit. Edit this registered Root Chapel game-background detail panel in place. It is one overlapping tile of a larger handcrafted anime gouache dungeon painting. Preserve EXACT camera, framing, perspective, every stone edge, carved floor motif, Gothic arch, root, flower, lantern, shadow, and their positions, plus the flat dark teal margin where present. Redraw the blurry surfaces at crisp native resolution with delicate hand-drawn edges and fine brush detail: individual masonry chips, subtle stone grain, precise engraved floor lines, bark grooves, tiny moss and violet flower details, amber lantern filigree. Maintain the SAME muted violet-blue and silver moonlight palette and brightness, warm lantern light and restrained magical glow. The floor remains quiet and flat for combat. No rearrangement or changed architecture, no additional stairs, ladders, props, creatures, lettering or UI. Do not zoom or crop. The outer 10% of every edge must remain especially faithful so adjacent panels overlap cleanly. Fine handcrafted anime linework, painterly gouache, no thick outlines, no photographic textures, no blur or mere smoothed enlargement. Full-frame 16:9 landscape matching the input.",
+    "mode": "built-in/edit",
+    "reference": "chapel_detail_ref_2_1.png"
+  },
+  {
+    "name": "chapel_panels/2_2",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-88b2f20f-b285-4b0a-9b00-0fead9f635fa.png",
+    "prompt": "Use case: precise-object-edit. Edit this registered Root Chapel game-background detail panel in place. It is one overlapping tile of a larger handcrafted anime gouache dungeon painting. Preserve EXACT camera, framing, perspective, every stone edge, carved floor motif, Gothic arch, root, flower, lantern, shadow, and their positions, plus the flat dark teal margin where present. Redraw the blurry surfaces at crisp native resolution with delicate hand-drawn edges and fine brush detail: individual masonry chips, subtle stone grain, precise engraved floor lines, bark grooves, tiny moss and violet flower details, amber lantern filigree. Maintain the SAME muted violet-blue and silver moonlight palette and brightness, warm lantern light and restrained magical glow. The floor remains quiet and flat for combat. No rearrangement or changed architecture, no additional stairs, ladders, props, creatures, lettering or UI. Do not zoom or crop. The outer 10% of every edge must remain especially faithful so adjacent panels overlap cleanly. Fine handcrafted anime linework, painterly gouache, no thick outlines, no photographic textures, no blur or mere smoothed enlargement. Full-frame 16:9 landscape matching the input.",
+    "mode": "built-in/edit",
+    "reference": "chapel_detail_ref_2_2.png"
+  },
+  {
+    "name": "castle_passage",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-5d96fc83-cb8f-409a-87a0-6f99eba16d82.png",
+    "prompt": "Use case: stylized-concept. New production background composition for a handcrafted anime gouache 2D RPG dungeon, an elevated three-quarter orthographic cutaway viewed down around 55 degrees, 16:9 landscape. Ruined Moonlight Castle LOWER PASSAGES, a medium U-shaped stone corridor with a clear change in elevation. Match the supplied painting's beautiful fine hand-drawn masonry and roots, muted slate blue and purple moonlight, warm amber brass lanterns. This is a different room with NO flowers on the walking floor and NO large arena. Essential exact layout, normalized screen percentages: LEFT stair tower and landing occupy x14%-30%, y17%-82%. At upper-left (x22%,y18%) a small exterior gate open to moonlit forest is the HIGH castle entrance. A long broad flight of 14 stone treads DESCENDS from that gate toward the viewer, from y30% to60%, ending on a LOW landing around (22%,70%). Visible stair risers and the raised upper landing must make the descent unmistakable. A wide walkable LOWER corridor runs horizontally across the bottom from (22%,70%) to (82%,70%), floor y59%-82%, with a bend and two shallow alcoves along its north wall. RIGHT stair tower occupies x74%-90%, y17%-82%. From the lower floor at (82%,64%) a SEPARATE broad stone staircase CLIMBS AWAY from the viewer to an arched upper-right Undercroft doorway at (82%,23%). Visible treads and masonry retaining walls show this exit goes UP. Left stairs down to corridor, right stairs up out of corridor. The central area between the stair towers, x32%-72%, y10%-58%, is an inaccessible solid mass of old stone vaults, thick tree roots, small barred windows, subtle deep recessed arch niches, no walkable arena or openings across it. Keep the lower connecting corridor open and uncluttered. Cut away near/front walls so nothing blocks the character; complete rear walls and side walls. Stair flights wide enough for a small adventurer, matching same architectural scale on both sides, genuinely level lower corridor, no impossible stairs. Old blue-gray stone, chipped carvings, sparse moss, roots through the ceiling, hanging lanterns and narrow cool shafts from high windows. Detailed, crisp elegant anime gouache brushwork, coherent straight walls and stone geometry, no pixels, no 3D render, no photographic texture. No people, enemies, chests, UI, labels, arrows, signs, water, ladders, or new door inside the connecting corridor. Fill the entire frame.",
+    "mode": "built-in",
+    "reference": "chapel_panels/0_1.png"
+  },
+  {
+    "name": "passage_panels/0_0",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-d9974f4e-0e81-41a2-93b9-9b6c1ff26f85.png",
+    "prompt": "Use case: precise-object-edit. Redraw this registered castle lower-passage game-background detail tile at crisp native resolution. It is an overlapping panel of a larger handcrafted anime gouache dungeon painting, so preserve EXACT framing, camera, stone geometry, placement, perspective, staircase tread counts and positions, floor boundaries, parapets, arches, roots, lanterns, light and shadow shapes, and the flat dark teal border where present. Replace blurred surfaces with fine newly painted detail: sharp delicate hand-drawn stone edges, chipped limestone, small restrained moss leaves, bark grooves, carved Gothic filigree, individual lantern details and fine quiet floor texture. Keep the SAME muted violet/slate-blue and amber palette and brightness. No zoom, no crop, no redesigned architecture or shifted features; protect the outer 10% of all edges so neighboring panels align cleanly. Stairs must remain straight and physically coherent. No extra stairs, ladders, props, creatures, doors, text, UI, arrows, water or floor clutter. Beautiful detailed anime gouache, no thick outlines, pixels or photographic texture, no blurred or smoothed enlargement. Full 16:9 landscape matching the reference.",
+    "mode": "built-in/edit",
+    "reference": "passage_detail_ref_0_0.png"
+  },
+  {
+    "name": "passage_panels/0_1",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-39a13ffe-1ca2-415a-980c-181153aef4d8.png",
+    "prompt": "Use case: precise-object-edit. Redraw this registered castle lower-passage game-background detail tile at crisp native resolution. It is an overlapping panel of a larger handcrafted anime gouache dungeon painting, so preserve EXACT framing, camera, stone geometry, placement, perspective, staircase tread counts and positions, floor boundaries, parapets, arches, roots, lanterns, light and shadow shapes, and the flat dark teal border where present. Replace blurred surfaces with fine newly painted detail: sharp delicate hand-drawn stone edges, chipped limestone, small restrained moss leaves, bark grooves, carved Gothic filigree, individual lantern details and fine quiet floor texture. Keep the SAME muted violet/slate-blue and amber palette and brightness. No zoom, no crop, no redesigned architecture or shifted features; protect the outer 10% of all edges so neighboring panels align cleanly. Stairs must remain straight and physically coherent. No extra stairs, ladders, props, creatures, doors, text, UI, arrows, water or floor clutter. Beautiful detailed anime gouache, no thick outlines, pixels or photographic texture, no blurred or smoothed enlargement. Full 16:9 landscape matching the reference.",
+    "mode": "built-in/edit",
+    "reference": "passage_detail_ref_0_1.png"
+  },
+  {
+    "name": "passage_panels/0_2",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-ce78913b-e94a-4438-a705-0c5bed039d55.png",
+    "prompt": "Use case: precise-object-edit. Redraw this registered castle lower-passage game-background detail tile at crisp native resolution. It is an overlapping panel of a larger handcrafted anime gouache dungeon painting, so preserve EXACT framing, camera, stone geometry, placement, perspective, staircase tread counts and positions, floor boundaries, parapets, arches, roots, lanterns, light and shadow shapes, and the flat dark teal border where present. Replace blurred surfaces with fine newly painted detail: sharp delicate hand-drawn stone edges, chipped limestone, small restrained moss leaves, bark grooves, carved Gothic filigree, individual lantern details and fine quiet floor texture. Keep the SAME muted violet/slate-blue and amber palette and brightness. No zoom, no crop, no redesigned architecture or shifted features; protect the outer 10% of all edges so neighboring panels align cleanly. Stairs must remain straight and physically coherent. No extra stairs, ladders, props, creatures, doors, text, UI, arrows, water or floor clutter. Beautiful detailed anime gouache, no thick outlines, pixels or photographic texture, no blurred or smoothed enlargement. Full 16:9 landscape matching the reference.",
+    "mode": "built-in/edit",
+    "reference": "passage_detail_ref_0_2.png"
+  },
+  {
+    "name": "passage_panels/1_0",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-112e91e0-61a7-4dc0-bb71-17e9a0d51426.png",
+    "prompt": "Use case: precise-object-edit. Redraw this registered castle lower-passage game-background detail tile at crisp native resolution. It is an overlapping panel of a larger handcrafted anime gouache dungeon painting, so preserve EXACT framing, camera, stone geometry, placement, perspective, staircase tread counts and positions, floor boundaries, parapets, arches, roots, lanterns, light and shadow shapes, and the flat dark teal border where present. Replace blurred surfaces with fine newly painted detail: sharp delicate hand-drawn stone edges, chipped limestone, small restrained moss leaves, bark grooves, carved Gothic filigree, individual lantern details and fine quiet floor texture. Keep the SAME muted violet/slate-blue and amber palette and brightness. No zoom, no crop, no redesigned architecture or shifted features; protect the outer 10% of all edges so neighboring panels align cleanly. Stairs must remain straight and physically coherent. No extra stairs, ladders, props, creatures, doors, text, UI, arrows, water or floor clutter. Beautiful detailed anime gouache, no thick outlines, pixels or photographic texture, no blurred or smoothed enlargement. Full 16:9 landscape matching the reference.",
+    "mode": "built-in/edit",
+    "reference": "passage_detail_ref_1_0.png"
+  },
+  {
+    "name": "passage_panels/1_1",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-f5e98a54-9333-4889-9636-17432aa40f92.png",
+    "prompt": "Use case: precise-object-edit. Redraw this registered castle lower-passage game-background detail tile at crisp native resolution. It is an overlapping panel of a larger handcrafted anime gouache dungeon painting, so preserve EXACT framing, camera, stone geometry, placement, perspective, staircase tread counts and positions, floor boundaries, parapets, arches, roots, lanterns, light and shadow shapes, and the flat dark teal border where present. Replace blurred surfaces with fine newly painted detail: sharp delicate hand-drawn stone edges, chipped limestone, small restrained moss leaves, bark grooves, carved Gothic filigree, individual lantern details and fine quiet floor texture. Keep the SAME muted violet/slate-blue and amber palette and brightness. No zoom, no crop, no redesigned architecture or shifted features; protect the outer 10% of all edges so neighboring panels align cleanly. Stairs must remain straight and physically coherent. No extra stairs, ladders, props, creatures, doors, text, UI, arrows, water or floor clutter. Beautiful detailed anime gouache, no thick outlines, pixels or photographic texture, no blurred or smoothed enlargement. Full 16:9 landscape matching the reference.",
+    "mode": "built-in/edit",
+    "reference": "passage_detail_ref_1_1.png"
+  },
+  {
+    "name": "passage_panels/1_2",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-70b29d67-3fd2-48a0-a9f7-dada2145dee8.png",
+    "prompt": "Use case: precise-object-edit. Redraw this registered castle lower-passage game-background detail tile at crisp native resolution. It is an overlapping panel of a larger handcrafted anime gouache dungeon painting, so preserve EXACT framing, camera, stone geometry, placement, perspective, staircase tread counts and positions, floor boundaries, parapets, arches, roots, lanterns, light and shadow shapes, and the flat dark teal border where present. Replace blurred surfaces with fine newly painted detail: sharp delicate hand-drawn stone edges, chipped limestone, small restrained moss leaves, bark grooves, carved Gothic filigree, individual lantern details and fine quiet floor texture. Keep the SAME muted violet/slate-blue and amber palette and brightness. No zoom, no crop, no redesigned architecture or shifted features; protect the outer 10% of all edges so neighboring panels align cleanly. Stairs must remain straight and physically coherent. No extra stairs, ladders, props, creatures, doors, text, UI, arrows, water or floor clutter. Beautiful detailed anime gouache, no thick outlines, pixels or photographic texture, no blurred or smoothed enlargement. Full 16:9 landscape matching the reference.",
+    "mode": "built-in/edit",
+    "reference": "passage_detail_ref_1_2.png"
+  },
+  {
+    "name": "passage_panels/2_0",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-0b50e0b3-2495-4dd9-82ac-a96e13a029af.png",
+    "prompt": "Use case: precise-object-edit. Redraw this registered castle lower-passage game-background detail tile at crisp native resolution. It is an overlapping panel of a larger handcrafted anime gouache dungeon painting, so preserve EXACT framing, camera, stone geometry, placement, perspective, staircase tread counts and positions, floor boundaries, parapets, arches, roots, lanterns, light and shadow shapes, and the flat dark teal border where present. Replace blurred surfaces with fine newly painted detail: sharp delicate hand-drawn stone edges, chipped limestone, small restrained moss leaves, bark grooves, carved Gothic filigree, individual lantern details and fine quiet floor texture. Keep the SAME muted violet/slate-blue and amber palette and brightness. No zoom, no crop, no redesigned architecture or shifted features; protect the outer 10% of all edges so neighboring panels align cleanly. Stairs must remain straight and physically coherent. No extra stairs, ladders, props, creatures, doors, text, UI, arrows, water or floor clutter. Beautiful detailed anime gouache, no thick outlines, pixels or photographic texture, no blurred or smoothed enlargement. Full 16:9 landscape matching the reference.",
+    "mode": "built-in/edit",
+    "reference": "passage_detail_ref_2_0.png"
+  },
+  {
+    "name": "passage_panels/2_1",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-52a7c67c-74bf-46aa-9c6d-1beb4a108ab2.png",
+    "prompt": "Use case: precise-object-edit. Redraw this registered castle lower-passage game-background detail tile at crisp native resolution. It is an overlapping panel of a larger handcrafted anime gouache dungeon painting, so preserve EXACT framing, camera, stone geometry, placement, perspective, staircase tread counts and positions, floor boundaries, parapets, arches, roots, lanterns, light and shadow shapes, and the flat dark teal border where present. Replace blurred surfaces with fine newly painted detail: sharp delicate hand-drawn stone edges, chipped limestone, small restrained moss leaves, bark grooves, carved Gothic filigree, individual lantern details and fine quiet floor texture. Keep the SAME muted violet/slate-blue and amber palette and brightness. No zoom, no crop, no redesigned architecture or shifted features; protect the outer 10% of all edges so neighboring panels align cleanly. Stairs must remain straight and physically coherent. No extra stairs, ladders, props, creatures, doors, text, UI, arrows, water or floor clutter. Beautiful detailed anime gouache, no thick outlines, pixels or photographic texture, no blurred or smoothed enlargement. Full 16:9 landscape matching the reference.",
+    "mode": "built-in/edit",
+    "reference": "passage_detail_ref_2_1.png"
+  },
+  {
+    "name": "passage_panels/2_2",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-efeedc0c-d0f4-47ee-beca-d8b873dbc36e.png",
+    "prompt": "Use case: precise-object-edit. Redraw this registered castle lower-passage game-background detail tile at crisp native resolution. It is an overlapping panel of a larger handcrafted anime gouache dungeon painting, so preserve EXACT framing, camera, stone geometry, placement, perspective, staircase tread counts and positions, floor boundaries, parapets, arches, roots, lanterns, light and shadow shapes, and the flat dark teal border where present. Replace blurred surfaces with fine newly painted detail: sharp delicate hand-drawn stone edges, chipped limestone, small restrained moss leaves, bark grooves, carved Gothic filigree, individual lantern details and fine quiet floor texture. Keep the SAME muted violet/slate-blue and amber palette and brightness. No zoom, no crop, no redesigned architecture or shifted features; protect the outer 10% of all edges so neighboring panels align cleanly. Stairs must remain straight and physically coherent. No extra stairs, ladders, props, creatures, doors, text, UI, arrows, water or floor clutter. Beautiful detailed anime gouache, no thick outlines, pixels or photographic texture, no blurred or smoothed enlargement. Full 16:9 landscape matching the reference.",
+    "mode": "built-in/edit",
+    "reference": "passage_detail_ref_2_2.png"
+  },
+  {
+    "name": "castle_passage_v02",
+    "prompt": "Use case: precise-object-edit. Asset type: complete hand-painted 2D RPG dungeon background, landscape 16:9. Input image 1 is the existing room, a STYLE reference; redesign the staircase layout to fix geographic continuity. Keep the violet limestone, fine hand-drawn gothic arches, creeping roots and warm brass lanterns; crisp illustrated anime background, no 3D render. NEW LAYOUT in a 3072x1728 logical canvas: the LEFT entrance is at the SOUTH/foreground near (570,1450), and its stone staircase DESCENDS AWAY from the viewer NORTH/up the image toward a recessed lower landing at (570,950). This is a stairwell seen FROM ITS TOP, like looking down into castle steps: downward into shadow, not a staircase rising toward an arch. Show ONLY enclosed stone steps inside this entrance, with solid stone sidewalls. No forest, trees, sky, moon, outdoor doorway, or outdoor view anywhere. From the recessed left stair foot, a clearly walkable horizontal vaulted corridor runs EAST across the middle-lower room from (570,950) through (1500,1080) to (2400,1100). At RIGHT a separate staircase ASCENDS away from the viewer NORTH from (2400,1100) to an indoor gothic doorway near (2580,530). Clearly distinguish the recessed DOWN flight on the left from the rising UP flight on the right. The central decorative rooted wall ends ABOVE the horizontal corridor, never blocks it. Fully show the entire route, no ceilings over the playable floor. Keep walls and recesses in the upper half, with clear textured stone floors and both stair flights in lower half. Left stair rail tops descend away into the room, right rail tops rise away. Use a readable elevated oblique game view, consistent floor perspective. Rich meticulous painted stone detail, no text, no arrows, no UI, no characters. Do not reuse the outdoor forest arch from the reference. The foreground entry top landing should be a plain open stair threshold, not an elaborate gateway. Do not add extra stairs.",
+    "mode": "built-in/edit",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-353dfd20-269c-4757-80cc-bd3b4a88bfd2.png",
+    "reference": "castle_passage.png"
+  },
+  {
+    "name": "passage_panels_v02/0_0",
+    "prompt": "Use case: precise-object-edit. Asset type: registered high-fidelity detail tile for a painted 2D dungeon. Input image 1 is the EXACT edit target and framing. Repaint its soft enlarged brushwork into exceptionally crisp native detailed hand-drawn anime illustration with finely inked stone edges, pitted limestone, delicate roots and clean warm lanterns. Preserve EXACT pixel placement, silhouettes, floor borders, masonry outlines, perspective, light colors and composition of this crop, including any outer dark void/margin. No zoom, no reframing, no added architecture, no new doorways, no characters, no text or UI. Do not change geometry. No forest or outdoor scenery, no moon, no sky. Maintain restrained violet stone and amber light, matching the target, no excessive contrast or bloom. ",
+    "mode": "built-in/edit",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-b045b869-4811-4a54-940a-473c5258466b.png",
+    "reference": "castle_passage_v02.png"
+  },
+  {
+    "name": "passage_panels_v02/0_1",
+    "prompt": "Use case: precise-object-edit. Asset type: registered high-fidelity detail tile for a painted 2D dungeon. Input image 1 is the EXACT edit target and framing. Repaint its soft enlarged brushwork into exceptionally crisp native detailed hand-drawn anime illustration with finely inked stone edges, pitted limestone, delicate roots and clean warm lanterns. Preserve EXACT pixel placement, silhouettes, floor borders, masonry outlines, perspective, light colors and composition of this crop, including any outer dark void/margin. No zoom, no reframing, no added architecture, no new doorways, no characters, no text or UI. Do not change geometry. No forest or outdoor scenery, no moon, no sky. Maintain restrained violet stone and amber light, matching the target, no excessive contrast or bloom. ",
+    "mode": "built-in/edit",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-5d06741d-078d-4e68-a269-1876ae974e36.png",
+    "reference": "castle_passage_v02.png"
+  },
+  {
+    "name": "passage_panels_v02/0_2",
+    "prompt": "Use case: precise-object-edit. Asset type: registered high-fidelity detail tile for a painted 2D dungeon. Input image 1 is the EXACT edit target and framing. Repaint its soft enlarged brushwork into exceptionally crisp native detailed hand-drawn anime illustration with finely inked stone edges, pitted limestone, delicate roots and clean warm lanterns. Preserve EXACT pixel placement, silhouettes, floor borders, masonry outlines, perspective, light colors and composition of this crop, including any outer dark void/margin. No zoom, no reframing, no added architecture, no new doorways, no characters, no text or UI. Do not change geometry. No forest or outdoor scenery, no moon, no sky. Maintain restrained violet stone and amber light, matching the target, no excessive contrast or bloom. ",
+    "mode": "built-in/edit",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-01c73bd1-63da-48ae-8139-8d4761a229f0.png",
+    "reference": "castle_passage_v02.png"
+  },
+  {
+    "name": "passage_panels_v02/1_0",
+    "prompt": "Use case: precise-object-edit. Asset type: registered high-fidelity detail tile for a painted 2D dungeon. Input image 1 is the EXACT edit target and framing. Repaint its soft enlarged brushwork into exceptionally crisp native detailed hand-drawn anime illustration with finely inked stone edges, pitted limestone, delicate roots and clean warm lanterns. Preserve EXACT pixel placement, silhouettes, floor borders, masonry outlines, perspective, light colors and composition of this crop, including any outer dark void/margin. No zoom, no reframing, no added architecture, no new doorways, no characters, no text or UI. Do not change geometry. No forest or outdoor scenery, no moon, no sky. Maintain restrained violet stone and amber light, matching the target, no excessive contrast or bloom. ",
+    "mode": "built-in/edit",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-c8aedd0e-6d1c-44c7-aecb-733f7ec93c65.png",
+    "reference": "castle_passage_v02.png",
+    "refinement": {
+      "prompt": "Precise object edit for a registered game background tile. Remove the UPPER/FAR part of the RIGHT-HAND stair parapet, including its far cap pillar near pixel (1210,665). Replace that far 250-pixel-long section of right balustrade with continuous flat stone floor so a character emerging from the staircase can turn RIGHT/EAST freely through the lower landing near image y800. The right parapet should only begin at the VERY BOTTOM EDGE of this crop (y930); keep that bottommost section and all edge registration unchanged. The left parapet, staircase tread positions, gothic wall and lanterns stay identical. Keep the image crisp hand-painted anime stonework, exactly the same perspective, light and dimensions. Do not add a doorway. No forest or outdoor scenery. No text.",
+      "reference": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-a5056c41-ead4-4879-b5c5-9e5d2830c40b.png"
+    }
+  },
+  {
+    "name": "passage_panels_v02/1_1",
+    "prompt": "Use case: precise-object-edit. Asset type: registered high-fidelity detail tile for a painted 2D dungeon. Input image 1 is the EXACT edit target and framing. Repaint its soft enlarged brushwork into exceptionally crisp native detailed hand-drawn anime illustration with finely inked stone edges, pitted limestone, delicate roots and clean warm lanterns. Preserve EXACT pixel placement, silhouettes, floor borders, masonry outlines, perspective, light colors and composition of this crop, including any outer dark void/margin. No zoom, no reframing, no added architecture, no new doorways, no characters, no text or UI. Do not change geometry. No forest or outdoor scenery, no moon, no sky. Maintain restrained violet stone and amber light, matching the target, no excessive contrast or bloom. ",
+    "mode": "built-in/edit",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-05c554ab-ccff-4c56-8dff-e108bc18f523.png",
+    "reference": "castle_passage_v02.png"
+  },
+  {
+    "name": "passage_panels_v02/1_2",
+    "prompt": "Use case: precise-object-edit. Asset type: registered high-fidelity detail tile for a painted 2D dungeon. Input image 1 is the EXACT edit target and framing. Repaint its soft enlarged brushwork into exceptionally crisp native detailed hand-drawn anime illustration with finely inked stone edges, pitted limestone, delicate roots and clean warm lanterns. Preserve EXACT pixel placement, silhouettes, floor borders, masonry outlines, perspective, light colors and composition of this crop, including any outer dark void/margin. No zoom, no reframing, no added architecture, no new doorways, no characters, no text or UI. Do not change geometry. No forest or outdoor scenery, no moon, no sky. Maintain restrained violet stone and amber light, matching the target, no excessive contrast or bloom. ",
+    "mode": "built-in/edit",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-3dadc2f3-be10-4600-b31a-e122487c63a8.png",
+    "reference": "castle_passage_v02.png"
+  },
+  {
+    "name": "passage_panels_v02/2_0",
+    "prompt": "Use case: precise-object-edit. Asset type: registered high-fidelity detail tile for a painted 2D dungeon. Input image 1 is the EXACT edit target and framing. Repaint its soft enlarged brushwork into exceptionally crisp native detailed hand-drawn anime illustration with finely inked stone edges, pitted limestone, delicate roots and clean warm lanterns. Preserve EXACT pixel placement, silhouettes, floor borders, masonry outlines, perspective, light colors and composition of this crop, including any outer dark void/margin. No zoom, no reframing, no added architecture, no new doorways, no characters, no text or UI. Do not change geometry. No forest or outdoor scenery, no moon, no sky. Maintain restrained violet stone and amber light, matching the target, no excessive contrast or bloom. The foreground LEFT entrance flight must read as stairs DESCENDING AWAY/NORTH into the room from the near foreground top landing. We see the tops of treads below the near threshold, NOT front-facing vertical risers of stairs climbing away. Keep its outer parapet and stair rectangle aligned to the reference, but render the stair tread/riser visibility as looking DOWN a stairwell from the top. The far landing is lower than the near foreground landing. ",
+    "mode": "built-in/edit",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-eaf724f9-037b-4533-a153-8a292d3de82a.png",
+    "reference": "castle_passage_v02.png",
+    "refinement": {
+      "prompt": "Precise architectural correction. This flight currently goes UP away from us. REVERSE ONLY THE STEPS to go DOWN away from us into a stairwell. Bottom of image is the UPPER landing; top of image is LOWER. Remove ALL front-facing vertical riser faces: looking down steps from above, we see tread TOPS but never their tall front faces. Draw a recessed staircase dropping away NORTH from the foreground threshold. Make the very near floor form the upper rim of a stair opening, with each tread deeper and darker toward top of image. Preserve the two outer stone parapet outlines, foreground posts, all outer image margins and boundaries so this remains a registered tile. This is NOT a staircase ascending toward a raised platform. The far floor lies BELOW the near foreground floor. Crisp hand-painted violet limestone and amber light matching original; no characters, labels, arrows or text.",
+      "reference": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-065bdbbd-00f5-4890-a842-1f4c39088afc.png"
+    }
+  },
+  {
+    "name": "passage_panels_v02/2_1",
+    "prompt": "Use case: precise-object-edit. Asset type: registered high-fidelity detail tile for a painted 2D dungeon. Input image 1 is the EXACT edit target and framing. Repaint its soft enlarged brushwork into exceptionally crisp native detailed hand-drawn anime illustration with finely inked stone edges, pitted limestone, delicate roots and clean warm lanterns. Preserve EXACT pixel placement, silhouettes, floor borders, masonry outlines, perspective, light colors and composition of this crop, including any outer dark void/margin. No zoom, no reframing, no added architecture, no new doorways, no characters, no text or UI. Do not change geometry. No forest or outdoor scenery, no moon, no sky. Maintain restrained violet stone and amber light, matching the target, no excessive contrast or bloom. ",
+    "mode": "built-in/edit",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-3481ddd1-28ac-48e1-96fb-b5bcab678f8e.png",
+    "reference": "castle_passage_v02.png"
+  },
+  {
+    "name": "passage_panels_v02/2_2",
+    "prompt": "Use case: precise-object-edit. Asset type: registered high-fidelity detail tile for a painted 2D dungeon. Input image 1 is the EXACT edit target and framing. Repaint its soft enlarged brushwork into exceptionally crisp native detailed hand-drawn anime illustration with finely inked stone edges, pitted limestone, delicate roots and clean warm lanterns. Preserve EXACT pixel placement, silhouettes, floor borders, masonry outlines, perspective, light colors and composition of this crop, including any outer dark void/margin. No zoom, no reframing, no added architecture, no new doorways, no characters, no text or UI. Do not change geometry. No forest or outdoor scenery, no moon, no sky. Maintain restrained violet stone and amber light, matching the target, no excessive contrast or bloom. ",
+    "mode": "built-in/edit",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-2d8a81e6-c9f6-4239-878d-eaee5440f5bd.png",
+    "reference": "castle_passage_v02.png"
+  },
+  {
+    "name": "castle_straight_stairs",
+    "prompt": "Use case: precise-object-edit. Asset type: existing transparent castle gatehouse sprite for a hand-painted anime 2D RPG. Edit target: supplied original castle cutout. Change ONLY the stairs visible inside its front central arch: replace the diagonal/right-bending stairs with a STRAIGHT descending stone staircase leading directly away from the centered front threshold, north into the dark castle. The stair centerline stays centered under the entrance arch all the way into the distance. Each tread runs horizontally left to right, with symmetrical parallel sidewalls receding to a central vanishing point. NO turn, NO bend, NO spiral and no diagonal stair run. The threshold and entry footprint must stay in exactly the same place. Keep the entire castle silhouette, proportions, two ruined towers, ivy, flowers, roots, blue slate roof, doorway stonework, warm hanging lantern and all other pixels as close to the reference as possible. Preserve transparent background and the original full-asset framing. Crisp native-resolution hand-painted masonry, no blurry textures, no characters, no text or UI.",
+    "mode": "built-in/edit",
+    "reference": "castle.png",
+    "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-67897b28-8292-4c28-ad16-797379203cf0.png"
+  }
+]

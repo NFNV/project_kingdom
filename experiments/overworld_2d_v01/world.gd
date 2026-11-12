@@ -1,6 +1,7 @@
 extends Node2D
 signal return_requested
 signal mill_requested
+signal moonlight_requested
 signal coast_requested
 signal save_requested
 signal journey_clock_changed(phase: float)
@@ -404,6 +405,27 @@ func enter_from_coast() -> void:
 	notice = "Palestone Coast · Press F near the lighthouse to return."
 	notice_left = 6
 
+func can_enter_moonlight() -> bool:
+	return linked_journey and not paused and not region_map and not transitioning and gate_cooldown<=0 and player.distance_to(Map.MOONLIGHT)<18
+
+func request_moonlight_entry() -> void:
+	if not can_enter_moonlight(): return
+	transitioning = true
+	velocity = Vector2.ZERO
+	moonlight_requested.emit()
+
+func enter_from_moonlight() -> void:
+	player = Map.MOONLIGHT-Vector2(0,12)
+	velocity = Vector2.ZERO
+	facing = Vector2(0,-1)
+	mounted_rider.reset()
+	gate_cooldown = 1.0
+	update_camera()
+	update_visible()
+	notice = "Moonlight Forest is behind you. F at the silver woodland entrance returns to the dungeon."
+	notice_left = 7
+	get_window().title = "Project Kingdom — The Greenshire"
+
 func can_enter_coast() -> bool:
 	return linked_journey and not paused and not region_map and not transitioning and gate_cooldown<=0 and player.distance_to(Map.COAST)<18
 
@@ -487,6 +509,7 @@ func foot_uv(item: Dictionary) -> Vector2:
 
 func ground_clearance(item: Dictionary) -> float:
 	if item.kind=="bridge_section": return Map.BRIDGE_HALF+.2
+	if item.has("ground_radius"): return item.ground_radius
 	# A wide foundation must stay in front of the dome's tangent, not just its
 	# center point; otherwise its outer edge hangs over the sky near the rim.
 	var broad: bool = item.kind in Dressing.BUILDING_KINDS or item.kind in ["rock","pine","coastal_pine"]
@@ -690,6 +713,9 @@ func draw_hud() -> void:
 	if player.distance_to(Stoneback.SITE)<19 and boss.phase == "idle":
 		panel(Rect2(710,184,500,40))
 		text(Vector2(728,210),"IVYKEEP RUINS  ·  F Accept Stoneback's challenge",16)
+	elif can_enter_moonlight():
+		panel(Rect2(710,184,500,40))
+		text(Vector2(728,210),"MOONLIGHT FOREST  ·  F Enter the forest dungeon",16)
 	elif can_enter_coast():
 		panel(Rect2(710,184,500,40))
 		text(Vector2(728,210),"PALESTONE COAST  ·  F Visit the lighthouse",16)
@@ -697,7 +723,7 @@ func draw_hud() -> void:
 		panel(Rect2(710,184,500,40))
 		text(Vector2(728,210),near_landmark+("  ·  F Enter Garden Square" if can_enter_town() else ("  ·  F Visit Windsong Mill" if can_enter_mill() else "  ·  F Inspect")),16)
 	panel(Rect2(440,1024,1454,30))
-	text(Vector2(454,1044),"WASD / arrows Roam   Shift Run   F Interact   T Time   M Map   1–8 Landmarks   Esc Pause   F11 Screen",14)
+	text(Vector2(454,1044),"WASD / arrows Roam   Shift Run   F Interact   T Time   M Map   1–9 Landmarks   Esc Pause   F11 Screen",14)
 	if diagnostics:
 		panel(Rect2(24,930,370,66))
 		text(Vector2(40,955),"CURVATURE  "+("ON" if curved else "OFF"),14)
@@ -758,7 +784,7 @@ func draw_map_contents(large: bool) -> void:
 		var at := map_point(markers[i].get("location",markers[i].p),large)
 		hud.draw_circle(at,7 if large else 3,Color("496b48"))
 		if large:
-			var glyph := {2:"pine",3:"city_illustration",4:"windmill",6:"ruins",7:"rock"}
+			var glyph := {2:"pine",3:"city_illustration",4:"windmill",6:"ruins",7:"rock",8:"moonlight_entrance"}
 			if glyph.has(i):
 				var texture: Texture2D = textures[glyph[i]]
 				var size := Vector2(texture.get_width()*38.0/texture.get_height(),38)
@@ -803,10 +829,11 @@ func draw_region_map() -> void:
 	if lighthouse_quest_tracked():
 		FieldMap.draw_quest_pin(hud,Vector2(1224,670),9)
 		text(Vector2(1241,676),"Tracked objective",17,Color("294c3e"))
-	text(Vector2(450,902),"1–8  Preview a destination     M / Esc  Return to the road",20,Color("294c3e"))
+	text(Vector2(450,902),"1–9  Preview a destination     M / Esc  Return to the road",20,Color("294c3e"))
 
 func visit(index: int) -> void:
-	var marker: Dictionary = Map.landmarks(bridge_center.x)[clampi(index,0,7)]
+	var markers := Map.landmarks(bridge_center.x)
+	var marker: Dictionary = markers[clampi(index,0,markers.size()-1)]
 	player = marker.p
 	update_camera()
 	velocity = Vector2.ZERO
@@ -840,6 +867,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		KEY_6: visit(5)
 		KEY_7: visit(6)
 		KEY_8: visit(7)
+		KEY_9: visit(8)
 		KEY_R:
 			camera_yaw = 0
 			paused = false
@@ -853,6 +881,10 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				transitioning = true
 				velocity = Vector2.ZERO
 				enter_ivykeep.call_deferred()
+				get_viewport().set_input_as_handled()
+				return
+			if can_enter_moonlight():
+				request_moonlight_entry()
 				get_viewport().set_input_as_handled()
 				return
 			if can_enter_mill():

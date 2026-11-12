@@ -1,0 +1,121 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://experiments/anime_hub_demo_v07/assets/moonlight/layout.gd" id="1"]
+
+[node name="MoonlightLayout" type="Node2D"]
+script = ExtResource("1")
+
+[node name="moonlight_forest" type="Node2D" parent="."]
+
+[node name="Camp" type="Marker2D" parent="moonlight_forest"]
+position = Vector2(1536, 1400)
+
+[node name="CampLamp" type="Marker2D" parent="moonlight_forest"]
+position = Vector2(1425, 1450)
+
+[node name="CastleLamp" type="Marker2D" parent="moonlight_forest"]
+position = Vector2(1710, 610)
+
+[node name="Moonwell" type="Marker2D" parent="moonlight_forest"]
+position = Vector2(2520, 920)
+
+[node name="Wicket" type="Marker2D" parent="moonlight_forest"]
+position = Vector2(1080, 650)
+
+[node name="WicketReturn" type="Marker2D" parent="moonlight_forest"]
+position = Vector2(800, 1380)
+
+[node name="glade_1" type="Marker2D" parent="moonlight_forest"]
+position = Vector2(1000, 1140)
+
+[node name="glade_2" type="Marker2D" parent="moonlight_forest"]
+position = Vector2(1120, 1200)
+
+[node name="creek_1" type="Marker2D" parent="moonlight_forest"]
+position = Vector2(2140, 1020)
+
+[node name="creek_2" type="Marker2D" parent="moonlight_forest"]
+position = Vector2(2260, 1010)
+
+[node name="moonlight_passage" type="Node2D" parent="."]
+
+[node name="DescentLanding" type="Marker2D" parent="moonlight_passage"]
+position = Vector2(570, 1100)
+
+[node name="CorridorBend" type="Marker2D" parent="moonlight_passage"]
+position = Vector2(1536, 1280)
+
+[node name="AscentLanding" type="Marker2D" parent="moonlight_passage"]
+position = Vector2(2400, 1280)
+
+[node name="moonlight_cistern" type="Node2D" parent="."]
+
+[node name="Checkpoint" type="Marker2D" parent="moonlight_cistern"]
+position = Vector2(660, 1330)
+
+[node name="Winch" type="Marker2D" parent="moonlight_cistern"]
+position = Vector2(2500, 650)
+
+[node name="cistern_1" type="Marker2D" parent="moonlight_cistern"]
+position = Vector2(2200, 1100)
+
+[node name="cistern_2" type="Marker2D" parent="moonlight_cistern"]
+position = Vector2(1500, 590)
+
+[node name="moonlight_chapel" type="Node2D" parent="."]
+
+[node name="Keeper" type="Marker2D" parent="moonlight_chapel"]
+position = Vector2(1536, 720)
+
+[node name="Chest" type="Marker2D" parent="moonlight_chapel"]
+position = Vector2(1536, 660)
+
+[node name="chapel_1" type="Marker2D" parent="moonlight_chapel"]
+position = Vector2(1100, 1080)
+
+[node name="chapel_2" type="Marker2D" parent="moonlight_chapel"]
+position = Vector2(1990, 1080)
+
+[node name="Trees" type="Node2D" parent="moonlight_forest"]
+
+[node name="Willow0" type="Marker2D" parent="moonlight_forest/Trees"]
+position = Vector2(500, 770)
+
+[node name="Elm1" type="Marker2D" parent="moonlight_forest/Trees"]
+position = Vector2(600, 990)
+
+[node name="Elm2" type="Marker2D" parent="moonlight_forest/Trees"]
+position = Vector2(650, 1260)
+
+[node name="Willow3" type="Marker2D" parent="moonlight_forest/Trees"]
+position = Vector2(840, 900)
+
+[node name="Elm4" type="Marker2D" parent="moonlight_forest/Trees"]
+position = Vector2(1200, 940)
+
+[node name="Elm5" type="Marker2D" parent="moonlight_forest/Trees"]
+position = Vector2(1300, 1150)
+
+[node name="Willow6" type="Marker2D" parent="moonlight_forest/Trees"]
+position = Vector2(1770, 1320)
+
+[node name="Elm7" type="Marker2D" parent="moonlight_forest/Trees"]
+position = Vector2(2130, 1280)
+
+[node name="Elm8" type="Marker2D" parent="moonlight_forest/Trees"]
+position = Vector2(2130, 760)
+
+[node name="Willow9" type="Marker2D" parent="moonlight_forest/Trees"]
+position = Vector2(2440, 1170)
+
+[node name="Elm10" type="Marker2D" parent="moonlight_forest/Trees"]
+position = Vector2(2570, 1390)
+
+[node name="Elm11" type="Marker2D" parent="moonlight_forest/Trees"]
+position = Vector2(2650, 750)
+
+[node name="Willow12" type="Marker2D" parent="moonlight_forest/Trees"]
+position = Vector2(940, 490)
+
+[node name="Elm13" type="Marker2D" parent="moonlight_forest/Trees"]
+position = Vector2(2130, 490)

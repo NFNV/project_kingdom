@@ -3,6 +3,7 @@ extends RefCounted
 const BOUNDS := Rect2(-240,-80,480,560)
 const START := Vector2(0,0)
 const TOWN := Vector2(-47,39)
+const MOONLIGHT := Vector2(-50,385)
 const FOREST := Vector2(9,173)
 const WINDMILL := Vector2(-135,155)
 const LAKESIDE := Vector2(105,197)
@@ -31,7 +32,8 @@ static func landmarks(bridge_x := BRIDGE_X) -> Array[Dictionary]:
   {"p":WINDMILL+Vector2(10,-15),"location":WINDMILL,"name":"WINDSONG RIDGE","short":"Windmill","description":"A cream-stone mill and a tiny market hamlet watch over the western meadows."},
   {"p":LAKESIDE,"name":"WILLOWMERE LAKE","short":"Willowmere","description":"Follow the shore path south or continue north toward the coast."},
   {"p":RUINS+Vector2(10,-16),"location":RUINS,"name":"IVYKEEP RUINS","short":"Ivykeep","description":"An ivy-covered arch is all that remains of the old watch keep."},
-  {"p":COAST,"name":"PALESTONE COAST","short":"Coast","description":"A little lighthouse watches over the pale rocks and open sea."}
+  {"p":COAST,"name":"PALESTONE COAST","short":"Coast","description":"A little lighthouse watches over the pale rocks and open sea."},
+  {"p":MOONLIGHT,"name":"MOONLIGHT FOREST","short":"Moonlight","description":"A silver woodland trail leads to a ruined castle and the Undercroft. F to enter on foot."}
  ]
 
 static func segment_distance(p: Vector2,a: Vector2,b: Vector2) -> float:

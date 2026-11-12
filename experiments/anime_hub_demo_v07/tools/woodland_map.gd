@@ -5,7 +5,9 @@ const District := preload("res://experiments/anime_hub_demo_v07/tools/northgate_
 const Mill := preload("res://experiments/anime_hub_demo_v07/tools/windsong_mill.gd")
 const Inn := preload("res://experiments/anime_hub_demo_v07/tools/windsong_inn.gd")
 const Lighthouse := preload("res://experiments/anime_hub_demo_v07/tools/palestone_lighthouse.gd")
+const Moonlight := preload("res://experiments/anime_hub_demo_v07/tools/moonlight_forest.gd")
 const NAMES := {"town":"Garden Square","trail":"Mosswood Trail","river":"Riverbend Glade","bakery":"The Bluebird Bakery","wilds":"Briarwood Wilds","district":"Northgate Quarter","forge":"Emberforge Workshop","mill_garden":"Windsong Mill Garden","mill_room":"Windsong Hearthroom","mill_loft":"Windsong Inn",
+	Moonlight.FOREST:"Moonlight Forest",Moonlight.PASSAGE:"Castle Lower Passages",Moonlight.CISTERN:"The Undercroft",Moonlight.CHAPEL:"Root Chapel",
 	Lighthouse.COAST:"Palestone Coast",Lighthouse.KEEPER:"Keeper's Workshop",Lighthouse.LANTERN:"Lantern Room"}
 const SOURCE_SIZE := Vector2(1672,941)
 
@@ -22,6 +24,7 @@ static func polygon(coords: Array) -> PackedVector2Array:
 
 
 static func world_size(zone: String) -> Vector2i:
+	if zone in Moonlight.ZONES: return Moonlight.SIZE
 	if zone in Lighthouse.ZONES: return Lighthouse.size_for(zone)
 	if zone=="mill_garden": return Mill.GARDEN_SIZE
 	if zone=="mill_room": return Mill.ROOM_SIZE
@@ -30,6 +33,7 @@ static func world_size(zone: String) -> Vector2i:
 
 
 static func floor_for(zone: String) -> PackedVector2Array:
+	if zone in Moonlight.ZONES: return Moonlight.floor_for(zone)
 	if zone in Lighthouse.ZONES: return Lighthouse.floor_for(zone)
 	if zone=="mill_loft": return Inn.floor_polygon()
 	if zone in ["mill_garden","mill_room"]: return Mill.floor_for(zone=="mill_room")
@@ -44,6 +48,7 @@ static func floor_for(zone: String) -> PackedVector2Array:
 
 
 static func exits_for(zone: String) -> Dictionary:
+	if zone in Moonlight.ZONES: return Moonlight.exits_for(zone)
 	if zone in Lighthouse.ZONES: return Lighthouse.exits_for(zone)
 	if zone=="mill_loft": return Inn.exits()
 	if zone in ["mill_garden","mill_room"]: return Mill.exits_for(zone=="mill_room")
@@ -66,6 +71,7 @@ static func exits_for(zone: String) -> Dictionary:
 
 
 static func arrival(zone: String, entry: String) -> Vector2:
+	if zone in Moonlight.ZONES: return Moonlight.arrival(zone,entry)
 	if zone in Lighthouse.ZONES: return Lighthouse.arrival(zone,entry)
 	if zone=="mill_loft": return Inn.arrival()
 	if zone in ["mill_garden","mill_room"]: return Mill.arrival(zone=="mill_room",entry)

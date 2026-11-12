@@ -8,6 +8,7 @@ func bake() -> void:
 	woodland.clear()
 	collect_layout(self)
 	collect_layout($Palestone)
+	collect_layout($MoonlightApproach)
 	collect_props($Woodland,woodland)
 	collect_props($LandmarkArt,props)
 	bake_surfaces(Map.BOUNDS,2)

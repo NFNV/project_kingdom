@@ -6,7 +6,8 @@ const Legacy := preload("res://experiments/anime_hub_demo_v07/tools/save_v1.gd")
 const State := preload("res://experiments/anime_hub_demo_v07/tools/game_state.gd")
 const DEFAULT_PATH := "user://kingdom_journey.json"
 const Lighthouse := preload("res://experiments/anime_hub_demo_v07/tools/palestone_lighthouse.gd")
-const ZONES := ["town","bakery","district","trail","river","wilds","forge","mill_garden","mill_room","mill_loft"] + Lighthouse.ZONES
+const Moonlight := preload("res://experiments/anime_hub_demo_v07/tools/moonlight_forest.gd")
+const ZONES := ["town","bakery","district","trail","river","wilds","forge","mill_garden","mill_room","mill_loft"] + Lighthouse.ZONES + Moonlight.ZONES
 const MEMORIES := ["old_elm","meadow","river_view"]
 const PLACES := ["north_place_plaza","north_place_park","north_place_civic"]
 var definitions: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://experiments/anime_hub_demo_v07/data/items.json"))
@@ -52,6 +53,8 @@ func validate(doc: Variant) -> bool:
 	var data: Variant = doc.get("state")
 	var player: Variant = doc.get("player")
 	if not data is Dictionary or not player is Dictionary:
+		return false
+	if data.has("moonlight") and not Moonlight.progress_valid(data.moonlight):
 		return false
 	if data.has("appearance") and not State.HeroLook.valid(data.appearance):
 		return false
@@ -130,7 +133,7 @@ func validate(doc: Variant) -> bool:
 	var sizes := {"town":Vector2(1920,1080),"bakery":Vector2(1920,1080),"district":Vector2(6400,3840),"trail":Vector2(1920,1080),"river":Vector2(1920,1080),"wilds":Vector2(4608,2592),"forge":Vector2(1920,1080),"mill_garden":Vector2(2400,1600),"mill_room":Vector2(1920,1080),"mill_loft":Vector2(1280,720)}
 	if player.get("zone") not in ZONES:
 		return false
-	var dimensions := Vector2(Lighthouse.size_for(player.zone)) if player.zone in Lighthouse.ZONES else Vector2(sizes[player.zone])
+	var dimensions := Vector2(Moonlight.SIZE) if player.zone in Moonlight.ZONES else (Vector2(Lighthouse.size_for(player.zone)) if player.zone in Lighthouse.ZONES else Vector2(sizes[player.zone]))
 	if player.zone=="mill_garden" and player.has("mill_garden_layout"):
 		if player.mill_garden_layout!=2: return false
 		dimensions = Vector2(1920,1280)

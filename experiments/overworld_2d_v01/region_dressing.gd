@@ -3,10 +3,11 @@ const ART := "res://experiments/anime_hub_assets_v06/"
 const PAINTED := "res://experiments/overworld_2d_v01/art/architecture/"
 const PALESTONE_ART := "res://experiments/overworld_2d_v01/art/palestone_kit/"
 const HOUSE_KINDS := ["ivy_cottage","balcony_cottage","bakery","grocer_shop","bookshop","country_hall","palestone_cottage"]
-const BUILDING_KINDS := HOUSE_KINDS+["city_illustration","windmill","watermill","lighthouse","ruins"]
+const BUILDING_KINDS := HOUSE_KINDS+["city_illustration","windmill","watermill","lighthouse","ruins","moonlight_entrance"]
 const TREE_KINDS := ["oak","pine","willow","coastal_pine","lakeside_alder"]
 const LAMP_KINDS := ["lamp","coastal_lantern"]
 const CATALOG := {
+ "moonlight_entrance":"res://experiments/anime_hub_demo_v07/assets/moonlight/forest_entrance.png",
  "oak":ART+"scenery/elm_tree.png", "willow":ART+"scenery/willow_tree.png",
  "pine":"res://experiments/overworld_2d_v01/art/region/pine_grove.png",
  "rock":"res://experiments/overworld_2d_v01/art/region/coastal_rocks.png",
@@ -30,6 +31,7 @@ const CATALOG := {
 # Legacy cropped UVs for landmarks. Pixel-calibrated entries below override
 # these positions when their textures are cached.
 const EMITTERS := {
+ "moonlight_entrance":[Vector2(.38,.70),Vector2(.63,.70)],
  "city_illustration":[Vector2(.20,.58),Vector2(.44,.35),Vector2(.71,.36),Vector2(.79,.63)],
  "ivy_cottage":[Vector2(.29,.67),Vector2(.60,.73)],
  "balcony_cottage":[Vector2(.29,.67),Vector2(.60,.73)],
@@ -60,6 +62,12 @@ const EMITTER_PIXELS := {
 
 static func make_prop(kind: String, at: Vector2, height: float, radius: float,tint := Color.WHITE) -> Dictionary:
  var result := {"p":at,"kind":kind,"height":height,"radius":radius,"tint":tint,"phase":float(posmod(hash(at),100))*.1,"dressed":true}
+ if kind=="moonlight_entrance":
+  result.anchor_uv = Vector2(.5,.95)
+  # Tall trees surround a shallow threshold, not a deep building foundation.
+  result.ground_radius = 3.5
+  result.max_height = 650.0
+  result.max_width = 1000.0
  if kind in HOUSE_KINDS:
   result.max_height = 180.0
   result.max_width = 230.0

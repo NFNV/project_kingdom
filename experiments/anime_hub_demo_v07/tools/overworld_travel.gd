@@ -69,6 +69,7 @@ func begin(from_zone := "town") -> void:
 	overworld.journey_clock_changed.connect(sync_journey_clock)
 	overworld.return_requested.connect(return_to_town,CONNECT_DEFERRED)
 	overworld.mill_requested.connect(visit_area.bind("mill_garden"),CONNECT_DEFERRED)
+	overworld.moonlight_requested.connect(visit_area.bind(hub.Moonlight.FOREST),CONNECT_DEFERRED)
 	overworld.coast_requested.connect(visit_area.bind(hub.Lighthouse.COAST),CONNECT_DEFERRED)
 	overworld.save_requested.connect(save_from_overworld)
 	overworld.journey_loot_claimed.connect(save_arena_loot)
@@ -84,6 +85,7 @@ func sync_journey_clock(phase: float) -> void:
 	if is_instance_valid(overworld): hub.clock_target = overworld.clock_target
 
 func checkpoint_zone() -> String:
+	if hub.zone in hub.Moonlight.ZONES: return hub.zone
 	if hub.zone in hub.Lighthouse.ZONES: return hub.Lighthouse.COAST
 	return "mill_garden" if hub.zone in ["mill_garden","mill_room","mill_loft"] else "town"
 
@@ -142,12 +144,15 @@ func visit_area(destination: String) -> void:
 	hub.transitioning = false
 	hub.queue_autosave()
 	var hint := "Windsong Mill · E to talk or enter · South gate returns to the Greenshire."
+	if destination==hub.Moonlight.FOREST:
+		hint = "Moonlight Forest · E rest / interact · Find the ruined castle to the north."
 	if destination==hub.Lighthouse.COAST:
 		hint = "Palestone Coast · Follow the path to the keeper's door. E to enter."
 	hub.ui.show_notice(hint)
 
 func place_at_region_gate(from_zone: String) -> void:
 	match from_zone:
+		hub.Moonlight.FOREST: overworld.enter_from_moonlight()
 		"mill_garden": overworld.enter_from_mill()
 		hub.Lighthouse.COAST: overworld.enter_from_coast()
 		_: overworld.enter_from_town()
