@@ -1,0 +1,19 @@
+{
+  "tool": "built-in image_gen.imagegen",
+  "mode": "generate",
+  "transparent_background": true,
+  "prompt": "Use case: ui-mockup. Asset type: ONE production game HUD frame, text-free, transparent cutout. Create a refined hand-painted anime fantasy RPG BOSS HEALTH BANNER frame for Project Kingdom. This is the actual reusable UI asset, not a screenshot or mockup, no scenery. Composition: a single VERY WIDE shallow horizontal frame, width about EIGHT TIMES its height; front-facing perfectly straight and symmetric. Center it across the canvas, all exterior pixels genuinely transparent. Its overall silhouette has elegant curved tapering end-caps rather than a plain rectangular box. Medium: beautiful traditionally painted storybook craftsmanship, precise clean silhouette, extremely restrained tiny botanical flourishes, aged pale brass carved edging, deep desaturated forest-green enamel/parchment inner surface with subtle pigment grain. Fine warm ivory and gold highlights along top rim, soft patina and delicate embossed filigree at far ends. Keep the middle 78% spacious, dark and empty for live typography. A small circular empty medallion on the left for a live level number, inset in the same brass with restrained laurel sprigs around it; the boss name will appear to its right. Along the lower part, include one long thin EMPTY recessed health track, perfectly straight and level, warm black-burgundy interior, fine gilt edges. Track extends from near the left inner edge all the way to near the right inner edge. No filled health color, no letters, numbers, words, level text, logos, extra icons, shields, crowns, weapons, jewels or separate UI elements. Professional polished art, legible compact shape, tastefully ornate but light and clean, no chunky solid gold, no sci-fi, no pixel art, no 3D render, no plastic gradients. Actual transparent background, preserve all frame artwork and delicate tips within canvas with small safe margins.",
+  "source": "/Users/n/.codex/generated_images/01a17f34-8e6a-74a2-bc29-e0d2d90d3a0f/exec-78454398-c414-4ffa-b7c3-50567eb6aaa6.png",
+  "asset": "res://experiments/anime_hub_demo_v07/assets/hud/boss_banner_v2.png",
+  "source_size": [
+    2172,
+    724
+  ],
+  "atlas_region": [
+    8,
+    205,
+    2158,
+    296
+  ],
+  "usage": "Text-free painted frame. Live serif name and level, and live rounded health fill are drawn by enemy_health.gd. Banner size 760x104 logical pixels at the upper center. Original transparent PNG is preserved without pixel edits."
+}

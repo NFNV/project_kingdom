@@ -16,6 +16,9 @@ const ROLL_COST := 28.0
 const ROLL_DURATION := .46
 const PARRY_WINDOW := .18
 const COMBAT_LINGER := 10.0
+const EnemyHealth := preload("res://experiments/anime_hub_demo_v07/tools/enemy_health.gd")
+@export_range(1,99) var level := 1
+@export var enemy_name := ""
 var hub: Node2D
 var controlled := false
 var enemy := false
@@ -579,8 +582,7 @@ func _draw() -> void:
 			var at := Vector2(-roll_heading.x,-roll_heading.y*GROUND_Y)*(15+i*11)
 			draw_arc(at,6+i*2,0,PI,12,Color(.87,.81,.57,.35-i*.08),1.5,true)
 	if enemy and hub.combat_active:
-		for i in maximum_health:
-			draw_circle(Vector2((i-(maximum_health-1)*0.5)*10,-sprite.display_height-12),3,Color("eea07f") if i<health else Color("473e38"))
+		EnemyHealth.mob(self,Vector2(0,-sprite.display_height-12),level,health,maximum_health)
 	if swing>0:
 		var elapsed := attack_duration-swing
 		var angle := atan2(facing.y*GROUND_Y,facing.x)

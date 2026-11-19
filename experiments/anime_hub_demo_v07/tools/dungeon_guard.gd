@@ -6,6 +6,8 @@ const Bolt := preload("res://experiments/anime_hub_demo_v07/tools/hostile_bolt.g
 var bolt_released := false
 
 func _ready() -> void:
+	if level==1: level = 12 if is_boss() else (9 if archetype=="ashen_vanguard" else 8)
+	if is_boss() and enemy_name.is_empty(): enemy_name = "Blackthorn Captain"
 	variant = "mauler" if archetype in ["ashen_vanguard","blackthorn_captain"] else "raider"
 	super._ready()
 	remove_child(sprite)
@@ -130,11 +132,6 @@ func _draw() -> void:
 			draw_colored_polygon(area,Color(tint,.2))
 			draw_arc(Vector2.ZERO,profile().reach,facing.angle()-spread,facing.angle()+spread,40,Color(tint,.85),2,true)
 	draw_set_transform(Vector2.ZERO)
-	var width := 155.0 if is_boss() else 46.0
-	var top: float = -sprite.display_height-17
-	draw_rect(Rect2(-width*.5-2,top-2,width+4,9),Color("25232f"))
-	draw_rect(Rect2(-width*.5,top,width*float(health)/maximum_health,5),Color("d49b99") if is_boss() else Color("d8b69a"))
-	if is_boss():
-		draw_string_outline(ThemeDB.fallback_font,Vector2(-92,top-10),"BLACKTHORN CAPTAIN",HORIZONTAL_ALIGNMENT_CENTER,184,13,3,Color("25232f"))
-		draw_string(ThemeDB.fallback_font,Vector2(-92,top-10),"BLACKTHORN CAPTAIN",HORIZONTAL_ALIGNMENT_CENTER,184,13,Color("eed4b3"))
+	if not is_boss():
+		EnemyHealth.mob(self,Vector2(0,-sprite.display_height-17),level,health,maximum_health)
 

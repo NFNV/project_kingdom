@@ -100,3 +100,15 @@ Both forest streetlamps now cast warm amber ground light and have luminous glass
 The forest campfire, fountain and treasure cache, their interaction prompts, placement markers and the fountain collision have been removed. The forest entrance remains a valid respawn point; the Undercroft rest point and Root Chapel boss chest remain available. Retired moonwell reward flags stay readable for compatibility with existing saves; no hidden cache reward can be claimed.
 
 The lantern and prop-cleanup pass completed **46 lighting/removal checks** and **140 full dungeon journey checks**, with no script errors. Existing shutdown cleanup warnings remain.
+
+## Enemy levels and health readouts
+
+Ordinary enemies show only `Lv` and their configured level above a slim warm-red health bar. Bosses use a shared deep-green banner with brass trim, a paired-leaf ornament, serif level/name lettering and a red health bar. Blackthorn's banner sits at the upper center. During a boss fight, the illustrated clock moves beside the hearts and returns to the center afterward. Captain Rook uses the same banner when approached or engaged. Stoneback uses the shared style in its existing arena header.
+
+Current encounter labels are woodland raiders Lv 3–5, Briarwood raiders/maulers Lv 4/6, Captain Rook Lv 8, dungeon soldiers Lv 8–9, Blackthorn Captain Lv 12 and Stoneback Lv 10. These labels are encounter metadata; adding them does not alter damage, health, rewards or implement player leveling. Actor-based enemies expose `Level` and `Enemy Name` in Godot; Stoneback's label is `Stoneback.LEVEL`.
+
+The boss banner reads live health, hides for pause menus/dialogue and after defeat, releases its target on room changes and binds the fresh boss on rematches. `enemy_health.gd` supplies reusable drawing; `boss_health.gd` selects the current boss for the hub HUD. [Blackthorn preview](blackthorn-encounter.png) · [Stoneback preview](stoneback-health-ui.png).
+
+The refined boss banner uses the original transparent painted `assets/hud/boss_banner_v2.png`, with a gilded botanical frame, a dedicated level medallion, textured dark-green interior and a recessed health track. The live boss name is centered independently of the level digits. Runtime lettering and the health fill remain separate from the painting. The PNG remains intact; an AtlasTexture selects the useful frame region without editing its pixels. The exact built-in imagegen prompt and source are recorded in `assets/hud/boss_banner_v2_generation.json`.
+
+The revised banner passed **17 native QHD UI checks**, including upper-center placement, clock non-overlap, damage, pause, death, rematches and clock restoration. Both Blackthorn and Stoneback full/damaged states were visually inspected. Existing shutdown cleanup warnings remain.

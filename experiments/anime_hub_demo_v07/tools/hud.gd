@@ -2,6 +2,8 @@ extends CanvasLayer
 
 const FieldMap := preload("res://experiments/anime_hub_demo_v07/tools/field_map.gd")
 const Hearts := preload("res://experiments/anime_hub_demo_v07/tools/heart_meter.gd")
+const BossHealth := preload("res://experiments/anime_hub_demo_v07/tools/boss_health.gd")
+var boss_health: Control
 const InventoryView := preload("res://experiments/anime_hub_demo_v07/tools/inventory_view.gd")
 const JournalView := preload("res://experiments/anime_hub_demo_v07/tools/quest_journal.gd")
 const ForgeShop := preload("res://experiments/anime_hub_demo_v07/tools/forge_shop.gd")
@@ -139,6 +141,10 @@ func _ready() -> void:
 	skill_label = skill_panel.status
 	skill_bar = skill_panel.recharge
 	skill_panel.hide()
+	boss_health = BossHealth.new()
+	boss_health.hub = hub
+	add_child(boss_health)
+	boss_health.visibility_changed.connect(layout_combat_header)
 	pause_overlay = Control.new()
 	pause_overlay.size = Vector2(1920,1080)
 	add_child(pause_overlay)
@@ -368,6 +374,11 @@ func refresh() -> void:
 		route_label.text = "Nearest bandits: %s  /  %d m" % [direction,ceili(closest/32.0)]
 	refresh_save_controls()
 
+
+func layout_combat_header() -> void:
+	# Give the upper center to a boss; retain the illustrated clock beside hearts.
+	clock_dial.position = Vector2(208,17) if boss_health.visible else Vector2(848,7)
+	clock_dial.scale = Vector2.ONE*(.62 if boss_health.visible else .8)
 
 func _process(delta: float) -> void:
 	if is_instance_valid(hub.player):

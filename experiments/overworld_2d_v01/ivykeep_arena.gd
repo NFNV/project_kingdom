@@ -5,6 +5,7 @@ signal loot_claimed
 
 const Boss := preload("res://experiments/overworld_2d_v01/stoneback.gd")
 const Hearts := preload("res://experiments/anime_hub_demo_v07/tools/heart_meter.gd")
+const EnemyHealth := preload("res://experiments/anime_hub_demo_v07/tools/enemy_health.gd")
 const Fighter := preload("res://experiments/anime_hub_demo_v07/tools/actor.gd")
 const RenderSettings := preload("res://experiments/anime_hub_demo_v07/tools/render_settings.gd")
 const TreasureChest := preload("res://experiments/anime_hub_demo_v07/assets/loot/treasure_chest.tscn")
@@ -251,9 +252,6 @@ func draw_hud() -> void:
 		hud.draw_string(font, Vector2(620, 504), "Stoneback defeated you", HORIZONTAL_ALIGNMENT_CENTER, 680, 34, Color("f6edcf"))
 		hud.draw_string(font, Vector2(620, 553), "R  Retry the duel     ·     F or Esc  Return to the Greenshire", HORIZONTAL_ALIGNMENT_CENTER, 680, 21, Color("f6edcf"))
 		return
-	var title := "STONEBACK"
-	if boss.fighting() and boss.enraged(): title += "   ·   ENRAGED"
-	if boss.phase == "defeated": title += "   ·   VICTORY"
 	var cue: String = {
 		"guard": "Shield raised", "warning": "%s incoming · Shield open" % boss.attack().name,
 		"sweep": boss.attack().name, "recover": "Open to attack",
@@ -263,12 +261,9 @@ func draw_hud() -> void:
 		cue = loot_message if not loot_message.is_empty() else "Victory · Walk to the chest"
 		if not chest.opened and near_chest() and loot_message.is_empty():
 			cue = "Victory · E Open chest"
-	hud.draw_rect(Rect2(625, 22, 670, 106 if boss.fighting() else 81), Color("203e36"))
-	hud.draw_string(font, Vector2(648, 53), title, HORIZONTAL_ALIGNMENT_LEFT, -1, 22, Color("f6edcf"))
-	hud.draw_string(font, Vector2(648, 83), cue, HORIZONTAL_ALIGNMENT_LEFT, -1, 19, Color("f6edcf"))
-	if boss.fighting():
-		hud.draw_rect(Rect2(648, 101, 624, 8), Color("513d31"))
-		hud.draw_rect(Rect2(648, 101, 624.0 * boss.health / Boss.HEALTH, 8), Color("e2965b"))
+	EnemyHealth.boss(hud,Rect2(580,18,760,104),"Stoneback",Boss.LEVEL,boss.health,Boss.HEALTH)
+	if boss.fighting() and boss.enraged(): cue = "Enraged  ·  "+cue
+	EnemyHealth.text(hud,cue,Vector2(580,148),760,19)
 	if boss.fighting() and guardian.feedback_left > 0:
 		hud.draw_string(font, Vector2(625, 153), guardian.hit_feedback, HORIZONTAL_ALIGNMENT_CENTER, 670, 19, Color("fff1c6"))
 	hud.draw_rect(Rect2(395, 992, 1130, 65), Color("203e36"))

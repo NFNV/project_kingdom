@@ -139,6 +139,7 @@ func enemy(id: String, at: Vector2, heavy := false) -> void:
  dog.home = at
  dog.patrol = PackedVector2Array([at,at+Vector2(65,30),at+Vector2(-55,35)])
  dog.maximum_health = 7 if heavy else 4
+ dog.level = 5 if heavy else 3
  dog.health = dog.maximum_health
  dog.patrol_wait = .5
  hub.dogs.append(dog)
