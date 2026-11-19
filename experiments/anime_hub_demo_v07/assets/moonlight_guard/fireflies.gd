@@ -23,12 +23,22 @@ const ROOT := "res://experiments/anime_hub_demo_v07/assets/moonlight_guard/"
 		night_weight = clampf(value,0,1)
 		visible = night_weight>.005
 		if is_instance_valid(batch): batch.material.set_shader_parameter("night_weight",night_weight)
+		if is_instance_valid(glow_batch): glow_batch.material.set_shader_parameter("night_weight",night_weight)
+@export_range(0,1) var ground_glow := 0.0:
+	set(value):
+		ground_glow = clampf(value,0,1)
+		if is_instance_valid(glow_batch):
+			glow_batch.visible = ground_glow>0
+			glow_batch.material.set_shader_parameter("glow_strength",ground_glow)
 var boundary := PackedVector2Array()
 var batch: MultiMeshInstance2D
+var glow_batch: MultiMeshInstance2D
 var motes: Array[Dictionary] = []
 var elapsed := 0.0
 
 func _ready() -> void:
+	# These ambient particles update every render frame, independently of physics.
+	physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
 	batch = MultiMeshInstance2D.new()
 	batch.texture = load(ROOT+"firefly_flutter.png")
 	batch.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
@@ -44,6 +54,15 @@ func _ready() -> void:
 	instances.instance_count = amount
 	batch.multimesh = instances
 	add_child(batch)
+	# Share the same instance transforms: one extra batch, no per-insect lights.
+	glow_batch = MultiMeshInstance2D.new()
+	glow_batch.multimesh = instances
+	glow_batch.z_index = -5
+	var glow_material := ShaderMaterial.new()
+	glow_material.shader = preload("res://experiments/anime_hub_demo_v07/assets/moonlight_guard/firefly_ground_glow.gdshader")
+	glow_batch.material = glow_material
+	add_child(glow_batch)
+	ground_glow = ground_glow
 	rebuild()
 	night_weight = night_weight
 

@@ -12,19 +12,22 @@ const BRIDGE := Rect2(1770,765,200,210)
 const STONES := Rect2(2340,805,150,125)
 const CHEST := preload("res://experiments/anime_hub_demo_v07/assets/loot/treasure_chest.tscn")
 const LAYOUT := preload("res://experiments/anime_hub_demo_v07/assets/moonlight/layout.tscn")
+const LANTERN_LIGHT := preload("res://experiments/anime_hub_demo_v07/assets/moonlight/lantern_light.tscn")
 const ENEMIES := ["glade_1","glade_2","creek_1","creek_2","cistern_1","cistern_2","chapel_1","chapel_2","vault_keeper","passage_1","passage_2","passage_3","cistern_3","cistern_4"]
 const RESPAWN_SECONDS := 300.0
 const ROOM_ENEMIES := {PASSAGE:["passage_1","passage_2","passage_3"],CISTERN:["cistern_1","cistern_2","cistern_3","cistern_4"]}
-# Keep the retired chapel_shortcut flag readable for existing journey saves.
+const FOREST_LIGHT := [Color("d3bfb2"),Color("f2fff3"),Color("bd8ca2"),Color("344c79")]
+const FOREST_ACTOR_LIGHT := [Color("fff0da"),Color.WHITE,Color("f2c4c2"),Color("8da9dc")]
+# Retired chapel shortcut and moonwell reward flags remain readable in old saves.
 const FLAGS := ["forest_shortcut","chapel_shortcut","winch","moonwell_claimed","vault_claimed"]
 var hub: Node2D
 var layout: Node2D
-var effects := 0.0
 var chest: Node2D
-var cache: Node2D
 var gates: Dictionary = {}
 var recovering := false
 var cistern_detail: Node2D
+var forest_detail: Node2D
+var lantern_lights: Array[Node2D] = []
 
 static func fresh_progress() -> Dictionary:
  return {"defeated":[],"forest_shortcut":false,"chapel_shortcut":false,"winch":false,"moonwell_claimed":false,"vault_claimed":false,"checkpoint":FOREST,"respawn_at":{}}
@@ -173,6 +176,7 @@ func region_prop(path: String, at: Vector2, height: float) -> void:
 
 func build_forest() -> void:
  var detail := preload("res://experiments/anime_hub_demo_v07/assets/moonlight/forest_detail.gd").new()
+ forest_detail = detail
  detail.name = "ForestDetail"
  detail.z_index = -9
  hub.zone_root.add_child(detail)
@@ -186,20 +190,26 @@ func build_forest() -> void:
  hub._solid(PackedVector2Array([CASTLE_BOUNDS.position,Vector2(CASTLE_BOUNDS.end.x,CASTLE_BOUNDS.position.y),CASTLE_BOUNDS.end,Vector2(CASTLE_BOUNDS.position.x,CASTLE_BOUNDS.end.y)]))
  for id in ["CampLamp","CastleLamp"]:
   hub._piece("street_lamp",point(id),150)
- var well := point("Moonwell")
- hub._piece("fountain",well-Vector2(0,80),155)
- hub._solid(hub._ellipse(well-Vector2(0,80),Vector2(60,32)))
- cache = CHEST.instantiate()
- cache.position = well+Vector2(70,10)
- cache.display_width = 65
- hub.world.add_child(cache)
- if hub.state.moonlight.moonwell_claimed: cache.open()
- interactable("moon_camp","Lantern Camp · Rest",point("Camp"),"A sheltered camp beneath silver leaves.")
- interactable("moon_well","Moonwell · Open cache",point("Moonwell"),"A small offering beside the old moonwell.")
- interactable("moon_wicket","Castle wicket · Open shortcut",point("Wicket"),"Unbar the woodland path back to Lantern Camp.")
- interactable("moon_wicket_return","Lantern Camp wicket",point("WicketReturn"),"The wicket opens from the castle courtyard.")
+  var light: Node2D = LANTERN_LIGHT.instantiate()
+  light.position = point(id)
+  hub.zone_root.add_child(light)
+  lantern_lights.append(light)
+ interactable("moon_wicket","Castle wicket · Open shortcut",point("Wicket"),"Unbar the woodland path back to the forest threshold.")
+ interactable("moon_wicket_return","Forest threshold wicket",point("WicketReturn"),"The wicket opens from the castle courtyard.")
  for id in ["glade_1","glade_2","creek_1","creek_2"]:
   enemy(id,point(id),id=="creek_2")
+
+func update_forest_lighting(phase: float) -> void:
+ var base := int(floorf(phase))%4
+ var next := (base+1)%4
+ var weight := smoothstep(.35,1.0,fposmod(phase,1.0))
+ var tint: Color = FOREST_LIGHT[base].lerp(FOREST_LIGHT[next],weight)
+ hub.backgrounds[0].modulate = tint
+ # The nine high-detail panels cover the base painting and must share its grade.
+ forest_detail.modulate = tint
+ hub.actor_tint = FOREST_ACTOR_LIGHT[base].lerp(FOREST_ACTOR_LIGHT[next],weight)
+ var night: float = hub.Mill.night_weight(phase)
+ for light in lantern_lights: light.night_weight = night
 
 func build_passage() -> void:
  var detail := preload("res://experiments/anime_hub_demo_v07/assets/moonlight/forest_detail.gd").new()
@@ -263,22 +273,13 @@ func can_use_safe_point() -> bool:
 func use(id: String) -> void:
  var progress: Dictionary = hub.state.moonlight
  match id:
-  "moon_camp","moon_entry":
+  "moon_entry":
    if not can_use_safe_point():
     hub._say("Catch your breath","Draw the nearby enemies away before resting.")
     return
    progress.checkpoint = hub.zone
    hub.state.health = hub.state.maximum_health
    hub._say("A quiet moment","Health restored. Your checkpoint is now here.")
-  "moon_well":
-   if progress.moonwell_claimed:
-    hub._say("Moonwell","The moonwell's cache has already been collected.")
-    return
-   progress.moonwell_claimed = true
-   cache.open()
-   hub.state.add_item("healing_draught",2)
-   hub.coins += 15
-   hub._say("Moonwell cache","Two healing draughts and 15 coins collected.")
   "moon_winch":
    progress.winch = true
    cistern_detail.set_door_open(true)
@@ -295,7 +296,7 @@ func use(id: String) -> void:
    if progress.forest_shortcut:
     relocate(point("WicketReturn")+Vector2(60,-30))
    progress.forest_shortcut = true
-   hub._say("Castle wicket opened","The shortcut back to Lantern Camp is open. Use either end to cross.")
+   hub._say("Castle wicket opened","The shortcut back to the forest threshold is open. Use either end to cross.")
   "moon_wicket_return":
    if not progress.forest_shortcut:
     hub._say("A barred wicket","Reach the castle courtyard to unbar this path.")
@@ -349,22 +350,9 @@ func recover() -> void:
  game.state.health = game.state.maximum_health
  game._travel.call_deferred(checkpoint,"checkpoint")
 
-func _process(delta: float) -> void:
- if hub.paused or hub.transitioning: return
- effects += delta
- queue_redraw()
-
 func _draw() -> void:
  if not is_instance_valid(hub): return
  if hub.zone==FOREST:
-  for id in ["Camp","Wicket","WicketReturn","Moonwell"]:
+  for id in ["Wicket","WicketReturn"]:
    var at := point(id)
    draw_arc(at+Vector2(0,-5),30,0,TAU,36,Color(.6,.82,1,.25),1.5,true)
-  var camp := point("Camp")+Vector2(-95,-15)
-  draw_circle(camp,28,Color(1,.63,.23,.07),true,-1,true)
-  for i in 3:
-   var log_end := Vector2.from_angle(i*PI/3)*17
-   draw_line(camp-log_end,camp+log_end,Color("564437"),7,true)
-  var flame := PackedVector2Array([camp+Vector2(-7,0),camp+Vector2(-10,-12),camp+Vector2(-4,-18),camp+Vector2(sin(effects*5)*3,-34),camp+Vector2(5,-20),camp+Vector2(9,-11),camp+Vector2(6,0)])
-  draw_colored_polygon(flame,Color("ed9b51"))
-  draw_colored_polygon(PackedVector2Array([camp+Vector2(-4,-2),camp+Vector2(sin(effects*6)*2,-22),camp+Vector2(5,-2)]),Color("ffe5a0"))

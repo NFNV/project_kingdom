@@ -7,17 +7,11 @@ script = ExtResource("1")
 
 [node name="moonlight_forest" type="Node2D" parent="."]
 
-[node name="Camp" type="Marker2D" parent="moonlight_forest"]
-position = Vector2(1536, 1400)
-
 [node name="CampLamp" type="Marker2D" parent="moonlight_forest"]
 position = Vector2(1425, 1450)
 
 [node name="CastleLamp" type="Marker2D" parent="moonlight_forest"]
 position = Vector2(1710, 610)
-
-[node name="Moonwell" type="Marker2D" parent="moonlight_forest"]
-position = Vector2(2520, 920)
 
 [node name="Wicket" type="Marker2D" parent="moonlight_forest"]
 position = Vector2(1080, 650)

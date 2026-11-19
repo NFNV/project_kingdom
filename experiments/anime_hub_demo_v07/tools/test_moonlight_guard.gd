@@ -45,7 +45,7 @@ func run() -> void:
 		game.clock = 3
 		game._update_lighting()
 		check(game.night_fireflies.visible and game.night_fireflies.night_weight>.99,zone+" fireflies appear at midnight")
-		check(game.night_fireflies.batch.multimesh.instance_count==120,zone+" uses one bounded MultiMesh batch")
+		check(game.night_fireflies.batch.multimesh.instance_count==(240 if zone=="moonlight_forest" else 120),zone+" uses bounded MultiMesh particles")
 		if zone=="town":
 			for i in 12: await process_frame
 			await RenderingServer.frame_post_draw

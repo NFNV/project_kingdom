@@ -351,6 +351,10 @@ func _load_zone(destination: String, entry: String) -> void:
 		night_fireflies.area = Rect2(Vector2.ZERO,Vector2(world_size))
 		night_fireflies.boundary = FLOOR
 		night_fireflies.amount = 120
+		if zone==Moonlight.FOREST:
+			night_fireflies.amount = 240
+			night_fireflies.insect_size = Vector2(10,17)
+			night_fireflies.ground_glow = .45
 		night_fireflies.z_index = 3
 		zone_root.add_child(night_fireflies)
 	if zone == "town":
@@ -1553,8 +1557,11 @@ func _update_lighting() -> void:
 		else:
 			backgrounds[0].modulate = actor_tint
 	elif zone in Moonlight.ZONES:
-		actor_tint = Color("d5e6fa") if zone==Moonlight.FOREST else Color("e3dcef")
-		backgrounds[0].modulate = Color.WHITE
+		if zone==Moonlight.FOREST:
+			moonlight_area.update_forest_lighting(clock)
+		else:
+			actor_tint = Color("e3dcef")
+			backgrounds[0].modulate = Color.WHITE
 	elif zone in Lighthouse.ZONES:
 		var night := Mill.night_weight(clock)
 		if zone==Lighthouse.LANTERN:

@@ -198,16 +198,16 @@ func run() -> void:
  await walk(Vector2(2415,740),"optional stepping-stone route")
  move_to(Vector2(1870,1030))
  await photograph("forest_creek")
- move_to(game.moonlight_area.point("Camp"))
+ move_to(Moonlight.arrival(Moonlight.FOREST,"start"))
  game.state.health = 1
  game.interact("moon_camp")
- check(game.state.health==game.state.maximum_health,"Camp restores all three hearts")
- check(game.state.moonlight.checkpoint==Moonlight.FOREST,"Camp becomes the respawn checkpoint")
+ check(game.state.health==1 and not game.interactables.has("moon_camp"),"Removed campfire has no invisible rest interaction")
+ check(game.state.moonlight.checkpoint==Moonlight.FOREST,"The forest threshold remains a valid legacy respawn checkpoint")
+ game.state.health = game.state.maximum_health
  var coins: int = game.coins
  var potions: int = game.state.item_counts().healing_draught
  game.interact("moon_well")
- game.interact("moon_well")
- check(game.coins==coins+15 and game.state.item_counts().healing_draught==potions+2,"Moonwell cache is awarded exactly once")
+ check(game.coins==coins and game.state.item_counts().healing_draught==potions and not game.interactables.has("moon_well"),"Removed forest chest cannot award hidden cache rewards")
  game.interact("moon_wicket_return")
  check(not game.state.moonlight.forest_shortcut,"Camp-side shortcut starts barred")
  game.interact("moon_wicket")
