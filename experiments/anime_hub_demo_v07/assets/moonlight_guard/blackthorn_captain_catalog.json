@@ -1,0 +1,416 @@
+{
+  "role": "blackthorn_captain",
+  "directions": {
+    "se": [
+      {
+        "asset": "blackthorn_se.png",
+        "region": [
+          10,
+          11,
+          425,
+          422
+        ],
+        "pivot_x": 171.0,
+        "foot_y": 431.0
+      },
+      {
+        "asset": "blackthorn_se.png",
+        "region": [
+          453,
+          19,
+          424,
+          408
+        ],
+        "pivot_x": 622.0,
+        "foot_y": 424.0
+      },
+      {
+        "asset": "blackthorn_se.png",
+        "region": [
+          911,
+          25,
+          410,
+          401
+        ],
+        "pivot_x": 1066.0,
+        "foot_y": 424.0
+      },
+      {
+        "asset": "blackthorn_se.png",
+        "region": [
+          1349,
+          30,
+          414,
+          397
+        ],
+        "pivot_x": 1516.0,
+        "foot_y": 425.0
+      },
+      {
+        "asset": "blackthorn_se.png",
+        "region": [
+          11,
+          442,
+          363,
+          437
+        ],
+        "pivot_x": 173.0,
+        "foot_y": 878.0
+      },
+      {
+        "asset": "blackthorn_se.png",
+        "region": [
+          434,
+          518,
+          444,
+          357
+        ],
+        "pivot_x": 607.0,
+        "foot_y": 872.0
+      },
+      {
+        "asset": "blackthorn_se.png",
+        "region": [
+          912,
+          506,
+          409,
+          366
+        ],
+        "pivot_x": 1057.0,
+        "foot_y": 871.0
+      },
+      {
+        "asset": "blackthorn_se.png",
+        "region": [
+          1341,
+          495,
+          423,
+          382
+        ],
+        "pivot_x": 1510.0,
+        "foot_y": 875.0
+      }
+    ],
+    "sw": [
+      {
+        "asset": "blackthorn_sw.png",
+        "region": [
+          29,
+          13,
+          387,
+          408
+        ],
+        "pivot_x": 261.0,
+        "foot_y": 420.0
+      },
+      {
+        "asset": "blackthorn_sw.png",
+        "region": [
+          450,
+          18,
+          410,
+          404
+        ],
+        "pivot_x": 692.0,
+        "foot_y": 419.0
+      },
+      {
+        "asset": "blackthorn_sw.png",
+        "region": [
+          889,
+          30,
+          391,
+          391
+        ],
+        "pivot_x": 1126.0,
+        "foot_y": 420.0
+      },
+      {
+        "asset": "blackthorn_sw.png",
+        "region": [
+          1321,
+          24,
+          417,
+          398
+        ],
+        "pivot_x": 1559.0,
+        "foot_y": 420.0
+      },
+      {
+        "asset": "blackthorn_sw.png",
+        "region": [
+          64,
+          444,
+          363,
+          429
+        ],
+        "pivot_x": 268.0,
+        "foot_y": 871.0
+      },
+      {
+        "asset": "blackthorn_sw.png",
+        "region": [
+          413,
+          505,
+          445,
+          367
+        ],
+        "pivot_x": 671.0,
+        "foot_y": 870.0
+      },
+      {
+        "asset": "blackthorn_sw.png",
+        "region": [
+          874,
+          495,
+          410,
+          378
+        ],
+        "pivot_x": 1126.0,
+        "foot_y": 872.0
+      },
+      {
+        "asset": "blackthorn_sw.png",
+        "region": [
+          1288,
+          489,
+          432,
+          384
+        ],
+        "pivot_x": 1536.0,
+        "foot_y": 872.0
+      }
+    ],
+    "ne": [
+      {
+        "asset": "blackthorn_ne.png",
+        "region": [
+          55,
+          33,
+          385,
+          376
+        ],
+        "pivot_x": 202.0,
+        "foot_y": 408.0
+      },
+      {
+        "asset": "blackthorn_ne.png",
+        "region": [
+          473,
+          34,
+          406,
+          378
+        ],
+        "pivot_x": 631.0,
+        "foot_y": 410.0
+      },
+      {
+        "asset": "blackthorn_ne.png",
+        "region": [
+          907,
+          35,
+          409,
+          375
+        ],
+        "pivot_x": 1069.0,
+        "foot_y": 409.0
+      },
+      {
+        "asset": "blackthorn_ne.png",
+        "region": [
+          1345,
+          41,
+          421,
+          372
+        ],
+        "pivot_x": 1505.0,
+        "foot_y": 411.0
+      },
+      {
+        "asset": "blackthorn_ne.png",
+        "region": [
+          57,
+          447,
+          377,
+          412
+        ],
+        "pivot_x": 249.0,
+        "foot_y": 853.0
+      },
+      {
+        "asset": "blackthorn_ne.png",
+        "region": [
+          468,
+          519,
+          449,
+          335
+        ],
+        "pivot_x": 653.0,
+        "foot_y": 852.0
+      },
+      {
+        "asset": "blackthorn_ne.png",
+        "region": [
+          917,
+          516,
+          430,
+          344
+        ],
+        "pivot_x": 1084.0,
+        "foot_y": 859.0
+      },
+      {
+        "asset": "blackthorn_ne.png",
+        "region": [
+          1350,
+          505,
+          411,
+          354
+        ],
+        "pivot_x": 1524.0,
+        "foot_y": 850.0
+      }
+    ],
+    "nw": [
+      {
+        "asset": "blackthorn_nw.png",
+        "region": [
+          13,
+          42,
+          415,
+          370
+        ],
+        "pivot_x": 278.0,
+        "foot_y": 411.0
+      },
+      {
+        "asset": "blackthorn_nw.png",
+        "region": [
+          458,
+          43,
+          418,
+          373
+        ],
+        "pivot_x": 730.0,
+        "foot_y": 414.0
+      },
+      {
+        "asset": "blackthorn_nw.png",
+        "region": [
+          903,
+          48,
+          421,
+          363
+        ],
+        "pivot_x": 1166.0,
+        "foot_y": 410.0
+      },
+      {
+        "asset": "blackthorn_nw.png",
+        "region": [
+          1339,
+          48,
+          421,
+          367
+        ],
+        "pivot_x": 1602.0,
+        "foot_y": 414.0
+      },
+      {
+        "asset": "blackthorn_nw.png",
+        "region": [
+          58,
+          451,
+          404,
+          408
+        ],
+        "pivot_x": 254.0,
+        "foot_y": 850.0
+      },
+      {
+        "asset": "blackthorn_nw.png",
+        "region": [
+          408,
+          531,
+          472,
+          324
+        ],
+        "pivot_x": 704.0,
+        "foot_y": 853.0
+      },
+      {
+        "asset": "blackthorn_nw.png",
+        "region": [
+          891,
+          515,
+          419,
+          340
+        ],
+        "pivot_x": 1154.0,
+        "foot_y": 854.0
+      },
+      {
+        "asset": "blackthorn_nw.png",
+        "region": [
+          1326,
+          508,
+          432,
+          349
+        ],
+        "pivot_x": 1585.0,
+        "foot_y": 848.0
+      }
+    ]
+  },
+  "poses": [
+    "idle",
+    "walk_left",
+    "walk_pass",
+    "walk_right",
+    "windup",
+    "strike",
+    "recover",
+    "hurt"
+  ],
+  "sources": [
+    {
+      "asset": "blackthorn_se.png",
+      "size": [
+        1774,
+        887
+      ],
+      "sha256": "6d4fb75d505c559aa050b8068cac44ee508ebaffa369e613ebc2f672cd5e3b6c"
+    },
+    {
+      "asset": "blackthorn_sw.png",
+      "size": [
+        1774,
+        887
+      ],
+      "sha256": "47e603eeccba7e199ac8b5c9f8309c6047049c6c352e6248292854f838548b4a"
+    },
+    {
+      "asset": "blackthorn_ne.png",
+      "size": [
+        1774,
+        887
+      ],
+      "sha256": "61e0400287fc7a5f002d193ad1031dd472ba62e6c797a00c4494fc0cbb27dd96"
+    },
+    {
+      "asset": "blackthorn_nw.png",
+      "size": [
+        1774,
+        887
+      ],
+      "sha256": "019250105cfe73eefef5c90668959da328357f2bd8ad9e9176e3db68655bb533"
+    }
+  ],
+  "canvas": [
+    600,
+    453
+  ],
+  "foot_line": 440,
+  "reference_height": 422,
+  "notes": "Native PNGs unchanged. Regions isolate 32 figures; transparent AtlasTexture margins register feet and body mass. Draft directional actions, no combat behavior attached."
+}

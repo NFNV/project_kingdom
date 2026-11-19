@@ -1,0 +1,392 @@
+{
+  "role": "gloam_arbalist",
+  "directions": {
+    "se": [
+      {
+        "asset": "gloam_arbalist.png",
+        "region": [
+          15,
+          15,
+          202,
+          205
+        ],
+        "pivot_x": 110.0,
+        "foot_y": 220.0
+      },
+      {
+        "asset": "gloam_arbalist.png",
+        "region": [
+          241,
+          15,
+          203,
+          205
+        ],
+        "pivot_x": 335.0,
+        "foot_y": 220.0
+      },
+      {
+        "asset": "gloam_arbalist.png",
+        "region": [
+          463,
+          15,
+          195,
+          205
+        ],
+        "pivot_x": 556.0,
+        "foot_y": 220.0
+      },
+      {
+        "asset": "gloam_arbalist.png",
+        "region": [
+          685,
+          15,
+          199,
+          205
+        ],
+        "pivot_x": 779.0,
+        "foot_y": 219.0
+      },
+      {
+        "asset": "gloam_arbalist.png",
+        "region": [
+          906,
+          13,
+          193,
+          206
+        ],
+        "pivot_x": 994.0,
+        "foot_y": 218.0
+      },
+      {
+        "asset": "gloam_arbalist.png",
+        "region": [
+          1115,
+          28,
+          242,
+          192
+        ],
+        "pivot_x": 1227.0,
+        "foot_y": 219.0
+      },
+      {
+        "asset": "gloam_arbalist.png",
+        "region": [
+          1361,
+          16,
+          184,
+          205
+        ],
+        "pivot_x": 1442.0,
+        "foot_y": 220.0
+      },
+      {
+        "asset": "gloam_arbalist.png",
+        "region": [
+          1580,
+          25,
+          186,
+          196
+        ],
+        "pivot_x": 1666.0,
+        "foot_y": 220.0
+      }
+    ],
+    "sw": [
+      {
+        "asset": "gloam_arbalist.png",
+        "region": [
+          8,
+          236,
+          202,
+          204
+        ],
+        "pivot_x": 111.0,
+        "foot_y": 439.0
+      },
+      {
+        "asset": "gloam_arbalist.png",
+        "region": [
+          228,
+          236,
+          204,
+          204
+        ],
+        "pivot_x": 335.0,
+        "foot_y": 439.0
+      },
+      {
+        "asset": "gloam_arbalist.png",
+        "region": [
+          453,
+          236,
+          194,
+          203
+        ],
+        "pivot_x": 557.0,
+        "foot_y": 439.0
+      },
+      {
+        "asset": "gloam_arbalist.png",
+        "region": [
+          671,
+          236,
+          205,
+          203
+        ],
+        "pivot_x": 777.0,
+        "foot_y": 439.0
+      },
+      {
+        "asset": "gloam_arbalist.png",
+        "region": [
+          888,
+          236,
+          210,
+          204
+        ],
+        "pivot_x": 992.0,
+        "foot_y": 439.0
+      },
+      {
+        "asset": "gloam_arbalist.png",
+        "region": [
+          1097,
+          254,
+          230,
+          186
+        ],
+        "pivot_x": 1223.0,
+        "foot_y": 440.0
+      },
+      {
+        "asset": "gloam_arbalist.png",
+        "region": [
+          1353,
+          237,
+          191,
+          203
+        ],
+        "pivot_x": 1449.0,
+        "foot_y": 440.0
+      },
+      {
+        "asset": "gloam_arbalist.png",
+        "region": [
+          1561,
+          243,
+          203,
+          196
+        ],
+        "pivot_x": 1664.0,
+        "foot_y": 439.0
+      }
+    ],
+    "ne": [
+      {
+        "asset": "gloam_arbalist.png",
+        "region": [
+          13,
+          455,
+          205,
+          203
+        ],
+        "pivot_x": 117.0,
+        "foot_y": 658.0
+      },
+      {
+        "asset": "gloam_arbalist.png",
+        "region": [
+          242,
+          455,
+          198,
+          205
+        ],
+        "pivot_x": 339.0,
+        "foot_y": 659.0
+      },
+      {
+        "asset": "gloam_arbalist.png",
+        "region": [
+          460,
+          455,
+          198,
+          205
+        ],
+        "pivot_x": 558.0,
+        "foot_y": 660.0
+      },
+      {
+        "asset": "gloam_arbalist.png",
+        "region": [
+          682,
+          454,
+          201,
+          203
+        ],
+        "pivot_x": 783.0,
+        "foot_y": 656.0
+      },
+      {
+        "asset": "gloam_arbalist.png",
+        "region": [
+          901,
+          454,
+          199,
+          205
+        ],
+        "pivot_x": 994.0,
+        "foot_y": 659.0
+      },
+      {
+        "asset": "gloam_arbalist.png",
+        "region": [
+          1110,
+          467,
+          241,
+          194
+        ],
+        "pivot_x": 1222.0,
+        "foot_y": 661.0
+      },
+      {
+        "asset": "gloam_arbalist.png",
+        "region": [
+          1349,
+          456,
+          196,
+          205
+        ],
+        "pivot_x": 1450.0,
+        "foot_y": 661.0
+      },
+      {
+        "asset": "gloam_arbalist.png",
+        "region": [
+          1563,
+          457,
+          198,
+          204
+        ],
+        "pivot_x": 1666.0,
+        "foot_y": 661.0
+      }
+    ],
+    "nw": [
+      {
+        "asset": "gloam_arbalist.png",
+        "region": [
+          9,
+          674,
+          195,
+          207
+        ],
+        "pivot_x": 106.0,
+        "foot_y": 880.0
+      },
+      {
+        "asset": "gloam_arbalist.png",
+        "region": [
+          227,
+          675,
+          200,
+          205
+        ],
+        "pivot_x": 326.0,
+        "foot_y": 880.0
+      },
+      {
+        "asset": "gloam_arbalist.png",
+        "region": [
+          451,
+          675,
+          198,
+          205
+        ],
+        "pivot_x": 548.0,
+        "foot_y": 880.0
+      },
+      {
+        "asset": "gloam_arbalist.png",
+        "region": [
+          670,
+          675,
+          202,
+          205
+        ],
+        "pivot_x": 770.0,
+        "foot_y": 879.0
+      },
+      {
+        "asset": "gloam_arbalist.png",
+        "region": [
+          881,
+          674,
+          202,
+          207
+        ],
+        "pivot_x": 988.0,
+        "foot_y": 880.0
+      },
+      {
+        "asset": "gloam_arbalist.png",
+        "region": [
+          1093,
+          694,
+          239,
+          187
+        ],
+        "pivot_x": 1223.0,
+        "foot_y": 880.0
+      },
+      {
+        "asset": "gloam_arbalist.png",
+        "region": [
+          1353,
+          679,
+          189,
+          202
+        ],
+        "pivot_x": 1442.0,
+        "foot_y": 880.0
+      },
+      {
+        "asset": "gloam_arbalist.png",
+        "region": [
+          1566,
+          686,
+          200,
+          195
+        ],
+        "pivot_x": 1664.0,
+        "foot_y": 880.0
+      }
+    ]
+  },
+  "poses": [
+    "idle",
+    "walk_left",
+    "walk_pass",
+    "walk_right",
+    "windup",
+    "strike",
+    "recover",
+    "hurt"
+  ],
+  "sources": [
+    {
+      "asset": "gloam_arbalist.png",
+      "size": [
+        1774,
+        887
+      ],
+      "sha256": "316daa4fd81e6907f8e0cdbb2c8d7c86cf45b409890863b991a66f48aac6c67f"
+    }
+  ],
+  "canvas": [
+    268,
+    215
+  ],
+  "foot_line": 210,
+  "reference_height": 205,
+  "notes": "Native PNGs unchanged. Regions isolate 32 figures; transparent AtlasTexture margins register feet and body mass. Draft directional actions, no combat behavior attached."
+}

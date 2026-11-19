@@ -313,7 +313,7 @@ func refresh() -> void:
 		objective.text = "Explore the backyard, meet the cats, or step inside Windsong Mill." if hub.zone=="mill_garden" else "Talk to Rowan by the counter, enjoy the tea corner and warm hearth."
 		status_label.text = "South gate → The Greenshire" if hub.zone=="mill_garden" else "Stairs → Guest rooms · Front door → Garden"
 	elif hub.zone in hub.Moonlight.ZONES:
-		objective.text = {hub.Moonlight.FOREST:"Explore the silver woodland and find the ruined castle.",hub.Moonlight.PASSAGE:"Descend the castle stairs, follow the lower corridor, then climb into the Undercroft.",hub.Moonlight.CISTERN:"Find the eastern winch to open the chapel doors.",hub.Moonlight.CHAPEL:"Defeat the vault keeper and open the treasure chest."}[hub.zone]
+		objective.text = {hub.Moonlight.FOREST:"Explore the silver woodland and find the ruined castle.",hub.Moonlight.PASSAGE:"Descend the castle stairs, follow the lower corridor, then climb into the Undercroft.",hub.Moonlight.CISTERN:"Find the eastern winch to open the chapel doors.",hub.Moonlight.CHAPEL:"Defeat Blackthorn Captain and open the vault chest."}[hub.zone]
 		status_label.text = "%d coins · E interact · M dungeon map" % hub.coins
 	elif hub.zone=="wilds":
 		objective.text = "Drive the dog bandits from the four forest clearings." if hub.combat_active else "Briarwood is quiet. Explore or take the western trail home."

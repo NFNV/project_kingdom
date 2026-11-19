@@ -38,6 +38,7 @@ func photograph(name: String) -> void:
  root.get_texture().get_image().save_png("/tmp/moonlight_"+name+".png")
 
 func walk(at: Vector2, label: String) -> void:
+ for dog in game.dogs: dog.process_mode = Node.PROCESS_MODE_DISABLED
  game.player.route = game.find_path(game.player.position,at)
  check(not game.player.route.is_empty(),"Navigation reaches "+label)
  for i in 1600:
@@ -102,6 +103,25 @@ func run() -> void:
  if not is_instance_valid(overworld):
   quit(1)
   return
+ check(is_instance_valid(overworld.night_fireflies),"The mounted overworld shares the reusable firefly effect")
+ overworld.day_phase = 3
+ overworld.update_lighting()
+ check(overworld.night_fireflies.visible and overworld.night_fireflies.night_weight>.99,"Mounted overworld fireflies appear at midnight")
+ if capture:
+  await ticks(12)
+  await RenderingServer.frame_post_draw
+  root.get_texture().get_image().save_png("/tmp/moonlight_overworld_fireflies.png")
+ overworld.day_phase = 1
+ overworld.update_lighting()
+ check(not overworld.night_fireflies.visible,"Mounted overworld fireflies disappear at noon")
+ overworld.day_phase = 3
+ overworld.update_lighting()
+ overworld.region_map = true
+ overworld._process(0)
+ check(not overworld.night_fireflies.visible,"Regional map hides ambient overworld fireflies")
+ overworld.region_map = false
+ overworld.day_phase = 1
+ overworld.update_lighting()
  var entrance: Dictionary = overworld.props.filter(func(prop): return prop.kind=="moonlight_entrance")[0]
  var approach_grows := true
  var previous_size := 0.0
@@ -202,6 +222,7 @@ func run() -> void:
   await physics_frame
   if game.zone==Moonlight.PASSAGE and not game.transitioning: break
  check(game.zone==Moonlight.PASSAGE,"Castle entrance opens the lower passages before the Undercroft")
+ for dog in game.dogs: dog.process_mode = Node.PROCESS_MODE_DISABLED
  check(game.player.facing==Vector2.UP,"Castle entry keeps the northward facing from the exterior stair")
  check(game.exits.castle.at.y>game.player.position.y,"The return threshold is behind the player at the top of the entrance flight")
  game.ui.status_label.text = ""
@@ -229,6 +250,7 @@ func run() -> void:
   support_save.player.position = [at.x,at.y]
   check(game.saves.write_document(support_save,game.save_path) and game.load_game(),"An old save on a stair support loads")
   check(game.is_walkable(game.player.position,0),"Loading a stair-support save recovers to walkable floor")
+  for dog in game.dogs: dog.process_mode = Node.PROCESS_MODE_DISABLED
  move_to(entry_position)
  # Return links must meet the castle threshold, not the distant forest camp.
  await walk(game.exits.castle.at,"upper castle landing")
@@ -363,9 +385,9 @@ func run() -> void:
  check(game.saves.write_document(document,game.save_path),"Dungeon progress writes to disk")
  check(game.load_game(),"Saved dungeon restores through the normal load entry point")
  check(game.zone==Moonlight.CHAPEL and game.state.moonlight.vault_claimed,"Restored journey retains room and collected treasure")
- check(game.dogs.all(func(dog): return dog.resident_id!="vault_keeper"),"Defeated keeper stays defeated after loading")
+ check(game.dogs.any(func(dog): return dog.resident_id=="vault_keeper" and dog.active and dog.health==dog.maximum_health),"Loading a chapel visit resets the boss for a rematch")
  for dog in game.dogs: dog.process_mode = Node.PROCESS_MODE_DISABLED
- check(game.moonlight_area.chest.opened,"Restored vault chest stays open")
+ check(not is_instance_valid(game.moonlight_area.chest) and not game.interactables.has("moon_chest"),"Loading a fresh boss encounter hides its old chest")
  await walk(game.exits.cistern.at,"chapel return entrance")
  game.travel_cooldown = 0
  game.request_travel("cistern")

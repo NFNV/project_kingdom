@@ -1,0 +1,193 @@
+[gd_resource type="SpriteFrames" load_steps=34 format=3]
+
+[ext_resource type="Texture2D" path="res://experiments/anime_hub_demo_v07/assets/moonlight_guard/ashen_vanguard.png" id="1"]
+
+[sub_resource type="AtlasTexture" id="Frame_0"]
+atlas = ExtResource("1")
+region = Rect2(22, 6, 189, 216)
+margin = Rect2(64.0, 4.0, 135, 13)
+
+[sub_resource type="AtlasTexture" id="Frame_1"]
+atlas = ExtResource("1")
+region = Rect2(251, 8, 185, 214)
+margin = Rect2(64.0, 6.0, 139, 15)
+
+[sub_resource type="AtlasTexture" id="Frame_2"]
+atlas = ExtResource("1")
+region = Rect2(471, 9, 175, 211)
+margin = Rect2(67.0, 8.0, 149, 18)
+
+[sub_resource type="AtlasTexture" id="Frame_3"]
+atlas = ExtResource("1")
+region = Rect2(690, 9, 181, 212)
+margin = Rect2(63.0, 7.0, 143, 17)
+
+[sub_resource type="AtlasTexture" id="Frame_4"]
+atlas = ExtResource("1")
+region = Rect2(901, 7, 189, 214)
+margin = Rect2(59.0, 6.0, 135, 15)
+
+[sub_resource type="AtlasTexture" id="Frame_5"]
+atlas = ExtResource("1")
+region = Rect2(1120, 27, 246, 194)
+margin = Rect2(50.0, 26.0, 78, 35)
+
+[sub_resource type="AtlasTexture" id="Frame_6"]
+atlas = ExtResource("1")
+region = Rect2(1363, 9, 183, 212)
+margin = Rect2(64.0, 7.0, 141, 17)
+
+[sub_resource type="AtlasTexture" id="Frame_7"]
+atlas = ExtResource("1")
+region = Rect2(1577, 26, 187, 196)
+margin = Rect2(64.0, 23.0, 137, 33)
+
+[sub_resource type="AtlasTexture" id="Frame_8"]
+atlas = ExtResource("1")
+region = Rect2(16, 234, 197, 205)
+margin = Rect2(55.0, 14.0, 127, 24)
+
+[sub_resource type="AtlasTexture" id="Frame_9"]
+atlas = ExtResource("1")
+region = Rect2(235, 236, 198, 204)
+margin = Rect2(58.0, 16.0, 126, 25)
+
+[sub_resource type="AtlasTexture" id="Frame_10"]
+atlas = ExtResource("1")
+region = Rect2(448, 237, 196, 202)
+margin = Rect2(60.0, 17.0, 128, 27)
+
+[sub_resource type="AtlasTexture" id="Frame_11"]
+atlas = ExtResource("1")
+region = Rect2(669, 237, 202, 201)
+margin = Rect2(56.0, 18.0, 122, 28)
+
+[sub_resource type="AtlasTexture" id="Frame_12"]
+atlas = ExtResource("1")
+region = Rect2(918, 234, 179, 207)
+margin = Rect2(78.0, 12.0, 145, 22)
+
+[sub_resource type="AtlasTexture" id="Frame_13"]
+atlas = ExtResource("1")
+region = Rect2(1101, 249, 257, 192)
+margin = Rect2(8.0, 27.0, 67, 37)
+
+[sub_resource type="AtlasTexture" id="Frame_14"]
+atlas = ExtResource("1")
+region = Rect2(1364, 237, 192, 203)
+margin = Rect2(58.0, 16.0, 132, 26)
+
+[sub_resource type="AtlasTexture" id="Frame_15"]
+atlas = ExtResource("1")
+region = Rect2(1568, 246, 189, 198)
+margin = Rect2(60.0, 21.0, 135, 31)
+
+[sub_resource type="AtlasTexture" id="Frame_16"]
+atlas = ExtResource("1")
+region = Rect2(27, 454, 197, 204)
+margin = Rect2(76.0, 15.0, 127, 25)
+
+[sub_resource type="AtlasTexture" id="Frame_17"]
+atlas = ExtResource("1")
+region = Rect2(251, 454, 192, 207)
+margin = Rect2(78.0, 13.0, 132, 22)
+
+[sub_resource type="AtlasTexture" id="Frame_18"]
+atlas = ExtResource("1")
+region = Rect2(474, 458, 192, 202)
+margin = Rect2(78.0, 17.0, 132, 27)
+
+[sub_resource type="AtlasTexture" id="Frame_19"]
+atlas = ExtResource("1")
+region = Rect2(696, 458, 190, 203)
+margin = Rect2(77.0, 17.0, 134, 26)
+
+[sub_resource type="AtlasTexture" id="Frame_20"]
+atlas = ExtResource("1")
+region = Rect2(907, 451, 168, 211)
+margin = Rect2(70.0, 9.0, 156, 18)
+
+[sub_resource type="AtlasTexture" id="Frame_21"]
+atlas = ExtResource("1")
+region = Rect2(1130, 462, 260, 200)
+margin = Rect2(60.0, 25.0, 64, 29)
+
+[sub_resource type="AtlasTexture" id="Frame_22"]
+atlas = ExtResource("1")
+region = Rect2(1386, 458, 189, 202)
+margin = Rect2(80.0, 17.0, 135, 27)
+
+[sub_resource type="AtlasTexture" id="Frame_23"]
+atlas = ExtResource("1")
+region = Rect2(1602, 461, 160, 201)
+margin = Rect2(89.0, 18.0, 164, 28)
+
+[sub_resource type="AtlasTexture" id="Frame_24"]
+atlas = ExtResource("1")
+region = Rect2(11, 672, 203, 205)
+margin = Rect2(55.0, 14.0, 121, 24)
+
+[sub_resource type="AtlasTexture" id="Frame_25"]
+atlas = ExtResource("1")
+region = Rect2(229, 673, 205, 204)
+margin = Rect2(52.0, 15.0, 119, 25)
+
+[sub_resource type="AtlasTexture" id="Frame_26"]
+atlas = ExtResource("1")
+region = Rect2(449, 677, 195, 200)
+margin = Rect2(57.0, 19.0, 129, 29)
+
+[sub_resource type="AtlasTexture" id="Frame_27"]
+atlas = ExtResource("1")
+region = Rect2(670, 674, 205, 204)
+margin = Rect2(53.0, 15.41399999999976, 119, 25)
+
+[sub_resource type="AtlasTexture" id="Frame_28"]
+atlas = ExtResource("1")
+region = Rect2(916, 671, 172, 206)
+margin = Rect2(79.0, 12.167999999999665, 152, 23)
+
+[sub_resource type="AtlasTexture" id="Frame_29"]
+atlas = ExtResource("1")
+region = Rect2(1106, 679, 246, 197)
+margin = Rect2(22.0, 23.717999999999847, 78, 32)
+
+[sub_resource type="AtlasTexture" id="Frame_30"]
+atlas = ExtResource("1")
+region = Rect2(1364, 677, 199, 200)
+margin = Rect2(54.0, 18.0, 125, 29)
+
+[sub_resource type="AtlasTexture" id="Frame_31"]
+atlas = ExtResource("1")
+region = Rect2(1597, 679, 158, 199)
+margin = Rect2(81.0, 20.0, 166, 30)
+
+[resource]
+animations = [{"frames": [{"duration": 1.0, "texture": SubResource("Frame_0")}], "loop": true, "name": &"idle_se", "speed": 2},
+{"frames": [{"duration": 1.0, "texture": SubResource("Frame_1")}, {"duration": 1.0, "texture": SubResource("Frame_2")}, {"duration": 1.0, "texture": SubResource("Frame_3")}, {"duration": 1.0, "texture": SubResource("Frame_2")}], "loop": true, "name": &"walk_se", "speed": 7},
+{"frames": [{"duration": 1.0, "texture": SubResource("Frame_4")}], "loop": false, "name": &"windup_se", "speed": 4},
+{"frames": [{"duration": 1.0, "texture": SubResource("Frame_5")}], "loop": false, "name": &"strike_se", "speed": 4},
+{"frames": [{"duration": 1.0, "texture": SubResource("Frame_6")}], "loop": false, "name": &"recover_se", "speed": 4},
+{"frames": [{"duration": 1.0, "texture": SubResource("Frame_7")}], "loop": false, "name": &"hurt_se", "speed": 4},
+{"frames": [{"duration": 1.0, "texture": SubResource("Frame_4")}, {"duration": 1.0, "texture": SubResource("Frame_5")}, {"duration": 1.0, "texture": SubResource("Frame_6")}], "loop": false, "name": &"attack_se", "speed": 5},
+{"frames": [{"duration": 1.0, "texture": SubResource("Frame_8")}], "loop": true, "name": &"idle_sw", "speed": 2},
+{"frames": [{"duration": 1.0, "texture": SubResource("Frame_9")}, {"duration": 1.0, "texture": SubResource("Frame_10")}, {"duration": 1.0, "texture": SubResource("Frame_11")}, {"duration": 1.0, "texture": SubResource("Frame_10")}], "loop": true, "name": &"walk_sw", "speed": 7},
+{"frames": [{"duration": 1.0, "texture": SubResource("Frame_12")}], "loop": false, "name": &"windup_sw", "speed": 4},
+{"frames": [{"duration": 1.0, "texture": SubResource("Frame_13")}], "loop": false, "name": &"strike_sw", "speed": 4},
+{"frames": [{"duration": 1.0, "texture": SubResource("Frame_14")}], "loop": false, "name": &"recover_sw", "speed": 4},
+{"frames": [{"duration": 1.0, "texture": SubResource("Frame_15")}], "loop": false, "name": &"hurt_sw", "speed": 4},
+{"frames": [{"duration": 1.0, "texture": SubResource("Frame_12")}, {"duration": 1.0, "texture": SubResource("Frame_13")}, {"duration": 1.0, "texture": SubResource("Frame_14")}], "loop": false, "name": &"attack_sw", "speed": 5},
+{"frames": [{"duration": 1.0, "texture": SubResource("Frame_16")}], "loop": true, "name": &"idle_ne", "speed": 2},
+{"frames": [{"duration": 1.0, "texture": SubResource("Frame_17")}, {"duration": 1.0, "texture": SubResource("Frame_18")}, {"duration": 1.0, "texture": SubResource("Frame_19")}, {"duration": 1.0, "texture": SubResource("Frame_18")}], "loop": true, "name": &"walk_ne", "speed": 7},
+{"frames": [{"duration": 1.0, "texture": SubResource("Frame_20")}], "loop": false, "name": &"windup_ne", "speed": 4},
+{"frames": [{"duration": 1.0, "texture": SubResource("Frame_21")}], "loop": false, "name": &"strike_ne", "speed": 4},
+{"frames": [{"duration": 1.0, "texture": SubResource("Frame_22")}], "loop": false, "name": &"recover_ne", "speed": 4},
+{"frames": [{"duration": 1.0, "texture": SubResource("Frame_23")}], "loop": false, "name": &"hurt_ne", "speed": 4},
+{"frames": [{"duration": 1.0, "texture": SubResource("Frame_20")}, {"duration": 1.0, "texture": SubResource("Frame_21")}, {"duration": 1.0, "texture": SubResource("Frame_22")}], "loop": false, "name": &"attack_ne", "speed": 5},
+{"frames": [{"duration": 1.0, "texture": SubResource("Frame_24")}], "loop": true, "name": &"idle_nw", "speed": 2},
+{"frames": [{"duration": 1.0, "texture": SubResource("Frame_25")}, {"duration": 1.0, "texture": SubResource("Frame_26")}, {"duration": 1.0, "texture": SubResource("Frame_27")}, {"duration": 1.0, "texture": SubResource("Frame_26")}], "loop": true, "name": &"walk_nw", "speed": 7},
+{"frames": [{"duration": 1.0, "texture": SubResource("Frame_28")}], "loop": false, "name": &"windup_nw", "speed": 4},
+{"frames": [{"duration": 1.0, "texture": SubResource("Frame_29")}], "loop": false, "name": &"strike_nw", "speed": 4},
+{"frames": [{"duration": 1.0, "texture": SubResource("Frame_30")}], "loop": false, "name": &"recover_nw", "speed": 4},
+{"frames": [{"duration": 1.0, "texture": SubResource("Frame_31")}], "loop": false, "name": &"hurt_nw", "speed": 4},
+{"frames": [{"duration": 1.0, "texture": SubResource("Frame_28")}, {"duration": 1.0, "texture": SubResource("Frame_29")}, {"duration": 1.0, "texture": SubResource("Frame_30")}], "loop": false, "name": &"attack_nw", "speed": 5}]

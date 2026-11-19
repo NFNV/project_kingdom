@@ -119,3 +119,18 @@ position = Vector2(940, 490)
 
 [node name="Elm13" type="Marker2D" parent="moonlight_forest/Trees"]
 position = Vector2(2130, 490)
+
+[node name="passage_1" type="Marker2D" parent="moonlight_passage"]
+position = Vector2(1110, 1280)
+
+[node name="passage_2" type="Marker2D" parent="moonlight_passage"]
+position = Vector2(1600, 1130)
+
+[node name="passage_3" type="Marker2D" parent="moonlight_passage"]
+position = Vector2(1980, 1370)
+
+[node name="cistern_3" type="Marker2D" parent="moonlight_cistern"]
+position = Vector2(2420, 860)
+
+[node name="cistern_4" type="Marker2D" parent="moonlight_cistern"]
+position = Vector2(1550, 1380)

@@ -12,7 +12,9 @@ const BRIDGE := Rect2(1770,765,200,210)
 const STONES := Rect2(2340,805,150,125)
 const CHEST := preload("res://experiments/anime_hub_demo_v07/assets/loot/treasure_chest.tscn")
 const LAYOUT := preload("res://experiments/anime_hub_demo_v07/assets/moonlight/layout.tscn")
-const ENEMIES := ["glade_1","glade_2","creek_1","creek_2","cistern_1","cistern_2","chapel_1","chapel_2","vault_keeper"]
+const ENEMIES := ["glade_1","glade_2","creek_1","creek_2","cistern_1","cistern_2","chapel_1","chapel_2","vault_keeper","passage_1","passage_2","passage_3","cistern_3","cistern_4"]
+const RESPAWN_SECONDS := 300.0
+const ROOM_ENEMIES := {PASSAGE:["passage_1","passage_2","passage_3"],CISTERN:["cistern_1","cistern_2","cistern_3","cistern_4"]}
 # Keep the retired chapel_shortcut flag readable for existing journey saves.
 const FLAGS := ["forest_shortcut","chapel_shortcut","winch","moonwell_claimed","vault_claimed"]
 var hub: Node2D
@@ -25,10 +27,18 @@ var recovering := false
 var cistern_detail: Node2D
 
 static func fresh_progress() -> Dictionary:
- return {"defeated":[],"forest_shortcut":false,"chapel_shortcut":false,"winch":false,"moonwell_claimed":false,"vault_claimed":false,"checkpoint":FOREST}
+ return {"defeated":[],"forest_shortcut":false,"chapel_shortcut":false,"winch":false,"moonwell_claimed":false,"vault_claimed":false,"checkpoint":FOREST,"respawn_at":{}}
 
 static func progress_valid(data: Variant) -> bool:
- if not data is Dictionary or data.size()!=7: return false
+ # Older journeys have seven fields and permanently cleared room enemies.
+ if not data is Dictionary or data.size() not in [7,8]: return false
+ if data.size()==8 and not data.has("respawn_at"): return false
+ if data.has("respawn_at"):
+  if not data.respawn_at is Dictionary: return false
+  for room in data.respawn_at:
+   var deadline: Variant = data.respawn_at[room]
+   if room not in ROOM_ENEMIES or typeof(deadline) not in [TYPE_INT,TYPE_FLOAT]: return false
+   if not is_finite(float(deadline)) or float(deadline)<0: return false
  for flag in FLAGS:
   if not data.get(flag) is bool: return false
  if data.get("checkpoint") not in [FOREST,CISTERN]: return false
@@ -38,6 +48,22 @@ static func progress_valid(data: Variant) -> bool:
   if id not in ENEMIES or seen.has(id): return false
   seen[id] = true
  return not data.vault_claimed or "vault_keeper" in data.defeated
+
+static func refresh_encounter(progress: Dictionary, room: String, now := -1.0) -> bool:
+ if room not in ROOM_ENEMIES: return false
+ if now<0: now = Time.get_unix_time_from_system()
+ var timers: Dictionary = progress.get("respawn_at",{})
+ if float(timers.get(room,0))>now: return false
+ # Only rebuild on entry: no enemies materialize around an occupied room.
+ # Missing timers migrate old permanent clears into a populated encounter.
+ var changed := timers.has(room)
+ for id in ROOM_ENEMIES[room]:
+  if id in progress.defeated:
+   progress.defeated.erase(id)
+   changed = true
+ timers.erase(room)
+ progress.respawn_at = timers
+ return changed
 
 static func files_for(zone: String) -> Array:
  return [ROOT+{FOREST:"forest_crossing.png",PASSAGE:"castle_passage_v02.png",CISTERN:"undercroft.png",CHAPEL:"chapel.png"}[zone]]
@@ -82,6 +108,7 @@ static func passage_stonework() -> Dictionary:
  }
 
 static func build(game: Node2D) -> Node2D:
+ if refresh_encounter(game.state.moonlight,game.zone): game.queue_autosave()
  var area: Node2D = load("res://experiments/anime_hub_demo_v07/tools/moonlight_forest.gd").new()
  area.hub = game
  game.zone_root.add_child(area)
@@ -109,21 +136,23 @@ func enemy(id: String, at: Vector2, heavy := false) -> void:
  dog.home = at
  dog.patrol = PackedVector2Array([at,at+Vector2(65,30),at+Vector2(-55,35)])
  dog.maximum_health = 7 if heavy else 4
- if id=="vault_keeper":
-  dog.maximum_health = 22
-  dog.sprite.display_height *= 1.32
-  dog.sprite.modulate = Color("c4c1ed")
-  var title := Label.new()
-  title.text = "MOONBOUND KEEPER"
-  title.position = Vector2(-90,-dog.sprite.display_height-30)
-  title.add_theme_font_size_override("font_size",13)
-  title.add_theme_color_override("font_color",Color("e5d9fb"))
-  title.add_theme_color_override("font_outline_color",Color("292b48"))
-  title.add_theme_constant_override("outline_size",4)
-  dog.add_child(title)
  dog.health = dog.maximum_health
  dog.patrol_wait = .5
  hub.dogs.append(dog)
+
+func guard(id: String, role: String) -> void:
+ # Boss defeat records journey history, not the state of a fresh room visit.
+ if id!="vault_keeper" and id in hub.state.moonlight.defeated: return
+ var soldier = load("res://experiments/anime_hub_demo_v07/assets/moonlight_guard/"+role+"_enemy.tscn").instantiate()
+ soldier.hub = hub
+ soldier.enemy = true
+ soldier.resident_id = id
+ soldier.position = point("Keeper" if id=="vault_keeper" else id)
+ soldier.home = soldier.position
+ var stride := Vector2(0,45) if id in ["cistern_1","cistern_3"] else Vector2(55,0)
+ soldier.patrol = PackedVector2Array([soldier.home,soldier.home+stride,soldier.home-stride])
+ hub.world.add_child(soldier)
+ hub.dogs.append(soldier)
 
 func region_prop(path: String, at: Vector2, height: float) -> void:
  var texture: Texture2D = load(path)
@@ -181,6 +210,8 @@ func build_passage() -> void:
  for id in passage_stonework():
   var body: StaticBody2D = hub._solid(passage_stonework()[id])
   body.name = id
+ for id in ["passage_1","passage_2","passage_3"]:
+  guard(id,{"passage_1":"ashen_vanguard","passage_2":"briar_spearman","passage_3":"gloam_arbalist"}[id])
 
 func build_cistern() -> void:
  cistern_detail = preload("res://experiments/anime_hub_demo_v07/assets/moonlight/forest_detail.gd").new()
@@ -205,7 +236,8 @@ func build_cistern() -> void:
  interactable("moon_winch","Cistern winch",point("Winch"),"Turn the winch to open the chapel doors.")
  if not hub.state.moonlight.winch:
   gates["grate"] = hub._solid(PackedVector2Array([Vector2(1410,530),Vector2(1665,530),Vector2(1665,563),Vector2(1410,563)]))
- for id in ["cistern_1","cistern_2"]: enemy(id,point(id),id=="cistern_2")
+ for id in ["cistern_1","cistern_2","cistern_3","cistern_4"]:
+  guard(id,{"cistern_1":"briar_spearman","cistern_2":"ashen_vanguard","cistern_3":"gloam_arbalist","cistern_4":"ashen_vanguard"}[id])
 
 func build_chapel() -> void:
  var detail := preload("res://experiments/anime_hub_demo_v07/assets/moonlight/forest_detail.gd").new()
@@ -213,9 +245,8 @@ func build_chapel() -> void:
  detail.panel_root = ROOT+"chapel_panels/"
  detail.z_index = -9
  hub.zone_root.add_child(detail)
- for id in ["chapel_1","chapel_2"]: enemy(id,point(id))
- enemy("vault_keeper",point("Keeper"),true)
- if "vault_keeper" in hub.state.moonlight.defeated: show_chest()
+ for id in ["chapel_1","chapel_2"]: guard(id,"ashen_vanguard" if id=="chapel_1" else "briar_spearman")
+ guard("vault_keeper","blackthorn_captain")
 
 func show_chest() -> void:
  if is_instance_valid(chest): return
@@ -300,13 +331,16 @@ func yielded(actor: Node2D) -> void:
   return
  if actor.resident_id not in hub.state.moonlight.defeated:
   hub.state.moonlight.defeated.append(actor.resident_id)
+ if hub.zone in ROOM_ENEMIES and actor.resident_id in ROOM_ENEMIES[hub.zone]:
+  if not hub.state.moonlight.has("respawn_at"): hub.state.moonlight.respawn_at = {}
+  hub.state.moonlight.respawn_at[hub.zone] = Time.get_unix_time_from_system()+RESPAWN_SECONDS
  var fade := actor.create_tween()
  fade.tween_property(actor.sprite,"modulate:a",0.0,.35)
  fade.tween_callback(actor.hide)
  hub.combat_active = hub.dogs.any(func(dog): return dog.active)
  if actor.resident_id=="vault_keeper":
   show_chest()
-  hub._say("The vault falls silent","The keeper has yielded. Open the chest beneath the roots.")
+  hub._say("The vault falls silent","Blackthorn Captain has yielded. Open the chest beneath the roots.")
  hub.queue_autosave()
 
 func recover() -> void:
@@ -323,12 +357,6 @@ func _process(delta: float) -> void:
 func _draw() -> void:
  if not is_instance_valid(hub): return
  if hub.zone==FOREST:
-  for i in 36:
-   var at := Vector2(410+fposmod(i*173.0+sin(effects*.25+i)*45,2200),520+fposmod(i*89.0,900))
-   at.y += sin(effects*.7+i)*12
-   var alpha := .3+.25*sin(effects*1.8+i)
-   draw_circle(at,9,Color(.60,.85,1,.025))
-   draw_circle(at,1.8,Color(.7,.95,1,alpha))
   for id in ["Camp","Wicket","WicketReturn","Moonwell"]:
    var at := point(id)
    draw_arc(at+Vector2(0,-5),30,0,TAU,36,Color(.6,.82,1,.25),1.5,true)

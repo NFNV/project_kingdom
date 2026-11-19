@@ -22,6 +22,8 @@ const Mill := preload("res://experiments/anime_hub_demo_v07/tools/windsong_mill.
 const Lighthouse := Map.Lighthouse
 const Moonlight := Map.Moonlight
 var moonlight_area: Node2D
+const NightFireflies := preload("res://experiments/anime_hub_demo_v07/assets/moonlight_guard/fireflies.tscn")
+var night_fireflies: Node2D
 const RenderSettings := preload("res://experiments/anime_hub_demo_v07/tools/render_settings.gd")
 var overworld_travel: Node
 var state: Node
@@ -271,6 +273,7 @@ func _load_zone(destination: String, entry: String) -> void:
 	bakery_room = null
 	lighthouse_glow = null
 	moonlight_area = null
+	night_fireflies = null
 	nearest = ""
 	near_exit = ""
 	conversation_actor = ""
@@ -343,6 +346,13 @@ func _load_zone(destination: String, entry: String) -> void:
 		_build_forest()
 	exits = Map.exits_for(zone)
 	_build_navigation()
+	if zone in ["town","district","trail","river","wilds","mill_garden",Lighthouse.COAST,Moonlight.FOREST]:
+		night_fireflies = NightFireflies.instantiate()
+		night_fireflies.area = Rect2(Vector2.ZERO,Vector2(world_size))
+		night_fireflies.boundary = FLOOR
+		night_fireflies.amount = 120
+		night_fireflies.z_index = 3
+		zone_root.add_child(night_fireflies)
 	if zone == "town":
 		_update_warden_routines(true)
 		_update_square_crowd()
@@ -1523,6 +1533,8 @@ func _blend_phase_backgrounds(base: int, next: int, weight: float) -> void:
 
 
 func _update_lighting() -> void:
+	if is_instance_valid(night_fireflies):
+		night_fireflies.night_weight = Mill.night_weight(clock)
 	var base := int(floorf(clock))%4
 	var next := (base+1)%4
 	var weight := smoothstep(0.35,1.0,fposmod(clock,1.0))

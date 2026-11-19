@@ -15,7 +15,7 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if hub.transitioning or hub.zone not in ["wilds", "ivykeep"]:
+	if hub.transitioning or hub.zone not in ["wilds", "ivykeep"]+hub.Moonlight.ZONES:
 		queue_free()
 		return
 	if hub.paused:

@@ -24,6 +24,8 @@ const FieldMap := preload("res://experiments/anime_hub_demo_v07/tools/field_map.
 const Dressing := preload("res://experiments/overworld_2d_v01/region_dressing.gd")
 const GreenshireScene := preload("res://experiments/overworld_2d_v01/greenshire_layout.tscn")
 const ClockDial := preload("res://experiments/anime_hub_demo_v07/tools/celestial_clock.gd")
+const NightFireflies := preload("res://experiments/anime_hub_demo_v07/assets/moonlight_guard/fireflies.tscn")
+var night_fireflies: Node2D
 const CYCLE_SECONDS := Atmosphere.CYCLE_SECONDS
 var day_phase := 1.0
 var auto_clock := true
@@ -155,6 +157,11 @@ func _ready() -> void:
 	scenery = Node2D.new()
 	scenery.draw.connect(draw_scene)
 	add_child(scenery)
+	night_fireflies = NightFireflies.instantiate()
+	night_fireflies.area = Rect2(45,560,1830,430)
+	night_fireflies.amount = 65
+	night_fireflies.insect_size = Vector2(6,11)
+	add_child(night_fireflies)
 	hud = Node2D.new()
 	hud.draw.connect(draw_hud)
 	add_child(hud)
@@ -189,6 +196,7 @@ func update_lighting() -> void:
 	lighting = Atmosphere.sample(day_phase)
 	light_tint = lighting.tint
 	night_weight = lighting.night
+	if is_instance_valid(night_fireflies): night_fireflies.night_weight = night_weight
 	lamp_weight = lighting.lamps
 	mounted_rider.light_tint = light_tint.lerp(Color("d0caab"),night_weight*.16)
 	clock_dial.set_phase(day_phase)
@@ -445,7 +453,10 @@ func request_town_entry() -> void:
 	return_requested.emit()
 
 func _process(_delta: float) -> void:
-	if is_instance_valid(arena): return
+	if is_instance_valid(arena):
+		if is_instance_valid(night_fireflies): night_fireflies.hide()
+		return
+	if is_instance_valid(night_fireflies): night_fireflies.visible = not region_map and night_weight>.005
 	terrain.visible = not region_map
 	scenery.visible = not region_map
 	for sky in sky_tiles: sky.visible = not region_map
