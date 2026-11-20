@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://experiments/anime_hub_demo_v07/assets/moonlight_guard/enemy_art.gd" id="1"]
+
+[node name="briar_spearman" type="Node2D"]
+script = ExtResource("1")
+archetype = "briar_spearman"
+display_height = 94.0

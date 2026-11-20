@@ -4,8 +4,9 @@ extends Marker2D
 const Dressing := preload("res://experiments/overworld_2d_v01/region_dressing.gd")
 const CONTACTS := "res://experiments/overworld_2d_v01/art/ground_contacts.json"
 static var previews: Dictionary
+static var contacts: Dictionary
 
-@export_enum("palestone_cottage","coastal_lantern","coastal_pine","lakeside_alder","balcony_cottage","bakery","produce_stall","bench","flowers") var kind := "palestone_cottage":
+@export_enum("palestone_cottage","ivy_cottage","balcony_cottage","bakery","grocer_shop","bookshop","country_hall","lamp","coastal_lantern","oak","willow","pine","coastal_pine","lakeside_alder","bush","rock","produce_stall","bakery_stall","bench","flowers","watermill","windmill","lighthouse","ruins","city_illustration","moonlight_entrance") var kind := "palestone_cottage":
 	set(value):
 		kind = value
 		queue_redraw()
@@ -24,11 +25,15 @@ func _draw() -> void:
 	if not previews.has(kind):
 		var file: String = Dressing.CATALOG[kind]
 		var texture: Texture2D = load(file)
-		var contacts: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(CONTACTS)).assets
-		var data: Dictionary = contacts[file]
-		var bounds: Array = data.solid_bounds
-		var source := Rect2(bounds[0],bounds[1],bounds[2]-bounds[0],bounds[3]-bounds[1])
-		var foot := Vector2(data.contact_pixel[0],data.contact_pixel[1])
+		if contacts.is_empty():
+			contacts = JSON.parse_string(FileAccess.get_file_as_string(CONTACTS)).assets
+		var source := Rect2(Vector2.ZERO,texture.get_size())
+		var foot := source.size*Vector2(.5,.95)
+		if contacts.has(file):
+			var data: Dictionary = contacts[file]
+			var bounds: Array = data.solid_bounds
+			source = Rect2(bounds[0],bounds[1],bounds[2]-bounds[0],bounds[3]-bounds[1])
+			foot = Vector2(data.contact_pixel[0],data.contact_pixel[1])
 		previews[kind] = [texture,source,foot]
 	var art: Array = previews[kind]
 	var source: Rect2 = art[1]

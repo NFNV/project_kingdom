@@ -154,6 +154,12 @@ func enter_zone(zone: String) -> void:
 		props[0].max_distance = 530
 		props[0].volume_db = -9
 		props[0].play()
+	elif zone=="moonlight_cistern":
+		props[0].stream = streams.river
+		props[0].position = Vector2(1536,950)
+		props[0].max_distance = 1800
+		props[0].volume_db = -17
+		props[0].play()
 	elif zone=="river":
 		props[0].stream = streams.river
 		props[0].position = hub.Map.point(940,440)
@@ -165,7 +171,7 @@ func enter_zone(zone: String) -> void:
 func _select_music() -> void:
 	var night: bool = hub.clock>=2.65 or hub.clock<.35
 	var desired := "music_night" if night else ("music_town" if active_zone in ["town","district","bakery","forge","mill_room","mill_loft"] else "music_woodland")
-	if active_zone=="wilds" and hub.combat_active and battle_hold>0:
+	if (active_zone=="wilds" or active_zone in hub.Moonlight.ZONES) and hub.combat_active and battle_hold>0:
 		desired = "music_battle"
 	request_music(desired)
 
@@ -195,7 +201,7 @@ func _process(delta: float) -> void:
 	decision_left -= delta
 	if decision_left<=0 and is_instance_valid(hub.player):
 		decision_left = .25
-		if active_zone=="wilds" and hub.combat_active:
+		if (active_zone=="wilds" or active_zone in hub.Moonlight.ZONES) and hub.combat_active:
 			for dog in hub.dogs:
 				if dog.active and dog.alerted and dog.position.distance_to(hub.player.position)<600:
 					battle_hold = 7.0
@@ -210,7 +216,7 @@ func _process(delta: float) -> void:
 			music_positions[music_ids[i]] = music[i].get_playback_position()
 			music[i].stop()
 	var night := smoothstep(2.35,3.0,hub.clock) if hub.clock>=1 else 1.0-smoothstep(0,.6,hub.clock)
-	var indoors := active_zone in ["bakery","forge","mill_room","mill_loft"]
+	var indoors := active_zone in ["bakery","forge","mill_room","mill_loft","moonlight_passage","moonlight_cistern","moonlight_chapel"]
 	beds[0].volume_db = move_toward(beds[0].volume_db,-48.0 if indoors else lerpf(-13,-34,night),delta*18)
 	beds[1].volume_db = move_toward(beds[1].volume_db,-55.0 if indoors else lerpf(-45,-12,night),delta*18)
 
@@ -244,7 +250,7 @@ func _exit_tree() -> void:
 func surface_at(point: Vector2) -> String:
 	if active_zone in ["bakery","mill_room","mill_loft"]:
 		return "wood"
-	if active_zone=="forge":
+	if active_zone in ["forge","moonlight_passage","moonlight_cistern","moonlight_chapel"]:
 		return "stone"
 	if active_zone=="district":
 		var delta: Vector2 = point-hub.Map.District.ORIGIN

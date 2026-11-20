@@ -58,6 +58,8 @@ static func build(hub: Node2D) -> void:
 			dog.health = dog.maximum_health
 			if id==hub.GameState.CAPTAIN_ID and not returning:
 				dog.captain = true
+				dog.level = 8
+				dog.enemy_name = "Captain Rook"
 				dog.maximum_health = 12
 				dog.health = 12
 				dog.sprite.display_height *= 1.09

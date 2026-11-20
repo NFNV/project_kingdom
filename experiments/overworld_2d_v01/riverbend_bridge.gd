@@ -15,32 +15,31 @@ const CAP_Y := 269.0
 const END_CAP_Y := 236.0
 const ART_HEIGHT_SCALE := .009
 
-static func pieces() -> Array[Dictionary]:
+static func pieces(center: Vector2) -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
 	for i in SECTION_COUNT:
 		var start := float(i)/SECTION_COUNT
 		var finish := float(i+1)/SECTION_COUNT
-		var center := Map.bridge_center()
-		center.y += z_offset((start+finish)*.5)
-		result.append({"p":center,"kind":"bridge_section","height":6.0,"start":start,"finish":finish})
+		var midpoint := center+Vector2(0,z_offset((start+finish)*.5))
+		result.append({"p":midpoint,"kind":"bridge_section","height":6.0,"start":start,"finish":finish})
 	return result
 
 static func z_offset(t: float) -> float:
 	return lerpf(-Map.BRIDGE_HALF_LENGTH,Map.BRIDGE_HALF_LENGTH,t)
 
-static func deck_height(p: Vector2) -> float:
-	if not Map.on_bridge(p): return 0.0
-	var from_center := absf(p.y-Map.bridge_center().y)/Map.BRIDGE_HALF_LENGTH
+static func deck_height(p: Vector2, center: Vector2) -> float:
+	if absf(p.x-center.x)>=Map.BRIDGE_HALF: return 0.0
+	var from_center := minf(absf(p.y-center.y)/Map.BRIDGE_HALF_LENGTH,1.0)
 	return RISE*(1.0-from_center*from_center)
 
 static func draw_piece(world: Node2D, canvas: CanvasItem, piece: Dictionary, shade: Color, layer: Layer) -> void:
 	var start: float = piece.start
 	var finish: float = piece.finish
-	var center := Map.bridge_center()
+	var center: Vector2 = world.bridge_center
 	var a := center+Vector2(0,z_offset(start))
 	var b := center+Vector2(0,z_offset(finish))
-	var ha := deck_height(a)
-	var hb := deck_height(b)
+	var ha := deck_height(a,center)
+	var hb := deck_height(b,center)
 	var deck_edge := Vector2(Map.BRIDGE_HALF,0)
 	if layer==Layer.DECK_AND_ARCH:
 		for side in [-1.0,1.0]:

@@ -1,7 +1,7 @@
 @tool
 extends Path2D
 
-@export_enum("Packed earth","Shell gravel") var surface := 0:
+@export_enum("Packed earth:0","Shell gravel:1","Dirt:3") var surface := 0:
 	set(value):
 		surface = value
 		queue_redraw()
@@ -16,5 +16,5 @@ func _ready() -> void:
 
 func _draw() -> void:
 	if Engine.is_editor_hint() and curve!=null and curve.point_count>1:
-		var color := Color("d4ac73") if surface==0 else Color("f0d7a9")
+		var color := Color("f0d7a9") if surface==1 else Color("d4ac73")
 		draw_polyline(curve.get_baked_points(),color,width,true)

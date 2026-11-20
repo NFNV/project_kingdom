@@ -1,0 +1,392 @@
+{
+  "role": "ashen_vanguard",
+  "directions": {
+    "se": [
+      {
+        "asset": "ashen_vanguard.png",
+        "region": [
+          22,
+          6,
+          189,
+          216
+        ],
+        "pivot_x": 120.0,
+        "foot_y": 220.0
+      },
+      {
+        "asset": "ashen_vanguard.png",
+        "region": [
+          251,
+          8,
+          185,
+          214
+        ],
+        "pivot_x": 349.0,
+        "foot_y": 220.0
+      },
+      {
+        "asset": "ashen_vanguard.png",
+        "region": [
+          471,
+          9,
+          175,
+          211
+        ],
+        "pivot_x": 566.0,
+        "foot_y": 219.0
+      },
+      {
+        "asset": "ashen_vanguard.png",
+        "region": [
+          690,
+          9,
+          181,
+          212
+        ],
+        "pivot_x": 789.0,
+        "foot_y": 220.0
+      },
+      {
+        "asset": "ashen_vanguard.png",
+        "region": [
+          901,
+          7,
+          189,
+          214
+        ],
+        "pivot_x": 1004.0,
+        "foot_y": 219.0
+      },
+      {
+        "asset": "ashen_vanguard.png",
+        "region": [
+          1120,
+          27,
+          246,
+          194
+        ],
+        "pivot_x": 1232.0,
+        "foot_y": 219.0
+      },
+      {
+        "asset": "ashen_vanguard.png",
+        "region": [
+          1363,
+          9,
+          183,
+          212
+        ],
+        "pivot_x": 1461.0,
+        "foot_y": 220.0
+      },
+      {
+        "asset": "ashen_vanguard.png",
+        "region": [
+          1577,
+          26,
+          187,
+          196
+        ],
+        "pivot_x": 1675.0,
+        "foot_y": 221.0
+      }
+    ],
+    "sw": [
+      {
+        "asset": "ashen_vanguard.png",
+        "region": [
+          16,
+          234,
+          197,
+          205
+        ],
+        "pivot_x": 123.0,
+        "foot_y": 438.0
+      },
+      {
+        "asset": "ashen_vanguard.png",
+        "region": [
+          235,
+          236,
+          198,
+          204
+        ],
+        "pivot_x": 339.0,
+        "foot_y": 438.0
+      },
+      {
+        "asset": "ashen_vanguard.png",
+        "region": [
+          448,
+          237,
+          196,
+          202
+        ],
+        "pivot_x": 550.0,
+        "foot_y": 438.0
+      },
+      {
+        "asset": "ashen_vanguard.png",
+        "region": [
+          669,
+          237,
+          202,
+          201
+        ],
+        "pivot_x": 775.0,
+        "foot_y": 437.0
+      },
+      {
+        "asset": "ashen_vanguard.png",
+        "region": [
+          918,
+          234,
+          179,
+          207
+        ],
+        "pivot_x": 1002.0,
+        "foot_y": 440.0
+      },
+      {
+        "asset": "ashen_vanguard.png",
+        "region": [
+          1101,
+          249,
+          257,
+          192
+        ],
+        "pivot_x": 1255.0,
+        "foot_y": 440.0
+      },
+      {
+        "asset": "ashen_vanguard.png",
+        "region": [
+          1364,
+          237,
+          192,
+          203
+        ],
+        "pivot_x": 1468.0,
+        "foot_y": 439.0
+      },
+      {
+        "asset": "ashen_vanguard.png",
+        "region": [
+          1568,
+          246,
+          189,
+          198
+        ],
+        "pivot_x": 1670.0,
+        "foot_y": 443.0
+      }
+    ],
+    "ne": [
+      {
+        "asset": "ashen_vanguard.png",
+        "region": [
+          27,
+          454,
+          197,
+          204
+        ],
+        "pivot_x": 113.0,
+        "foot_y": 657.0
+      },
+      {
+        "asset": "ashen_vanguard.png",
+        "region": [
+          251,
+          454,
+          192,
+          207
+        ],
+        "pivot_x": 335.0,
+        "foot_y": 659.0
+      },
+      {
+        "asset": "ashen_vanguard.png",
+        "region": [
+          474,
+          458,
+          192,
+          202
+        ],
+        "pivot_x": 558.0,
+        "foot_y": 659.0
+      },
+      {
+        "asset": "ashen_vanguard.png",
+        "region": [
+          696,
+          458,
+          190,
+          203
+        ],
+        "pivot_x": 781.0,
+        "foot_y": 659.0
+      },
+      {
+        "asset": "ashen_vanguard.png",
+        "region": [
+          907,
+          451,
+          168,
+          211
+        ],
+        "pivot_x": 999.0,
+        "foot_y": 660.0
+      },
+      {
+        "asset": "ashen_vanguard.png",
+        "region": [
+          1130,
+          462,
+          260,
+          200
+        ],
+        "pivot_x": 1232.0,
+        "foot_y": 655.0
+      },
+      {
+        "asset": "ashen_vanguard.png",
+        "region": [
+          1386,
+          458,
+          189,
+          202
+        ],
+        "pivot_x": 1468.0,
+        "foot_y": 659.0
+      },
+      {
+        "asset": "ashen_vanguard.png",
+        "region": [
+          1602,
+          461,
+          160,
+          201
+        ],
+        "pivot_x": 1675.0,
+        "foot_y": 661.0
+      }
+    ],
+    "nw": [
+      {
+        "asset": "ashen_vanguard.png",
+        "region": [
+          11,
+          672,
+          203,
+          205
+        ],
+        "pivot_x": 118.0,
+        "foot_y": 876.0
+      },
+      {
+        "asset": "ashen_vanguard.png",
+        "region": [
+          229,
+          673,
+          205,
+          204
+        ],
+        "pivot_x": 339.0,
+        "foot_y": 876.0
+      },
+      {
+        "asset": "ashen_vanguard.png",
+        "region": [
+          449,
+          677,
+          195,
+          200
+        ],
+        "pivot_x": 554.0,
+        "foot_y": 876.0
+      },
+      {
+        "asset": "ashen_vanguard.png",
+        "region": [
+          670,
+          674,
+          205,
+          204
+        ],
+        "pivot_x": 779.0,
+        "foot_y": 876.5860000000002
+      },
+      {
+        "asset": "ashen_vanguard.png",
+        "region": [
+          916,
+          671,
+          172,
+          206
+        ],
+        "pivot_x": 999.0,
+        "foot_y": 876.8320000000003
+      },
+      {
+        "asset": "ashen_vanguard.png",
+        "region": [
+          1106,
+          679,
+          246,
+          197
+        ],
+        "pivot_x": 1246.0,
+        "foot_y": 873.2820000000002
+      },
+      {
+        "asset": "ashen_vanguard.png",
+        "region": [
+          1364,
+          677,
+          199,
+          200
+        ],
+        "pivot_x": 1472.0,
+        "foot_y": 877.0
+      },
+      {
+        "asset": "ashen_vanguard.png",
+        "region": [
+          1597,
+          679,
+          158,
+          199
+        ],
+        "pivot_x": 1678.0,
+        "foot_y": 877.0
+      }
+    ]
+  },
+  "poses": [
+    "idle",
+    "walk_left",
+    "walk_pass",
+    "walk_right",
+    "windup",
+    "strike",
+    "recover",
+    "hurt"
+  ],
+  "sources": [
+    {
+      "asset": "ashen_vanguard.png",
+      "size": [
+        1774,
+        887
+      ],
+      "sha256": "18386651c584f29a9b969923786e3b869eb8ccf94dbcdbb19043f63a0f0e8701"
+    }
+  ],
+  "canvas": [
+    324,
+    229
+  ],
+  "foot_line": 218,
+  "reference_height": 216,
+  "notes": "Native PNGs unchanged. Regions isolate 32 figures; transparent AtlasTexture margins register feet and body mass. Draft directional actions, no combat behavior attached."
+}

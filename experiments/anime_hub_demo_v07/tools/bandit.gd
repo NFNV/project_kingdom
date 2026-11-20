@@ -22,6 +22,7 @@ var poise_reset := 0.0
 var combo_step := 0
 
 func _ready() -> void:
+	if level==1: level = 8 if captain else (6 if variant=="mauler" else 4)
 	super._ready()
 	remove_child(sprite)
 	sprite.queue_free()
@@ -300,13 +301,10 @@ func _draw() -> void:
 		draw_arc(Vector2.ZERO,22,-PI/2,-PI/2+TAU*strength,32,Color(tint,.95),3,true)
 	draw_set_transform(Vector2.ZERO)
 	if defence_flash>0:
-		draw_string_outline(ThemeDB.fallback_font,Vector2(-45,-sprite.display_height-27),"ARMORED",HORIZONTAL_ALIGNMENT_CENTER,90,11,3,Color("293b33"))
-		draw_string(ThemeDB.fallback_font,Vector2(-45,-sprite.display_height-27),"ARMORED",HORIZONTAL_ALIGNMENT_CENTER,90,11,Color("f2c67b"))
-	if captain:
-		draw_string_outline(ThemeDB.fallback_font,Vector2(-61,-sprite.display_height-35),"ROOK · CAPTAIN",HORIZONTAL_ALIGNMENT_LEFT,-1,14,3,Color("293b33"))
-		draw_string(ThemeDB.fallback_font,Vector2(-61,-sprite.display_height-35),"ROOK · CAPTAIN",HORIZONTAL_ALIGNMENT_LEFT,-1,14,Color("ffe3a5"))
-	for i in maximum_health:
-		draw_circle(Vector2((i-(maximum_health-1)*.5)*10,-sprite.display_height-12),3.0,Color("f3bd8a") if i<health else Color("4c4541"))
-	if windup>0:
-		draw_string_outline(ThemeDB.fallback_font,Vector2(-26,-sprite.display_height-25),attack_kind.to_upper(),HORIZONTAL_ALIGNMENT_LEFT,-1,11,3,Color("353d3a"))
-		draw_string(ThemeDB.fallback_font,Vector2(-26,-sprite.display_height-25),attack_kind.to_upper(),HORIZONTAL_ALIGNMENT_LEFT,-1,11,Color("fce5ae"))
+		draw_string_outline(ThemeDB.fallback_font,Vector2(-45,-sprite.display_height-49),"ARMORED",HORIZONTAL_ALIGNMENT_CENTER,90,11,3,Color("293b33"))
+		draw_string(ThemeDB.fallback_font,Vector2(-45,-sprite.display_height-49),"ARMORED",HORIZONTAL_ALIGNMENT_CENTER,90,11,Color("f2c67b"))
+	if not captain:
+		EnemyHealth.mob(self,Vector2(0,-sprite.display_height-12),level,health,maximum_health)
+	if windup>0 and defence_flash<=0:
+		draw_string_outline(ThemeDB.fallback_font,Vector2(-26,-sprite.display_height-39),attack_kind.to_upper(),HORIZONTAL_ALIGNMENT_LEFT,-1,11,3,Color("353d3a"))
+		draw_string(ThemeDB.fallback_font,Vector2(-26,-sprite.display_height-39),attack_kind.to_upper(),HORIZONTAL_ALIGNMENT_LEFT,-1,11,Color("fce5ae"))

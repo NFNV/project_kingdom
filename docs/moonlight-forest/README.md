@@ -1,0 +1,114 @@
+# Moonlight Forest
+
+Playable expansion for the Greenshire. The forest is the first dungeon, with its own encounters, route choice, and shortcut. The ruined castle stands at the far end. Its courtyard opens into the castle’s lower passages: descend the entrance staircase, follow the lower vaulted corridor, then climb the far staircase into the Undercroft.
+
+[Route blueprint](blueprint.svg) · [Overhead blockouts](blockouts.svg) · [Forest and castle sketch](forest-reveal.png) · [Cistern sketch](cistern.png)
+
+The entrance sits at the marked woodland location, just north of Ivykeep and west of the main northern road, at regional coordinates `(-50, 385)`. A short branching trail leads to the threshold. Press **F** nearby to enter on foot. The southern forest trail returns to the same location on the mounted overworld.
+
+The threshold has a dedicated painted woodland arch with lanterns. Its shallow ground footprint is independent of the trees' height, so the curved horizon reveals it from roughly twice the previous approach distance. Its size grows with rider proximity from both front and side approaches, with a smooth near-distance size limit.
+
+Inside, the forest, castle passages, Undercroft and Root Chapel each use nine overlapping detail paintings at the existing follow-camera distance. Each covers 1152 × 648 world units with a native image around 1672 × 941 pixels, reducing magnification at 2560 × 1440 from about 3.7× to 1.38×. The same paintings appear in the placement editor. Undercroft water animation uses room coordinates so ripples stay continuous across the overlapping panels, while the stone rim remains fixed.
+
+Root Chapel has registered closed and open door paintings in the same stone arch. The eastern winch changes the painting and removes the doorway blocker together. The saved winch state restores the open doors on subsequent visits and after loading a journey. The closed doors also appear in the Undercroft placement preview.
+
+Native QHD previews: [distant entrance](entrance-distant.png) · [closed chapel doors](chapel-closed.png) · [open chapel doors](chapel-open.png) · [Root Chapel floor without the ladder](root-chapel-floor.png). [Root Chapel artwork detail](root-chapel-detail.png).
+
+Castle passage previews: [full layout](castle-passage-overview.png) · [entrance descent](castle-passage-descent.png) · [open lower landing](castle-passage-landing.png) · [lower corridor](castle-passage-corridor.png) · [staircase up to the Undercroft](castle-passage-ascent.png).
+
+The castle facade and rear are solid. Its forest-facing entrance uses `castle_straight_stairs.png`: one centered, straight flight matching the interior direction. Both passage stair railings and their projected support faces are solid, so the player cannot stand over the painted pillars. Navigation and old-save recovery use the same blockers. Native QHD checks: [Undercroft stair support](stair-support-undercroft.png) · [entrance stair support](stair-support-entrance.png) · [straight castle entrance](castle-straight-entrance.png). Use the stair interaction in front of the arch to descend. Loading a save from the former gap inside the castle restores the character to the front approach.
+
+The playable version uses four connected maps. Moonlight Forest contains the lantern-lit threshold, patrol clearings, creek crossings and castle courtyard. Castle Lower Passages joins two enclosed stair flights with a lower eastbound corridor. Entering the castle continues north down the western flight, with the courtyard return threshold behind the player to the south. The lower landing opens east around the stair parapet; the separate eastern staircase climbs north into the Undercroft. The entrance contains stone steps and masonry rather than a second outdoor forest view. Arrival facing and exit arrows follow these directions, and old saves from the former upper-left entrance recover to a safe landing. Both connections support return travel, and the passage can be saved mid-stair. The Undercroft contains the Entry Hall, cistern and winch. Root Chapel contains its guard encounter and the Sealed Vault keeper and chest.
+
+**E** interacts, **Space / left click** strikes, **Q** casts Wind Slash, **F** guards or parries, and **V / Ctrl** rolls. Resting in the Undercroft Entry Hall restores health and sets the defeat checkpoint. The forest threshold remains the default respawn point before reaching it. The castle-side wicket opens a return shortcut. Root Chapel returns through its existing southern entrance; the floating ladder and its interactions have been removed. The old ladder-progress flag remains accepted in existing saves. The eastern winch opens the chapel doors. Defeated enemies, opened shortcuts, checkpoint and claimed caches are saved with the existing journey.
+
+The woodland retains its existing bandits. The castle lower passages now contain three grim canine soldiers, and the Undercroft has four guards on its dry aisles: sword-and-shield vanguards, spear soldiers and crossbowmen. Blackthorn Captain replaces the old Moonbound Keeper in Root Chapel, with two sentries. The captain has 36 health, visible attack warnings, slashes, sweeps and rushing lunges; it can be parried and damaged by the sword and Wind Slash. The original saved boss ID and reusable treasure chest remain compatible. The forest campfire, fountain and cache have been removed. The Root Chapel vault chest remains and awards 100 coins and three draughts once per journey.
+
+## Editing the placements
+
+Open [the dungeon placement scene](../../experiments/anime_hub_demo_v07/assets/moonlight/layout.tscn) in Godot's 2D editor. Choose a room using the root node's `Preview Zone` property. Drag the markers for trees, enemies, lanterns, winch and vault treasure over the room painting. Walking boundaries, water collision and passages are authored in [moonlight_forest.gd](../../experiments/anime_hub_demo_v07/tools/moonlight_forest.gd). The regional trail and its trees and lamps are in [moonlight_approach.tscn](../../experiments/overworld_2d_v01/moonlight_approach.tscn).
+
+The original route and blockout sketches below predate the added castle passage. The current route is Moonlight Forest → Castle Lower Passages → Undercroft → Root Chapel.
+
+## 01–06 · Moonlight Forest
+
+| ID | Area | What the player does |
+| --- | --- | --- |
+| 01 | Forest Threshold | Enter at the marked woodland location or return to it. |
+| 02 | Forest lantern | Follow the illuminated threshold trail. Spot a barred return wicket nearby. |
+| 03 | Split Willow Glade | Fight the first small group of enemies in an open clearing. Pick a route after the fight. |
+| 04 | Creek Crossing | Take the main route over a stone footbridge into a wider encounter space. |
+| 05 | Creekside clearing | Take the optional creekside route. Stepping stones lead onward to the same courtyard. |
+| 06 | Ruined Castle | Reach the courtyard, open the wicket back to the forest threshold from this side, and enter the lower passages through the lit arch. |
+
+Use the split willow and the castle towers as landmarks. The first full view of the castle comes across the creek. Keep walking paths clear of the darker foreground branches. The forest should be accessible at any hour, with cool light beneath the canopy as its visual signature.
+
+## 07–11 · The Undercroft
+
+| ID | Area | What the player does |
+| --- | --- | --- |
+| 06b | Castle Lower Passages | Descend from the forest gate, follow the lantern-lit lower corridor, then climb the separate far staircase into the Undercroft. |
+| 07 | Entry Hall | Arrive from the upper passage stairs and reach a second checkpoint. The return stairs remain accessible from the dry western aisle. |
+| 08 | Flooded Cistern | Follow a wide, dry ledge around the water. Spot the closed chapel doors before turning into the winch room. |
+| 09 | Winch Room | Open the doors, then return to the cistern and cross into the chapel. |
+| 10 | Root Chapel | Fight a second encounter. The southern entrance leads back to the Undercroft. |
+| 11 | Sealed Vault | Fight the dungeon boss and claim the reward. Return through the chapel entrance and castle stairs. |
+
+Use the same raised three-quarter view in both dungeons. In the cistern, keep the rim and every walkable ledge readable against the water. Let warm lanterns mark the stairs, winch, and gates. Keep the chapel doors visible from the cistern so operating the winch has a clear result.
+
+The route blueprint shows connections and encounter spaces. The overhead plans show initial footprints for the glade and cistern. The grid gives relative proportions for laying out the walking bounds and obstacles in Godot. The castle passage’s collision outline follows the painted stair widths, parapets and lower corridor. The native follow-camera view is used for checking the final artwork’s detail.
+
+
+## Artwork and verification
+
+New background paintings, the castle cutout and winch are stored with the [dungeon assets](../../experiments/anime_hub_demo_v07/assets/moonlight/). The [generation manifest](../../experiments/anime_hub_demo_v07/assets/moonlight/generation.json) records the prompts and built-in image-generation provenance.
+
+[The integration check](../../experiments/anime_hub_demo_v07/tools/test_moonlight.gd) exercises the normal town-to-overworld transition, forest entry, physical movement through the crossings, both castle stair flights, the lower corridor and around the cistern, combat and damage, locked passage, castle shortcut, chapel return travel, defeat recovery, one-time rewards, save/load, old-save compatibility and return to the marked location. It uses an isolated save under `/tmp`.
+
+The latest native 2560 × 1440 run passed 140 dungeon checks with no script errors. These cover the new castle passage and its HUD, detail density in all four maps, northward entrance continuity, arrival facing, physical descent and ascent, both return connections, saving and loading on the stairs, recovery from the former entrance location, solid central and outer walls, collision across both stair railings and their complete painted support faces, walking/rolling attempts against the reported pillars, safe click-to-move targets and recovery of saves on the old walkable pillars, distant forest entrance visibility and approach scaling, chapel door states and collision, retired ladder-save compatibility, combat, loot, checkpoint recovery and the complete return journey. The prior existing journey suite passed 99/99 checks. Godot reported its existing shutdown resource-cleanup warnings.
+
+## Reusable Moonlight Guard art
+
+The new [Moonlight Guard art pack](../../experiments/anime_hub_demo_v07/assets/moonlight_guard/README.md) contains sword-and-shield infantry, spear guards, crossbowmen and the larger Blackthorn Captain. Each has four directional views and eight action poses, with reusable Godot scenes and SpriteFrames resources. Separate presentation and combat scenes let the same artwork be reused elsewhere. Dungeon enemies now use these drawings with foot-registered movement, windup, strike, recovery and hurt poses. Enemy patrol and spawn positions remain editable in the placement scene.
+
+The same pack supplies animated painted fireflies connected to outdoor nighttime areas and the mounted overworld. They disappear in daylight, indoors and on the regional map. [Art preview](moonlight-guard-assets.png) · [Overworld night](overworld-fireflies.png) · [Town night](town-fireflies.png). The existing 140-check journey regression still passes with the new encounters. The dedicated encounter checks cover floor placement, actual ranged and boss AI, half-heart damage, Wind Slash, parries, boss resets on re-entry, one-time chest rewards and nighttime visibility. Godot retains its existing shutdown cleanup warnings.
+
+Live encounter previews: [Blackthorn in Root Chapel](blackthorn-encounter.png) · [Moonlight Forest fireflies](forest-fireflies.png). The native QHD implementation pass completed 59 encounter checks, 68 asset and lighting checks, and 140 journey checks. The boss-reset update expands the encounter suite to 67 checks, including normal exit/re-entry, full-health rematches, interrupted-fight resets and reward deduplication. Existing shutdown cleanup warnings remain.
+
+Blackthorn resets to full health and fresh attack state each time Root Chapel is entered, whether the previous fight ended in victory or retreat. This also applies when loading into the chapel. The chest is revealed by the current fight; collected vault loot remains saved and cannot be awarded again on rematches. Forest and chapel sentries remain defeated; lower passage and Undercroft soldiers use the timed reset described below.
+
+## Lower passage and Undercroft respawns
+
+Three grim soldiers patrol the lower passages, and four guard the Undercroft. Each room resets on entry once five real-time minutes have passed since its last kill. Re-entering earlier preserves the casualties; staying in the room never causes enemies to appear around the player. Each room has its own saved deadline, so loading a save or quitting the game does not restart the timer. Older permanently cleared saves repopulate these rooms on entry. The winch, checkpoints, forest and chapel defeat history, and collected treasure remain intact.
+
+The cooldown is `RESPAWN_SECONDS` in `moonlight_forest.gd`. The focused respawn regression covers partial and full clears, saved deadlines, old-save migration, full-health respawns and preservation of permanent progress.
+
+## Forest day and night
+
+Moonlight Forest now grades its base painting and all nine detail panels together through dawn, daylight, dusk and a dark blue nighttime palette. Characters use a slightly brighter night tint to remain readable, and the HUD keeps its own brightness. The transition follows the existing world clock without altering the native-detail artwork.
+
+At night the forest has 240 larger painted fireflies, with drifting, individually pulsing amber light pools on the ground. They share a single instance buffer and use two batched draws instead of hundreds of individual lights. The light pools draw below actors and scenery; both insects and pools disappear in daylight. Other outdoor zones retain their existing firefly density, and dungeon interiors retain their existing lighting.
+
+The native QHD lighting regression compares four rendered times of day, checks matched panel tint and transition continuity, and verifies nighttime light pools and daylight hiding. [Daylight preview](forest-daylight.png) · [Nighttime preview](forest-fireflies.png).
+
+Lighting verification: **46/46 native QHD lighting and prop-cleanup checks** and **68/68 reusable art/outdoor lighting checks** passed with no script errors. The sampled midnight frame measured about 40% of daylight luminance, including firefly glow. Godot still reports the existing shutdown cleanup warnings.
+
+## Forest lanterns and prop cleanup
+
+Both forest streetlamps now cast warm amber ground light and have luminous glass halos, with a subtle flame variation. They fade through the world clock and turn off at noon. `assets/moonlight/lantern_light.tscn` is reusable: place its origin at a lamp's feet, match `Lamp Height` to the artwork and supply `Night Weight`. Its ground pool draws beneath actors and its halo is aligned to the existing lamp's glass chamber.
+
+The forest campfire, fountain and treasure cache, their interaction prompts, placement markers and the fountain collision have been removed. The forest entrance remains a valid respawn point; the Undercroft rest point and Root Chapel boss chest remain available. Retired moonwell reward flags stay readable for compatibility with existing saves; no hidden cache reward can be claimed.
+
+The lantern and prop-cleanup pass completed **46 lighting/removal checks** and **140 full dungeon journey checks**, with no script errors. Existing shutdown cleanup warnings remain.
+
+## Enemy levels and health readouts
+
+Ordinary enemies show only `Lv` and their configured level above a slim warm-red health bar. Bosses use a shared deep-green banner with brass trim, a paired-leaf ornament, serif level/name lettering and a red health bar. Blackthorn's banner sits at the upper center. During a boss fight, the illustrated clock moves beside the hearts and returns to the center afterward. Captain Rook uses the same banner when approached or engaged. Stoneback uses the shared style in its existing arena header.
+
+Current encounter labels are woodland raiders Lv 3–5, Briarwood raiders/maulers Lv 4/6, Captain Rook Lv 8, dungeon soldiers Lv 8–9, Blackthorn Captain Lv 12 and Stoneback Lv 10. These labels are encounter metadata; adding them does not alter damage, health, rewards or implement player leveling. Actor-based enemies expose `Level` and `Enemy Name` in Godot; Stoneback's label is `Stoneback.LEVEL`.
+
+The boss banner reads live health, hides for pause menus/dialogue and after defeat, releases its target on room changes and binds the fresh boss on rematches. `enemy_health.gd` supplies reusable drawing; `boss_health.gd` selects the current boss for the hub HUD. [Blackthorn preview](blackthorn-encounter.png) · [Stoneback preview](stoneback-health-ui.png).
+
+The refined boss banner uses the original transparent painted `assets/hud/boss_banner_v2.png`, with a gilded botanical frame, a dedicated level medallion, textured dark-green interior and a recessed health track. The live boss name is centered independently of the level digits. Runtime lettering and the health fill remain separate from the painting. The PNG remains intact; an AtlasTexture selects the useful frame region without editing its pixels. The exact built-in imagegen prompt and source are recorded in `assets/hud/boss_banner_v2_generation.json`.
+
+The revised banner passed **17 native QHD UI checks**, including upper-center placement, clock non-overlap, damage, pause, death, rematches and clock restoration. Both Blackthorn and Stoneback full/damaged states were visually inspected. Existing shutdown cleanup warnings remain.

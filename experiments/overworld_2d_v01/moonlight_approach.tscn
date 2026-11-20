@@ -1,0 +1,116 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://experiments/overworld_2d_v01/palestone_route.gd" id="1"]
+[ext_resource type="Script" path="res://experiments/overworld_2d_v01/palestone_prop.gd" id="2"]
+
+[sub_resource type="Curve2D" id="MoonlightTrail"]
+bake_interval = 2.0
+_data = {"points": PackedVector2Array(0, 0, 0, 0, -80, -315, 0, 0, 0, 0, -76, -343, 0, 0, 0, 0, -60, -365, 0, 0, 0, 0, -50, -385)}
+point_count = 4
+
+[node name="MoonlightApproach" type="Node2D"]
+
+[node name="Roads" type="Node2D" parent="."]
+
+[node name="SilverTrail" type="Path2D" parent="Roads"]
+curve = SubResource("MoonlightTrail")
+script = ExtResource("1")
+width = 5.0
+surface = 3
+
+[node name="Squares" type="Node2D" parent="."]
+
+[node name="Clearings" type="Node2D" parent="."]
+
+[node name="ThresholdClearing" type="Polygon2D" parent="Clearings"]
+polygon = PackedVector2Array(-62, -372, -37, -372, -30, -390, -38, -400, -61, -400, -70, -387)
+color = Color(0.45, 0.57, 0.60, 0.2)
+
+[node name="Scenery" type="Node2D" parent="."]
+
+[node name="Willow0" type="Marker2D" parent="Scenery"]
+position = Vector2(-79, -376)
+script = ExtResource("2")
+kind = "willow"
+height = 19.0
+radius = 2.5
+modulate = Color(0.72, 0.79, 1, 1)
+
+[node name="Willow1" type="Marker2D" parent="Scenery"]
+position = Vector2(-27, -379)
+script = ExtResource("2")
+kind = "willow"
+height = 18.0
+radius = 2.5
+modulate = Color(0.72, 0.79, 1, 1)
+
+[node name="Oak2" type="Marker2D" parent="Scenery"]
+position = Vector2(-73, -401)
+script = ExtResource("2")
+kind = "oak"
+height = 17.0
+radius = 2.5
+modulate = Color(0.72, 0.79, 1, 1)
+
+[node name="Oak3" type="Marker2D" parent="Scenery"]
+position = Vector2(-27, -406)
+script = ExtResource("2")
+kind = "oak"
+height = 19.0
+radius = 2.5
+modulate = Color(0.72, 0.79, 1, 1)
+
+[node name="Pine4" type="Marker2D" parent="Scenery"]
+position = Vector2(-59, -419)
+script = ExtResource("2")
+kind = "pine"
+height = 20.0
+radius = 2.5
+modulate = Color(0.72, 0.79, 1, 1)
+
+[node name="Pine5" type="Marker2D" parent="Scenery"]
+position = Vector2(-44, -422)
+script = ExtResource("2")
+kind = "pine"
+height = 21.0
+radius = 2.5
+modulate = Color(0.72, 0.79, 1, 1)
+
+[node name="Pine6" type="Marker2D" parent="Scenery"]
+position = Vector2(-91, -391)
+script = ExtResource("2")
+kind = "pine"
+height = 19.0
+radius = 2.5
+modulate = Color(0.72, 0.79, 1, 1)
+
+[node name="Pine7" type="Marker2D" parent="Scenery"]
+position = Vector2(-10, -395)
+script = ExtResource("2")
+kind = "pine"
+height = 18.0
+radius = 2.5
+modulate = Color(0.72, 0.79, 1, 1)
+
+[node name="Lamp8" type="Marker2D" parent="Scenery"]
+position = Vector2(-64, -369)
+script = ExtResource("2")
+kind = "lamp"
+height = 5.0
+radius = 1.2
+modulate = Color(1, 1, 1, 1)
+
+[node name="Lamp9" type="Marker2D" parent="Scenery"]
+position = Vector2(-37, -369)
+script = ExtResource("2")
+kind = "lamp"
+height = 5.0
+radius = 1.2
+modulate = Color(1, 1, 1, 1)
+
+[node name="MoonlightForestEntrance" type="Marker2D" parent="Scenery"]
+position = Vector2(-50, -391)
+script = ExtResource("2")
+kind = "moonlight_entrance"
+height = 21.0
+radius = 0.0

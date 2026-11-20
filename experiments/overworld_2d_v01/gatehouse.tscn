@@ -1,0 +1,13 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://experiments/overworld_2d_v01/art/fortifications/boundary_gate.png" id="1"]
+
+[node name="Gatehouse" type="Marker2D"]
+gizmo_extents = 2.0
+
+[node name="PaintedFacade" type="Sprite2D" parent="."]
+scale = Vector2(0.0134907251, 0.013224822)
+texture = ExtResource("1")
+offset = Vector2(0, -491.5)
+region_enabled = true
+region_rect = Rect2(175, 11, 1186, 983)

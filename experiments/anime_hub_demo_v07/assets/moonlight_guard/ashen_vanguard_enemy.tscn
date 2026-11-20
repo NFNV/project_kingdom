@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://experiments/anime_hub_demo_v07/tools/dungeon_guard.gd" id="1"]
+
+[node name="AshenVanguard" type="CharacterBody2D"]
+script = ExtResource("1")
+archetype = "ashen_vanguard"

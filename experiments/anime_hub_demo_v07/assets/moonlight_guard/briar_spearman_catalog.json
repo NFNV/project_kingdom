@@ -1,0 +1,392 @@
+{
+  "role": "briar_spearman",
+  "directions": {
+    "se": [
+      {
+        "asset": "briar_spearman.png",
+        "region": [
+          36,
+          7,
+          196,
+          214
+        ],
+        "pivot_x": 116.0,
+        "foot_y": 220.0
+      },
+      {
+        "asset": "briar_spearman.png",
+        "region": [
+          256,
+          9,
+          196,
+          213
+        ],
+        "pivot_x": 339.0,
+        "foot_y": 220.69800000000032
+      },
+      {
+        "asset": "briar_spearman.png",
+        "region": [
+          479,
+          11,
+          194,
+          210
+        ],
+        "pivot_x": 561.0,
+        "foot_y": 220.0
+      },
+      {
+        "asset": "briar_spearman.png",
+        "region": [
+          697,
+          10,
+          200,
+          208
+        ],
+        "pivot_x": 785.0,
+        "foot_y": 213.0
+      },
+      {
+        "asset": "briar_spearman.png",
+        "region": [
+          918,
+          9,
+          167,
+          207
+        ],
+        "pivot_x": 1000.0,
+        "foot_y": 215.0
+      },
+      {
+        "asset": "briar_spearman.png",
+        "region": [
+          1114,
+          38,
+          265,
+          178
+        ],
+        "pivot_x": 1227.0,
+        "foot_y": 215.0
+      },
+      {
+        "asset": "briar_spearman.png",
+        "region": [
+          1374,
+          11,
+          200,
+          210
+        ],
+        "pivot_x": 1456.0,
+        "foot_y": 220.0
+      },
+      {
+        "asset": "briar_spearman.png",
+        "region": [
+          1594,
+          27,
+          174,
+          195
+        ],
+        "pivot_x": 1660.0,
+        "foot_y": 221.0
+      }
+    ],
+    "sw": [
+      {
+        "asset": "briar_spearman.png",
+        "region": [
+          9,
+          229,
+          186,
+          212
+        ],
+        "pivot_x": 119.0,
+        "foot_y": 441.0
+      },
+      {
+        "asset": "briar_spearman.png",
+        "region": [
+          230,
+          229,
+          188,
+          214
+        ],
+        "pivot_x": 339.0,
+        "foot_y": 442.0
+      },
+      {
+        "asset": "briar_spearman.png",
+        "region": [
+          451,
+          231,
+          182,
+          209
+        ],
+        "pivot_x": 559.0,
+        "foot_y": 439.0
+      },
+      {
+        "asset": "briar_spearman.png",
+        "region": [
+          671,
+          230,
+          180,
+          212
+        ],
+        "pivot_x": 779.0,
+        "foot_y": 441.0
+      },
+      {
+        "asset": "briar_spearman.png",
+        "region": [
+          921,
+          226,
+          156,
+          215
+        ],
+        "pivot_x": 994.0,
+        "foot_y": 440.0
+      },
+      {
+        "asset": "briar_spearman.png",
+        "region": [
+          1082,
+          265,
+          270,
+          174
+        ],
+        "pivot_x": 1232.5,
+        "foot_y": 437.0
+      },
+      {
+        "asset": "briar_spearman.png",
+        "region": [
+          1348,
+          237,
+          186,
+          203
+        ],
+        "pivot_x": 1458.0,
+        "foot_y": 439.0
+      },
+      {
+        "asset": "briar_spearman.png",
+        "region": [
+          1572,
+          250,
+          168,
+          198
+        ],
+        "pivot_x": 1671.0,
+        "foot_y": 447.0
+      }
+    ],
+    "ne": [
+      {
+        "asset": "briar_spearman.png",
+        "region": [
+          32,
+          455,
+          185,
+          204
+        ],
+        "pivot_x": 114.0,
+        "foot_y": 659.0
+      },
+      {
+        "asset": "briar_spearman.png",
+        "region": [
+          256,
+          455,
+          185,
+          207
+        ],
+        "pivot_x": 338.0,
+        "foot_y": 661.0
+      },
+      {
+        "asset": "briar_spearman.png",
+        "region": [
+          481,
+          456,
+          183,
+          206
+        ],
+        "pivot_x": 559.0,
+        "foot_y": 661.0
+      },
+      {
+        "asset": "briar_spearman.png",
+        "region": [
+          700,
+          455,
+          190,
+          206
+        ],
+        "pivot_x": 783.0,
+        "foot_y": 660.0
+      },
+      {
+        "asset": "briar_spearman.png",
+        "region": [
+          901,
+          453,
+          169,
+          205
+        ],
+        "pivot_x": 987.0,
+        "foot_y": 657.0
+      },
+      {
+        "asset": "briar_spearman.png",
+        "region": [
+          1098,
+          474,
+          292,
+          187
+        ],
+        "pivot_x": 1223.0,
+        "foot_y": 655.0
+      },
+      {
+        "asset": "briar_spearman.png",
+        "region": [
+          1387,
+          457,
+          183,
+          203
+        ],
+        "pivot_x": 1466.0,
+        "foot_y": 659.0
+      },
+      {
+        "asset": "briar_spearman.png",
+        "region": [
+          1606,
+          463,
+          135,
+          199
+        ],
+        "pivot_x": 1668.0,
+        "foot_y": 661.0
+      }
+    ],
+    "nw": [
+      {
+        "asset": "briar_spearman.png",
+        "region": [
+          5,
+          673,
+          182,
+          206
+        ],
+        "pivot_x": 113.0,
+        "foot_y": 879.0
+      },
+      {
+        "asset": "briar_spearman.png",
+        "region": [
+          222,
+          673,
+          197,
+          208
+        ],
+        "pivot_x": 335.0,
+        "foot_y": 879.4960000000001
+      },
+      {
+        "asset": "briar_spearman.png",
+        "region": [
+          448,
+          676,
+          186,
+          204
+        ],
+        "pivot_x": 553.0,
+        "foot_y": 879.0
+      },
+      {
+        "asset": "briar_spearman.png",
+        "region": [
+          666,
+          674,
+          200,
+          206
+        ],
+        "pivot_x": 778.0,
+        "foot_y": 879.0
+      },
+      {
+        "asset": "briar_spearman.png",
+        "region": [
+          921,
+          669,
+          152,
+          211
+        ],
+        "pivot_x": 993.0,
+        "foot_y": 879.0
+      },
+      {
+        "asset": "briar_spearman.png",
+        "region": [
+          1086,
+          698,
+          267,
+          182
+        ],
+        "pivot_x": 1227.0,
+        "foot_y": 879.0
+      },
+      {
+        "asset": "briar_spearman.png",
+        "region": [
+          1346,
+          677,
+          189,
+          202
+        ],
+        "pivot_x": 1455.0,
+        "foot_y": 879.0
+      },
+      {
+        "asset": "briar_spearman.png",
+        "region": [
+          1576,
+          683,
+          163,
+          198
+        ],
+        "pivot_x": 1672.0,
+        "foot_y": 880.0
+      }
+    ]
+  },
+  "poses": [
+    "idle",
+    "walk_left",
+    "walk_pass",
+    "walk_right",
+    "windup",
+    "strike",
+    "recover",
+    "hurt"
+  ],
+  "sources": [
+    {
+      "asset": "briar_spearman.png",
+      "size": [
+        1774,
+        887
+      ],
+      "sha256": "40a3b650b288c270325dccafd7f0ca8a78a8cba811d6fa804da873aa7121e36e"
+    }
+  ],
+  "canvas": [
+    342,
+    228
+  ],
+  "foot_line": 218,
+  "reference_height": 214,
+  "notes": "Native PNGs unchanged. Regions isolate 32 figures; transparent AtlasTexture margins register feet and body mass. Draft directional actions, no combat behavior attached."
+}

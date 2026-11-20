@@ -10,7 +10,7 @@ The redundant terrain plaza circle is removed. A soft foundation shadow and smal
 grass tufts blend the painting into the road verge without covering the gateway.
 
 The navigable region is 480 × 560 map units, 3.64 times the previous area. Its
-1,593 scenery objects include painted elms, waterside willows, fir groves, limestone
+scenery includes painted elms, waterside willows, fir groves, limestone
 outcrops, a windmill and an ivy-covered ruin. The north road crosses Riverbend's
 bridge and branches into a loop through Windsong Ridge and Ivykeep, or east to
 Willowmere Lake and Palestone Coast. Trees are kept off road corridors. Lake,
@@ -21,6 +21,34 @@ Press **M** for a larger north-up region map with roads, water, vegetation areas
 landmark artwork and place names. Movement and animation pause while the map is
 open. **Esc** or **M** returns to roaming. **1–8** preview the eight destinations;
 these are development shortcuts, not unlocked fast travel.
+
+## Editing the whole region in Godot
+
+1. Open [greenshire_layout.tscn](greenshire_layout.tscn) in the **2D** workspace.
+   Select **FrameEntireMap** in the Scene tree, move the pointer over the
+   viewport, and press **Shift+F** to fit the whole region.
+2. Select a **Roads** path to edit its points. The Inspector controls road
+   width and surface. Use a unique curve resource when duplicating a path.
+3. Move houses, lamps, and props under **Scenery**. Duplicate a marker and
+   change its **Kind**, **Height**, and **Radius** to add a prop. **Woodland**
+   groups the original trees and rocks by area. Its eye icon hides the group
+   while editing. Delete a marker to remove it from the game.
+4. Add a **Polygon2D** under **Squares** for limestone paving or under
+   **Clearings** to suppress woodland in that area. The **Palestone** branch
+   contains the existing coast layout. **LandmarkArt** marks fixed destinations
+   used by travel and quests.
+5. Drag **Crossings → RiverbendBridge** along the river. Its footprint and
+   approach shortcut follow it. Adjust the road points to meet the new
+   bridge ends.
+6. Edit the rampart lines and gatehouses under **Fortifications**. The lines
+   set the wall positions and thickness. Move the adjoining wall endpoints
+   with a gatehouse so the stonework meets its towers. Reuse
+   [gatehouse.tscn](gatehouse.tscn) or the separate paintings under
+   [art/fortifications](art/fortifications).
+
+Save the layout and run the project normally. For a quick overworld-only
+preview, open [world.tscn](world.tscn) and use **Run Current Scene**. The game
+loads the saved placement scene and bakes the road and plaza surfaces from it.
 
 ## Artwork
 

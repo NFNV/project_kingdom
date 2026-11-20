@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://experiments/anime_hub_demo_v07/assets/moonlight_guard/enemy_art.gd" id="1"]
+
+[node name="gloam_arbalist" type="Node2D"]
+script = ExtResource("1")
+archetype = "gloam_arbalist"
+display_height = 87.0

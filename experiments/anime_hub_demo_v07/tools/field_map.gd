@@ -115,6 +115,16 @@ func draw_area(rect: Rect2) -> void:
 			for member in 3:
 				cleared = cleared and hub.forest_defeated.has("wild_dog_%d_%d" % [i,member])
 			draw_circle(origin+hub.Map.Wilds.CAMPS[i]*ratio,6 if detailed else 3,Color("68835a") if cleared else Color("b77252"),true,-1,true)
+	elif hub.zone in hub.Moonlight.ZONES:
+		for polygon in hub.blockers:
+			var obstacle := PackedVector2Array()
+			for point in polygon: obstacle.append(origin+point*ratio)
+			draw_colored_polygon(obstacle,Color(.27,.39,.43,.5))
+		for id in hub.interactables:
+			var marker: Vector2 = origin+hub.interactables[id].at*ratio
+			draw_circle(marker,4 if detailed else 2,ROAD,true,-1,true)
+			if detailed:
+				draw_string(font,marker+Vector2(7,-7),hub.interactables[id].name.split(" · ")[0],HORIZONTAL_ALIGNMENT_LEFT,190,13,INK)
 	elif hub.zone=="district":
 		for road in hub.Map.District.ROADS:
 			draw_line(origin+hub.Map.District.iso(road,0)*ratio,origin+hub.Map.District.iso(road,13)*ratio,ROAD,3 if detailed else 1,true)

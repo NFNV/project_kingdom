@@ -6,4 +6,6 @@
 /assets/tiny_swords/
 # Reference-based prototype character art stays local as well.
 /assets/local_characters/
+# Exploratory fantasy concept art stays local, outside version control.
+/concepts/old-school-fantasy-v*/
 .DS_Store

@@ -38,6 +38,7 @@ var appearance: Dictionary = HeroLook.DEFAULT.duplicate():
 	set(value):
 		appearance = HeroLook.normalized(value)
 var stoneback_stage: int = StonebackStage.AVAILABLE
+var moonlight: Dictionary = preload("res://experiments/anime_hub_demo_v07/tools/moonlight_forest.gd").fresh_progress()
 var lighthouse_stage: int = LighthouseStage.AVAILABLE
 var coins := 12
 var delivery_stage := 0
@@ -459,6 +460,7 @@ func snapshot() -> Dictionary:
 		"appearance":appearance.duplicate(),
 		"stoneback_stage":stoneback_stage,
 		"lighthouse_stage":lighthouse_stage,
+		"moonlight":moonlight.duplicate(true),
 		"smith":{"accepted":smith_accepted,"rewarded":smith_rewarded,"tools_recovered":tools_recovered},
 		"quest":{"accepted":accepted,"rewarded":rewarded}}
 
@@ -493,6 +495,7 @@ func restore(data: Dictionary, player_health: int) -> void:
 	appearance = data.get("appearance",HeroLook.DEFAULT).duplicate()
 	stoneback_stage = int(data.stoneback_stage)
 	lighthouse_stage = int(data.lighthouse_stage)
+	moonlight = data.get("moonlight",preload("res://experiments/anime_hub_demo_v07/tools/moonlight_forest.gd").fresh_progress()).duplicate(true)
 	for id in data.items:
 		if int(data.items[id])>0:
 			add_item(id,int(data.items[id]))

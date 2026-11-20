@@ -167,6 +167,7 @@ height = 1.0
 radius = 0.35
 
 [node name="SquareFlowers" type="Marker2D" parent="Scenery" unique_id=879752882]
+position = Vector2(154, -361)
 gizmo_extents = 1.5
 script = ExtResource("3")
 kind = "flowers"

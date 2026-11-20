@@ -2,6 +2,8 @@ extends CanvasLayer
 
 const FieldMap := preload("res://experiments/anime_hub_demo_v07/tools/field_map.gd")
 const Hearts := preload("res://experiments/anime_hub_demo_v07/tools/heart_meter.gd")
+const BossHealth := preload("res://experiments/anime_hub_demo_v07/tools/boss_health.gd")
+var boss_health: Control
 const InventoryView := preload("res://experiments/anime_hub_demo_v07/tools/inventory_view.gd")
 const JournalView := preload("res://experiments/anime_hub_demo_v07/tools/quest_journal.gd")
 const ForgeShop := preload("res://experiments/anime_hub_demo_v07/tools/forge_shop.gd")
@@ -139,6 +141,10 @@ func _ready() -> void:
 	skill_label = skill_panel.status
 	skill_bar = skill_panel.recharge
 	skill_panel.hide()
+	boss_health = BossHealth.new()
+	boss_health.hub = hub
+	add_child(boss_health)
+	boss_health.visibility_changed.connect(layout_combat_header)
 	pause_overlay = Control.new()
 	pause_overlay.size = Vector2(1920,1080)
 	add_child(pause_overlay)
@@ -296,10 +302,10 @@ func refresh() -> void:
 	skill_button.disabled = hub.peaceful_mode or hub.player.skill_cooldown>0 or not hub.player.active or int(hub.state.stats().attack)<=0
 	skill_bar.max_value = float(hub.state.stats().recharge)
 	skill_bar.value = skill_bar.max_value-hub.player.skill_cooldown
-	skill_label.text = "Briarwood only" if hub.peaceful_mode else ("Queued" if hub.player.skill_buffer>0 else ("Ready" if hub.player.skill_cooldown<=0 else "Recharging  %.1f s" % hub.player.skill_cooldown))
+	skill_label.text = "Combat areas" if hub.peaceful_mode else ("Queued" if hub.player.skill_buffer>0 else ("Ready" if hub.player.skill_cooldown<=0 else "Recharging  %.1f s" % hub.player.skill_cooldown))
 	if int(hub.state.stats().attack)<=0:
 		skill_label.text = "Equip a weapon"
-	controls_label.text = "WASD · Space / Click sword · Q wind · F guard / parry · V / Ctrl roll" if hub.zone=="wilds" else "WASD walk · Shift run · V roll · E interact · Right click walk"
+	controls_label.text = "WASD · Space / Click sword · Q wind · F guard / parry · V / Ctrl roll" if not hub.peaceful_mode else "WASD walk · Shift run · V roll · E interact · Right click walk"
 	if hub.zone=="town":
 		objective.text = hub.OBJECTIVES[hub.quest_stage]
 		status_label.text = "%d / 5 deliveries  ·  The wardens are friendly" % mini(hub.quest_stage,5)
@@ -312,6 +318,9 @@ func refresh() -> void:
 	elif hub.zone in ["mill_garden","mill_room","mill_loft"]:
 		objective.text = "Explore the backyard, meet the cats, or step inside Windsong Mill." if hub.zone=="mill_garden" else "Talk to Rowan by the counter, enjoy the tea corner and warm hearth."
 		status_label.text = "South gate → The Greenshire" if hub.zone=="mill_garden" else "Stairs → Guest rooms · Front door → Garden"
+	elif hub.zone in hub.Moonlight.ZONES:
+		objective.text = {hub.Moonlight.FOREST:"Explore the silver woodland and find the ruined castle.",hub.Moonlight.PASSAGE:"Descend the castle stairs, follow the lower corridor, then climb into the Undercroft.",hub.Moonlight.CISTERN:"Find the eastern winch to open the chapel doors.",hub.Moonlight.CHAPEL:"Defeat Blackthorn Captain and open the vault chest."}[hub.zone]
+		status_label.text = "%d coins · E interact · M dungeon map" % hub.coins
 	elif hub.zone=="wilds":
 		objective.text = "Drive the dog bandits from the four forest clearings." if hub.combat_active else "Briarwood is quiet. Explore or take the western trail home."
 		status_label.text = "%d / 12 bandits defeated  ·  %d coins" % [hub.forest_defeated.size(),hub.coins]
@@ -365,6 +374,11 @@ func refresh() -> void:
 		route_label.text = "Nearest bandits: %s  /  %d m" % [direction,ceili(closest/32.0)]
 	refresh_save_controls()
 
+
+func layout_combat_header() -> void:
+	# Give the upper center to a boss; retain the illustrated clock beside hearts.
+	clock_dial.position = Vector2(208,17) if boss_health.visible else Vector2(848,7)
+	clock_dial.scale = Vector2.ONE*(.62 if boss_health.visible else .8)
 
 func _process(delta: float) -> void:
 	if is_instance_valid(hub.player):
